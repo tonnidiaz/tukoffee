@@ -1,0 +1,7 @@
+{
+  "name": "tukoffee",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
