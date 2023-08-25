@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  div(style="padding: 8px; min-height: 100%; display: flex; justify-content: center; flex-direction: column")
+    h3 Total: $500
+    #paypal
+  script(src="https://www.paypal.com/sdk/js?client-id=Adje7FVT5TsCmRQmoHS6B_OrS1wqIbVX4CO3vPTtj_cvyp40wKkWVPpIPLbJeMFxIa673yxdP_1p780Y&components=buttons&currency=USD" data-namespace="paypal_sdk")
+  script.
+    

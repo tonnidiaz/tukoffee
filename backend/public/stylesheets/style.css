@@ -1,0 +1,16 @@
+body {
+  
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  position: relative;
+}
+html, body{
+    height: 100%;padding: 0px; margin: 0
+}
+
+a {
+  color: #00B7FF;
+}
+#paypal{
+    width: 80vw;
+    margin: 0 auto;
+}

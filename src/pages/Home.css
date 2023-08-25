@@ -1,0 +1,12 @@
+.scroll-v {
+    overflow-y: scroll !important;
+}
+.products-cont {
+    height: calc(100vh - 165px);
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
