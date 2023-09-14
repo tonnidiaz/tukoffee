@@ -1,0 +1,112 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            28.183866,
+            -26.240611
+          ]
+        },
+        "properties": {
+          "country_code": "za",
+          "housenumber": "16",
+          "street": "Gill Street",
+          "country": "South Africa",
+          "county": "Ekurhuleni",
+          "datasource": {
+            "sourcename": "openaddresses",
+            "attribution": "© OpenAddresses contributors",
+            "license": "BSD-3-Clause License"
+          },
+          "state": "Gauteng",
+          "district": "Ekurhuleni",
+          "city": "Germiston",
+          "lon": 28.183866,
+          "lat": -26.240611,
+          "state_code": "GT",
+          "suburb": "Parkhill Gardens",
+          "postcode": "1401",
+          "formatted": "16 Gill Street, Parkhill Gardens, Germiston, 1401, South Africa",
+          "address_line1": "16 Gill Street",
+          "address_line2": "Parkhill Gardens, Germiston, 1401, South Africa",
+          "timezone": {
+            "name": "Africa/Johannesburg",
+            "offset_STD": "+02:00",
+            "offset_STD_seconds": 7200,
+            "offset_DST": "+02:00",
+            "offset_DST_seconds": 7200,
+            "abbreviation_STD": "SAST",
+            "abbreviation_DST": "SAST"
+          },
+          "plus_code": "5G5CQ55M+QG",
+          "plus_code_short": "5M+QG Germiston, Ekurhuleni, South Africa",
+          "result_type": "building",
+          "rank": {
+            "confidence": 1,
+            "match_type": "full_match"
+          },
+          "place_id": "51a9d898d7112f3c4059d00eb8ae983d3ac0c00203e2034a6f70656e6164647265737365733a616464726573733a7a612f67742f656b757268756c656e692d6164647265737365732d636974792e6373763a36626635316533623765636166623966"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            22.147087,
+            -34.089138
+          ]
+        },
+        "properties": {
+          "country_code": "za",
+          "housenumber": "16",
+          "street": "Gill Street",
+          "country": "South Africa",
+          "county": "Garden Route District Municipality",
+          "datasource": {
+            "sourcename": "openaddresses",
+            "attribution": "© OpenAddresses contributors",
+            "license": "BSD-3-Clause License"
+          },
+          "state": "Western Cape",
+          "city": "Mossel Bay",
+          "lon": 22.147087,
+          "lat": -34.089138,
+          "state_code": "WC",
+          "postcode": "6503",
+          "suburb": "Riverside",
+          "formatted": "16 Gill Street, Riverside, Mossel Bay, 6503, South Africa",
+          "address_line1": "16 Gill Street",
+          "address_line2": "Riverside, Mossel Bay, 6503, South Africa",
+          "timezone": {
+            "name": "Africa/Johannesburg",
+            "offset_STD": "+02:00",
+            "offset_STD_seconds": 7200,
+            "offset_DST": "+02:00",
+            "offset_DST_seconds": 7200,
+            "abbreviation_STD": "SAST",
+            "abbreviation_DST": "SAST"
+          },
+          "plus_code": "4GQ4W46W+8R",
+          "plus_code_short": "W46W+8R Mossel Bay, Garden Route District Municipality, South Africa",
+          "result_type": "building",
+          "rank": {
+            "confidence": 1,
+            "match_type": "full_match"
+          },
+          "place_id": "51b0aa5e7ea725364059596abddf680b41c0c00203e2034b6f70656e6164647265737365733a616464726573733a7a612f636f756e747279776964652d6164647265737365732d636f756e7472792e6373763a38613130346635316164343130336464"
+        }
+      }
+    ],
+    "query": {
+      "text": "16 Gill street",
+      "parsed": {
+        "housenumber": "16",
+        "street": "gill street",
+        "expected_type": "building"
+      }
+    }
+  }
