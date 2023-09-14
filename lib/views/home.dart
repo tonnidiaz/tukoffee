@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frust/main.dart';
 import 'package:frust/utils/constants.dart';
-import 'package:frust/utils/styles.dart';
 import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common2.dart';
 import '../utils/functions.dart';
@@ -18,7 +17,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _storeCtrl = MainApp.storeCtrl;
   final _appCtrl = MainApp.appCtrl;
 
   @override

@@ -1,6 +1,5 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, use_build_context_synchronously
 
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -108,33 +107,27 @@ class ProductCard extends StatelessWidget {
                                     .where((el) =>
                                         el["product"]["_id"] == product["_id"])
                                     .isNotEmpty;
-                            return false
-                                ? Text(
-                                    "$inCart",
-                                    style: const TextStyle(color: Colors.white),
-                                  )
-                                : product['quantity'] <= 0
-                                    ? none()
-                                    : IconButton(
-                                        padding: EdgeInsets.zero,
-                                        icon: inCart
-                                            ? const Icon(
-                                                CupertinoIcons
-                                                    .bag_fill_badge_minus,
-                                                color: Colors.orange,
-                                                size: 30,
-                                              )
-                                            : const Icon(
-                                                CupertinoIcons.bag_badge_plus,
-                                                color: Colors.white70,
-                                                size: 30,
-                                              ),
-                                        onPressed: product['quantity'] <= 0
-                                            ? null
-                                            : () async {
-                                                addRemoveCart();
-                                              },
-                                      );
+                            return product['quantity'] <= 0
+                                ? none()
+                                : IconButton(
+                                    padding: EdgeInsets.zero,
+                                    icon: inCart
+                                        ? const Icon(
+                                            CupertinoIcons.bag_fill_badge_minus,
+                                            color: Colors.orange,
+                                            size: 30,
+                                          )
+                                        : const Icon(
+                                            CupertinoIcons.bag_badge_plus,
+                                            color: Colors.white70,
+                                            size: 30,
+                                          ),
+                                    onPressed: product['quantity'] <= 0
+                                        ? null
+                                        : () async {
+                                            addRemoveCart();
+                                          },
+                                  );
                           }),
                         ),
                       )

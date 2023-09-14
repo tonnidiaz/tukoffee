@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:frust/main.dart';
 import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/constants2.dart';
 import 'package:frust/utils/functions.dart';
@@ -19,13 +16,6 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  double? _zoom;
-  _setZoom(double? val) {
-    setState(() {
-      _zoom = val;
-    });
-  }
-
   LatLng? _center = const LatLng(-26.1974939, 28.0534776);
   _setCenter(LatLng? val) {
     setState(() {
@@ -137,7 +127,6 @@ class _MapPageState extends State<MapPage> {
                         center: const LatLng(51.509364, -0.128928),
                         onPositionChanged: (pos, hasChanged) async {
                           _setCurrCenter(pos.center);
-                          _setZoom(pos.zoom);
                           if (pos.zoom != null && pos.zoom! >= 17.5) {
                             // Max zoom
                             _mapController.move(_currCenter!, 17.5);

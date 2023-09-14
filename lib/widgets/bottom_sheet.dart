@@ -39,7 +39,7 @@ class _TBottomSheetState extends State<TBottomSheet> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ..._appCtrl.navItems,
-                        NavItem(
+                        navItem(
                             text: "Exit",
                             onClick: () async {
                               SystemChannels.platform

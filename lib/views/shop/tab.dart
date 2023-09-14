@@ -71,119 +71,114 @@ class _HomeTabState extends State<HomeTab> {
           padding: defaultPadding,
 
           ///height: screenSize(context).height - 100,
-          child: false
-              ? const Text("Hello")
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("FILTER",
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black)),
+                  Obx(() => IconButton(
+                        splashRadius: 15,
+                        onPressed: () {
+                          _storeCtrl.sortOrder.value == SortOrder.descending
+                              ? _storeCtrl.setSortOrder(SortOrder.ascending)
+                              : _storeCtrl.setSortOrder(SortOrder.descending);
+                        },
+                        icon: Icon(
+                            _storeCtrl.sortOrder.value == SortOrder.descending
+                                ? Icons.arrow_drop_down
+                                : Icons.arrow_drop_up),
+                        color: Colors.black87,
+                      )),
+                ],
+              ),
+              LayoutBuilder(builder: (context, c) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("FILTER",
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black)),
-                        Obx(() => IconButton(
-                              splashRadius: 15,
-                              onPressed: () {
-                                _storeCtrl.sortOrder.value ==
-                                        SortOrder.descending
-                                    ? _storeCtrl
-                                        .setSortOrder(SortOrder.ascending)
-                                    : _storeCtrl
-                                        .setSortOrder(SortOrder.descending);
-                              },
-                              icon: Icon(_storeCtrl.sortOrder.value ==
-                                      SortOrder.descending
-                                  ? Icons.arrow_drop_down
-                                  : Icons.arrow_drop_up),
-                              color: Colors.black87,
-                            )),
-                      ],
-                    ),
-                    LayoutBuilder(builder: (context, c) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Obx(() => TuDropdownButton(
-                                label: "Sort by",
-                                labelFontSize: 14,
-                                width: (c.maxWidth / 2) - 2.5,
-                                height: 40,
-                                value: _storeCtrl.sortBy.value,
-                                radius: 2,
-                                items: [
-                                  SelectItem("name", SortBy.name),
-                                  SelectItem("price", SortBy.price),
-                                  SelectItem("date", SortBy.dateCreated),
-                                ],
-                                onChanged: (p0) {
-                                  _storeCtrl.setSortBy(p0);
-                                },
-                              )),
-                          Obx(() => TuDropdownButton(
-                                label: "Status",
-                                labelFontSize: 14,
-                                width: (c.maxWidth / 2) - 2.5,
-                                radius: 2,
-                                height: 40,
-                                value: _storeCtrl.status.value,
-                                items: [
-                                  SelectItem("All", ProductStatus.all),
-                                  SelectItem("in stock", ProductStatus.instock),
-                                  SelectItem("out of stock", ProductStatus.out),
-                                ],
-                                onChanged: (p0) {
-                                  _storeCtrl.setStatus(p0);
-                                },
-                              )),
-                        ],
-                      );
-                    }),
-                    mY(10),
-                    Obx(() => !_storeCtrl.productsFetched.value
-                        ? Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                h3("Please wait..."),
-                              ],
-                            ),
-                          )
-                        : _storeCtrl.products.isEmpty
-                            ? Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    mY(30),
-                                    h3("Nothing to show"),
-                                    IconButton(
-                                        icon: const Icon(Icons.refresh),
-                                        onPressed: () async {
-                                          await getProducts();
-
-                                          //setupUser();
-                                        })
-                                  ],
-                                ),
-                              )
-                            : Container(
-                                color: Colors.transparent,
-                                //height: screenSize(context).height,
-                                child: Builder(builder: (context) {
-                                  return Obx(() => Wrap(
-                                          children: ([
-                                        ..._storeCtrl.sortedProducts,
-                                      ]).map((it) {
-                                        return ProductCard(
-                                          product: it,
-                                        );
-                                      }).toList()));
-                                }),
-                              ))
+                    Obx(() => TuDropdownButton(
+                          label: "Sort by",
+                          labelFontSize: 14,
+                          width: (c.maxWidth / 2) - 2.5,
+                          height: 40,
+                          value: _storeCtrl.sortBy.value,
+                          radius: 2,
+                          items: [
+                            SelectItem("name", SortBy.name),
+                            SelectItem("price", SortBy.price),
+                            SelectItem("date", SortBy.dateCreated),
+                          ],
+                          onChanged: (p0) {
+                            _storeCtrl.setSortBy(p0);
+                          },
+                        )),
+                    Obx(() => TuDropdownButton(
+                          label: "Status",
+                          labelFontSize: 14,
+                          width: (c.maxWidth / 2) - 2.5,
+                          radius: 2,
+                          height: 40,
+                          value: _storeCtrl.status.value,
+                          items: [
+                            SelectItem("All", ProductStatus.all),
+                            SelectItem("in stock", ProductStatus.instock),
+                            SelectItem("out of stock", ProductStatus.out),
+                          ],
+                          onChanged: (p0) {
+                            _storeCtrl.setStatus(p0);
+                          },
+                        )),
                   ],
-                ),
+                );
+              }),
+              mY(10),
+              Obx(() => !_storeCtrl.productsFetched.value
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          h3("Please wait..."),
+                        ],
+                      ),
+                    )
+                  : _storeCtrl.products.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              mY(30),
+                              h3("Nothing to show"),
+                              IconButton(
+                                  icon: const Icon(Icons.refresh),
+                                  onPressed: () async {
+                                    await getProducts();
+
+                                    //setupUser();
+                                  })
+                            ],
+                          ),
+                        )
+                      : Container(
+                          color: Colors.transparent,
+                          //height: screenSize(context).height,
+                          child: Builder(builder: (context) {
+                            return Obx(() => Wrap(
+                                    children: ([
+                                  ..._storeCtrl.sortedProducts,
+                                ]).map((it) {
+                                  return ProductCard(
+                                    product: it,
+                                  );
+                                }).toList()));
+                          }),
+                        ))
+            ],
+          ),
         ),
       ),
     );

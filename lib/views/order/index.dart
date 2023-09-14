@@ -7,7 +7,6 @@ import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/styles.dart';
 import 'package:frust/views/account/settings.dart';
 import 'package:frust/views/map.dart';
-import 'package:frust/views/order/checkout.dart';
 import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common2.dart';
 import 'package:frust/widgets/form_view.dart';

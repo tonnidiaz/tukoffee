@@ -18,13 +18,6 @@ class TDrawer extends StatefulWidget {
 
 class _TDrawerState extends State<TDrawer> {
   final AppCtrl _appCtrl = Get.find();
-  int _selectedIndex = 0;
-
-  void _onItemTap(int i) {
-    setState(() {
-      _selectedIndex = i;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +55,6 @@ class _TDrawerState extends State<TDrawer> {
                 leading: const Icon(Icons.home),
                 selected: currPage == "/",
                 onTap: () {
-                  _onItemTap(0);
                   Navigator.pushNamed(context, "/");
                 }),
             TDrawerItem(
@@ -71,7 +63,6 @@ class _TDrawerState extends State<TDrawer> {
                 leading: const Icon(Icons.storefront),
                 selected: currPage == "/shop",
                 onTap: () {
-                  _onItemTap(0);
                   Navigator.pushNamed(context, "/shop");
                 }),
             Obx(() {
@@ -83,7 +74,6 @@ class _TDrawerState extends State<TDrawer> {
                       leading: const Icon(Icons.space_dashboard),
                       selected: currPage == "/admin/dashboard",
                       onTap: () {
-                        _onItemTap(1);
                         Navigator.pushNamed(context, "/admin/dashboard");
                       });
             }),
@@ -93,7 +83,6 @@ class _TDrawerState extends State<TDrawer> {
                 leading: const Icon(Icons.shopping_cart),
                 selected: currPage == "/cart",
                 onTap: () {
-                  _onItemTap(3);
                   Navigator.pushNamed(context, "/cart");
                 }),
             TDrawerItem(
@@ -102,7 +91,6 @@ class _TDrawerState extends State<TDrawer> {
                 leading: const Icon(Icons.shopping_basket),
                 selected: currPage == "/orders",
                 onTap: () {
-                  _onItemTap(4);
                   Navigator.pushNamed(context, "/orders");
                 }),
             TDrawerItem(
@@ -111,7 +99,6 @@ class _TDrawerState extends State<TDrawer> {
                 leading: const Icon(Icons.shopping_cart_checkout),
                 selected: currPage == "/order/checkout",
                 onTap: () {
-                  _onItemTap(5);
                   Navigator.pushNamed(context, "/order/checkout");
                 }),
             Visibility(
@@ -122,7 +109,6 @@ class _TDrawerState extends State<TDrawer> {
                   leading: const Icon(Icons.science),
                   selected: currPage == "/rf",
                   onTap: () {
-                    _onItemTap(6);
                     Navigator.pushNamed(context, "/rf");
                   }),
             ),

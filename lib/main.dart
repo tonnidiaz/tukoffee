@@ -165,7 +165,7 @@ class _PageWrapperState extends State<PageWrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: widget.appBar ??
-          MobileTitleBar(bottom: widget.bottom, actions: widget.actions),
+          mobileTitleBar(bottom: widget.bottom, actions: widget.actions),
       // drawer: const TDrawer(),
       endDrawer: const TDrawer(),
       body: RefreshIndicator(

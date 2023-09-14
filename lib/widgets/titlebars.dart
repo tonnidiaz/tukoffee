@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:frust/controllers/app_ctrl.dart';
 import 'package:frust/widgets/common2.dart';
-import 'package:frust/widgets/common3.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../utils/constants.dart';
 import '/utils/functions.dart';
 
-import 'common.dart';
-
-PreferredSizeWidget MobileTitleBar(
+PreferredSizeWidget mobileTitleBar(
     {PreferredSizeWidget? bottom, List<PopupMenuItem> actions = const []}) {
   final AppCtrl appCtrl = Get.find();
   return AppBar(

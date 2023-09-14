@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:frust/controllers/app_ctrl.dart';
 import 'package:frust/main.dart';
 import 'package:frust/utils/constants.dart';
+import 'package:frust/utils/constants2.dart';
 import 'package:frust/utils/functions.dart';
 import 'package:frust/utils/styles.dart';
 import 'package:frust/views/map.dart';
@@ -51,6 +52,40 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
     });
   }
 
+  _onBtnImportImgClick() async {
+    //Import img  -> upload it to cloudinary -> update db store image -> display it
+    try {
+      final file = await importFile();
+      if (file != null) {
+        if (appCtrl.storeImage['publicId'] != null) {
+          clog("Deleting old...");
+          try {
+            await signedCloudinary.destroy(appCtrl.storeImage['publicId']);
+          } catch (e) {
+            errorHandler(
+                e: e, context: context, msg: "Failed to delete old image");
+          }
+        }
+
+        clog("Uploading...");
+        showToast("Uploading image...").show(context);
+        final res = await uploadImg(file, appCtrl: appCtrl);
+        if (res.isResultOk) {
+          clog("Updating...");
+          final res2 = await apiDio().post('/store/update', data: {
+            'data': {
+              'image': {'url': res.secureUrl, 'publicId': res.publicId}
+            }
+          });
+          setupStoreDetails(data: res2.data['store']);
+        }
+      }
+    } catch (e) {
+      clog(e);
+      errorHandler(e: e, context: context, msg: "Failed to upload image");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,8 +95,59 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
           padding: defaultPadding,
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            /* Text("Store settings", style: Styles.h1),
-            mY(10), */
+            Container(
+                alignment: Alignment.center,
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.all(2),
+                child: Row(
+                  children: [
+                    Container(
+                      height: 70,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(width: 1.5, color: Colors.black12)),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Obx(
+                            () => appCtrl.storeImage['url'] != null
+                                ? Image.network(
+                                    appCtrl.storeImage['url'],
+                                  )
+                                : const Icon(
+                                    Icons.image,
+                                    size: 30,
+                                  ),
+                          ),
+                          Positioned(
+                              bottom: 0,
+                              left: 0,
+                              width: 80,
+                              child: Container(
+                                color: const Color.fromRGBO(40, 40, 40, .85),
+                                height: 20,
+                                child: InkWell(
+                                  onTap: _onBtnImportImgClick,
+                                  child: const Icon(
+                                    Icons.camera_alt_outlined,
+                                    color: Colors.white,
+                                    size: 15,
+                                  ),
+                                ),
+                              ))
+                        ],
+                      ),
+                    ),
+                    mX(10),
+                    Obx(
+                      () => Text(
+                        "${appCtrl.storeName}",
+                        style: Styles.h2(),
+                      ),
+                    ),
+                  ],
+                )),
             TuCard(
                 child: Column(
               children: [

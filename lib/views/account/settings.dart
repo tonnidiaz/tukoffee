@@ -20,7 +20,6 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fprmViewCtrl = MainApp.formViewCtrl;
     final AppCtrl appCtrl = Get.find();
     final FormViewCtrl formViewCtrl = Get.find();
 

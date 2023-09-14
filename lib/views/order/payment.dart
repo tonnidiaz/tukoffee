@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frust/controllers/store_ctrl.dart';
 import 'package:frust/main.dart';
@@ -53,10 +52,6 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   PaymentScreenArgs? _args;
-  _onUrlChanged(String url) async {
-    return;
-    if (url.contains("$apiURL/payment")) {}
-  }
 
   _createOrder() async {
     //create the order
@@ -102,7 +97,6 @@ class _PaymentPageState extends State<PaymentPage> {
               onPageStarted: (String url) {},
               onPageFinished: (String url) {
                 clog("URL changed to: $url");
-                _onUrlChanged(url);
               },
               onWebResourceError: (WebResourceError error) {},
               onNavigationRequest: (NavigationRequest request) {

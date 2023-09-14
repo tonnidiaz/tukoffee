@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frust/controllers/store_ctrl.dart';
 import 'package:frust/utils/functions.dart';

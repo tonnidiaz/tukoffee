@@ -47,8 +47,7 @@ class _ProductsState extends State<Products> {
                           var pids = _appBarCtrl.selected
                               .map((element) => element['pid'])
                               .toList();
-                          var res = await apiDio()
-                              .post("/products/delete?pids=$pids");
+                          await apiDio().post("/products/delete?pids=$pids");
                           //Delete images for each product
                           for (var product in _appBarCtrl.selected) {
                             var imgs = product['images'];

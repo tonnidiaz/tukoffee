@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:another_flushbar/flushbar.dart';
+import 'package:cloudinary/cloudinary.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +100,7 @@ setupStoreDetails({Map<String, dynamic>? data}) async {
     appCtrl.setownerName(details['ownerName']);
     appCtrl.setownerPhone(details['ownerPhone']);
     appCtrl.setstoreSite(details['site']);
+    appCtrl.setStoreImage(details['image']);
   } catch (e) {
     if (e.runtimeType == DioException) {
       e as DioException;
@@ -217,14 +219,14 @@ Future<String?> addProduct(BuildContext context, Map<String, dynamic> product,
 }
 
 Future<File?> importFile(
-    {String dialogTitle = "Import audio file",
-    String exts = "mp3",
-    FileType? type}) async {
+    {String dialogTitle = "Import image file",
+    String exts = "jpg",
+    FileType type = FileType.image}) async {
   try {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-        dialogTitle: dialogTitle,
-        type: type ?? FileType.custom,
-        allowedExtensions: type != null ? null : exts.split(","));
+      dialogTitle: dialogTitle,
+      type: type,
+    );
 
     if (result != null) {
       //File file =
@@ -282,4 +284,16 @@ getStores({required StoreCtrl storeCtrl}) async {
     clog(e);
     storeCtrl.setStores([]);
   }
+}
+
+Future<CloudinaryResponse> uploadImg(File file,
+    {required AppCtrl appCtrl, Function(int, int)? onUpload}) async {
+  return await cloudinary.unsignedUpload(
+      uploadPreset: uploadPreset,
+      file: file.path,
+      publicId:
+          "${appCtrl.storeName}_-_product_-_epoch-${DateTime.now().millisecondsSinceEpoch}",
+      resourceType: CloudinaryResourceType.image,
+      folder: getCloudinaryFolder(storeName: appCtrl.storeName.value),
+      progressCallback: onUpload);
 }

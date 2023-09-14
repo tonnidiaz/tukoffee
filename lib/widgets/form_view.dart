@@ -54,8 +54,6 @@ class FormView extends StatefulWidget {
 class _FormViewState extends State<FormView> {
   final _formKey = GlobalKey<FormState>();
 
-  final FormViewCtrl _formViewCtrl = Get.find();
-
   @override
   void dispose() {
     super.dispose();
@@ -84,8 +82,8 @@ class _FormViewState extends State<FormView> {
         child: SingleChildScrollView(
           child: Container(
               //color: Colors.amber,
-              padding:
-                  const EdgeInsets.only(bottom: 55, top: 14, left: 14, right: 14),
+              padding: const EdgeInsets.only(
+                  bottom: 55, top: 14, left: 14, right: 14),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

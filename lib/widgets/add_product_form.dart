@@ -6,7 +6,6 @@ import 'package:cloudinary/cloudinary.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:frust/widgets/tu/multiselect.dart';
 import 'package:get/get.dart';
 
 import '../main.dart';
@@ -36,7 +35,6 @@ class AddProductForm extends StatefulWidget {
 class _AddProductFormState extends State<AddProductForm> {
   final _innerController = ScrollController();
   final _appCtrl = MainApp.appCtrl;
-  final _storeCtrl = MainApp.storeCtrl;
   final _formViewCtrl = MainApp.formViewCtrl;
 
   @override
@@ -67,10 +65,7 @@ class _AddProductFormState extends State<AddProductForm> {
         var existingImgs = _formViewCtrl.form['images'] ?? [];
         if (widget.mode == "edit") {
           // immediately update product images
-          var tempImgs = [
-            ...existingImgs,
-            {"url": res.secureUrl, "publicId": res.publicId}
-          ];
+
           try {
             clog("Adding image to backend...");
             var newImgs = [

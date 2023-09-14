@@ -123,8 +123,7 @@ class OrderItem extends StatelessWidget {
                   Builder(builder: (context) {
                     var dateCreated =
                         DateTime.parse(order['date_created']).toLocal();
-                    var lastModified =
-                        DateTime.parse(order['last_modified']).toLocal();
+
                     return Text(
                       "$dateCreated",
                       style: const TextStyle(fontSize: 12),

@@ -40,7 +40,6 @@ class Step1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ctrl = Get.find<SignupCtrl>();
-    final appCtrl = MainApp.appCtrl;
     return CreateAccountPageWrapper(
       onSubmit: () async {
         clog(ctrl.user);

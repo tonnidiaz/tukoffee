@@ -87,6 +87,11 @@ class AppCtrl extends GetxController {
     storeAddress.value = val;
   }
 
+  RxMap<String, dynamic> storeImage = <String, dynamic>{}.obs;
+  setStoreImage(Map<String, dynamic> val) {
+    storeImage.value = val;
+  }
+
   RxBool isAdmin = false.obs;
   var user = <dynamic, dynamic>{}.obs;
   void setUser(Map<dynamic, dynamic> val) {

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frust/utils/constants.dart';
 
-
 import '../main.dart';
 import '../widgets/common2.dart';
 
@@ -14,8 +13,6 @@ class RFPage2 extends StatefulWidget {
 }
 
 class _RFPage2State extends State<RFPage2> {
-  final String _locationText = "Location";
-
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
