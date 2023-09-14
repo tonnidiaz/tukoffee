@@ -291,13 +291,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                         width: 24,
                                         child: IconButton(
                                           onPressed: () {
-                                            showModalBottomSheet(
-                                                isScrollControlled: true,
+                                            TuFuncs.showBottomSheet(
                                                 context: context,
-                                                builder: (c) {
-                                                  return editCollectorModal(
-                                                      context);
-                                                });
+                                                widget: editCollectorModal(
+                                                    context));
                                           },
                                           icon: const Icon(
                                             Icons.edit,

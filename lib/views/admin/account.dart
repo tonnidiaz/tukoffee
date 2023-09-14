@@ -6,6 +6,7 @@ import 'package:frust/utils/colors.dart';
 import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/functions.dart';
 import 'package:frust/utils/styles.dart';
+import 'package:frust/views/map.dart';
 import 'package:frust/widgets/common.dart';
 import 'package:get/get.dart';
 
@@ -91,7 +92,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                       children: [
                                         tuTableRow(
                                             Text(
-                                              "Personal details:",
+                                              "Personal details",
                                               style: Styles.h2(),
                                             ),
                                             IconButton(
@@ -106,9 +107,9 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                                         _user!['last_name'],
                                                   });
                                                   final form = ctrl.form;
-                                                  pushTo(
-                                                      context,
-                                                      FormView(
+                                                  TuFuncs.showBottomSheet(
+                                                      context: context,
+                                                      widget: FormView(
                                                           title:
                                                               "Edit personal details",
                                                           fields: [
@@ -197,7 +198,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                       children: [
                                         tuTableRow(
                                             Text(
-                                              "Contact details:",
+                                              "Contact details",
                                               style: Styles.h2(),
                                             ),
                                             IconButton(
@@ -245,14 +246,14 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                       children: [
                                         tuTableRow(
                                             Text(
-                                              "Residential Address:",
+                                              "Residential Address",
                                               style: Styles.h2(),
                                             ),
                                             IconButton(
                                                 padding: EdgeInsets.zero,
                                                 onPressed: () {
                                                   formViewCtrl.setForm(
-                                                      _user!['address']);
+                                                      _user!['address'] ?? {});
                                                   addEditAddress(
                                                       title: "Edit address");
                                                 },
@@ -281,56 +282,12 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                                         )),
                                                   ),
                                                 ))
-                                              : Column(
-                                                  //id=address-details
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    tuTableRow(
-                                                      Text(
-                                                        "Street:",
-                                                        style: Styles.h3(),
-                                                      ),
-                                                      Text(
-                                                        "${address['street']}",
-                                                        style: Styles.h3(
-                                                            isLight: true),
-                                                      ),
-                                                    ),
-                                                    tuTableRow(
-                                                      Text(
-                                                        "Suburb:",
-                                                        style: Styles.h3(),
-                                                      ),
-                                                      Text(
-                                                        "${address['suburb']}",
-                                                        style: Styles.h3(
-                                                            isLight: true),
-                                                      ),
-                                                    ),
-                                                    tuTableRow(
-                                                      Text(
-                                                        "City:",
-                                                        style: Styles.h3(),
-                                                      ),
-                                                      Text(
-                                                        "${address['city']}",
-                                                        style: Styles.h3(
-                                                            isLight: true),
-                                                      ),
-                                                    ),
-                                                    tuTableRow(
-                                                      Text(
-                                                        "State:",
-                                                        style: Styles.h3(),
-                                                      ),
-                                                      Text(
-                                                        "${address['state']}",
-                                                        style: Styles.h3(
-                                                            isLight: true),
-                                                      ),
-                                                    ),
-                                                  ],
+                                              : Text(
+                                                  "${address['location']['name']}",
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 14),
                                                 );
                                         })
                                       ])),
@@ -342,7 +299,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Permissions:",
+                                          "Permissions",
                                           style: Styles.h2(),
                                         ),
                                         mY(5),
@@ -406,61 +363,14 @@ class _DashAccountPageState extends State<DashAccountPage> {
 
   final FormViewCtrl formViewCtrl = Get.find();
   addEditAddress({String? title}) async {
-    final form = formViewCtrl.form;
-    pushTo(
-        context,
-        FormView(
-            title: title,
-            fields: [
-              TuFormField(
-                label: "Street:",
-                hint: "e.g. 50 Davies street",
-                radius: 5,
-                hasBorder: false,
-                isRequired: true,
-                value: form["street"],
-                onChanged: (val) {
-                  formViewCtrl.setFormField("street", val);
-                },
-              ),
-              TuFormField(
-                label: "Suburb:",
-                hint: "e.g. Doornfontetin",
-                radius: 5,
-                hasBorder: false,
-                isRequired: true,
-                value: form["suburb"],
-                onChanged: (val) {
-                  formViewCtrl.setFormField("suburb", val);
-                },
-              ),
-              TuFormField(
-                label: "City:",
-                hint: "e.g. Johsnnesburg",
-                radius: 5,
-                hasBorder: false,
-                isRequired: true,
-                value: form["city"],
-                onChanged: (val) {
-                  formViewCtrl.setFormField("city", val);
-                },
-              ),
-              TuFormField(
-                label: "Province:",
-                hint: "e.g. Gauteng",
-                radius: 5,
-                hasBorder: false,
-                isRequired: true,
-                value: form["state"],
-                onChanged: (val) {
-                  formViewCtrl.setFormField("state", val);
-                },
-              ),
-              mY(5),
-            ],
-            onSubmit: () async {
-              _editFields(data: {"value": form}, field: "address");
-            }));
+    TuFuncs.showBottomSheet(
+        context: context,
+        widget: MapPage(onSubmit: (val) async {
+          if (val.isEmpty) return;
+          _editFields(data: {
+            "value": {"location": val}
+          }, field: "address");
+        }));
   }
 
   _setUser(Map<String, dynamic>? val) {

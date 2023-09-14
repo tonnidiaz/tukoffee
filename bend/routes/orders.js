@@ -22,7 +22,7 @@ router.get("/", async (req, res)=>{
         
         let populatedOrders = []
         for (let o of orders){
-            let ord = await (await o.populate("customer")).populate("products.product")
+            let ord = await (await (await o.populate("customer")).populate("products.product")).populate('store')
             populatedOrders.push({...ord.toJSON(), products: ord.products.filter((it) => it.product != null)})
         }
         orders = populatedOrders//.map(it=> it.toJSON())

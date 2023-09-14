@@ -7,6 +7,7 @@ import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/styles.dart';
 import 'package:frust/views/account/settings.dart';
 import 'package:frust/views/map.dart';
+import 'package:frust/views/order/checkout.dart';
 import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common2.dart';
 import 'package:frust/widgets/form_view.dart';
@@ -29,6 +30,7 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   OrderPageArgs? _args;
   final _appCtrl = MainApp.appCtrl;
+  final _storeCtrl = MainApp.storeCtrl;
   final _formViewCtrl = MainApp.formViewCtrl;
   Map<String, dynamic>? _order;
   void _setOrder(Map<String, dynamic>? val) {
@@ -59,6 +61,7 @@ class _OrderPageState extends State<OrderPage> {
       } else {
         _setOrder({});
       }
+      getStores(storeCtrl: _storeCtrl);
     } catch (e) {
       clog(e);
       setState(() {
@@ -404,33 +407,71 @@ class _OrderPageState extends State<OrderPage> {
                                         ],
                                       )),
                                   mY(10),
-                                  TuCard(
-                                      width: double.infinity,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          tuTableRow(
-                                              Text(
-                                                "Delivery address",
-                                                style: Styles.h2(),
-                                              ),
-                                              IconButton(
-                                                  padding: EdgeInsets.zero,
-                                                  onPressed:
-                                                      _onEditAddressPress,
-                                                  icon: const Icon(
-                                                    Icons.edit,
-                                                    size: 20,
-                                                  )),
-                                              my: 0),
-                                          Builder(builder: (context) {
-                                            final addr =
-                                                _order!["delivery_address"];
-                                            return Column(
-                                              //id=address-details
-                                              children: [
-                                                addr['location'] == null
+                                  _order!['mode'] == 1
+                                      ? TuCard(
+                                          child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Store",
+                                              style: Styles.h2(),
+                                            ),
+                                            Obx(
+                                              () => _storeCtrl.stores.value ==
+                                                      null
+                                                  ? none()
+                                                  : TuDropdownButton(
+                                                      label: "Store:",
+                                                      value: _order!['store']
+                                                          ['_id'],
+                                                      items: _storeCtrl
+                                                          .stores.value!
+                                                          .map((e) {
+                                                        return SelectItem(
+                                                            e['location']
+                                                                ['name'],
+                                                            e['_id']);
+                                                      }).toList(),
+                                                      onChanged: (val) {
+                                                        var store = _storeCtrl
+                                                            .stores.value!
+                                                            .where((element) =>
+                                                                element[
+                                                                    '_id'] ==
+                                                                val)
+                                                            .first;
+                                                        //_ctrl.setStore(store);
+                                                        //TODO: Edit store
+                                                      },
+                                                    ),
+                                            )
+                                          ],
+                                        ))
+                                      : TuCard(
+                                          width: double.infinity,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              tuTableRow(
+                                                  Text(
+                                                    "Delivery address",
+                                                    style: Styles.h2(),
+                                                  ),
+                                                  IconButton(
+                                                      padding: EdgeInsets.zero,
+                                                      onPressed:
+                                                          _onEditAddressPress,
+                                                      icon: const Icon(
+                                                        Icons.edit,
+                                                        size: 20,
+                                                      )),
+                                                  my: 0),
+                                              Builder(builder: (context) {
+                                                final addr =
+                                                    _order!["delivery_address"];
+                                                return addr['location'] == null
                                                     ? const Text("No address")
                                                     : Text(
                                                         addr['location']
@@ -439,12 +480,10 @@ class _OrderPageState extends State<OrderPage> {
                                                             fontWeight:
                                                                 FontWeight
                                                                     .w600),
-                                                      )
-                                              ],
-                                            );
-                                          }),
-                                        ],
-                                      )),
+                                                      );
+                                              }),
+                                            ],
+                                          )),
                                 ],
                               )),
                           mY(10),
