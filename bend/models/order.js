@@ -8,6 +8,7 @@ const OrderSchema = new Schema({
         type: Schema.ObjectId, ref: "User", required: true
     },
     mode: {type: Number, default: OrderMode.deliver},
+    store: { type: Schema.ObjectId, ref: "Store"},
     collector: {type: {name: String, phone: String}} ,
     collection_time: {
         type: String

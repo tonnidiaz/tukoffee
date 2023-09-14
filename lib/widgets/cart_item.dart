@@ -41,12 +41,7 @@ class CartItem extends StatelessWidget {
         // t.dismiss();
         clog("Item quantity updated");
       } catch (e) {
-        clog(e);
-        if (e.runtimeType == DioException) {
-          handleDioException(context: context, exception: e as DioException);
-          return;
-        }
-        showToast("Something went wrong!", isErr: true).show(context);
+        errorHandler(e: e, context: context);
       }
     }
 

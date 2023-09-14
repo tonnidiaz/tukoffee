@@ -14,7 +14,7 @@ router.get('/', async function(req, res, next) {
         users.push(user)
     }
     else {
-        users = await User.find().exec()
+        users = (await User.find().exec()).filter(it=> it.phone_verified && it.first_name)
     }
   res.json({users: users.map(it=>it.toJSON())})}
   catch(e){

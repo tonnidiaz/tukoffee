@@ -14,9 +14,10 @@ class InfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final appCtrl = MainApp.appCtrl;
     return Scaffold(
-      appBar: childAppbar(title: "Info"),
+      appBar: childAppbar(title: "About", showCart: false),
       body: Container(
           margin: const EdgeInsets.only(top: 10),
+          padding: defaultPadding2,
           //color: cardBGLight,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +115,7 @@ class InfoItem extends StatelessWidget {
       child: Container(
           width: double.infinity,
           height: 40,
-          padding: defaultPadding2,
+          padding: defaultPadding,
           color: Colors.white,
           margin: const EdgeInsets.symmetric(vertical: .5),
           child: child),

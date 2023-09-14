@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:frust/main.dart';
 import 'package:frust/utils/constants.dart';
@@ -85,7 +87,6 @@ class Step1 extends StatelessWidget {
         Obx(() => TuFormField(
               label: "Password:",
               hint: "More than 6 characters...",
-              keyboard: TextInputType.phone,
               isRequired: true,
               hasBorder: false,
               value: ctrl.user["password"],
@@ -114,8 +115,46 @@ class Step1 extends StatelessWidget {
   }
 }
 
-class Step2 extends StatelessWidget {
+class Step2 extends StatefulWidget {
   const Step2({super.key});
+
+  @override
+  State<Step2> createState() => _Step2State();
+}
+
+class _Step2State extends State<Step2> {
+  late Timer timer;
+  int _secs = 60;
+  _setSecs(int val) {
+    setState(() {
+      _secs = val;
+    });
+  }
+
+  _onTimerChange(Timer timer) {
+    if (_secs > 0) {
+      _setSecs(_secs - 1);
+    } else {
+      timer.cancel();
+    }
+  }
+
+  _initTimer() {
+    _setSecs(60);
+    timer = Timer.periodic(const Duration(seconds: 1), _onTimerChange);
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initTimer();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,11 +179,13 @@ class Step2 extends StatelessWidget {
               textAlign: TextAlign.center,
             )),
         Obx(() => TuFormField(
-              radius: 7,
               my: 0,
               textAlign: TextAlign.center,
               labelAlignment: FloatingLabelAlignment.center,
               hint: "* * * * ",
+              height: 14,
+
+              ///label: "OTP:",
               value: ctrl.user['otp'],
               keyboard: TextInputType.number,
               hasBorder: false,
@@ -154,15 +195,26 @@ class Step2 extends StatelessWidget {
                 ctrl.setuser = {...ctrl.user, 'otp': val};
               },
             )),
-        TextButton(
-            //   style: TextButton.styleFrom(fixedSize: const Size.fromHeight(10)),
-            onPressed: () {
-              //TODO: Request new otp
-            },
-            child: const Text(
-              "Resend PIN",
-              style: TextStyle(color: Colors.orange, fontSize: 14),
-            ))
+        InkWell(
+          onTap: _secs > 0
+              ? null
+              : () async {
+                  try {
+                    await apiDio().post('/auth/otp/resend',
+                        data: {'phone': ctrl.user['phone']});
+                    _setSecs(60);
+                    _initTimer();
+                  } catch (e) {
+                    errorHandler(
+                        e: e, context: context, msg: 'Failed to request OTP');
+                    _setSecs(0);
+                  }
+                },
+          child: Text(
+            _secs > 0 ? "Resend PIN in: $_secs" : "Resend PIN",
+            style: TextStyle(color: _secs > 0 ? Colors.black45 : Colors.orange),
+          ),
+        )
       ],
     );
   }
@@ -259,7 +311,7 @@ class _CreateAccountPageWrapperState extends State<CreateAccountPageWrapper> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      appBar: childAppbar(title: "Sign up", showCart: false),
+      appBar: childAppbar(title: "Login/Sign up", showCart: false),
       child: Container(
           padding: const EdgeInsets.all(14),
           height: screenSize(context).height - (appBarH + statusBarH(context)),

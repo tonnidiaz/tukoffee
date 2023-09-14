@@ -13,7 +13,6 @@ const authenticator = async (req, res,next, isRequired)=>{
     if (authorization) {
         const tkn = authorization.split(" ")[1];      
      if (tkn){
-        console.log(tkn)
          try {
             const {payload} = jwt.verify(tkn, process.env.PRIVATE_KEY);
             if (payload && payload.id){

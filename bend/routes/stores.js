@@ -6,7 +6,6 @@ const router = require('express').Router()
 router.get('/', async (req, res)=>{
     let stores = await Store.find().exec()
             stores = stores.map(it=>it.toJSON())
-            console.log(stores)
         res.json({stores})
 })
 

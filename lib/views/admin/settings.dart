@@ -71,64 +71,71 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                       style: Styles.h2(),
                     ),
                     Obx(
-                      () => Visibility(
-                        visible: appCtrl.user['permissions'] > 0,
-                        child: InkWell(
-                          onTap: () {
-                            // Edit name and phone
-                            formCtrl.setForm({
-                              'name': appCtrl.storeName.value,
-                              'phone': appCtrl.storePhone.value,
-                            });
-                            showDialog(
-                                context: context,
-                                builder: (context) => FormView(
-                                    title: "Edit store details",
-                                    fields: [
-                                      TuFormField(
-                                        label: "Store name:",
-                                        hint: "Enter store name...",
-                                        isRequired: true,
-                                        hasBorder: false,
-                                        value: formCtrl.form['name'],
-                                        onChanged: (val) {
-                                          formCtrl.setFormField('name', val);
-                                        },
-                                      ),
-                                      TuFormField(
-                                        label: "Store phone:",
-                                        hasBorder: false,
-                                        hint: "Enter store phone number...",
-                                        isRequired: true,
-                                        keyboard: TextInputType.phone,
-                                        value: formCtrl.form['phone'],
-                                        onChanged: (val) {
-                                          formCtrl.setFormField('phone', val);
-                                        },
-                                      ),
-                                      TuFormField(
-                                        label: "Store website:",
-                                        hasBorder: false,
-                                        hint: "Enter store website url...",
-                                        isRequired: false,
-                                        keyboard: TextInputType.url,
-                                        value: formCtrl.form['site'],
-                                        onChanged: (val) {
-                                          formCtrl.setFormField('site', val);
-                                        },
-                                      ),
-                                      mY(10)
-                                    ],
-                                    onSubmit: () async {
-                                      editFields();
-                                    }));
-                          },
-                          child: const Icon(
-                            Icons.edit,
-                            size: 20,
-                          ),
-                        ),
-                      ),
+                      () => appCtrl.user.isEmpty
+                          ? none()
+                          : Visibility(
+                              visible: appCtrl.user['permissions'] > 0,
+                              child: InkWell(
+                                onTap: () {
+                                  // Edit name and phone
+                                  formCtrl.setForm({
+                                    'name': appCtrl.storeName.value,
+                                    'phone': appCtrl.storePhone.value,
+                                  });
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => FormView(
+                                          title: "Edit store details",
+                                          fields: [
+                                            TuFormField(
+                                              label: "Store name:",
+                                              hint: "Enter store name...",
+                                              isRequired: true,
+                                              hasBorder: false,
+                                              value: formCtrl.form['name'],
+                                              onChanged: (val) {
+                                                formCtrl.setFormField(
+                                                    'name', val);
+                                              },
+                                            ),
+                                            TuFormField(
+                                              label: "Store phone:",
+                                              hasBorder: false,
+                                              hint:
+                                                  "Enter store phone number...",
+                                              isRequired: true,
+                                              keyboard: TextInputType.phone,
+                                              value: formCtrl.form['phone'],
+                                              onChanged: (val) {
+                                                formCtrl.setFormField(
+                                                    'phone', val);
+                                              },
+                                            ),
+                                            TuFormField(
+                                              label: "Store website:",
+                                              hasBorder: false,
+                                              hint:
+                                                  "Enter store website url...",
+                                              isRequired: false,
+                                              keyboard: TextInputType.url,
+                                              value: formCtrl.form['site'],
+                                              onChanged: (val) {
+                                                formCtrl.setFormField(
+                                                    'site', val);
+                                              },
+                                            ),
+                                            mY(10)
+                                          ],
+                                          onSubmit: () async {
+                                            editFields();
+                                          }));
+                                },
+                                child: const Icon(
+                                  Icons.edit,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
                     )),
                 tuTableRow(
                     Text(
@@ -178,53 +185,58 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                           style: Styles.h2(),
                         ),
                         Obx(
-                          () => Visibility(
-                            visible: appCtrl.user['permissions'] > 0,
-                            child: InkWell(
-                              onTap: () {
-                                formCtrl.setForm({
-                                  'ownerName': appCtrl.ownerName.value,
-                                  'ownerPhone': appCtrl.ownerPhone.value,
-                                });
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => FormView(
-                                        title: "Edit owner details",
-                                        fields: [
-                                          TuFormField(
-                                            label: "Owner name:",
-                                            hint: "Enter owner name...",
-                                            isRequired: true,
-                                            hasBorder: false,
-                                            value: formCtrl.form['ownerName'],
-                                            onChanged: (val) {
-                                              formCtrl.setFormField(
-                                                  'ownerName', val);
-                                            },
-                                          ),
-                                          TuFormField(
-                                            label: "Owner phone:",
-                                            hasBorder: false,
-                                            hint: "Enter owner phone number...",
-                                            isRequired: true,
-                                            value: formCtrl.form['ownerPhone'],
-                                            onChanged: (val) {
-                                              formCtrl.setFormField(
-                                                  'ownerPhone', val);
-                                            },
-                                          ),
-                                          mY(10)
-                                        ],
-                                        onSubmit: () async {
-                                          editFields();
-                                        }));
-                              },
-                              child: const Icon(
-                                Icons.edit,
-                                size: 20,
-                              ),
-                            ),
-                          ),
+                          () => appCtrl.user.isEmpty
+                              ? none()
+                              : Visibility(
+                                  visible: appCtrl.user['permissions'] > 0,
+                                  child: InkWell(
+                                    onTap: () {
+                                      formCtrl.setForm({
+                                        'ownerName': appCtrl.ownerName.value,
+                                        'ownerPhone': appCtrl.ownerPhone.value,
+                                      });
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) => FormView(
+                                              title: "Edit owner details",
+                                              fields: [
+                                                TuFormField(
+                                                  label: "Owner name:",
+                                                  hint: "Enter owner name...",
+                                                  isRequired: true,
+                                                  hasBorder: false,
+                                                  value: formCtrl
+                                                      .form['ownerName'],
+                                                  onChanged: (val) {
+                                                    formCtrl.setFormField(
+                                                        'ownerName', val);
+                                                  },
+                                                ),
+                                                TuFormField(
+                                                  label: "Owner phone:",
+                                                  hasBorder: false,
+                                                  hint:
+                                                      "Enter owner phone number...",
+                                                  isRequired: true,
+                                                  value: formCtrl
+                                                      .form['ownerPhone'],
+                                                  onChanged: (val) {
+                                                    formCtrl.setFormField(
+                                                        'ownerPhone', val);
+                                                  },
+                                                ),
+                                                mY(10)
+                                              ],
+                                              onSubmit: () async {
+                                                editFields();
+                                              }));
+                                    },
+                                    child: const Icon(
+                                      Icons.edit,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
                         )),
                     tuTableRow(
                         Text(
@@ -261,23 +273,25 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                               style: Styles.h2(),
                             ),
                             Obx(
-                              () => Visibility(
-                                visible: appCtrl.user['permissions'] > 0,
-                                child: InkWell(
-                                  onTap: () {
-                                    formCtrl.setForm({});
-                                    showModalBottomSheet(
-                                        isScrollControlled: true,
-                                        context: context,
-                                        builder: (context) =>
-                                            const AddStoreView());
-                                  },
-                                  child: const Icon(
-                                    CupertinoIcons.add_circled,
-                                    size: 27,
-                                  ),
-                                ),
-                              ),
+                              () => appCtrl.user.isEmpty
+                                  ? none()
+                                  : Visibility(
+                                      visible: appCtrl.user['permissions'] > 0,
+                                      child: InkWell(
+                                        onTap: () {
+                                          formCtrl.setForm({});
+                                          showModalBottomSheet(
+                                              isScrollControlled: true,
+                                              context: context,
+                                              builder: (context) =>
+                                                  const AddStoreView());
+                                        },
+                                        child: const Icon(
+                                          CupertinoIcons.add_circled,
+                                          size: 27,
+                                        ),
+                                      ),
+                                    ),
                             )),
                         mY(5),
                         storeCtrl.stores.value == null

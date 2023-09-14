@@ -17,7 +17,7 @@ import '../../controllers/app_ctrl.dart';
 import '../../controllers/appbar.dart';
 
 class AccountsCtrl extends GetxController {
-  Rx<List<dynamic>?> accounts = (null).obs;
+  Rx<List<dynamic>?> accounts = (null as List<dynamic>?).obs;
   setAccounts(List<dynamic>? val) {
     accounts.value = val;
     setSelectedAccounts([]);
@@ -40,6 +40,7 @@ class _AccountsState extends State<Accounts> {
   final AccountsCtrl _ctrl = Get.put(AccountsCtrl());
   final AppBarCtrl _appBarCtrl = Get.find();
   final AppCtrl _appCtrl = Get.find();
+
   /// ****************METHODS******************
   void _deleteAccounts() async {
     showDialog(
@@ -87,7 +88,6 @@ class _AccountsState extends State<Accounts> {
   }
 
   _init() async {
-    clog(_appCtrl.user['permissions']);
     if (_appCtrl.user['permissions'] == 2) {
       _appBarCtrl.setSelectedActions([
         PopupMenuItem(
@@ -121,52 +121,53 @@ class _AccountsState extends State<Accounts> {
         onRefresh: () async {
           await _init();
         },
-        child: Container(
-          //height: screenSize(context).height,
-          padding: const EdgeInsets.only(bottom: 10),
-          child: SingleChildScrollView(
-            child: Container(
-              padding: defaultPadding,
-              // constraints: BoxConstraints(minHeight: c.maxHeight),
-
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Accounts",
-                    style: Styles.h1,
-                  ),
-                  Obx(() {
-                    return _ctrl.accounts.value == null
-                        ? Center(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: defaultPadding,
+            height: screenSize(context).height -
+                statusBarH(context) -
+                (appBarH * 2),
+            // constraints: BoxConstraints(minHeight: c.maxHeight),
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                mY(14),
+                Text(
+                  "Accounts",
+                  style: Styles.h1,
+                ),
+                Obx(() {
+                  return _ctrl.accounts.value == null
+                      ? Expanded(
+                          child: Center(
                             child: Text("Loading...", style: Styles.h3()),
-                          )
-                        : Column(
-                            children: [
-                              AccountsSection(
-                                  ctrl: _ctrl,
-                                  title: "Staff",
-                                  accounts: [
-                                    ..._ctrl.accounts.value!
-                                        .where((it) =>
-                                            it['permissions'] == 1 ||
-                                            it['permissions'] == 2)
-                                        .toList(),
-                                  ]),
-                              mY(5),
-                              AccountsSection(
+                          ),
+                        )
+                      : Column(
+                          children: [
+                            AccountsSection(
                                 ctrl: _ctrl,
-                                title: "Customers",
-                                accounts: _ctrl.accounts.value!
-                                    .where((it) => it['permissions'] == 0)
-                                    .toList(),
-                              ),
-                            ],
-                          );
-                  })
-                ],
-              ),
+                                title: "Staff",
+                                accounts: [
+                                  ..._ctrl.accounts.value!
+                                      .where((it) =>
+                                          it['permissions'] == 1 ||
+                                          it['permissions'] == 2)
+                                      .toList(),
+                                ]),
+                            mY(5),
+                            AccountsSection(
+                              ctrl: _ctrl,
+                              title: "Customers",
+                              accounts: _ctrl.accounts.value!
+                                  .where((it) => it['permissions'] == 0)
+                                  .toList(),
+                            ),
+                          ],
+                        );
+                })
+              ],
             ),
           ),
         ));
@@ -357,59 +358,57 @@ class _AccountsSectionState extends State<AccountsSection> {
   final AppBarCtrl _appBarCtrl = Get.find();
   @override
   Widget build(BuildContext context) {
-    return TuCard(
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(widget.title, style: Styles.h2()),
-            Obx(() => TuLabeledCheckbox(
-                // top-cehckbox
-                activeColor: Colors.orange,
-                radius: 50,
-                value: _appBarCtrl.selected.isNotEmpty &&
-                    _appBarCtrl.selected
-                            .where((p0) => widget.accounts.contains(p0))
-                            .length ==
-                        widget.accounts.length,
-                onChanged: (val) {
-                  if (val == true) {
-                    // add the accounts to the already existing ones
-                    _appBarCtrl.setSelected(
-                        [..._appBarCtrl.selected, ...widget.accounts]);
-                  } else {
-                    // All except for the once in the widget.account
-                    _appBarCtrl.setSelected(_appBarCtrl.selected
-                        .where((it) => !widget.accounts.contains(it))
-                        .toList());
-                  }
-                })),
-          ],
-        ),
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(widget.title, style: Styles.h2()),
+          Obx(() => TuLabeledCheckbox(
+              // top-cehckbox
+              activeColor: Colors.orange,
+              radius: 50,
+              value: _appBarCtrl.selected.isNotEmpty &&
+                  _appBarCtrl.selected
+                          .where((p0) => widget.accounts.contains(p0))
+                          .length ==
+                      widget.accounts.length,
+              onChanged: (val) {
+                if (val == true) {
+                  // add the accounts to the already existing ones
+                  _appBarCtrl.setSelected(
+                      [..._appBarCtrl.selected, ...widget.accounts]);
+                } else {
+                  // All except for the once in the widget.account
+                  _appBarCtrl.setSelected(_appBarCtrl.selected
+                      .where((it) => !widget.accounts.contains(it))
+                      .toList());
+                }
+              })),
+        ],
+      ),
 
-        mY(5),
+      mY(5),
 
-        //id=accounts
-        widget.accounts.isEmpty
-            ? SizedBox(
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Nothing to show",
-                      style: Styles.h3(),
-                    ),
-                  ],
-                ),
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: widget.accounts.map((it) {
-                  return AccountCard(account: it, ctrl: widget.ctrl);
-                }).toList(),
-              )
-      ]),
-    );
+      //id=accounts
+      widget.accounts.isEmpty
+          ? SizedBox(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Nothing to show",
+                    style: Styles.h3(),
+                  ),
+                ],
+              ),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: widget.accounts.map((it) {
+                return AccountCard(account: it, ctrl: widget.ctrl);
+              }).toList(),
+            )
+    ]);
   }
 }

@@ -141,11 +141,10 @@ class _Step2State extends State<Step2> {
               textAlign: TextAlign.center,
             )),
         Obx(() => TuFormField(
-              radius: 7,
-              my: 0,
               textAlign: TextAlign.center,
               labelAlignment: FloatingLabelAlignment.center,
               hint: "* * * * ",
+              height: 14,
               value: formCtrl.form['otp'],
               keyboard: TextInputType.number,
               hasBorder: false,
@@ -160,9 +159,9 @@ class _Step2State extends State<Step2> {
               ? null
               : () async {
                   try {
-                    _setSecs(60);
                     await apiDio().post('/auth/password/reset?act=gen-otp',
                         data: {'phone': formCtrl.form['phone']});
+                    _setSecs(60);
                     _initTimer();
                   } catch (e) {
                     errorHandler(

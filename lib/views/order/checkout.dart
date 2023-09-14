@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frust/controllers/store_ctrl.dart';
@@ -35,6 +37,11 @@ class CheckoutCtrl extends GetxController {
   RxMap<String, dynamic> collector = <String, dynamic>{}.obs;
   setCollector(Map<String, dynamic> val) {
     collector.value = val;
+  }
+
+  RxMap<String, dynamic> store = <String, dynamic>{}.obs;
+  setStore(Map<String, dynamic> val) {
+    store.value = val;
   }
 
   RxMap<String, dynamic> selectedAddr = <String, dynamic>{}.obs;
@@ -78,6 +85,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
           'phone': user['phone']
         });
       }
+
+      getStores(storeCtrl: _storeCtrl);
     });
   }
 
@@ -299,53 +308,46 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       ),
                                     ),
                                     mY(5),
-                                    TuListTile(
-                                      leading: const Icon(
-                                        Icons.storefront,
-                                        color: Color.fromRGBO(255, 152, 0, .7),
-                                      ),
-                                      title: Text(
-                                        "${_appCtrl.storeName} ${_appCtrl.storeAddress['suburb']}",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      subtitle: Text(
-                                        "${_appCtrl.storePhone}",
-                                        style: const TextStyle(fontSize: 12),
-                                      ),
-                                    ),
+                                    Obx(() {
+                                      return _storeCtrl.stores.value == null
+                                          ? none()
+                                          : TuDropdownButton(
+                                              label: "Store:",
+                                              value: _ctrl.store['_id'],
+                                              items: _storeCtrl.stores.value!
+                                                  .map((e) {
+                                                return SelectItem(
+                                                    e['location']['name'],
+                                                    e['_id']);
+                                              }).toList(),
+                                              onChanged: (val) {
+                                                var store = _storeCtrl
+                                                    .stores.value!
+                                                    .where((element) =>
+                                                        element['_id'] == val)
+                                                    .first;
+                                                _ctrl.setStore(store);
+                                              },
+                                            );
+                                    }),
                                     mY(10),
-                                    TuListTile(
-                                      leading: const Icon(
-                                        Icons.person,
-                                        color: Color.fromRGBO(255, 152, 0, .7),
+                                    Obx(
+                                      () => TuListTile(
+                                        leading: const Icon(
+                                          Icons.person,
+                                          color:
+                                              Color.fromRGBO(255, 152, 0, .7),
+                                        ),
+                                        title: Text(
+                                          _ctrl.collector['name'] ?? "",
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        subtitle: Text(
+                                          _ctrl.collector['phone'] ?? "",
+                                          style: const TextStyle(fontSize: 12),
+                                        ),
                                       ),
-                                      title: Text(
-                                        _ctrl.collector['name'] ?? "",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      subtitle: Text(
-                                        _ctrl.collector['phone'] ?? "",
-                                        style: const TextStyle(fontSize: 12),
-                                      ),
-                                    ),
-                                    mY(10),
-                                    TuListTile(
-                                      leading: const Icon(
-                                        Icons.timer_outlined,
-                                        color: Color.fromRGBO(255, 152, 0, .7),
-                                      ),
-                                      title: Obx(() => TuDropdownButton(
-                                          label: "Collection time",
-                                          value: _ctrl.collectionTime.value,
-                                          onChanged: (val) {
-                                            _ctrl.setCollectionTime(val);
-                                          },
-                                          items: collectionTimes
-                                              .map((e) => SelectItem(
-                                                  e.toUpperCase(), e))
-                                              .toList())),
                                     ),
                                   ],
                                 ))
@@ -415,8 +417,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
     showToast("Creating order...").show(context);
     try {
       final res = await apiDio().post(
-          "/order/create?cartId=${_storeCtrl.cart["_id"]}",
-          data: {"address": _ctrl.selectedAddr});
+          "/order/create?mode=${_ctrl.mode.value == OrderMode.deliver ? 0 : 1}&cartId=${_storeCtrl.cart["_id"]}",
+          data: {"address": _ctrl.selectedAddr, 'store': _ctrl.store});
       Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
       Navigator.pushNamed(context, "/order",
           arguments: OrderPageArgs(id: "${res.data["order"]["oid"]}"));
@@ -429,10 +431,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   _onCheckoutBtnPress() async {
-    if (_ctrl.selectedAddr.isEmpty) {
+    if (_ctrl.mode.value == OrderMode.deliver && _ctrl.selectedAddr.isEmpty) {
       // Disallow if user has no delivery addresses
       return showToast("Delivery address is required!", isErr: true)
           .show(context);
+    } else if (_ctrl.mode.value == OrderMode.collect && _ctrl.store.isEmpty) {
+      return showToast("Please select a store", isErr: true).show(context);
     } else if (_storeCtrl.cart.isEmpty) {
       return showToast("Please Add some items to your cart!", isErr: true)
           .show(context);
@@ -458,8 +462,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
       final res = await paystackDio.post("/page", data: body);
       final resData = res.data["data"];
       final checkoutUrl = "$paystackPayUrl/${resData['slug']}";
-      _createOrder();
-      return;
+      if (Platform.isLinux || Platform.isWindows) {
+        _createOrder();
+        return;
+      }
       // Navigate to payment page and pass checkoutUrl as arg to be used in webview
       Navigator.pushNamed(context, "/order/checkout/payment",
           arguments: PaymentScreenArgs(checkoutUrl));
@@ -527,17 +533,12 @@ Widget addressCard(
                           '/user/delivery-address?action=remove',
                           data: {"address": address});
                       MainApp.appCtrl.setUser(res.data['user']);
+                      checkoutCtrl.setSelectedAddr({});
                     } catch (e) {
-                      if (e.runtimeType == DioException) {
-                        handleDioException(
-                            context: context,
-                            exception: e as DioException,
-                            msg: "Failed to remove addresss");
-                      } else {
-                        clog(e);
-                        showToast("Failed to remove address", isErr: true)
-                            .show(context);
-                      }
+                      errorHandler(
+                          e: e,
+                          context: context,
+                          msg: "Failed to remove addresss");
                     }
                   },
                   icon: const Icon(
@@ -630,19 +631,22 @@ class _EditAddressFormState extends State<EditAddressForm> {
 }
 
 Widget editCollectorModal(BuildContext context) {
-  final formCtrl = MainApp.formViewCtrl;
+  final ctrl = Get.find<CheckoutCtrl>();
   return FormView(
     useBottomSheet: true,
-    title: "Order settings",
-    onSubmit: () {},
+    title: "Order Collector",
+    onSubmit: () {
+      Navigator.pop(context);
+    },
+    btnTxt: "Done",
     fields: [
       Obx(() => TuFormField(
             label: "Collector Name:",
             hint: "e.g. John Doe",
             isRequired: true,
-            value: formCtrl.form['name'],
+            value: ctrl.collector['name'],
             onChanged: (val) {
-              formCtrl.setFormField('name', val);
+              ctrl.setCollector({...ctrl.collector, 'name': val});
             },
           )),
       Obx(() => TuFormField(
@@ -650,9 +654,9 @@ Widget editCollectorModal(BuildContext context) {
             hint: "e.g. 0712345678",
             isRequired: true,
             keyboard: TextInputType.phone,
-            value: formCtrl.form['phone'],
+            value: ctrl.collector['phone'],
             onChanged: (val) {
-              formCtrl.setFormField('phone', val);
+              ctrl.setCollector({...ctrl.collector, 'phone': val});
             },
           )),
     ],

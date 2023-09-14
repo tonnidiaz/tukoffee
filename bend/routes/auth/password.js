@@ -10,8 +10,8 @@ router.post("/reset", async (req, res) => {
         const { act } = req.query;
         const { email, phone, otp, password } = req.body;
         const user =
-            (await User.findOne({ phone }).exec()) ??
-            (await User.findOne({ email }).exec());
+            phone ? (await User.findOne({ phone }).exec()) : email ?
+            (await User.findOne({ email }).exec()) : null;
         if (!user) {
             return res.status(400).send("tuned:Account does not exist");
         }

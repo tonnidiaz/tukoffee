@@ -36,7 +36,6 @@ class _DashAccountPageState extends State<DashAccountPage> {
           "/user/edit${field != null ? "?field=$field" : ""}",
           data: {...data, "userId": _user!["_id"]});
       _setUser(res.data["user"]);
-      Navigator.pop(context);
     } catch (e) {
       if (e.runtimeType == DioException) {
         handleDioException(
@@ -147,11 +146,13 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                                             ),
                                                           ],
                                                           onSubmit: () async {
-                                                            _editFields(
+                                                            await _editFields(
                                                               data: {
                                                                 'value': form
                                                               },
                                                             );
+                                                            Navigator.pop(
+                                                                context);
                                                           }));
                                                 },
                                                 icon: const Icon(
@@ -347,47 +348,35 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                         mY(5),
                                         Builder(builder: (context) {
                                           final perms = _user!['permissions'];
-                                          return false
-                                              ? Text("$perms")
-                                              : TuDropdownButton(
-                                                  label: "Permissions",
-                                                  value: perms,
-                                                  borderColor:
-                                                      const Color.fromRGBO(
-                                                          33, 33, 33, .2),
-                                                  onChanged: (val) async {
-                                                    try {
-                                                      _editFields(data: {
-                                                        'value': {
-                                                          'permissions': val
-                                                        }
-                                                      });
-                                                      /* _setUser(
+                                          return TuDropdownButton(
+                                            label: "Permissions",
+                                            value: perms,
+                                            borderColor: const Color.fromRGBO(
+                                                33, 33, 33, .2),
+                                            onChanged: (val) async {
+                                              try {
+                                                await _editFields(data: {
+                                                  'value': {'permissions': val}
+                                                });
+                                                showToast("Done!")
+                                                    .show(context);
+                                                /* _setUser(
                                                           res.data['user']); */
-                                                    } catch (e) {
-                                                      if (e.runtimeType ==
-                                                          DioException) {
-                                                        e as DioException;
-                                                        handleDioException(
-                                                            context: context,
-                                                            exception: e,
-                                                            msg:
-                                                                "Error modifying user permissions");
-                                                      } else {
-                                                        clog(e);
-                                                        showToast(
-                                                                "Error modifying user permissions")
-                                                            .show(context);
-                                                      }
-                                                    }
-                                                  },
-                                                  items: [
-                                                    SelectItem("Read only", 0),
-                                                    SelectItem("Read/Write", 1),
-                                                    SelectItem(
-                                                        "Read/Write/Delete", 2),
-                                                  ],
-                                                ); /* Wrap(
+                                              } catch (e) {
+                                                errorHandler(
+                                                    e: e,
+                                                    context: context,
+                                                    msg:
+                                                        "Error modifying user permissions");
+                                              }
+                                            },
+                                            items: [
+                                              SelectItem("Read only", 0),
+                                              SelectItem("Read/Write", 1),
+                                              SelectItem(
+                                                  "Read/Write/Delete", 2),
+                                            ],
+                                          ); /* Wrap(
                                           children: [
                                             TuLabeledCheckbox(
                                                 label: "Read only",
@@ -485,12 +474,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
       final res = await dio.get('$apiURL/users?id=${widget.id}');
       _setUser(res.data['users'][0]);
     } catch (e) {
-      if (e.runtimeType == DioException) {
-        e as DioException;
-        clog(e.response);
-      } else {
-        clog(e);
-      }
+      errorHandler(e: e, context: context);
     }
   }
 }

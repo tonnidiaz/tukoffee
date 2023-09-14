@@ -3,13 +3,11 @@
 import 'dart:io';
 
 import 'package:cloudinary/cloudinary.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:frust/widgets/tu/multiselect.dart';
 import 'package:get/get.dart';
-import 'package:search_choices/search_choices.dart';
 
 import '../main.dart';
 import '../utils/constants.dart';

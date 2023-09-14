@@ -244,6 +244,7 @@ class TuFuncs {
       bool full = true,
       required Widget widget}) {
     showModalBottomSheet(
+        useSafeArea: true,
         isScrollControlled: full,
         context: context,
         builder: (context) => widget);
