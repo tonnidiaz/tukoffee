@@ -415,7 +415,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
     try {
       final res = await apiDio().post(
           "/order/create?mode=${_ctrl.mode.value == OrderMode.deliver ? 0 : 1}&cartId=${_storeCtrl.cart["_id"]}",
-          data: {"address": _ctrl.selectedAddr, 'store': _ctrl.store});
+          data: {
+            "address": _ctrl.selectedAddr,
+            'store': _ctrl.store,
+            'collector': _ctrl.collector
+          });
       Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
       Navigator.pushNamed(context, "/order",
           arguments: OrderPageArgs(id: "${res.data["order"]["oid"]}"));

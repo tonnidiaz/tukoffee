@@ -71,7 +71,9 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   _onEditRecipientBtnPress() async {
-    _formViewCtrl.setForm({"delivery_address": _order!['delivery_address']});
+    var mode = _order!['mode'];
+    Map<String, dynamic> form =
+        mode == 1 ? _order!['collector'] : _order!['delivery_address'];
 
     TuFuncs.showBottomSheet(
         context: context,
@@ -84,10 +86,9 @@ class _OrderPageState extends State<OrderPage> {
                 isRequired: true,
                 label: "Name:",
                 hint: "e.g. John Doe",
-                value: _formViewCtrl.form['delivery_address']['name'],
+                value: form['name'],
                 onChanged: (val) {
-                  _formViewCtrl.setFormField("delivery_address",
-                      {..._formViewCtrl.form['delivery_address'], "name": val});
+                  form["name"] = val;
                 },
               ),
               TuFormField(
@@ -95,25 +96,24 @@ class _OrderPageState extends State<OrderPage> {
                 isRequired: true,
                 label: "Phone:",
                 hint: "e.g. 0712345678",
-                value: _formViewCtrl.form['delivery_address']['phone'],
+                value: form['phone'],
                 onChanged: (val) {
-                  _formViewCtrl.setFormField("delivery_address", {
-                    ..._formViewCtrl.form['delivery_address'],
-                    "phone": val
-                  });
+                  form["phone"] = val;
                 },
               ),
               mY(5)
             ],
             onSubmit: () async {
               try {
-                final res = await apiDio().post(
-                    '/order/edit?id=${_order!['_id']}',
-                    data: _formViewCtrl.form);
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/', (route) => false);
-                Navigator.pushNamed(context, '/order',
-                    arguments: OrderPageArgs(id: "${res.data['id']}"));
+                var field = mode == 1 ? "collector" : "delivery_address";
+                Map<String, dynamic> val = mode == 1
+                    ? _order!['collector']
+                    : _order!['delivery_address'];
+                final res = await apiDio()
+                    .post('/order/edit?id=${_order!['_id']}', data: {
+                  field: {...val, ...form}
+                });
+                _reload(res);
               } catch (e) {
                 errorHandler(
                     e: e, context: context, msg: "Error editing fields!");
@@ -136,13 +136,17 @@ class _OrderPageState extends State<OrderPage> {
                 "location": val
               }
             });
-            Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-            Navigator.pushNamed(context, '/order',
-                arguments: OrderPageArgs(id: "${res.data['id']}"));
+            _reload(res);
           } catch (e) {
             errorHandler(e: e, context: context, msg: "Error editing fields!");
           }
         }));
+  }
+
+  _reload(res) async {
+    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    Navigator.pushNamed(context, '/order',
+        arguments: OrderPageArgs(id: "${res.data['id']}"));
   }
 
   @override
@@ -223,17 +227,7 @@ class _OrderPageState extends State<OrderPage> {
                                                                 data: {
                                                               "status": status
                                                             });
-                                                        Navigator
-                                                            .pushNamedAndRemoveUntil(
-                                                                context,
-                                                                '/',
-                                                                (route) =>
-                                                                    false);
-                                                        Navigator.pushNamed(
-                                                            context, '/order',
-                                                            arguments:
-                                                                OrderPageArgs(
-                                                                    id: "${res.data['id']}"));
+                                                        _reload(res);
                                                       } catch (e) {
                                                         errorHandler(
                                                             e: e,
@@ -386,7 +380,7 @@ class _OrderPageState extends State<OrderPage> {
                                                   style: Styles.h3(),
                                                 ),
                                                 Text(
-                                                  "${_order!["delivery_address"]["name"]}",
+                                                  "${_order!["delivery_address"]["name"] ?? _order!["collector"]["name"]}",
                                                   style:
                                                       Styles.h3(isLight: true),
                                                 ),
@@ -397,7 +391,7 @@ class _OrderPageState extends State<OrderPage> {
                                                   style: Styles.h3(),
                                                 ),
                                                 Text(
-                                                  "${_order!["delivery_address"]["phone"]}",
+                                                  "${_order!["delivery_address"]["phone"] ?? _order!["collector"]["phone"]}",
                                                   style:
                                                       Styles.h3(isLight: true),
                                                 ),
@@ -433,7 +427,7 @@ class _OrderPageState extends State<OrderPage> {
                                                                 ['name'],
                                                             e['_id']);
                                                       }).toList(),
-                                                      onChanged: (val) {
+                                                      onChanged: (val) async {
                                                         var store = _storeCtrl
                                                             .stores.value!
                                                             .where((element) =>
@@ -441,8 +435,15 @@ class _OrderPageState extends State<OrderPage> {
                                                                     '_id'] ==
                                                                 val)
                                                             .first;
+                                                        clog(store);
                                                         //_ctrl.setStore(store);
-                                                        //TODO: Edit store
+                                                        final res =
+                                                            await apiDio().post(
+                                                                '/order/edit?id=${_order!['_id']}',
+                                                                data: {
+                                                              'store': store
+                                                            });
+                                                        _reload(res);
                                                       },
                                                     ),
                                             )

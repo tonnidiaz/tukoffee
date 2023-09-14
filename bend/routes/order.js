@@ -60,7 +60,7 @@ router.post("/cancel", auth, async (req, res) => {
 });
 router.post("/create", auth, async (req, res) => {
     const { cartId, mode } = req.query;
-    const { address, store } = req.body;
+    const { address, store, collector } = req.body;
     try {
         if (cartId) {
             // The customer has paid. so get the cart and create an order
@@ -80,6 +80,7 @@ router.post("/create", auth, async (req, res) => {
             order.delivery_address = address;
             order.mode = mode;
             order.store = store;
+            order.collector = collector;
             await order.save();
             // add order to user's orders
             user.orders.push(order);

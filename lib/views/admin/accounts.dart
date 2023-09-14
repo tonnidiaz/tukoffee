@@ -285,7 +285,6 @@ class AccountCard extends StatelessWidget {
                       : [
                           PopupMenuItem(
                               onTap: () async {
-                                //TODO
                                 showDialog(
                                     context: context,
                                     builder: (context) {
