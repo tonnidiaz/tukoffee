@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+/* // ignore_for_file: use_build_context_synchronously
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -130,7 +130,6 @@ class _OrdersPageState extends State<OrdersPage> {
 
   @override
   void dispose() {
-    clog("Dispose");
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       // deselect
       _appBarCtrl.setSelected([]);
@@ -354,3 +353,4 @@ class _OrdersPageState extends State<OrdersPage> {
     );
   }
 }
+ */

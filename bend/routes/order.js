@@ -2,6 +2,7 @@ const express = require("express");
 const { Cart, Order, User } = require("../models");
 const { auth } = require("../utils/middleware");
 const { OrderStatus } = require("../utils/constants");
+const { tunedErr } = require("../utils/functions");
 const router = express.Router();
 
 const genOID = async () => {
@@ -67,13 +68,13 @@ router.post("/create", auth, async (req, res) => {
             // Also delete the user cart
             console.log("Creating order for cart: " + cartId);
             const cart = await Cart.findById(cartId).exec();
-            if (!cart) return res.status(400).json({ msg: "Cart not found" });
+            if (!cart) return tunedErr(res, 400, "Carr not found")
             const user = await User.findById(cart.customer).exec();
             if (!user)
-                return res.status(400).json({ msg: "Customer not found" });
+                return tunedErr(res, 400, "Customer not found")
 
             const order = new Order();
-
+            console.log(store)
             order.oid = await genOID();
             order.customer = user;
             order.products = cart.products;
@@ -97,7 +98,7 @@ router.post("/create", auth, async (req, res) => {
         }
     } catch (e) {
         console.log(e);
-        res.json({ msg: "Something went wrong" });
+        return tunedErr(res, 500, "Something went wrong")
     }
 });
 

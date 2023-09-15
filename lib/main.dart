@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:frust/controllers/appbar.dart';
 import 'package:frust/controllers/products_ctrl.dart';
 import 'package:frust/controllers/store_ctrl.dart';
+import 'package:frust/views/admin/orders.dart';
 import 'package:frust/views/auth/create.dart';
-import 'package:frust/views/orders.dart';
 import 'package:frust/widgets/form_view.dart';
 import 'package:frust/widgets/loader.dart';
 import 'package:get/get.dart';
@@ -71,7 +71,6 @@ class MainApp extends StatefulWidget {
   static StoreCtrl storeCtrl = Get.put(StoreCtrl());
   static AppBarCtrl appBarCtrl = Get.put(AppBarCtrl());
   static ProductsCtrl productsCtrl = Get.put(ProductsCtrl());
-  static OrdersCtrl ordersCtrl = Get.put(OrdersCtrl());
   static SignupCtrl signupCtrl = Get.put(SignupCtrl());
 
   @override
@@ -85,7 +84,6 @@ class _MainAppState extends State<MainApp> {
     Get.put(StoreCtrl());
     Get.put(AppBarCtrl());
     Get.put(ProductsCtrl());
-    Get.put(OrdersCtrl());
     Get.put(SignupCtrl());
   }
 

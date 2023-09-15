@@ -417,17 +417,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
           "/order/create?mode=${_ctrl.mode.value == OrderMode.deliver ? 0 : 1}&cartId=${_storeCtrl.cart["_id"]}",
           data: {
             "address": _ctrl.selectedAddr,
-            'store': _ctrl.store,
+            'store': _ctrl.store['_id'],
             'collector': _ctrl.collector
           });
+
+      var oid = res.data["order"]["oid"];
+      clog(oid);
       Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
       Navigator.pushNamed(context, "/order",
-          arguments: OrderPageArgs(id: "${res.data["order"]["oid"]}"));
+          arguments: OrderPageArgs(id: "$oid"));
     } catch (e) {
-      errorHandler(
-          e: e,
-          context: context,
-          msg: "Failed to create order. Please contact the developer");
+      errorHandler(e: e, context: context, msg: "Failed to create order");
     }
   }
 

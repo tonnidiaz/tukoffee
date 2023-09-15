@@ -143,20 +143,6 @@ class OrderItem extends StatelessWidget {
                           return [
                             PopupMenuItem(
                               onTap: () {
-                                _appBarCtrl.setSelected([]);
-                                Navigator.pushNamed(context, "/order",
-                                    arguments:
-                                        OrderPageArgs(id: "${order['oid']}"));
-                              },
-                              child: iconText(
-                                "View",
-                                Icons.visibility,
-                                alignment: MainAxisAlignment.start,
-                                fontSize: 15,
-                              ),
-                            ),
-                            PopupMenuItem(
-                              onTap: () {
                                 _cancelOrder(context);
                               },
                               child: iconText(

@@ -24,6 +24,13 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  String? _searchBy;
+  _setSearchBy(String val) {
+    setState(() {
+      _searchBy = val;
+    });
+  }
+
   List? _products;
   _setProducts(List? val) {
     setState(() {
@@ -36,12 +43,12 @@ class _SearchPageState extends State<SearchPage> {
   _searchProducts(String q) async {
     try {
       _setProducts(null);
-      final res = await apiDio().get('/search', queryParameters: {"q": _query});
+      final res = await apiDio()
+          .get('/search', queryParameters: {"q": _query, 'by': _searchBy});
       _setProducts(res.data['products']);
     } catch (e) {
       _setProducts([]);
-      errorHandler(
-          e: e, context: context, msg: "Failed to search for products");
+      clog(e);
     }
   }
 
@@ -78,7 +85,19 @@ class _SearchPageState extends State<SearchPage> {
         ),
         body: Container(
             padding: defaultPadding2,
-            child: Column(children: [
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              TuDropdownButton(
+                label: "Search by:",
+                value: _searchBy,
+                onChanged: (val) {
+                  _setSearchBy(val);
+                },
+                items: [
+                  SelectItem("Product ID", "pid"),
+                  SelectItem("Name", "name"),
+                ],
+              ),
               Visibility(
                 visible: _query.isNotEmpty,
                 child: Row(

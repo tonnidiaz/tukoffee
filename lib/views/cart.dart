@@ -55,7 +55,7 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      appBar: childAppbar(),
+      appBar: childAppbar(showCart: false),
       bottomSheet: Container(
         decoration: const BoxDecoration(
             color: cardBGLight,

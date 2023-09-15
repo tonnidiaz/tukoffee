@@ -85,22 +85,32 @@ class _TDrawerState extends State<TDrawer> {
                 onTap: () {
                   Navigator.pushNamed(context, "/cart");
                 }),
-            TDrawerItem(
-                title: "Orders",
-                index: 4,
-                leading: const Icon(Icons.shopping_basket),
-                selected: currPage == "/orders",
-                onTap: () {
-                  Navigator.pushNamed(context, "/orders");
-                }),
-            TDrawerItem(
-                title: "Checkout",
-                index: 5,
-                leading: const Icon(Icons.shopping_cart_checkout),
-                selected: currPage == "/order/checkout",
-                onTap: () {
-                  Navigator.pushNamed(context, "/order/checkout");
-                }),
+            Obx(
+              () => Visibility(
+                visible: _appCtrl.user.isNotEmpty,
+                child: TDrawerItem(
+                    title: "Orders",
+                    index: 4,
+                    leading: const Icon(Icons.shopping_basket),
+                    selected: currPage == "/orders",
+                    onTap: () {
+                      Navigator.pushNamed(context, "/orders");
+                    }),
+              ),
+            ),
+            Obx(
+              () => Visibility(
+                visible: _appCtrl.user.isNotEmpty,
+                child: TDrawerItem(
+                    title: "Checkout",
+                    index: 5,
+                    leading: const Icon(Icons.shopping_cart_checkout),
+                    selected: currPage == "/order/checkout",
+                    onTap: () {
+                      Navigator.pushNamed(context, "/order/checkout");
+                    }),
+              ),
+            ),
             Visibility(
               visible: dev,
               child: TDrawerItem(

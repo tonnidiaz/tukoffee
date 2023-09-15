@@ -9,6 +9,7 @@ import 'package:frust/views/about.dart';
 import 'package:frust/views/account/index.dart';
 import 'package:frust/views/account/profile.dart';
 import 'package:frust/views/account/settings.dart';
+import 'package:frust/views/admin/orders.dart';
 import 'package:frust/views/auth/create.dart';
 import 'package:frust/views/auth/login.dart';
 import 'package:frust/views/auth/reset_pass.dart';
@@ -16,7 +17,6 @@ import 'package:frust/views/cart.dart';
 import 'package:frust/views/order/index.dart';
 import 'package:frust/views/order/checkout.dart';
 import 'package:frust/views/order/payment.dart';
-import 'package:frust/views/orders.dart';
 import 'package:frust/views/product.dart';
 import 'package:frust/views/rf.dart';
 import 'package:frust/views/search.dart';
@@ -96,6 +96,8 @@ final List<Page> pages = [
   Page("/auth/create", const SignupPage(),
       icon: CupertinoIcons.home, inList: false),
   Page("/orders", const OrdersPage(), icon: CupertinoIcons.home, inList: false),
+  Page("/admin/orders", const OrdersPage(),
+      icon: CupertinoIcons.home, inList: false),
   Page("/cart", const CartPage(), icon: CupertinoIcons.home, inList: false),
   Page("/order/checkout", const CheckoutPage(),
       icon: CupertinoIcons.home, inList: false),

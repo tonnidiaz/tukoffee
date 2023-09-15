@@ -171,7 +171,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      appBar: childAppbar(),
+      appBar: childAppbar(showCart: false),
       bottomNavBar: Obx(
         () => BottomNavigationBar(
           currentIndex: _ctrl.selectedTab.value,
@@ -185,6 +185,7 @@ class _DashboardPageState extends State<DashboardPage> {
               icon: Icon(Icons.home),
               label: "Home",
             ), */
+
             BottomNavigationBarItem(
               icon: Icon(Icons.dashboard),
               label: "Dashboard",
@@ -204,10 +205,20 @@ class _DashboardPageState extends State<DashboardPage> {
           ],
         ),
       ),
-      child: SizedBox(
-          height: screenSize(context).height -
-              (appBarH + statusBarH(context) + bottomBarH),
-          child: Obx(() => adminPages.elementAt(_ctrl.selectedTab.value))),
+      child: WillPopScope(
+        onWillPop: () async {
+          clog("On will pop");
+          if (_ctrl.selectedTab.value != 0) {
+            _ctrl.selectedTab.value = 0;
+            return false;
+          }
+          return true;
+        },
+        child: SizedBox(
+            height: screenSize(context).height -
+                (appBarH + statusBarH(context) + bottomBarH),
+            child: Obx(() => adminPages.elementAt(_ctrl.selectedTab.value))),
+      ),
     );
   }
 }
@@ -297,7 +308,7 @@ class Dashboard extends StatelessWidget {
 final List<Widget> adminPages = [
   const Dashboard(),
   const Products(),
-  const AdminOrdersPage(),
+  const OrdersPage(),
   const Accounts(),
 ];
 

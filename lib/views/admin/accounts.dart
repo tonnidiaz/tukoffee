@@ -9,6 +9,7 @@ import 'package:frust/views/admin/account.dart';
 import 'package:frust/views/order/index.dart';
 import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common2.dart';
+import 'package:frust/widgets/common3.dart';
 import 'package:frust/widgets/order_item.dart';
 import 'package:frust/widgets/prompt_modal.dart';
 import 'package:get/get.dart';
@@ -21,11 +22,25 @@ class AccountsCtrl extends GetxController {
   setAccounts(List<dynamic>? val) {
     accounts.value = val;
     setSelectedAccounts([]);
+    if (val != null) {
+      setFilteredAccounts(val);
+    }
+  }
+
+  RxList filteredAccounts = [].obs;
+  setFilteredAccounts(List val) {
+    filteredAccounts.value = val;
+    setSelectedAccounts([]);
   }
 
   RxList<dynamic> selectedAccounts = <dynamic>[].obs;
   setSelectedAccounts(List<dynamic> val) {
     selectedAccounts.value = val;
+  }
+
+  RxString query = "".obs;
+  setQuery(String val) {
+    query.value = val;
   }
 }
 
@@ -132,10 +147,35 @@ class _AccountsState extends State<Accounts> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                mY(14),
+                mY(10),
                 Text(
                   "Accounts",
                   style: Styles.h1,
+                ),
+                Obx(
+                  () => TuFormField(
+                    hint: "Name or email",
+                    prefixIcon: TuIcon(Icons.search),
+                    radius: 100,
+                    value: _ctrl.query.value,
+                    onChanged: (val) {
+                      _ctrl.setQuery(val);
+
+                      _ctrl.setFilteredAccounts(
+                          _ctrl.accounts.value!.where((p0) {
+                        var firstLastName =
+                            "${p0['first_name']} ${p0['last_name']}";
+
+                        var filter = "${p0['email']}"
+                                .contains(RegExp(val, caseSensitive: false)) ||
+                            firstLastName
+                                .contains(RegExp(val, caseSensitive: false)) ||
+                            "${p0['first_name']}"
+                                .contains(RegExp(val, caseSensitive: false));
+                        return filter;
+                      }).toList());
+                    },
+                  ),
                 ),
                 Obx(() {
                   return _ctrl.accounts.value == null
@@ -150,7 +190,7 @@ class _AccountsState extends State<Accounts> {
                                 ctrl: _ctrl,
                                 title: "Staff",
                                 accounts: [
-                                  ..._ctrl.accounts.value!
+                                  ..._ctrl.filteredAccounts
                                       .where((it) =>
                                           it['permissions'] == 1 ||
                                           it['permissions'] == 2)
@@ -160,7 +200,7 @@ class _AccountsState extends State<Accounts> {
                             AccountsSection(
                               ctrl: _ctrl,
                               title: "Customers",
-                              accounts: _ctrl.accounts.value!
+                              accounts: _ctrl.filteredAccounts
                                   .where((it) => it['permissions'] == 0)
                                   .toList(),
                             ),
