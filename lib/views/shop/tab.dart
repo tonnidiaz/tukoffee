@@ -1,7 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frust/controllers/store_ctrl.dart';
 import 'package:frust/main.dart';
 import 'package:frust/utils/functions.dart';
+import 'package:frust/views/search.dart';
+import 'package:frust/widgets/common2.dart';
+import 'package:frust/widgets/common3.dart';
 import 'package:get/get.dart';
 import '../../utils/constants2.dart';
 import '../../widgets/common.dart';
@@ -62,83 +66,111 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
+    filterModal() {
+      return Padding(
+        padding: defaultPadding2,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("FILTER",
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black)),
+                Obx(() => IconButton(
+                      splashRadius: 15,
+                      onPressed: () {
+                        _storeCtrl.sortOrder.value == SortOrder.descending
+                            ? _storeCtrl.setSortOrder(SortOrder.ascending)
+                            : _storeCtrl.setSortOrder(SortOrder.descending);
+                      },
+                      icon: Icon(
+                          _storeCtrl.sortOrder.value == SortOrder.descending
+                              ? CupertinoIcons.sort_down
+                              : CupertinoIcons.sort_up),
+                      color: Colors.black87,
+                    )),
+              ],
+            ),
+            LayoutBuilder(builder: (context, c) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Obx(() => TuDropdownButton(
+                        label: "Sort by",
+                        labelFontSize: 14,
+                        width: (c.maxWidth / 2) - 2.5,
+                        height: 40,
+                        value: _storeCtrl.sortBy.value,
+                        radius: 2,
+                        items: [
+                          SelectItem("name", SortBy.name),
+                          SelectItem("price", SortBy.price),
+                          SelectItem("date", SortBy.dateCreated),
+                        ],
+                        onChanged: (p0) {
+                          _storeCtrl.setSortBy(p0);
+                        },
+                      )),
+                  Obx(() => TuDropdownButton(
+                        label: "Status",
+                        labelFontSize: 14,
+                        width: (c.maxWidth / 2) - 2.5,
+                        radius: 2,
+                        height: 40,
+                        value: _storeCtrl.status.value,
+                        items: [
+                          SelectItem("All", ProductStatus.all),
+                          SelectItem("Top selling", ProductStatus.topSelling),
+                          SelectItem("On special", ProductStatus.special),
+                          SelectItem("On sale", ProductStatus.sale),
+                          SelectItem("in stock", ProductStatus.instock),
+                          SelectItem("out of stock", ProductStatus.out),
+                        ],
+                        onChanged: (p0) {
+                          _storeCtrl.setStatus(p0);
+                        },
+                      )),
+                ],
+              );
+            }),
+          ],
+        ),
+      );
+    }
+
     return RefreshIndicator(
       onRefresh: () async {
         await getProducts();
       },
       child: SingleChildScrollView(
         child: Container(
-          padding: defaultPadding,
+          padding: EdgeInsets.symmetric(horizontal: 8),
 
           ///height: screenSize(context).height - 100,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text("FILTER",
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black)),
-                  Obx(() => IconButton(
-                        splashRadius: 15,
-                        onPressed: () {
-                          _storeCtrl.sortOrder.value == SortOrder.descending
-                              ? _storeCtrl.setSortOrder(SortOrder.ascending)
-                              : _storeCtrl.setSortOrder(SortOrder.descending);
-                        },
-                        icon: Icon(
-                            _storeCtrl.sortOrder.value == SortOrder.descending
-                                ? Icons.arrow_drop_down
-                                : Icons.arrow_drop_up),
-                        color: Colors.black87,
-                      )),
-                ],
+              TuFormField(
+                hint: "Search",
+                prefixIcon: TuIcon(Icons.search),
+                radius: 5,
+                suffix: IconButton(
+                    splashRadius: 20,
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      // show filters
+                      TuFuncs.showBottomSheet(
+                          full: false, context: context, widget: filterModal());
+                    },
+                    icon: TuIcon(Icons.tune)),
+                onTap: () {
+                  TuFuncs.showBottomSheet(
+                      context: context, widget: const SearchPage());
+                },
               ),
-              LayoutBuilder(builder: (context, c) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Obx(() => TuDropdownButton(
-                          label: "Sort by",
-                          labelFontSize: 14,
-                          width: (c.maxWidth / 2) - 2.5,
-                          height: 40,
-                          value: _storeCtrl.sortBy.value,
-                          radius: 90,
-                          items: [
-                            SelectItem("name", SortBy.name),
-                            SelectItem("price", SortBy.price),
-                            SelectItem("date", SortBy.dateCreated),
-                          ],
-                          onChanged: (p0) {
-                            _storeCtrl.setSortBy(p0);
-                          },
-                        )),
-                    Obx(() => TuDropdownButton(
-                          label: "Status",
-                          labelFontSize: 14,
-                          width: (c.maxWidth / 2) - 2.5,
-                          radius: 90,
-                          height: 40,
-                          value: _storeCtrl.status.value,
-                          items: [
-                            SelectItem("All", ProductStatus.all),
-                            SelectItem("Top selling", ProductStatus.topSelling),
-                            SelectItem("On special", ProductStatus.special),
-                            SelectItem("On sale", ProductStatus.sale),
-                            SelectItem("in stock", ProductStatus.instock),
-                            SelectItem("out of stock", ProductStatus.out),
-                          ],
-                          onChanged: (p0) {
-                            _storeCtrl.setStatus(p0);
-                          },
-                        )),
-                  ],
-                );
-              }),
               mY(10),
               Obx(() => !_storeCtrl.productsFetched.value
                   ? Center(

@@ -5,6 +5,7 @@ import 'package:frust/main.dart';
 import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/constants2.dart';
 import 'package:frust/utils/styles.dart';
+import 'package:frust/views/search.dart';
 import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common2.dart';
 import 'package:frust/widgets/tu/product_circle.dart';
@@ -96,16 +97,15 @@ class _HomePageState extends State<HomePage> {
                     fontSize: 30, fontWeight: FontWeight.w900),
               ),
               mY(5),
-              Obx(() {
-                var location = _appCtrl.location;
-                return TuFormField(
-                  hint: "Search",
-                  prefixIcon: TuIcon(Icons.search),
-                  radius: 50,
-                  value: location['name'],
-                  onTap: () {},
-                );
-              }),
+              TuFormField(
+                hint: "Search",
+                prefixIcon: TuIcon(Icons.search),
+                radius: 50,
+                onTap: () {
+                  TuFuncs.showBottomSheet(
+                      context: context, widget: const SearchPage());
+                },
+              ),
               mY(15),
               Obx(
                 () => _ctrl.topSelling.value != null &&

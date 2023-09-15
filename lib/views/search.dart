@@ -96,12 +96,14 @@ class _SearchPageState extends State<SearchPage> {
               ),
               mY(10),
               _products == null
-                  ? Expanded(
-                      child: Center(
-                          child: Text(
-                      "Searching...",
-                      style: Styles.h3(isLight: true),
-                    )))
+                  ? _query.isEmpty
+                      ? none()
+                      : Expanded(
+                          child: Center(
+                              child: Text(
+                          "Searching...",
+                          style: Styles.h3(isLight: true),
+                        )))
                   : _products!.isNotEmpty
                       ? LayoutBuilder(builder: (context, c) {
                           return Wrap(
