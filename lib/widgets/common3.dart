@@ -166,3 +166,14 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
 Icon TuIcon(IconData icon) {
   return Icon(icon, size: 25);
 }
+
+Widget placeholderText(
+    {double width = 50, double height = 14, Color? color, double my = 0}) {
+  return Container(
+    height: height,
+    width: width,
+    margin: EdgeInsets.symmetric(vertical: my),
+    decoration: BoxDecoration(
+        color: color ?? Colors.black12, borderRadius: BorderRadius.circular(5)),
+  );
+}

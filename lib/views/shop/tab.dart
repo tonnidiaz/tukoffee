@@ -24,7 +24,7 @@ class _HomeTabState extends State<HomeTab> {
     _storeCtrl.setProductsFetched(false);
     try {
       clog("Fetching products...");
-      final res = await dio.get("$apiURL/products?q=${widget.q}");
+      final res = await apiDio().get("/products?q=${widget.q}");
       _storeCtrl.setProducts(res.data["data"]);
       _storeCtrl.setProductsFetched(true);
     } catch (e) {

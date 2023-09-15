@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:frust/main.dart';
 import 'package:frust/utils/constants.dart';
@@ -5,13 +7,24 @@ import 'package:frust/utils/constants2.dart';
 import 'package:frust/utils/styles.dart';
 import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common2.dart';
+import 'package:frust/widgets/tu/product_circle.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import '../utils/functions.dart';
 import '../widgets/common3.dart';
 import 'package:get/get.dart';
+import 'package:dio/dio.dart' as dio;
 
-import 'map.dart';
+class HomeCtrl extends GetxController {
+  Rx<List?> topSelling = (null as List?).obs;
+  setTopSelling(List? val) {
+    topSelling.value = val;
+  }
+
+  Rx<List?> special = (null as List?).obs;
+  setSpecial(List? val) {
+    special.value = val;
+  }
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,14 +33,46 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+Future<dio.Response<dynamic>> getProducts(String? q) async {
+  return await apiDio().get("/products?q=$q");
+}
+
 class _HomePageState extends State<HomePage> {
   final _appCtrl = MainApp.appCtrl;
+  final _ctrl = Get.put(HomeCtrl());
+
+  _getToSelling() async {
+    try {
+      _ctrl.setTopSelling(null);
+      final res = await getProducts('top-selling');
+      _ctrl.setTopSelling(res.data['data']);
+    } catch (e) {
+      _ctrl.setTopSelling([]);
+      errorHandler(e: e, context: context);
+    }
+  }
+
+  _getSpecial() async {
+    try {
+      _ctrl.setSpecial(null);
+      final res = await getProducts('special');
+      _ctrl.setSpecial(res.data['data']);
+    } catch (e) {
+      _ctrl.setSpecial([]);
+      errorHandler(e: e, context: context);
+    }
+  }
+
+  _init() async {
+    _getToSelling();
+    _getSpecial();
+  }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      clog("Getting stores...");
+      _init();
       //getStores(storeCtrl: _storeCtrl);
     });
   }
@@ -35,15 +80,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      /* appBar: AppBar(
-        leading: none(),
-        title: const Text("TuKoffee"),
-        actions: [
-          Container(
-              margin: const EdgeInsets.only(right: 10),
-              child: const EndDrawerButton())
-        ],
-      ), */
       child: Container(
         padding: defaultPadding2,
         height: screenSize(context).height - statusBarH(context) - appBarH,
@@ -75,40 +111,93 @@ class _HomePageState extends State<HomePage> {
                 );
               }),
               mY(15),
-              Column(
-                //top-selling section
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Top selling",
-                    style: Styles.title(isLight: false),
-                  ),
-                  mY(15),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                        children: List.generate(
-                            10, (index) => const TuProductCircle())),
-                  )
-                ],
+              Obx(
+                () => _ctrl.topSelling.value != null &&
+                        _ctrl.topSelling.value!.isEmpty
+                    ? none()
+                    : Column(
+                        //top-selling section
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Top selling",
+                            style: Styles.title(isLight: false),
+                          ),
+                          mY(15),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Obx(
+                              () => Row(
+                                  children: _ctrl.topSelling.value == null
+                                      ? List.generate(
+                                          10,
+                                          (index) => const TuProductCircle(
+                                              dummy: true))
+                                      : _ctrl.topSelling.value!.map((it) {
+                                          return TuProductCircle(
+                                            subtitle:
+                                                "R${roundDouble(it['price'].toDouble(), 2)}",
+                                            title: "${it['name']}",
+                                            img: it['images'].isNotEmpty
+                                                ? it['images'][0]['url']
+                                                : null,
+                                            onTap: () {
+                                              Navigator.pushNamed(
+                                                  context, '/product',
+                                                  arguments: {
+                                                    "pid": it["pid"]
+                                                  });
+                                            },
+                                          );
+                                        }).toList()),
+                            ),
+                          )
+                        ],
+                      ),
               ),
               mY(15),
-              Column(
-                //special section
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Today's special",
-                    style: Styles.title(isLight: false),
-                  ),
-                  mY(15),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                        children: List.generate(
-                            10, (index) => const TuProductCircle())),
-                  )
-                ],
+              Obx(
+                () =>
+                    _ctrl.special.value != null && _ctrl.special.value!.isEmpty
+                        ? none()
+                        : Column(
+                            //top-selling section
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Today's special",
+                                style: Styles.title(isLight: false),
+                              ),
+                              mY(15),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Obx(
+                                  () => Row(
+                                      children: _ctrl.special.value == null
+                                          ? List.generate(
+                                              10,
+                                              (index) => const TuProductCircle(
+                                                  dummy: true))
+                                          : _ctrl.special.value!.map((it) {
+                                              return TuProductCircle(
+                                                subtitle:
+                                                    "R${roundDouble(it['price'].toDouble(), 2)}",
+                                                img: it['images'].isNotEmpty
+                                                    ? it['images'][0]['url']
+                                                    : null,
+                                                onTap: () {
+                                                  Navigator.pushNamed(
+                                                      context, '/product',
+                                                      arguments: {
+                                                        "pid": it["pid"]
+                                                      });
+                                                },
+                                              );
+                                            }).toList()),
+                                ),
+                              )
+                            ],
+                          ),
               ),
             ],
           ),
@@ -135,48 +224,4 @@ Widget tuIconBtn(
       onPressed: onPressed,
     ),
   );
-}
-
-class TuProductCircle extends StatelessWidget {
-  const TuProductCircle({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(right: 5, bottom: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-              width: 70,
-              height: 70,
-              decoration: BoxDecoration(
-                  color: Colors.black26,
-                  borderRadius: BorderRadius.circular(100)),
-              child: CircleAvatar(
-                // borderRadius: BorderRadius.circular(100),
-                backgroundColor: Colors.black12,
-                backgroundImage: Image.network(
-                  randomImg(),
-                  width: 70,
-                  height: 70,
-                  errorBuilder: (context, error, stackTrace) => const Icon(
-                    Icons.coffee_maker,
-                    color: Colors.black54,
-                  ),
-                ).image,
-              )),
-          mY(2.5),
-          const Text(
-            "R40.00",
-            style: TextStyle(
-                color: Colors.orange,
-                fontSize: 12,
-                fontWeight: FontWeight.w600),
-          ),
-          const Text("La koff")
-        ],
-      ),
-    );
-  }
 }
