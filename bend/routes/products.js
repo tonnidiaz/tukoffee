@@ -16,9 +16,21 @@ const genPID = async () => {
 router.get('/', async (req, res, next) => {
 
     const args = req.query
-    const { pid } = args;
+    const { pid, q } = args;
 
-    try{const prods = pid ? await Product.find({pid}).exec() : await Product.find().exec();
+    try{let prods = pid ? await Product.find({pid}).exec() : await Product.find().exec();
+
+    switch (q){
+        case "top-selling":
+            prods = prods.filter(it=> it.top_selling);
+            break;
+        case "special":
+            prods = prods.filter(it=> it.on_special);
+            break;
+        case "sale":
+            prods = prods.filter(it=> it.on_sale);
+            break;
+    }
     let data = parseProducts(prods);
 
     res.json({data})}

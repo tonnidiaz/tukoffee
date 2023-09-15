@@ -26,6 +26,9 @@ const ProductSchema = new Schema({
         required: true,
         default: 1
     },
+    on_special: {type: Boolean, default: false},
+    top_selling: {type: Boolean, default: false},
+    on_sale: {type: Boolean, default: false},
     description: {
         type: String,
         required: true

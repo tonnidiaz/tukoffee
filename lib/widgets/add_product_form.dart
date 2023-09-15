@@ -35,13 +35,13 @@ class AddProductForm extends StatefulWidget {
 class _AddProductFormState extends State<AddProductForm> {
   final _innerController = ScrollController();
   final _appCtrl = MainApp.appCtrl;
-  final _formViewCtrl = MainApp.formViewCtrl;
+  final _formCtrl = MainApp.formViewCtrl;
 
   @override
   void dispose() {
     _innerController.dispose();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _formViewCtrl.clear();
+      _formCtrl.clear();
     });
     super.dispose();
   }
@@ -62,7 +62,7 @@ class _AddProductFormState extends State<AddProductForm> {
           folder: getCloudinaryFolder(storeName: _appCtrl.storeName.value),
           progressCallback: _onUpload);
       if (res.isResultOk) {
-        var existingImgs = _formViewCtrl.form['images'] ?? [];
+        var existingImgs = _formCtrl.form['images'] ?? [];
         if (widget.mode == "edit") {
           // immediately update product images
 
@@ -73,14 +73,14 @@ class _AddProductFormState extends State<AddProductForm> {
               {"url": res.secureUrl, "publicId": res.publicId}
             ];
             await apiDio().post('/products/edit',
-                data: {"pid": _formViewCtrl.form['pid'], "images": newImgs});
-            _formViewCtrl.setFormField("images", newImgs);
-            _formViewCtrl.tempImgs[index] = {
-              ..._formViewCtrl.tempImgs[index],
+                data: {"pid": _formCtrl.form['pid'], "images": newImgs});
+            _formCtrl.setFormField("images", newImgs);
+            _formCtrl.tempImgs[index] = {
+              ..._formCtrl.tempImgs[index],
               "loading": false
             };
           } catch (e) {
-            _formViewCtrl.tempImgs.removeAt(index);
+            _formCtrl.tempImgs.removeAt(index);
             // delete image cloudinary
             await signedCloudinary.destroy(res.publicId);
             if (e.runtimeType == DioException) {
@@ -96,12 +96,12 @@ class _AddProductFormState extends State<AddProductForm> {
           }
         } else {
           // Is adding
-          _formViewCtrl.setFormField("images", [
+          _formCtrl.setFormField("images", [
             ...existingImgs,
             {"url": res.secureUrl, "publicId": res.publicId}
           ]);
-          _formViewCtrl.tempImgs[index] = {
-            ..._formViewCtrl.tempImgs[index],
+          _formCtrl.tempImgs[index] = {
+            ..._formCtrl.tempImgs[index],
             "loading": false
           };
         }
@@ -126,11 +126,11 @@ class _AddProductFormState extends State<AddProductForm> {
     final file = await importFile(
         dialogTitle: "Import image file", type: FileType.image);
     if (file != null) {
-      _formViewCtrl.setTempImgs([
-        ..._formViewCtrl.tempImgs,
+      _formCtrl.setTempImgs([
+        ..._formCtrl.tempImgs,
         {'file': file, 'loading': true}
       ]);
-      _uploadImg(file, _formViewCtrl.tempImgs.length - 1);
+      _uploadImg(file, _formCtrl.tempImgs.length - 1);
     }
   }
 
@@ -138,9 +138,9 @@ class _AddProductFormState extends State<AddProductForm> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var formImgs = _formViewCtrl.form["images"];
+      var formImgs = _formCtrl.form["images"];
       if (widget.mode == "edit") {
-        _formViewCtrl.setTempImgs(formImgs);
+        _formCtrl.setTempImgs(formImgs);
       }
     });
   }
@@ -154,29 +154,29 @@ class _AddProductFormState extends State<AddProductForm> {
           TuFormField(
             label: "Product name:",
             hint: "Enter product name...",
-            value: _formViewCtrl.form["name"],
+            value: _formCtrl.form["name"],
             //height: 30,
             isRequired: true,
             hasBorder: false,
             onChanged: (val) {
-              _formViewCtrl.setFormField("name", val);
+              _formCtrl.setFormField("name", val);
             },
           ),
           TuFormField(
             label: "Product description:",
             hint: "Enter product description...",
-            value: _formViewCtrl.form["description"],
+            value: _formCtrl.form["description"],
             isRequired: true,
             hasBorder: false,
             onChanged: (val) {
-              _formViewCtrl.setFormField("description", val);
+              _formCtrl.setFormField("description", val);
             },
           ),
           TuFormField(
             label: "Price:",
             prefix: const Text("R "),
             hint: "Enter product price...",
-            value: _formViewCtrl.form["price"],
+            value: _formCtrl.form["price"],
             isRequired: true,
             hasBorder: false,
             validator: (val) {
@@ -188,14 +188,14 @@ class _AddProductFormState extends State<AddProductForm> {
             },
             keyboard: TextInputType.number,
             onChanged: (val) {
-              _formViewCtrl.setFormField("price", val);
+              _formCtrl.setFormField("price", val);
             },
           ),
           TuFormField(
             label: "Quantity:",
             keyboard: TextInputType.number,
             hint: "How many are you adding?...",
-            value: _formViewCtrl.form["quantity"],
+            value: _formCtrl.form["quantity"],
             isRequired: true,
             hasBorder: false,
             validator: (val) {
@@ -206,8 +206,36 @@ class _AddProductFormState extends State<AddProductForm> {
               return null;
             },
             onChanged: (val) {
-              _formViewCtrl.setFormField("quantity", val);
+              _formCtrl.setFormField("quantity", val);
             },
+          ),
+          Row(
+            children: [
+              Obx(
+                () => TuLabeledCheckbox(
+                    label: "Top selling",
+                    value: _formCtrl.form['top_selling'] == true,
+                    onChanged: (val) {
+                      _formCtrl.setFormField('top_selling', val);
+                    }),
+              ),
+              Obx(
+                () => TuLabeledCheckbox(
+                    label: "On special",
+                    value: _formCtrl.form['on_special'] == true,
+                    onChanged: (val) {
+                      _formCtrl.setFormField('on_special', val);
+                    }),
+              ),
+            ],
+          ),
+          Obx(
+            () => TuLabeledCheckbox(
+                label: "On sale",
+                value: _formCtrl.form['on_sale'] == true,
+                onChanged: (val) {
+                  _formCtrl.setFormField('on_sale', val);
+                }),
           ),
           mY(5),
           Column(
@@ -234,8 +262,7 @@ class _AddProductFormState extends State<AddProductForm> {
                   controller: _innerController,
                   scrollDirection: Axis.horizontal,
                   child: Obx(() => Row(
-                        children:
-                            _formViewCtrl.tempImgs.asMap().entries.map((e) {
+                        children: _formCtrl.tempImgs.asMap().entries.map((e) {
                           return imgCard(
                               context: context,
                               index: e.key,
@@ -258,7 +285,7 @@ class _AddProductFormState extends State<AddProductForm> {
         onSubmit: () async {
           if (true) {
             showToast("Processing...").show(context);
-            final res = await addProduct(context, {..._formViewCtrl.form},
+            final res = await addProduct(context, {..._formCtrl.form},
                 mode: widget.mode);
             if (res != null) {
               /*   showToast('Successs!').show(context);

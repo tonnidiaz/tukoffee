@@ -66,7 +66,8 @@ class _ProductPageState extends State<ProductPage> {
 
   Future<Map<String, dynamic>?> _getProduct(String? pid) async {
     if (pid == null) return null;
-    if (_product != null) return _product;
+    clog(pid);
+    //if (_product != null) return _product;
     try {
       final url = "$apiURL/products?pid=$pid";
       final res = await dio.get(url);
@@ -88,19 +89,6 @@ class _ProductPageState extends State<ProductPage> {
       appBar: childAppbar(
         title: _product == null ? "" : "${_product!["name"]}",
       ),
-      /*  actions: [
-          PopupMenuItem(
-              onTap: () {
-                if (_args["pid"] != null) {
-                  _setupProduct();
-                }
-                //
-              },
-              child: const Text("Refresh"))
-        ],
-        onRefresh: () async {
-          clog("Refreshing...");
-        }, */
       body: SizedBox(
         width: double.infinity,
         height: screenSize(context).height,
@@ -451,19 +439,16 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   _onPopupEditTap() async {
-    //_formViewCtrl.clear();
-    _formViewCtrl.setForm({
-      "name": _product!['name'],
-      "description": _product!['description'],
-      "price": _product!['price'],
-      "quantity": _product!['quantity'],
-      "images": _product!["images"],
-      "pid": _product!["pid"]
-    });
+    //  _formViewCtrl.clear();
+    Map<String, dynamic> prod = {};
+    for (var key in _product!.keys) {
+      prod[key] = _product![key];
+    }
+    _formViewCtrl.setForm(prod);
 
-    pushTo(
-        context,
-        const AddProductForm(
+    TuFuncs.showBottomSheet(
+        context: context,
+        widget: const AddProductForm(
           title: "Edit product",
           mode: "edit",
           btnTxt: "Edit product",

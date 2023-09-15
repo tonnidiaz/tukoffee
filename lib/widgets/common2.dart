@@ -332,38 +332,39 @@ Container imgCard(
                     ),
                     onPressed: () async {
                       // delete and remove the img from the list
+                      var toast =
+                          showToast("Deleting image...", autoDismiss: false);
                       var img =
                           formViewCtrl.form["images"][index]; // {url, publicId}
-                      clog(img);
+                      toast.show(context);
                       try {
+                        clog("Deleting from cloudinary...");
                         var res = await signedCloudinary.destroy(
                           img['publicId'],
                         );
                         clog(formViewCtrl.form['images'].length);
                         var tempImgs = [...formViewCtrl.form['images']];
                         tempImgs.removeAt(index);
+                        clog(res.result);
+                        if (mode == "edit" || res.result == "not found") {
+                          final res2 = await addProduct(
+                              context,
+                              {
+                                "images": tempImgs,
+                                "pid": formViewCtrl.form['pid']
+                              },
+                              mode: mode);
+                          if (res2 != null) {
+                            formViewCtrl.tempImgs.removeAt(index);
+                          }
+                        }
                         if (res.isSuccessful) {
                           clog("Image deleted successfully!");
-                          // If is edit mode => also delete image from backend
-                          if (mode == "edit") {
-                            final res2 = await addProduct(
-                                context,
-                                {
-                                  "images": tempImgs,
-                                  "pid": formViewCtrl.form['pid']
-                                },
-                                mode: mode);
-                            clog(formViewCtrl.form['images'].length);
-                            if (res2 != null) {
-                              formViewCtrl.tempImgs.removeAt(index);
-                              //formViewCtrl.form["images"].removeAt(index);
-                            }
-                          }
-                        } else {
-                          clog(res.error);
                         }
+                        toast.dismiss();
                       } catch (e) {
                         clog(e);
+                        toast.dismiss();
                         showToast("Failed to delete image").show(context);
                       }
                     },
