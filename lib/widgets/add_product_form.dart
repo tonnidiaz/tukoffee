@@ -155,6 +155,7 @@ class _AddProductFormState extends State<AddProductForm> {
             label: "Product name:",
             hint: "Enter product name...",
             value: _formViewCtrl.form["name"],
+            //height: 30,
             isRequired: true,
             hasBorder: false,
             onChanged: (val) {

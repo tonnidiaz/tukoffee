@@ -75,21 +75,17 @@ class ProductItem extends StatelessWidget {
                                         })
                                     : none(),
                                 mX(5),
-                                Container(
-                                  // id=image-wrap
-                                  width: 70,
-                                  height: 70,
-                                  padding: const EdgeInsets.all(1),
-                                  //margin: const EdgeInsets.only(top: 5.0, left: 5.0, right: 5.0),
-                                  decoration: BoxDecoration(
-                                      color: cardBGLight,
-                                      border: Border.all(
-                                          width: 2, color: cardBGLight),
-                                      borderRadius: BorderRadius.circular(0)),
-                                  child: Center(
+                                Center(
+                                  child: CircleAvatar(
+                                    radius: 40,
+                                    backgroundColor: Colors.black12,
+                                    backgroundImage: product['images'].isEmpty
+                                        ? null
+                                        : Image.network(
+                                                product['images'][0]['url'])
+                                            .image,
                                     child: product['images'].isNotEmpty
-                                        ? Image.network(product['images'][0][
-                                            'url']) //"https://loremflickr.com/g/320/240/tea?random=${Random().nextInt(100)}")
+                                        ? null
                                         : const Icon(
                                             Icons.coffee_outlined,
                                             size: 45,

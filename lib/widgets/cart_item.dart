@@ -60,7 +60,7 @@ class CartItem extends StatelessWidget {
                 Row(
                   //Checkbox, cover, content, deleteBtn
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Obx(() => Row(
                           // cover and checkbox
@@ -78,19 +78,18 @@ class CartItem extends StatelessWidget {
                                         }),
                                   )
                                 : none(),
-                            Container(
-                              // id=image-wrap
-                              width: 80,
-                              height: 80,
-                              //margin: const EdgeInsets.only(top: 5.0, left: 5.0, right: 5.0),
-                              decoration: BoxDecoration(
-                                  color: imgBG,
-                                  borderRadius: BorderRadius.circular(1)),
-                              child: Center(
+                            Center(
+                              child: CircleAvatar(
+                                radius: 40,
+                                backgroundColor: Colors.black12,
+                                backgroundImage:
+                                    product['product']['images'].isEmpty
+                                        ? null
+                                        : Image.network(product['product']
+                                                ['images'][0]['url'])
+                                            .image,
                                 child: product['product']['images'].isNotEmpty
-                                    ? Image.network(product['product']['images']
-                                            [0][
-                                        'url']) //"https://loremflickr.com/g/320/240/tea?random=${Random().nextInt(100)}")
+                                    ? null //"https://loremflickr.com/g/320/240/tea?random=${Random().nextInt(100)}")
                                     : const Icon(
                                         Icons.coffee_outlined,
                                         size: 45,

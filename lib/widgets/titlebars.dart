@@ -7,7 +7,9 @@ import '../utils/constants.dart';
 import '/utils/functions.dart';
 
 PreferredSizeWidget mobileTitleBar(
-    {PreferredSizeWidget? bottom, List<PopupMenuItem> actions = const []}) {
+    {required BuildContext context,
+    PreferredSizeWidget? bottom,
+    List<PopupMenuItem> actions = const []}) {
   final AppCtrl appCtrl = Get.find();
   return AppBar(
     titleSpacing: 0,
@@ -19,7 +21,22 @@ PreferredSizeWidget mobileTitleBar(
     actions: [
       Container(
           margin: const EdgeInsets.only(right: 10),
-          child: const EndDrawerButton())
+          child: Builder(builder: (context) {
+            return CircleAvatar(
+              backgroundColor: Colors.black12,
+              foregroundColor: Colors.black,
+              child: IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openEndDrawer();
+                },
+                splashRadius: 25,
+
+                //co: Colors.black12,
+
+                icon: Icon(Icons.menu),
+              ),
+            );
+          }))
     ],
     bottom: bottom,
   );

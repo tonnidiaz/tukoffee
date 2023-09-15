@@ -111,7 +111,7 @@ const String package = "com.tb.tmeta";
 const double bottomSheetH = 150;
 const double bottomBarH = 46;
 const double footerH = 46;
-const double appBarH = 46;
+const double appBarH = 56;
 const double tabH = 46;
 double statusBarH(BuildContext context) {
   return MediaQuery.of(context).viewPadding.top;

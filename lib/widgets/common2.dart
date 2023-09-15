@@ -25,7 +25,8 @@ class CartBtn extends StatelessWidget {
     return Obx(() => Container(
         color: Colors.transparent,
         width: 35 + 10,
-        height: 35,
+        alignment: Alignment.center,
+        height: appBarH,
         child: Stack(
           children: [
             Builder(builder: (context) {
@@ -234,27 +235,34 @@ PreferredSizeWidget childAppbar({String? title, bool showCart = true}) {
         backgroundColor: Colors.transparent,
         centerTitle: appBarCtrl
             .selected.isEmpty, //appBarCtrl.selected.isNotEmpty ? false : true,
-        leading: SizedBox(
-            width: 35,
-            child: appBarCtrl.selected.isNotEmpty
-                ? IconButton(
-                    padding: EdgeInsets.zero,
-                    splashRadius: 20,
-                    onPressed: () {
-                      appBarCtrl.setSelected([]);
-                    },
-                    icon: const Icon(Icons.close))
-                : Builder(builder: (context) {
-                    return IconButton(
+        leadingWidth: appBarH - 5,
+        leading: appBarCtrl.selected.isNotEmpty
+            ? IconButton(
+                padding: EdgeInsets.zero,
+                splashRadius: 20,
+                onPressed: () {
+                  appBarCtrl.setSelected([]);
+                },
+                icon: const Icon(Icons.close))
+            : Builder(builder: (context) {
+                return Container(
+                  margin: EdgeInsets.only(left: 10),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black12,
+                    foregroundColor: Colors.black,
+                    child: IconButton(
                         padding: EdgeInsets.zero,
                         splashRadius: 20,
-                        style: IconButton.styleFrom(
-                            backgroundColor: Colors.orange),
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        icon: const Icon(Icons.arrow_back_rounded));
-                  })),
+                        icon: const Icon(
+                          Icons.chevron_left,
+                          size: 30,
+                        )),
+                  ),
+                );
+              }),
 
         title: appBarCtrl.selected.isNotEmpty
             ? Text(
@@ -397,7 +405,7 @@ class TuFormField extends StatefulWidget {
   final bool showEye;
   final bool hasBorder;
   final TextInputType keyboard;
-  final double radius;
+  final double? radius;
   final double height;
   final double my;
   final bool isLegacy;
@@ -424,7 +432,7 @@ class TuFormField extends StatefulWidget {
       this.hint = "",
       this.value,
       this.radius = 5,
-      this.height = 6,
+      this.height = 15,
       this.maxLines = 1,
       this.maxLength,
       this.onChanged,
@@ -467,6 +475,9 @@ class _TuFormFieldState extends State<TuFormField> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _updateVal();
     });
+    final border = OutlineInputBorder(
+        borderSide: BorderSide.none,
+        borderRadius: BorderRadius.circular(widget.radius!));
     return Container(
       margin: EdgeInsets.symmetric(vertical: widget.my),
       width: widget.width,
@@ -540,20 +551,11 @@ class _TuFormFieldState extends State<TuFormField> {
               floatingLabelAlignment: widget.labelAlignment,
               floatingLabelStyle:
                   const TextStyle(color: Colors.black87, fontSize: 18),
-              /*  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide:
-                        const BorderSide(color: Colors.black54, width: 2)),
-                focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: const BorderSide(color: Colors.red, width: 2)),
-                errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: const BorderSide(color: Colors.red, width: 2)),
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide:
-                        const BorderSide(width: 2, color: Colors.black26)) */
+              enabledBorder: widget.radius != null ? border : null,
+              focusedBorder: widget.radius != null ? border : null,
+              focusedErrorBorder: widget.radius != null ? border : null,
+              errorBorder: widget.radius != null ? border : null,
+              border: widget.radius != null ? border : null,
             ),
           ),
         ],

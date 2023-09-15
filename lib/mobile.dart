@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:frust/main.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,7 +7,6 @@ import '/utils/constants.dart';
 import 'utils/colors.dart';
 
 class MobileApp extends StatefulWidget {
-  static const mChannel = MethodChannel("$package/channel");
   const MobileApp({Key? key}) : super(key: key);
 
   @override
@@ -42,7 +40,7 @@ class _MobileAppState extends State<MobileApp> {
       theme: tuTheme(_darkMode), //(Brightness.light),
       routes: routes,
       debugShowCheckedModeBanner: false,
-      initialRoute: "/dashboard",
+      initialRoute: "/shop",
       builder: (context, child) {
         return child!;
       },
@@ -67,18 +65,6 @@ ThemeData tuTheme(bool dark) {
           vertical: 7,
           horizontal: 10,
         ),
-        /* focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: const BorderSide(color: Colors.black54, width: 2)),
-          focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: const BorderSide(color: Colors.red, width: 2)),
-          errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: const BorderSide(color: Colors.red, width: 2)),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: const BorderSide(width: 2, color: Colors.black26)) */
         focusedBorder: border,
         errorBorder: border,
         focusedErrorBorder: border,
@@ -101,12 +87,12 @@ ThemeData tuTheme(bool dark) {
           dividerColor: Colors.brown),
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
-              foregroundColor: Colors.black,
-              textStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
+              backgroundColor: true ? TuColors.coffee1 : Colors.orange,
+              foregroundColor: Colors.white,
+              textStyle: GoogleFonts.lato(fontWeight: FontWeight.w600))),
       cardColor: cardBGLight,
       colorScheme: ThemeData().colorScheme.copyWith(
-            primary: Colors.orange,
+            primary: true ? TuColors.coffee1 : Colors.orange,
           ),
-      textTheme: GoogleFonts.poppinsTextTheme());
+      textTheme: GoogleFonts.rubikTextTheme());
 }

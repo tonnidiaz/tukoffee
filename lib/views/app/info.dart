@@ -27,10 +27,13 @@ class InfoPage extends StatelessWidget {
                     showAboutDialog(
                         context: context,
                         applicationName: appCtrl.storeName.value,
-                        applicationIcon: Image.asset(
-                          "assets/images/coffee2.jpg",
-                          width: 30,
-                          height: 30,
+                        applicationIcon: Obx(
+                          () => Image.network(
+                            appCtrl.storeImage['url'],
+                            
+                            width: 70,
+                            height: 70,
+                          ),
                         ),
                         applicationVersion: appCtrl.appVersion.value);
                   },

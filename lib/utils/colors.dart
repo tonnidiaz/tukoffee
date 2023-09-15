@@ -19,10 +19,12 @@ const Color btnBG = Color.fromRGBO(45, 45, 45, 1);
 const Color imgBG = Color.fromRGBO(228, 228, 228, 1);
 
 class TuColors {
-  static Color coffee = const Color.fromRGBO(108, 52, 40, 1);
-  static Color coffee1 = const Color.fromRGBO(186, 112, 79, 1);
-  static Color coffee2 = const Color.fromRGBO(223, 168, 120, 1);
+  static Color coffee = const Color.fromRGBO(63, 35, 5, 1);
+  static Color coffee1 = const Color.fromRGBO(108, 52, 40, 1);
+  static Color coffee2 = const Color.fromRGBO(186, 112, 79, 1);
+  static Color coffee3 = const Color.fromRGBO(223, 168, 120, 1);
 
-  static Color fieldBG = const Color.fromRGBO(255, 153, 0, .1);
+  //static Color fieldBG = const Color.fromRGBO(255, 153, 0, .1);
+  static Color fieldBG = const Color.fromRGBO(196, 196, 196, 0.2);
   //static Color fieldBG = Color.fromARGB(255, 255, 203, 124);
 }

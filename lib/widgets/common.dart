@@ -153,6 +153,7 @@ class TuButton extends StatefulWidget {
   final double width;
   final double height;
   final double vp;
+  final double radius;
   final double hp;
   final Function()? onPressed;
   final Color? bgColor;
@@ -164,6 +165,7 @@ class TuButton extends StatefulWidget {
       this.width = double.infinity,
       this.height = 40,
       this.vp = 5,
+      this.radius = 0,
       this.hp = 10,
       this.onPressed,
       this.bgColor,
@@ -186,23 +188,26 @@ class _TuButtonState extends State<TuButton> {
     return SizedBox(
       width: widget.width,
       height: widget.height,
-      child: ElevatedButton(
-        onPressed: _isProcessing
-            ? null
-            : () async {
-                _setIsProcessing(true);
-                if (widget.onPressed != null) {
-                  await widget.onPressed!();
-                }
-                _setIsProcessing(false);
-              },
-        style: ElevatedButton.styleFrom(
-            elevation: .5,
-            padding: EdgeInsets.symmetric(
-                vertical: widget.vp, horizontal: widget.hp),
-            backgroundColor: widget.bgColor,
-            alignment: Alignment.center),
-        child: widget.child ?? Text(widget.text.toUpperCase()),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(widget.radius),
+        child: ElevatedButton(
+          onPressed: _isProcessing
+              ? null
+              : () async {
+                  _setIsProcessing(true);
+                  if (widget.onPressed != null) {
+                    await widget.onPressed!();
+                  }
+                  _setIsProcessing(false);
+                },
+          style: ElevatedButton.styleFrom(
+              elevation: .5,
+              padding: EdgeInsets.symmetric(
+                  vertical: widget.vp, horizontal: widget.hp),
+              backgroundColor: widget.bgColor,
+              alignment: Alignment.center),
+          child: widget.child ?? Text(widget.text.toUpperCase()),
+        ),
       ),
     );
   }

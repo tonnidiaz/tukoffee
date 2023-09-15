@@ -107,7 +107,7 @@ class _HomeTabState extends State<HomeTab> {
                           width: (c.maxWidth / 2) - 2.5,
                           height: 40,
                           value: _storeCtrl.sortBy.value,
-                          radius: 2,
+                          radius: 90,
                           items: [
                             SelectItem("name", SortBy.name),
                             SelectItem("price", SortBy.price),
@@ -121,7 +121,7 @@ class _HomeTabState extends State<HomeTab> {
                           label: "Status",
                           labelFontSize: 14,
                           width: (c.maxWidth / 2) - 2.5,
-                          radius: 2,
+                          radius: 90,
                           height: 40,
                           value: _storeCtrl.status.value,
                           items: [

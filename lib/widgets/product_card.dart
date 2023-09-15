@@ -22,7 +22,7 @@ class ProductCard extends StatelessWidget {
     final StoreCtrl storeCtrl = Get.find();
     final AppCtrl appCtrl = Get.find();
     final cardW = (screenSize(context).width / 2) - 13;
-    double rad = 2;
+    double rad = 8;
     addRemoveCart() async {
       if (appCtrl.user.isEmpty)
         return showToast("Login to add to cart", isErr: true).show(context);
@@ -73,66 +73,84 @@ class ProductCard extends StatelessWidget {
         padding: EdgeInsets.zero,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Expanded(
-            child: false
-                ? none()
-                : Stack(
-                    children: [
-                      Container(
-                        //id=cover
+            child: Stack(
+              children: [
+                Container(
+                  //id=cover
 
-                        //  color: appBGLight,
-                        alignment: Alignment.center,
-                        height: cardW,
-                        width: cardW,
+                  //  color: appBGLight,
+                  alignment: Alignment.center,
+                  height: cardW,
+                  width: cardW,
 
-                        child: product['images'].isNotEmpty
-                            ? Image.network(product['images'][0][
-                                'url']) //"https://loremflickr.com/g/320/240/tea?random=${Random().nextInt(100)}")
-                            : const Icon(
-                                Icons.coffee_outlined,
-                                size: 50,
-                                color: Colors.black54,
-                              ),
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        right: 5,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: const Color.fromRGBO(13, 13, 13, 01),
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Obx(() {
-                            bool inCart = storeCtrl.cart.isNotEmpty &&
-                                storeCtrl.cart["products"]
-                                    .where((el) =>
-                                        el["product"]["_id"] == product["_id"])
-                                    .isNotEmpty;
-                            return product['quantity'] <= 0
-                                ? none()
-                                : IconButton(
-                                    padding: EdgeInsets.zero,
-                                    icon: inCart
-                                        ? const Icon(
-                                            CupertinoIcons.bag_fill_badge_minus,
-                                            color: Colors.orange,
-                                            size: 30,
-                                          )
-                                        : const Icon(
-                                            CupertinoIcons.bag_badge_plus,
-                                            color: Colors.white70,
-                                            size: 30,
-                                          ),
-                                    onPressed: product['quantity'] <= 0
-                                        ? null
-                                        : () async {
-                                            addRemoveCart();
-                                          },
-                                  );
-                          }),
-                        ),
-                      )
-                    ],
+                  padding: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(rad),
+                    color: const Color.fromRGBO(0, 0, 0, 0.05),
                   ),
+                  child: product['images'].isNotEmpty
+                      ? CircleAvatar(
+                          //borderRadius: BorderRadius.circular(rad),
+                          radius: 60,
+                          backgroundColor: Colors.black12,
+                          backgroundImage: Image.network(
+                            product['images'][0]['url'],
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Center(
+                                child: Icon(
+                                  Icons.image,
+                                  size: 50,
+                                  color: Colors.black54,
+                                ),
+                              );
+                            },
+                          ).image,
+                        ) //"https://loremflickr.com/g/320/240/tea?random=${Random().nextInt(100)}")
+                      : const Icon(
+                          Icons.coffee_outlined,
+                          size: 50,
+                          color: Colors.black54,
+                        ),
+                ),
+                Positioned(
+                  bottom: 10,
+                  right: 5,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: const Color.fromRGBO(13, 13, 13, 01),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Obx(() {
+                      bool inCart = storeCtrl.cart.isNotEmpty &&
+                          storeCtrl.cart["products"]
+                              .where((el) =>
+                                  el["product"]["_id"] == product["_id"])
+                              .isNotEmpty;
+                      return product['quantity'] <= 0
+                          ? none()
+                          : IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: inCart
+                                  ? const Icon(
+                                      CupertinoIcons.bag_fill_badge_minus,
+                                      color: Colors.orange,
+                                      size: 30,
+                                    )
+                                  : const Icon(
+                                      CupertinoIcons.bag_badge_plus,
+                                      color: Colors.white70,
+                                      size: 30,
+                                    ),
+                              onPressed: product['quantity'] <= 0
+                                  ? null
+                                  : () async {
+                                      addRemoveCart();
+                                    },
+                            );
+                    }),
+                  ),
+                )
+              ],
+            ),
           ),
           mY(5),
           Padding(
@@ -151,18 +169,27 @@ class ProductCard extends StatelessWidget {
                   product['quantity'] > 0 ? "In stock" : "out of stock",
                   style: const TextStyle(fontSize: 12, color: Colors.black54),
                 ),
+                mY(2),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "R${product['price']}",
-                      style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold),
+                    TuCard(
+                      width: 50,
+                      radius: 100,
+                      padding: 4,
+                      child: Text(
+                        "R${product['price']}",
+                        style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                     iconText("${product['rating'] ?? 0}", Icons.star,
-                        iconSize: 12, fontSize: 12, iconColor: Colors.amber),
+                        iconSize: 12,
+                        fontSize: 12,
+                        iconColor: Colors.amber,
+                        fw: FontWeight.w600),
                   ],
                 )
               ],
