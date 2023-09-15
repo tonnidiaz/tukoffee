@@ -33,10 +33,6 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-Future<dio.Response<dynamic>> getProducts(String? q) async {
-  return await apiDio().get("/products?q=$q");
-}
-
 class _HomePageState extends State<HomePage> {
   final _appCtrl = MainApp.appCtrl;
   final _ctrl = Get.put(HomeCtrl());
@@ -44,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   _getToSelling() async {
     try {
       _ctrl.setTopSelling(null);
-      final res = await getProducts('top-selling');
+      final res = await getProducts(q: 'top-selling');
       _ctrl.setTopSelling(res.data['data']);
     } catch (e) {
       _ctrl.setTopSelling([]);
@@ -55,7 +51,7 @@ class _HomePageState extends State<HomePage> {
   _getSpecial() async {
     try {
       _ctrl.setSpecial(null);
-      final res = await getProducts('special');
+      final res = await getProducts(q: 'special');
       _ctrl.setSpecial(res.data['data']);
     } catch (e) {
       _ctrl.setSpecial([]);

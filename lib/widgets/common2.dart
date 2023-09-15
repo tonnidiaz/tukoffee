@@ -225,14 +225,15 @@ PreferredSizeWidget childAppbar0({String? title, bool showCart = true}) {
   );
 }
 
-PreferredSizeWidget childAppbar({String? title, bool showCart = true}) {
+PreferredSizeWidget childAppbar(
+    {String? title, bool showCart = true, double height = appBarH}) {
   final AppCtrl appCtrl = Get.find();
   final AppBarCtrl appBarCtrl = Get.find();
   return PreferredSize(
-    preferredSize: const Size.fromHeight(appBarH),
+    preferredSize: Size.fromHeight(height),
     child: Obx(
       () => AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: appBGLight,
         centerTitle: appBarCtrl
             .selected.isEmpty, //appBarCtrl.selected.isNotEmpty ? false : true,
         leadingWidth: appBarH - 5,
@@ -246,22 +247,7 @@ PreferredSizeWidget childAppbar({String? title, bool showCart = true}) {
                 icon: const Icon(Icons.close))
             : Builder(builder: (context) {
                 return Container(
-                  margin: EdgeInsets.only(left: 10),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.black12,
-                    foregroundColor: Colors.black,
-                    child: IconButton(
-                        padding: EdgeInsets.zero,
-                        splashRadius: 20,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(
-                          Icons.chevron_left,
-                          size: 30,
-                        )),
-                  ),
-                );
+                    margin: EdgeInsets.only(left: 10), child: TuBackButton());
               }),
 
         title: appBarCtrl.selected.isNotEmpty
@@ -561,6 +547,28 @@ class _TuFormFieldState extends State<TuFormField> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class TuBackButton extends StatelessWidget {
+  const TuBackButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      backgroundColor: Colors.black12,
+      foregroundColor: Colors.black,
+      child: IconButton(
+          padding: EdgeInsets.zero,
+          splashRadius: 20,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.chevron_left,
+            size: 30,
+          )),
     );
   }
 }

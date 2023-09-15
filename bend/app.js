@@ -11,6 +11,7 @@ const usersRouter = require('./routes/users');
 const ordersRouter = require('./routes/orders');
 const productsRouter = require('./routes/products');
 const authRouter = require('./routes/auth');
+const searchRouter = require('./routes/search');
 const storesRouter = require('./routes/stores');
 const userRouter = require('./routes/user');
 const { onGetGenToken } = require("./utils/functions")
@@ -57,6 +58,7 @@ app.use('/order', orderRouter);
 app.use('/orders', ordersRouter);
 app.use('/products', parser, productsRouter);
 app.use('/auth', parser, authRouter);
+app.use('/search', parser, searchRouter);
 app.use('/user', parser, userRouter);
 app.use('/stores', parser, storesRouter);
 app.get("/gen-token", onGetGenToken)

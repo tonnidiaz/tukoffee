@@ -65,8 +65,21 @@ class DashCtrl extends GetxController {
       case ProductStatus.instock:
         setSortedProducts(prods.where((it) => it['quantity'] > 0).toList());
         break;
+      case ProductStatus.topSelling:
+        setSortedProducts(
+            prods.where((it) => it['top_selling'] == true).toList());
+        break;
+      case ProductStatus.special:
+        setSortedProducts(
+            prods.where((it) => it['on_special'] == true).toList());
+        break;
+      case ProductStatus.sale:
+        setSortedProducts(prods.where((it) => it['on_sale'] == true).toList());
+        break;
       case ProductStatus.out:
         setSortedProducts(prods.where((it) => it['quantity'] == 0).toList());
+        break;
+      default:
         break;
     }
     _sortProducts();

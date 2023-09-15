@@ -56,7 +56,7 @@ String getCloudinaryFolder(
   return "TunedBass/$storeName/${dev ? "DEV" : "PROD"}/images/$folder";
 }
 
-enum ProductStatus { all, instock, out }
+enum ProductStatus { all, instock, out, topSelling, special, sale }
 
 final signedCloudinary = Cloudinary.signedConfig(
     apiKey: cloudinaryApiKey,
@@ -97,34 +97,6 @@ final List<String> collectionTimes = [
   '17:30',
   '17:45',
   '18:00',
-];
-
-var dummyLocations = [
-  '50 Davies, Kimberley, Northern Cape 8301, South Africa',
-  '50 Davies Street, Westonaria, Gauteng 1779, South Africa',
-  '50 Davies Street, Johannesburg, Johannesburg, Gauteng 2094, South Africa',
-  '50 Sutton Street, Port Elizabeth, Eastern Cape 6001, South Africa',
-  '50 Davies Street, Surry Hills New South Wales 2010, Australia'
-];
-
-var dummyLocations2 = [
-  'Gill Street, Vanderbijlpark, Gauteng 1911, South Africa',
-  '16 Gill Street, Bloemfontein, Bloemfontein, Free State 9301, South Africa',
-  '16 Gill Street, Johannesburg, Johannesburg, Gauteng 2198, South Africa',
-  '16 Gill Street, Germiston, Gauteng 1401, South Africa',
-  '16 Gill Street, Klein Brakrivier, Western Cape 6503, South Africa'
-];
-
-var dummLocs = [
-  {
-    "name": 'Gill Street, Vanderbijlpark, Gauteng 1911, South Africa',
-    "coordinates": [27.82563, -26.6948865]
-  },
-  {
-    "name":
-        '16 Gill Street, Bloemfontein, Bloemfontein, Free State 9301, South Africa',
-    "coordinates": [26.173052, -29.143129]
-  },
 ];
 
 class Debouncer {

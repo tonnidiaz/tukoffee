@@ -40,7 +40,7 @@ class _MobileAppState extends State<MobileApp> {
       theme: tuTheme(_darkMode), //(Brightness.light),
       routes: routes,
       debugShowCheckedModeBanner: false,
-      initialRoute: "/shop",
+      initialRoute: "/search",
       builder: (context, child) {
         return child!;
       },
@@ -74,6 +74,7 @@ ThemeData tuTheme(bool dark) {
       appBarTheme: AppBarTheme(
           centerTitle: true,
           toolbarHeight: appBarH,
+          titleSpacing: 0,
           //  iconTheme: IconThemeData(color: ),
           titleTextStyle: GoogleFonts.ubuntu(
               fontWeight: FontWeight.w800,

@@ -19,6 +19,7 @@ import 'package:frust/views/order/payment.dart';
 import 'package:frust/views/orders.dart';
 import 'package:frust/views/product.dart';
 import 'package:frust/views/rf.dart';
+import 'package:frust/views/search.dart';
 import 'package:geocode/geocode.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../views/admin/dashboard.dart';
@@ -69,6 +70,11 @@ final List<Page> pages = [
     "/rf2",
     const RFPage2(),
     icon: CupertinoIcons.home,
+  ),
+  Page(
+    "/search",
+    const SearchPage(),
+    icon: CupertinoIcons.search,
   ),
   Page(
     "/admin/dashboard",

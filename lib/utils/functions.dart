@@ -297,3 +297,7 @@ Future<CloudinaryResponse> uploadImg(File file,
       folder: getCloudinaryFolder(storeName: appCtrl.storeName.value),
       progressCallback: onUpload);
 }
+
+Future<Response<dynamic>> getProducts({String? q}) async {
+  return await apiDio().get("/products?q=$q");
+}

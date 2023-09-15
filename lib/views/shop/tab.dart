@@ -126,6 +126,9 @@ class _HomeTabState extends State<HomeTab> {
                           value: _storeCtrl.status.value,
                           items: [
                             SelectItem("All", ProductStatus.all),
+                            SelectItem("Top selling", ProductStatus.topSelling),
+                            SelectItem("On special", ProductStatus.special),
+                            SelectItem("On sale", ProductStatus.sale),
                             SelectItem("in stock", ProductStatus.instock),
                             SelectItem("out of stock", ProductStatus.out),
                           ],

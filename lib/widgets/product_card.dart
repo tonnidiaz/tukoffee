@@ -15,13 +15,14 @@ import 'common.dart';
 class ProductCard extends StatelessWidget {
   final Map<String, dynamic> product;
   final String? cols;
-  const ProductCard({super.key, required this.product, this.cols});
+  final double? width;
+  const ProductCard({super.key, required this.product, this.cols, this.width});
 
   @override
   Widget build(BuildContext context) {
     final StoreCtrl storeCtrl = Get.find();
     final AppCtrl appCtrl = Get.find();
-    final cardW = (screenSize(context).width / 2) - 13;
+    final cardW = width ?? (screenSize(context).width / 2) - 13;
     double rad = 8;
     addRemoveCart() async {
       if (appCtrl.user.isEmpty)

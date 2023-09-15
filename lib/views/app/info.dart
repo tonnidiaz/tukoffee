@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frust/main.dart';
 import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/functions.dart';
+import 'package:frust/utils/styles.dart';
 import 'package:frust/views/order/index.dart';
+import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common2.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,7 +32,6 @@ class InfoPage extends StatelessWidget {
                         applicationIcon: Obx(
                           () => Image.network(
                             appCtrl.storeImage['url'],
-                            
                             width: 70,
                             height: 70,
                           ),
@@ -54,11 +55,8 @@ class InfoPage extends StatelessWidget {
                   child: const Text("About Developer")),
               InfoItem(
                   onTap: () async {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return const UpdatesView();
-                        });
+                    TuFuncs.showBottomSheet(
+                        context: context, widget: const UpdatesView());
                     /*  appCtrl.sethasUpdates(false);
                     // check for update
                     var t = showToast("Checking for updates...",
@@ -86,19 +84,82 @@ class InfoPage extends StatelessWidget {
   }
 }
 
-class UpdatesView extends StatelessWidget {
+class UpdatesView extends StatefulWidget {
   const UpdatesView({super.key});
 
   @override
+  State<UpdatesView> createState() => _UpdatesViewState();
+}
+
+class _UpdatesViewState extends State<UpdatesView> {
+  int? _updates;
+  _setUpdates(int? val) {
+    setState(() {
+      _updates = val;
+    });
+  }
+
+  _checkUpdates() async {
+    _setUpdates(null);
+    await Future.delayed(Duration(seconds: 3));
+    _setUpdates(4);
+  }
+
+  _init() async {
+    _checkUpdates();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _init();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PageWrapper(
       appBar: childAppbar(showCart: false),
-      body: Container(
+      onRefresh: () async {
+        await _checkUpdates();
+      },
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromRGBO(42, 42, 42, 1),
+        onPressed: () {
+          _checkUpdates();
+        },
+        child: const Icon(Icons.refresh),
+      ),
+      child: Container(
         padding: defaultPadding2,
-        child: const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        width: double.infinity,
+        height: screenSize(context).height - appBarH - statusBarH(context),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Checking for updates..."),
+            _updates != null
+                ? Column(
+                    children: [
+                      TextButton(
+                        child: Text(
+                          "($_updates) Updates found",
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        onPressed: () {},
+                      ),
+                      TuButton(
+                        text: "Update now",
+                        onPressed: () {},
+                      ),
+                    ],
+                  )
+                : Text(
+                    "Checking for updates...",
+                    style: Styles.h3(),
+                    textAlign: TextAlign.center,
+                  ),
           ],
         ),
       ),

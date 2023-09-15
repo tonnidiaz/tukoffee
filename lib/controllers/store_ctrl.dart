@@ -50,39 +50,6 @@ class StoreCtrl extends GetxController {
     _sortProducts();
   }
 
-  RxList<Store> dymmystores = [
-    const Store(
-        address: Address(
-          street: "16 Gill st",
-          suburb: "Vanderbijlpark",
-          city: "Vereeniging",
-          postcode: 1911,
-          state: "Gauteng",
-        ),
-        openTime: TimeOfDay(hour: 10, minute: 15),
-        closeTime: TimeOfDay(hour: 17, minute: 30)),
-    const Store(
-        address: Address(
-          street: "50 Davies st",
-          suburb: "Doornfontein",
-          city: "Johannesburg",
-          postcode: 2001,
-          state: "Gauteng",
-        ),
-        openTime: TimeOfDay(hour: 08, minute: 15),
-        closeTime: TimeOfDay(hour: 19, minute: 30)),
-    const Store(
-        address: Address(
-          street: "50 Davies st",
-          suburb: "Doornfontein",
-          city: "Johannesburg",
-          postcode: 2001,
-          state: "Gauteng",
-        ),
-        openTime: TimeOfDay(hour: 18, minute: 15),
-        closeTime: TimeOfDay(hour: 05, minute: 30)),
-  ].obs;
-
   Rx<List?> stores = (null as List?).obs;
   void setStores(List? val) {
     stores.value = val;
@@ -100,8 +67,21 @@ class StoreCtrl extends GetxController {
       case ProductStatus.instock:
         setSortedProducts(prods.where((it) => it['quantity'] > 0).toList());
         break;
+      case ProductStatus.topSelling:
+        setSortedProducts(
+            prods.where((it) => it['top_selling'] == true).toList());
+        break;
+      case ProductStatus.special:
+        setSortedProducts(
+            prods.where((it) => it['on_special'] == true).toList());
+        break;
+      case ProductStatus.sale:
+        setSortedProducts(prods.where((it) => it['on_sale'] == true).toList());
+        break;
       case ProductStatus.out:
         setSortedProducts(prods.where((it) => it['quantity'] == 0).toList());
+        break;
+      default:
         break;
     }
     _sortProducts();
