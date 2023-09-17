@@ -28,7 +28,7 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      appBar: childAppbar(title: "TuKoffee"),
+      appBar: childAppbar(title: "Shop"),
       bottom: TabBar(
         controller: _tabController,
         indicatorColor: Colors.brown,

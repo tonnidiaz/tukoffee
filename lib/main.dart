@@ -120,10 +120,11 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() =>
-        !MainApp.appCtrl.ready.value || MainApp.appCtrl.storeName.isEmpty
-            ? const TuLoader()
-            : const MobileApp());
+    return Obx(() => !MainApp.appCtrl.ready.value ||
+            MainApp.appCtrl.store['name'] == null ||
+            MainApp.appCtrl.store['name'].isEmpty
+        ? const TuLoader()
+        : const MobileApp());
   }
 }
 

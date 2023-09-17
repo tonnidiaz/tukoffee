@@ -25,7 +25,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   String? _searchBy;
-  _setSearchBy(String val) {
+  _setSearchBy(String? val) {
     setState(() {
       _searchBy = val;
     });
@@ -78,71 +78,85 @@ class _SearchPageState extends State<SearchPage> {
             onChanged: (val) {},
           ),
           actions: [
-            PopupMenuButton(itemBuilder: (context) {
-              return [];
-            })
+            PopupMenuButton(
+                splashRadius: 20,
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem(
+                      child: Text("Reset"),
+                      onTap: () {
+                        _setProducts(null);
+                        _setQuery("");
+                        _setSearchBy(null);
+                      },
+                    )
+                  ];
+                })
           ],
         ),
-        body: Container(
-            padding: defaultPadding2,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              TuDropdownButton(
-                label: "Search by:",
-                value: _searchBy,
-                onChanged: (val) {
-                  _setSearchBy(val);
-                },
-                items: [
-                  SelectItem("Product ID", "pid"),
-                  SelectItem("Name", "name"),
-                ],
-              ),
-              Visibility(
-                visible: _query.isNotEmpty,
-                child: Row(
+        body: SingleChildScrollView(
+          child: Container(
+              padding: defaultPadding2,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Search results for:  ",
-                      style: Styles.title(isLight: true),
+                    TuDropdownButton(
+                      label: "Search by:",
+                      value: _searchBy,
+                      onChanged: (val) {
+                        _setSearchBy(val);
+                      },
+                      items: [
+                        SelectItem("Product ID", "pid"),
+                        SelectItem("Name", "name"),
+                      ],
                     ),
-                    Text(
-                      _query,
-                      style: Styles.title(color: Colors.orange),
-                    )
-                  ],
-                ),
-              ),
-              mY(10),
-              _products == null
-                  ? _query.isEmpty
-                      ? none()
-                      : Expanded(
-                          child: Center(
-                              child: Text(
-                          "Searching...",
-                          style: Styles.h3(isLight: true),
-                        )))
-                  : _products!.isNotEmpty
-                      ? LayoutBuilder(builder: (context, c) {
-                          return Wrap(
-                            alignment: WrapAlignment.spaceBetween,
-                            //runAlignment: WrapAlignment.spaceBetween,
-                            //Products
-                            children: _products!
-                                .map((it) => ProductCard(
-                                      product: it,
-                                      width: (c.maxWidth / 2) - 5,
-                                    ))
-                                .toList(),
-                          );
-                        })
-                      : Expanded(
-                          child: Center(
-                              child: Text(
-                          "No results",
-                          style: Styles.h3(isLight: true),
-                        )))
-            ])));
+                    Visibility(
+                      visible: _query.isNotEmpty,
+                      child: Row(
+                        children: [
+                          Text(
+                            "Search results for:  ",
+                            style: Styles.title(isLight: true),
+                          ),
+                          Text(
+                            _query,
+                            style: Styles.title(color: Colors.orange),
+                          )
+                        ],
+                      ),
+                    ),
+                    mY(10),
+                    _products == null
+                        ? _query.isEmpty
+                            ? none()
+                            : Expanded(
+                                child: Center(
+                                    child: Text(
+                                "Searching...",
+                                style: Styles.h3(isLight: true),
+                              )))
+                        : _products!.isNotEmpty
+                            ? LayoutBuilder(builder: (context, c) {
+                                return Wrap(
+                                  alignment: WrapAlignment.spaceBetween,
+                                  //runAlignment: WrapAlignment.spaceBetween,
+                                  //Products
+                                  children: _products!
+                                      .map((it) => ProductCard(
+                                            product: it,
+                                            width: (c.maxWidth / 2) - 5,
+                                          ))
+                                      .toList(),
+                                );
+                              })
+                            : Expanded(
+                                child: Center(
+                                    child: Text(
+                                "No results",
+                                style: Styles.h3(isLight: true),
+                              )))
+                  ])),
+        ));
   }
 }

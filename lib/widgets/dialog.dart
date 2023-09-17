@@ -31,9 +31,10 @@ class _TuDialogViewState extends State<TuDialogView> {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: cardBGLight,
-      contentPadding: defaultPadding,
-      titlePadding: defaultPadding,
-      actionsPadding: const EdgeInsets.only(left: 8, right: 8, bottom: 15),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+      titlePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      actionsPadding:
+          const EdgeInsets.only(left: 8, right: 8, bottom: 15, top: 10),
       insetPadding: const EdgeInsets.all(15),
       title: Text(
         widget.title,
@@ -53,6 +54,7 @@ class _TuDialogViewState extends State<TuDialogView> {
       actions: [
         TuButton(
             text: widget.okTxt,
+            height: 35,
             onPressed: () async {
               if (widget.isForm) {
                 if (_formKey.currentState!.validate()) {

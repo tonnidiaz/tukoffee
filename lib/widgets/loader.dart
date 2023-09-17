@@ -37,7 +37,7 @@ class _TuLoaderState extends State<TuLoader> {
 
   void _init() async {
     // Check for internet connection
-    if (_appCtrl.storeName.isNotEmpty) return;
+    if (_appCtrl.store['name'] != null) return;
     _setConnected(true);
     bool result = await InternetConnectionChecker().hasConnection;
     await Future.delayed(const Duration(milliseconds: 100));

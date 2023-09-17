@@ -16,7 +16,7 @@ PreferredSizeWidget mobileTitleBar(
     toolbarHeight: appBarH,
     //leadingWidth: 35,
     leading: const CartBtn(),
-    title: Obx(() => Text(appCtrl.storeName.value,
+    title: Obx(() => Text(appCtrl.store['name'],
         style: GoogleFonts.lato(fontWeight: FontWeight.w900, fontSize: 16))),
     actions: [
       Container(

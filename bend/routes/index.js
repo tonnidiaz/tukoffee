@@ -108,7 +108,7 @@ router.post("/store/update", auth, async (req, res) => {
         const { data } = req.body;
         const buff = fs.readFileSync(jsonPath, { encoding: "utf-8" });
         const details = JSON.parse(buff);
-        for (let key of Object.keys(data)) {
+        for (let key of Object.keys(data)) { 
             details[key] = data[key];
         }
         fs.writeFileSync(jsonPath, JSON.stringify(details));

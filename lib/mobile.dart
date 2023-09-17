@@ -40,7 +40,7 @@ class _MobileAppState extends State<MobileApp> {
       theme: tuTheme(_darkMode), //(Brightness.light),
       routes: routes,
       debugShowCheckedModeBanner: false,
-      initialRoute: "/dashboard",
+      initialRoute: "/rf",
       builder: (context, child) {
         return child!;
       },

@@ -14,6 +14,7 @@ import 'package:frust/views/auth/create.dart';
 import 'package:frust/views/auth/login.dart';
 import 'package:frust/views/auth/reset_pass.dart';
 import 'package:frust/views/cart.dart';
+import 'package:frust/views/map.dart';
 import 'package:frust/views/order/index.dart';
 import 'package:frust/views/order/checkout.dart';
 import 'package:frust/views/order/payment.dart';
@@ -55,6 +56,11 @@ final List<Page> pages = [
     "/",
     const HomePage(),
     icon: CupertinoIcons.home,
+  ),
+  Page(
+    "/map",
+    const MapPage(),
+    icon: CupertinoIcons.map,
   ),
   Page(
     "/product",

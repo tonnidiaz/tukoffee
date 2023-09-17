@@ -43,7 +43,7 @@ class _UpdatesViewState extends State<UpdatesView> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      appBar: childAppbar(showCart: false),
+      appBar: childAppbar(showCart: false, title: "Updates"),
       onRefresh: () async {
         await _checkUpdates();
       },
@@ -57,12 +57,12 @@ class _UpdatesViewState extends State<UpdatesView> {
       child: Container(
         padding: defaultPadding2,
         width: double.infinity,
-        height: screenSize(context).height - appBarH - statusBarH(context),
+        height: screenSize(context).height - appBarH - statusBarH(context) - 70,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _updates != null
+            false //_updates != null
                 ? Column(
                     children: [
                       TuCard(
@@ -104,10 +104,16 @@ class _UpdatesViewState extends State<UpdatesView> {
                           )),
                     ],
                   )
-                : Text(
-                    "Checking for updates...",
-                    style: Styles.h3(),
-                    textAlign: TextAlign.center,
+                : Column(
+                    children: [
+                      Text(
+                        "Checking updates",
+                        style: Styles.title(),
+                        textAlign: TextAlign.center,
+                      ),
+                      mY(5),
+                      const LinearProgressIndicator(),
+                    ],
                   ),
           ],
         ),

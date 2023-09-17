@@ -9,6 +9,7 @@ import 'package:frust/main.dart';
 import 'package:frust/utils/constants2.dart';
 import 'package:frust/utils/functions.dart';
 import 'package:frust/utils/styles.dart';
+import 'package:frust/views/auth/login.dart';
 import 'package:frust/views/map.dart';
 import 'package:frust/views/order/index.dart';
 import 'package:frust/views/order/payment.dart';
@@ -73,7 +74,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (_appCtrl.user.isEmpty) {
-        pushNamed(context, "/auth/login");
+        TuFuncs.showBottomSheet(context: context, widget: LoginPage());
         return;
       }
 
@@ -92,12 +93,27 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = childAppbar(showCart: false, title: "Checkout");
     return _appCtrl.user.isEmpty
         ? PageWrapper(
-            appBar: childAppbar(),
+            appBar: appBar,
+            child: Container(
+              padding: defaultPadding2,
+              height:
+                  screenSize(context).height - statusBarH(context) - appBarH,
+              child: Center(
+                child: TuButton(
+                  text: "Login",
+                  onPressed: () {
+                    TuFuncs.showBottomSheet(
+                        context: context, widget: LoginPage());
+                  },
+                ),
+              ),
+            ),
           )
         : PageWrapper(
-            appBar: childAppbar(),
+            appBar: appBar,
             bottomSheet: Container(
               decoration: const BoxDecoration(
                   color: cardBGLight,
@@ -454,7 +470,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
       var body = {
         "name":
-            "${_appCtrl.user['first_name']} ${_appCtrl.user['last_name']}'s ${_appCtrl.storeName} Order",
+            "${_appCtrl.user['first_name']} ${_appCtrl.user['last_name']}'s ${_appCtrl.store['name']} Order",
         "amount": total * 100,
         "description": "Checkout your Tukoffee order.",
         "redirect_url": "$apiURL/payment"

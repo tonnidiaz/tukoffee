@@ -11,12 +11,14 @@ class TuSearchField extends StatefulWidget {
   final Function(TuSuggestion it) onSuggestionTap;
   final IconData? suggestionIcon;
   final Function(String) onChanged;
-  final String label;
+  final String? label;
+  final String hint;
   final Widget? prefix;
   final Color? fill;
   const TuSearchField(
       {super.key,
-      this.label = "",
+      this.label,
+      this.hint = "",
       this.fill,
       required this.onChanged,
       this.prefix,
@@ -108,7 +110,11 @@ class _TuSearchFieldState extends State<TuSearchField> {
         fill: widget.fill,
         prefixIcon: widget.prefix,
         focusNode: _focusNode,
+        hint: widget.hint,
         isRequired: true,
+        onSubmitted: (val) {
+          _hideOverlay();
+        },
         onChanged: (val) {
           _setValue(val);
           _debouncer.run(() {

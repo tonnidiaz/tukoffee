@@ -7,6 +7,11 @@ import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/tu/searchfield.dart';
 import 'package:latlong2/latlong.dart';
 
+class MapPageArgs {
+  final List center;
+  const MapPageArgs({required this.center});
+}
+
 class MapPage extends StatefulWidget {
   final Function(Map<String, dynamic> val)? onSubmit;
   const MapPage({super.key, this.onSubmit});
@@ -16,6 +21,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  MapPageArgs? _args;
   LatLng? _center = const LatLng(-26.1974939, 28.0534776);
   _setCenter(LatLng? val) {
     setState(() {
@@ -72,6 +78,19 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        _args = ModalRoute.of(context)?.settings.arguments as MapPageArgs?;
+        clog(_args?.center);
+        if (_args != null) {
+          var cent = LatLng(_args!.center.first, _args!.center.last);
+          //_setCurrCenter(LatLng(_args!.center.first, _args!.center.last));
+          _setCenter(cent);
+          _mapController.move(cent, 17.5);
+        }
+      });
+    });
   }
 
   @override
@@ -84,36 +103,30 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     double bottomSheetH = 60;
     return Scaffold(
-        bottomSheet: Container(
-          padding: defaultPadding,
-          height: bottomSheetH,
-          color: Colors.transparent,
-          child: LayoutBuilder(builder: (context, c) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TuButton(
-                  width: (c.maxWidth / 2) - 2.5,
-                  text: "Cancel",
-                  bgColor: Color.fromRGBO(255, 224, 178, 0),
-                  onPressed: () async {
-                    Navigator.pop(context);
-                  },
-                ),
-                TuButton(
-                  width: (c.maxWidth / 2) - 2.5,
-                  text: "Use Location",
-                  onPressed: () async {
-                    /// _setCenter(_currCenter);
-                    if (widget.onSubmit != null) {
-                      widget.onSubmit!(_address);
-                    }
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            );
-          }),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton.small(
+                heroTag: "My location",
+                backgroundColor: Colors.black,
+                child: const Icon(Icons.my_location),
+                onPressed: () {
+                  //TODO: go to user location
+                }),
+            mY(10),
+            FloatingActionButton.small(
+              heroTag: "Use location",
+              backgroundColor: Colors.black,
+              child: const Icon(Icons.check),
+              onPressed: () async {
+                /// _setCenter(_currCenter);
+                if (widget.onSubmit != null) {
+                  widget.onSubmit!(_address);
+                }
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
         body: SafeArea(
           child: Container(
@@ -129,6 +142,7 @@ class _MapPageState extends State<MapPage> {
                           _setCurrCenter(pos.center);
                           if (pos.zoom != null && pos.zoom! >= 17.5) {
                             // Max zoom
+
                             _mapController.move(_currCenter!, 17.5);
                           }
                         }
@@ -156,16 +170,16 @@ class _MapPageState extends State<MapPage> {
                         markers: [
                           Marker(
                             // curr position
-                            point: _currCenter!,
+                            point: _currCenter ?? const LatLng(0, 0),
                             builder: (context) => const Icon(
-                              Icons.location_on,
-                              color: Color.fromRGBO(42, 42, 42, 01),
-                              size: 26,
+                              Icons.location_searching_rounded,
+                              color: Color.fromRGBO(10, 10, 10, 01),
+                              size: 20,
                             ),
                           ),
                           Marker(
                             // curr location
-                            point: _center!,
+                            point: _center ?? const LatLng(0, 0),
                             builder: (context) => const Icon(
                               Icons.location_pin,
                               color: Colors.orange,
@@ -177,7 +191,7 @@ class _MapPageState extends State<MapPage> {
                     ],
                   ),
                   Container(
-                    margin: defaultPadding2,
+                    margin: defaultPadding,
                     //  color: Color.fromRGBO(255, 255, 255, 1),
                     height: 140,
 
@@ -185,30 +199,51 @@ class _MapPageState extends State<MapPage> {
                     width: double.infinity,
                     child: Column(
                       children: [
-                        TuSearchField(
-                            label: "Search location:",
-                            prefix: const Icon(
-                              Icons.location_on,
-                              size: 25,
-                            ),
-                            fill: const Color.fromARGB(255, 255, 254, 253),
-                            suggestions: _features
-                                .map((it) => TuSuggestion(
-                                    text: "${it['place_name']}", value: it))
-                                .toList(),
-                            onChanged: (val) {
-                              _searchAddress(val);
-                            },
-                            onSuggestionTap: (val) {
-                              var center = val.value['center'];
-                              var latlng = LatLng(center[1], center[0]);
-                              _mapController.move(latlng, 18.5);
-                              _setCenter(latlng);
-                              _setAddress({
-                                "name": val.value['place_name'],
-                                "center": center,
-                              });
-                            })
+                        Container(
+                          //height: 40,
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+
+                          decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 255, 254, 253),
+                              borderRadius: BorderRadius.circular(7)),
+                          width: double.infinity,
+                          child: false
+                              ? none()
+                              : Row(
+                                  children: [
+                                    BackButton(),
+                                    Expanded(
+                                      child: TuSearchField(
+                                          hint: "Search location...",
+                                          prefix: const Icon(
+                                            Icons.location_on,
+                                            size: 25,
+                                          ),
+                                          fill: const Color.fromARGB(
+                                              255, 255, 254, 253),
+                                          suggestions: _features
+                                              .map((it) => TuSuggestion(
+                                                  text: "${it['place_name']}",
+                                                  value: it))
+                                              .toList(),
+                                          onChanged: (val) {
+                                            _searchAddress(val);
+                                          },
+                                          onSuggestionTap: (val) {
+                                            var center = val.value['center'];
+                                            var latlng =
+                                                LatLng(center[1], center[0]);
+                                            _mapController.move(latlng, 18.5);
+                                            _setCenter(latlng);
+                                            _setAddress({
+                                              "name": val.value['place_name'],
+                                              "center": center,
+                                            });
+                                          }),
+                                    )
+                                  ],
+                                ),
+                        )
                       ],
                     ),
                   )

@@ -199,7 +199,7 @@ PreferredSizeWidget childAppbar0({String? title, bool showCart = true}) {
             : title != null
                 ? Text(title)
                 : Text(
-                    appCtrl.storeName.value,
+                    appCtrl.store['name'],
                   ),
 
         actions: [
@@ -247,7 +247,8 @@ PreferredSizeWidget childAppbar(
                 icon: const Icon(Icons.close))
             : Builder(builder: (context) {
                 return Container(
-                    margin: EdgeInsets.only(left: 10), child: TuBackButton());
+                    margin: const EdgeInsets.only(left: 10),
+                    child: const TuBackButton());
               }),
 
         title: appBarCtrl.selected.isNotEmpty
@@ -255,7 +256,7 @@ PreferredSizeWidget childAppbar(
                 "${appBarCtrl.selected.length} selected",
                 style: const TextStyle(fontWeight: FontWeight.w500),
               )
-            : Text(title ?? appCtrl.storeName.value),
+            : Text(title ?? appCtrl.store['name']),
 
         actions: [
           appBarCtrl.selected.isNotEmpty
@@ -381,6 +382,7 @@ class TuFormField extends StatefulWidget {
   final String hint;
   final dynamic value;
   final Widget? suffix;
+  final Widget? suffixIcon;
   final Widget? prefixIcon;
   final Widget? prefix;
   final Function(String)? onChanged;
@@ -410,6 +412,7 @@ class TuFormField extends StatefulWidget {
       this.label,
       this.my = 5,
       this.focusNode,
+      this.suffixIcon,
       this.suffix,
       this.onSubmitted,
       this.width,
@@ -506,6 +509,7 @@ class _TuFormFieldState extends State<TuFormField> {
               ),
               prefixIcon: widget.prefixIcon,
               prefix: widget.prefix,
+              suffix: widget.suffix,
               suffixIcon: widget.isPass && widget.showEye
                   ? IconButton(
                       padding: EdgeInsets.zero,
@@ -531,7 +535,7 @@ class _TuFormFieldState extends State<TuFormField> {
                       icon: Icon(!_showPass
                           ? CupertinoIcons.eye
                           : CupertinoIcons.eye_slash))
-                  : widget.suffix,
+                  : widget.suffixIcon,
               labelText:
                   !widget.hasBorder || !widget.isLegacy ? widget.label : null,
               hintText: widget.hint,
@@ -558,7 +562,7 @@ class TuBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       backgroundColor: Colors.black12,
-      foregroundColor: Colors.black,
+      foregroundColor: const Color.fromRGBO(50, 50, 50, .9),
       child: IconButton(
           padding: EdgeInsets.zero,
           splashRadius: 20,

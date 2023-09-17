@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frust/views/map.dart';
 import '../utils/constants.dart';
 import '../utils/functions.dart';
 import '../utils/styles.dart';
@@ -137,7 +138,10 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
       borderSize: 0,
       radius: 0,
       onTap: () {
-        pushNamed(context, '/shop');
+        //TODO://Open map with location coordinates
+        final center = store['location']['center'];
+        pushNamed(context, '/map',
+            args: MapPageArgs(center: [center[1], center[0]]));
       },
       child: TuListTile(
           leading: const Icon(

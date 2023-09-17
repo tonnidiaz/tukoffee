@@ -22,7 +22,7 @@ class Footer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "Copyright © ${DateTime.now().year} | ${appCtrl.storeName}",
+              "Copyright © ${DateTime.now().year} | ${appCtrl.store['name']}",
               style: const TextStyle(fontSize: 14, color: Colors.white70),
             )
           ],

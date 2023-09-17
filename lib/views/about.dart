@@ -15,9 +15,7 @@ class _AboutPageState extends State<AboutPage> {
   Widget build(BuildContext context) {
     return PageWrapper(
         child: Container(
-      width: isMobile
-          ? screenSize(context).width
-          : screenSize(context).width - appBarH,
+      width: double.infinity,
       padding: const EdgeInsets.all(8),
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.center,

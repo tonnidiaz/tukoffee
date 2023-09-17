@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frust/main.dart';
 import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/functions.dart';
-import 'package:frust/utils/styles.dart';
 import 'package:frust/views/order/index.dart';
-import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common2.dart';
 import 'package:frust/widgets/tu/updates.dart';
 import 'package:get/get.dart';
@@ -29,10 +27,10 @@ class InfoPage extends StatelessWidget {
                   onTap: () {
                     showAboutDialog(
                         context: context,
-                        applicationName: appCtrl.storeName.value,
+                        applicationName: appCtrl.store['name'],
                         applicationIcon: Obx(
                           () => Image.network(
-                            appCtrl.storeImage['url'],
+                            appCtrl.store['image']['url'],
                             width: 70,
                             height: 70,
                           ),
@@ -44,31 +42,26 @@ class InfoPage extends StatelessWidget {
                   onTap: () {
                     pushNamed(context, '/admin/settings');
                   },
-                  child: Obx(() => Text("About ${MainApp.appCtrl.storeName}"))),
+                  child: Obx(
+                      () => Text("About ${MainApp.appCtrl.store['name']}"))),
               InfoItem(
                   onTap: () async {
                     try {
-                      await launchUrl(Uri.parse(appCtrl.developerLink.value));
+                      await launchUrl(Uri.parse(appCtrl.developer['site']));
                     } catch (e) {
                       clog(e);
                     }
                   },
                   child: const Text("About Developer")),
               InfoItem(
-                  onTap: () async {
-                    TuFuncs.showBottomSheet(
-                        context: context, widget: const UpdatesView());
-                  },
-                  child: tuTableRow(
-                      const Text("Check for updates"),
-                      Obx(() => Visibility(
-                            visible: appCtrl.hasUpdates.value,
-                            child: const CircleAvatar(
-                              radius: 5,
-                              backgroundColor: Colors.orange,
-                              foregroundColor: Colors.white,
-                            ),
-                          )))),
+                onTap: () async {
+                  TuFuncs.showBottomSheet(
+                      context: context,
+                      widget: const UpdatesView(),
+                      full: true);
+                },
+                child: const Text("Check for updates"),
+              ),
             ],
           )),
     );

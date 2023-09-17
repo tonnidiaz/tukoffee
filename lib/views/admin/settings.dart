@@ -34,8 +34,10 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
 
   editFields() async {
     try {
+      //clog(formCtrl.form);
       final res =
           await apiDio().post('/store/update', data: {'data': formCtrl.form});
+      // clog(res);
       setupStoreDetails(data: res.data['store']);
       Navigator.pop(context);
     } catch (e) {
@@ -57,10 +59,10 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
     try {
       final file = await importFile();
       if (file != null) {
-        if (appCtrl.storeImage['publicId'] != null) {
+        if (appCtrl.store['image']['publicId'] != null) {
           clog("Deleting old...");
           try {
-            await signedCloudinary.destroy(appCtrl.storeImage['publicId']);
+            await signedCloudinary.destroy(appCtrl.store['image']['publicId']);
           } catch (e) {
             errorHandler(
                 e: e, context: context, msg: "Failed to delete old image");
@@ -89,7 +91,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: childAppbar(showCart: false),
+      appBar: childAppbar(showCart: false, title: "Store Config"),
       body: SingleChildScrollView(
         child: Container(
           padding: defaultPadding,
@@ -111,38 +113,42 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                         alignment: Alignment.center,
                         children: [
                           Obx(
-                            () => appCtrl.storeImage['url'] != null
+                            () => appCtrl.store['image'] != null
                                 ? Image.network(
-                                    appCtrl.storeImage['url'],
+                                    appCtrl.store['image']['url'],
                                   )
                                 : const Icon(
                                     Icons.image,
                                     size: 30,
                                   ),
                           ),
-                          Positioned(
-                              bottom: 0,
-                              left: 0,
-                              width: 80,
-                              child: Container(
-                                color: const Color.fromRGBO(40, 40, 40, .85),
-                                height: 20,
-                                child: InkWell(
-                                  onTap: _onBtnImportImgClick,
-                                  child: const Icon(
-                                    Icons.camera_alt_outlined,
-                                    color: Colors.white,
-                                    size: 15,
+                          Visibility(
+                            visible: appCtrl.user.isNotEmpty &&
+                                appCtrl.user['permissions'] > 0,
+                            child: Positioned(
+                                bottom: 0,
+                                left: 0,
+                                width: 80,
+                                child: Container(
+                                  color: const Color.fromRGBO(40, 40, 40, .85),
+                                  height: 20,
+                                  child: InkWell(
+                                    onTap: _onBtnImportImgClick,
+                                    child: const Icon(
+                                      Icons.camera_alt_outlined,
+                                      color: Colors.white,
+                                      size: 15,
+                                    ),
                                   ),
-                                ),
-                              ))
+                                )),
+                          )
                         ],
                       ),
                     ),
                     mX(10),
                     Obx(
                       () => Text(
-                        "${appCtrl.storeName}",
+                        "${appCtrl.store['name']}",
                         style: Styles.h2(),
                       ),
                     ),
@@ -151,123 +157,11 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
             TuCard(
                 child: Column(
               children: [
-                tuTableRow(
-                    Text(
-                      "Store details",
-                      style: Styles.h2(),
-                    ),
-                    Obx(
-                      () => appCtrl.user.isEmpty
-                          ? none()
-                          : Visibility(
-                              visible: appCtrl.user['permissions'] > 0,
-                              child: InkWell(
-                                onTap: () {
-                                  // Edit name and phone
-                                  formCtrl.setForm({
-                                    'name': appCtrl.storeName.value,
-                                    'phone': appCtrl.storePhone.value,
-                                  });
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => FormView(
-                                          title: "Edit store details",
-                                          fields: [
-                                            TuFormField(
-                                              label: "Store name:",
-                                              hint: "Enter store name...",
-                                              isRequired: true,
-                                              hasBorder: false,
-                                              value: formCtrl.form['name'],
-                                              onChanged: (val) {
-                                                formCtrl.setFormField(
-                                                    'name', val);
-                                              },
-                                            ),
-                                            TuFormField(
-                                              label: "Store phone:",
-                                              hasBorder: false,
-                                              hint:
-                                                  "Enter store phone number...",
-                                              isRequired: true,
-                                              keyboard: TextInputType.phone,
-                                              value: formCtrl.form['phone'],
-                                              onChanged: (val) {
-                                                formCtrl.setFormField(
-                                                    'phone', val);
-                                              },
-                                            ),
-                                            TuFormField(
-                                              label: "Store website:",
-                                              hasBorder: false,
-                                              hint:
-                                                  "Enter store website url...",
-                                              isRequired: false,
-                                              keyboard: TextInputType.url,
-                                              value: formCtrl.form['site'],
-                                              onChanged: (val) {
-                                                formCtrl.setFormField(
-                                                    'site', val);
-                                              },
-                                            ),
-                                            mY(10)
-                                          ],
-                                          onSubmit: () async {
-                                            editFields();
-                                          }));
-                                },
-                                child: const Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                ),
-                              ),
-                            ),
-                    )),
-                tuTableRow(
-                    Text(
-                      "Store name:",
-                      style: Styles.label(isBold: true),
-                    ),
-                    Obx(
-                      () => Text(
-                        appCtrl.storeName.value,
-                        style: Styles.label(isLight: true),
-                      ),
-                    )),
-                tuTableRow(
-                    Text(
-                      "Store phone:",
-                      style: Styles.label(isBold: true),
-                    ),
-                    Obx(
-                      () => SelectableText(
-                        appCtrl.storePhone.value,
-                        style: Styles.label(isLight: true),
-                      ),
-                    )),
-                tuTableRow(
-                    Text(
-                      "Store website:",
-                      style: Styles.label(isBold: true),
-                    ),
-                    Obx(
-                      () => SizedBox(
-                        width: 100,
-                        child: SelectableText(
-                          appCtrl.storeSite.value,
-                          maxLines: 1,
-                          //overflow: TextOverflow.ellipsis,
-                          style: Styles.label(isLight: true),
-                        ),
-                      ),
-                    )),
-                mY(10),
-                TuCard(
-                    child: Column(
+                Column(
                   children: [
                     tuTableRow(
                         Text(
-                          "Store owner",
+                          "Store details",
                           style: Styles.h2(),
                         ),
                         Obx(
@@ -277,38 +171,87 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                   visible: appCtrl.user['permissions'] > 0,
                                   child: InkWell(
                                     onTap: () {
-                                      formCtrl.setForm({
-                                        'ownerName': appCtrl.ownerName.value,
-                                        'ownerPhone': appCtrl.ownerPhone.value,
-                                      });
+                                      formCtrl.setFormField(
+                                          "store", appCtrl.store);
                                       showDialog(
                                           context: context,
                                           builder: (context) => FormView(
-                                              title: "Edit owner details",
+                                              title: "Edit store details",
                                               fields: [
                                                 TuFormField(
-                                                  label: "Owner name:",
-                                                  hint: "Enter owner name...",
+                                                  label: "Store name:",
+                                                  hint: "Enter store name...",
                                                   isRequired: true,
                                                   hasBorder: false,
-                                                  value: formCtrl
-                                                      .form['ownerName'],
+                                                  value: formCtrl.form['store']
+                                                      ['name'],
                                                   onChanged: (val) {
+                                                    Map owner =
+                                                        formCtrl.form['store'];
                                                     formCtrl.setFormField(
-                                                        'ownerName', val);
+                                                        'store', {
+                                                      ...owner,
+                                                      'name': val
+                                                    });
                                                   },
                                                 ),
                                                 TuFormField(
-                                                  label: "Owner phone:",
+                                                  label: "Store phone:",
                                                   hasBorder: false,
                                                   hint:
-                                                      "Enter owner phone number...",
+                                                      "Enter store phone number...",
+                                                  keyboard: TextInputType.phone,
                                                   isRequired: true,
-                                                  value: formCtrl
-                                                      .form['ownerPhone'],
+                                                  value: formCtrl.form['store']
+                                                      ['phone'],
                                                   onChanged: (val) {
+                                                    Map owner =
+                                                        formCtrl.form['store'];
                                                     formCtrl.setFormField(
-                                                        'ownerPhone', val);
+                                                        'store', {
+                                                      ...owner,
+                                                      'phone': val
+                                                    });
+                                                  },
+                                                ),
+                                                TuFormField(
+                                                  label: "Store email:",
+                                                  hasBorder: false,
+                                                  hint:
+                                                      "Enter store email number...",
+                                                  keyboard: TextInputType
+                                                      .emailAddress,
+                                                  isRequired: true,
+                                                  value: formCtrl.form['store']
+                                                      ['email'],
+                                                  onChanged: (val) {
+                                                    Map owner =
+                                                        formCtrl.form['store'];
+                                                    formCtrl.setFormField(
+                                                        'store', {
+                                                      ...owner,
+                                                      'email': val
+                                                    });
+                                                  },
+                                                ),
+                                                mY(10),
+                                                TuFormField(
+                                                  label: "Store website:",
+                                                  hasBorder: false,
+                                                  hint:
+                                                      "Enter store website...",
+                                                  keyboard: TextInputType.url,
+                                                  isRequired: true,
+                                                  value: formCtrl.form['store']
+                                                      ['site'],
+                                                  onChanged: (val) {
+                                                    Map owner =
+                                                        formCtrl.form['store'];
+                                                    formCtrl.setFormField(
+                                                        'store', {
+                                                      ...owner,
+                                                      'site': val
+                                                    });
                                                   },
                                                 ),
                                                 mY(10)
@@ -331,7 +274,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                         ),
                         Obx(
                           () => Text(
-                            appCtrl.ownerName.value,
+                            appCtrl.store['name'],
                             style: Styles.label(isLight: true),
                           ),
                         )),
@@ -342,12 +285,387 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                         ),
                         Obx(
                           () => SelectableText(
-                            appCtrl.ownerPhone.value,
+                            appCtrl.store['phone'],
                             style: Styles.label(isLight: true),
                           ),
                         )),
+                    tuTableRow(
+                        Text(
+                          "Email:",
+                          style: Styles.label(isBold: true),
+                        ),
+                        Obx(
+                          () => SizedBox(
+                            width: 100,
+                            child: SelectableText(
+                              appCtrl.store['email'],
+                              maxLines: 1,
+                              style: Styles.label(isLight: true),
+                            ),
+                          ),
+                        )),
+                    tuTableRow(
+                        Text(
+                          "Website:",
+                          style: Styles.label(isBold: true),
+                        ),
+                        Obx(
+                          () => SizedBox(
+                            width: 100,
+                            child: SelectableText(
+                              appCtrl.store['site'],
+                              maxLines: 1,
+                              style: Styles.label(isLight: true),
+                            ),
+                          ),
+                        )),
                   ],
-                )),
+                ),
+                mY(10),
+                TuCard(
+                  child: Column(
+                    children: [
+                      tuTableRow(
+                          Text(
+                            "Store owner",
+                            style: Styles.h2(),
+                          ),
+                          Obx(
+                            () => appCtrl.user.isEmpty
+                                ? none()
+                                : Visibility(
+                                    visible: appCtrl.user['permissions'] > 0,
+                                    child: InkWell(
+                                      onTap: () {
+                                        formCtrl.setFormField("owner", {
+                                          'name': appCtrl.owner['name'],
+                                          'phone': appCtrl.owner['phone'],
+                                          'email': appCtrl.owner['email'],
+                                          'site': appCtrl.owner['site'],
+                                        });
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) => FormView(
+                                                title: "Edit owner details",
+                                                fields: [
+                                                  TuFormField(
+                                                    label: "Owner name:",
+                                                    hint: "Enter owner name...",
+                                                    isRequired: true,
+                                                    hasBorder: false,
+                                                    value: formCtrl
+                                                        .form['owner']['name'],
+                                                    onChanged: (val) {
+                                                      Map owner = formCtrl
+                                                          .form['owner'];
+                                                      formCtrl.setFormField(
+                                                          'owner', {
+                                                        ...owner,
+                                                        'name': val
+                                                      });
+                                                    },
+                                                  ),
+                                                  TuFormField(
+                                                    label: "Owner phone:",
+                                                    hasBorder: false,
+                                                    hint:
+                                                        "Enter owner phone number...",
+                                                    keyboard:
+                                                        TextInputType.phone,
+                                                    isRequired: true,
+                                                    value: formCtrl
+                                                        .form['owner']['phone'],
+                                                    onChanged: (val) {
+                                                      Map owner = formCtrl
+                                                          .form['owner'];
+                                                      formCtrl.setFormField(
+                                                          'owner', {
+                                                        ...owner,
+                                                        'phone': val
+                                                      });
+                                                    },
+                                                  ),
+                                                  TuFormField(
+                                                    label: "Owner email:",
+                                                    hasBorder: false,
+                                                    hint:
+                                                        "Enter owner email number...",
+                                                    keyboard: TextInputType
+                                                        .emailAddress,
+                                                    isRequired: true,
+                                                    value: formCtrl
+                                                        .form['owner']['email'],
+                                                    onChanged: (val) {
+                                                      Map owner = formCtrl
+                                                          .form['owner'];
+                                                      formCtrl.setFormField(
+                                                          'owner', {
+                                                        ...owner,
+                                                        'email': val
+                                                      });
+                                                    },
+                                                  ),
+                                                  mY(10),
+                                                  TuFormField(
+                                                    label: "Owner website:",
+                                                    hasBorder: false,
+                                                    hint:
+                                                        "Enter owner website...",
+                                                    keyboard: TextInputType.url,
+                                                    isRequired: true,
+                                                    value: formCtrl
+                                                        .form['owner']['site'],
+                                                    onChanged: (val) {
+                                                      Map owner = formCtrl
+                                                          .form['owner'];
+                                                      formCtrl.setFormField(
+                                                          'owner', {
+                                                        ...owner,
+                                                        'site': val
+                                                      });
+                                                    },
+                                                  ),
+                                                  mY(10)
+                                                ],
+                                                onSubmit: () async {
+                                                  editFields();
+                                                }));
+                                      },
+                                      child: const Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                          )),
+                      tuTableRow(
+                          Text(
+                            "Name:",
+                            style: Styles.label(isBold: true),
+                          ),
+                          Obx(
+                            () => Text(
+                              appCtrl.owner['name'],
+                              style: Styles.label(isLight: true),
+                            ),
+                          )),
+                      tuTableRow(
+                          Text(
+                            "Phone:",
+                            style: Styles.label(isBold: true),
+                          ),
+                          Obx(
+                            () => SelectableText(
+                              appCtrl.owner['phone'],
+                              style: Styles.label(isLight: true),
+                            ),
+                          )),
+                      tuTableRow(
+                          Text(
+                            "Email:",
+                            style: Styles.label(isBold: true),
+                          ),
+                          Obx(
+                            () => SizedBox(
+                              width: 100,
+                              child: SelectableText(
+                                appCtrl.owner['email'],
+                                maxLines: 1,
+                                style: Styles.label(isLight: true),
+                              ),
+                            ),
+                          )),
+                      tuTableRow(
+                          Text(
+                            "Website:",
+                            style: Styles.label(isBold: true),
+                          ),
+                          Obx(
+                            () => SizedBox(
+                              width: 100,
+                              child: SelectableText(
+                                appCtrl.owner['site'],
+                                maxLines: 1,
+                                style: Styles.label(isLight: true),
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
+                mY(10),
+                TuCard(
+                  child: Column(
+                    children: [
+                      tuTableRow(
+                          Text(
+                            "Developer",
+                            style: Styles.h2(),
+                          ),
+                          Obx(
+                            () => appCtrl.user.isEmpty
+                                ? none()
+                                : Visibility(
+                                    visible: appCtrl.user['permissions'] > 0,
+                                    child: InkWell(
+                                      onTap: () {
+                                        formCtrl.setFormField(
+                                            "developer", appCtrl.developer);
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) => FormView(
+                                                title: "Edit developer details",
+                                                fields: [
+                                                  TuFormField(
+                                                    label: "Developer name:",
+                                                    hint:
+                                                        "Enter developer name...",
+                                                    isRequired: true,
+                                                    hasBorder: false,
+                                                    value: formCtrl
+                                                            .form['developer']
+                                                        ['name'],
+                                                    onChanged: (val) {
+                                                      Map owner = formCtrl
+                                                          .form['developer'];
+                                                      formCtrl.setFormField(
+                                                          'developer', {
+                                                        ...owner,
+                                                        'name': val
+                                                      });
+                                                    },
+                                                  ),
+                                                  TuFormField(
+                                                    label: "Developer phone:",
+                                                    hasBorder: false,
+                                                    hint:
+                                                        "Enter developer phone number...",
+                                                    keyboard:
+                                                        TextInputType.phone,
+                                                    isRequired: true,
+                                                    value: formCtrl
+                                                            .form['developer']
+                                                        ['phone'],
+                                                    onChanged: (val) {
+                                                      Map owner = formCtrl
+                                                          .form['developer'];
+                                                      formCtrl.setFormField(
+                                                          'developer', {
+                                                        ...owner,
+                                                        'phone': val
+                                                      });
+                                                    },
+                                                  ),
+                                                  TuFormField(
+                                                    label: "Developer email:",
+                                                    hasBorder: false,
+                                                    hint:
+                                                        "Enter developer email number...",
+                                                    keyboard: TextInputType
+                                                        .emailAddress,
+                                                    isRequired: true,
+                                                    value: formCtrl
+                                                            .form['developer']
+                                                        ['email'],
+                                                    onChanged: (val) {
+                                                      Map owner = formCtrl
+                                                          .form['developer'];
+                                                      formCtrl.setFormField(
+                                                          'developer', {
+                                                        ...owner,
+                                                        'email': val
+                                                      });
+                                                    },
+                                                  ),
+                                                  mY(10),
+                                                  TuFormField(
+                                                    label: "Developer website:",
+                                                    hasBorder: false,
+                                                    hint:
+                                                        "Enter developer website...",
+                                                    keyboard: TextInputType.url,
+                                                    isRequired: true,
+                                                    value: formCtrl
+                                                            .form['developer']
+                                                        ['site'],
+                                                    onChanged: (val) {
+                                                      Map owner = formCtrl
+                                                          .form['developer'];
+                                                      formCtrl.setFormField(
+                                                          'developer', {
+                                                        ...owner,
+                                                        'site': val
+                                                      });
+                                                    },
+                                                  ),
+                                                  mY(10)
+                                                ],
+                                                onSubmit: () async {
+                                                  editFields();
+                                                }));
+                                      },
+                                      child: const Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                          )),
+                      tuTableRow(
+                          Text(
+                            "Name:",
+                            style: Styles.label(isBold: true),
+                          ),
+                          Obx(
+                            () => Text(
+                              appCtrl.developer['name'],
+                              style: Styles.label(isLight: true),
+                            ),
+                          )),
+                      tuTableRow(
+                          Text(
+                            "Phone:",
+                            style: Styles.label(isBold: true),
+                          ),
+                          Obx(
+                            () => SelectableText(
+                              appCtrl.developer['phone'],
+                              style: Styles.label(isLight: true),
+                            ),
+                          )),
+                      tuTableRow(
+                          Text(
+                            "Email:",
+                            style: Styles.label(isBold: true),
+                          ),
+                          Obx(
+                            () => SizedBox(
+                              width: 100,
+                              child: SelectableText(
+                                appCtrl.developer['email'],
+                                maxLines: 1,
+                                style: Styles.label(isLight: true),
+                              ),
+                            ),
+                          )),
+                      tuTableRow(
+                          Text(
+                            "Website:",
+                            style: Styles.label(isBold: true),
+                          ),
+                          Obx(
+                            () => SizedBox(
+                              width: 100,
+                              child: SelectableText(
+                                appCtrl.developer['site'],
+                                maxLines: 1,
+                                style: Styles.label(isLight: true),
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
                 mY(10),
                 TuCard(child: Obx(
                   () {

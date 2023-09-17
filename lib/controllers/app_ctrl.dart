@@ -37,7 +37,12 @@ class AppCtrl extends GetxController {
     appVersion.value = val;
   }
 
-  RxString developerLink = "https://thabiso.vercel.app".obs;
+  RxString title = "".obs;
+  void setTitle(String val) {
+    title.value = val;
+  }
+
+/*   RxString developerLink = "https://thabiso.vercel.app".obs;
   void setDeveloperLink(String val) {
     developerLink.value = val;
   }
@@ -46,12 +51,6 @@ class AppCtrl extends GetxController {
   void setStoreLink(String val) {
     storeLink.value = val;
   }
-
-  RxString title = "".obs;
-  void setTitle(String val) {
-    title.value = val;
-  }
-
   RxString ownerName = "".obs;
   void setownerName(String val) {
     ownerName.value = val;
@@ -90,6 +89,34 @@ class AppCtrl extends GetxController {
   RxMap<String, dynamic> storeImage = <String, dynamic>{}.obs;
   setStoreImage(Map<String, dynamic> val) {
     storeImage.value = val;
+  }
+ */
+
+  RxMap store = {}.obs;
+  setStore(Map val) {
+    store.value = val;
+  }
+
+  setStoreField(String field, dynamic val) {
+    setStore({...store, field: val});
+  }
+
+  RxMap owner = {}.obs;
+  setOwner(Map val) {
+    owner.value = val;
+  }
+
+  setOwnerField(String field, dynamic val) {
+    setStore({...store, field: val});
+  }
+
+  RxMap developer = {}.obs;
+  setDeveloper(Map val) {
+    developer.value = val;
+  }
+
+  setDeveloperField(String field, dynamic val) {
+    setDeveloper({...store, field: val});
   }
 
   RxBool isAdmin = false.obs;

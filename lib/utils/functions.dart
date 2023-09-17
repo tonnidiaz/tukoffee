@@ -72,8 +72,8 @@ void pushTo(BuildContext context, Widget widget) {
   Navigator.push(context, MaterialPageRoute(builder: (ctx) => widget));
 }
 
-void pushNamed(BuildContext context, String name) {
-  Navigator.pushNamed(context, name);
+void pushNamed(BuildContext context, String name, {Object? args}) {
+  Navigator.pushNamed(context, name, arguments: args);
 }
 
 double roundDouble(double value, int places) {
@@ -94,13 +94,16 @@ setupStoreDetails({Map<String, dynamic>? data}) async {
       appCtrl.setserverDown(false);
     }
 
-    appCtrl.setstoreName(details['name']);
+    appCtrl.setStore(details['store']);
+    appCtrl.setOwner(details['owner']);
+    appCtrl.setDeveloper(details['developer']);
+    /* appCtrl.setstoreName(details['name']);
     appCtrl.setStoreAddress(details['address']);
     appCtrl.setStorePhone(details['phone']);
     appCtrl.setownerName(details['ownerName']);
     appCtrl.setownerPhone(details['ownerPhone']);
     appCtrl.setstoreSite(details['site']);
-    appCtrl.setStoreImage(details['image']);
+    appCtrl.setStoreImage(details['image']); */
   } catch (e) {
     if (e.runtimeType == DioException) {
       e as DioException;
@@ -292,9 +295,9 @@ Future<CloudinaryResponse> uploadImg(File file,
       uploadPreset: uploadPreset,
       file: file.path,
       publicId:
-          "${appCtrl.storeName}_-_product_-_epoch-${DateTime.now().millisecondsSinceEpoch}",
+          "${appCtrl.store['name']}_-_product_-_epoch-${DateTime.now().millisecondsSinceEpoch}",
       resourceType: CloudinaryResourceType.image,
-      folder: getCloudinaryFolder(storeName: appCtrl.storeName.value),
+      folder: getCloudinaryFolder(storeName: appCtrl.store['name']),
       progressCallback: onUpload);
 }
 

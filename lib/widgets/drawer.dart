@@ -42,8 +42,8 @@ class _TDrawerState extends State<TDrawer> {
                     color: cardBGLight),
                 child: Center(
                   child: Text(
-                    _appCtrl.storeName.value,
-                    style: GoogleFonts.headlandOne(
+                    _appCtrl.store['name'],
+                    style: GoogleFonts.poppins(
                         color: Colors.black54,
                         fontSize: 30,
                         fontWeight: FontWeight.w900),

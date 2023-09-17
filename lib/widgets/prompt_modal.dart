@@ -23,11 +23,11 @@ class PromptModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: EdgeInsets.zero,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 15),
       backgroundColor: appBGLight,
       insetPadding: defaultPadding2,
-      actionsPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      titlePadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      //actionsPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      titlePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       title: Text(
         title,
         style: Styles.h3(),

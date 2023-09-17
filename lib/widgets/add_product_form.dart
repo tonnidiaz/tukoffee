@@ -57,9 +57,9 @@ class _AddProductFormState extends State<AddProductForm> {
           uploadPreset: uploadPreset,
           file: file.path,
           publicId:
-              "${_appCtrl.storeName}_-_product_-_epoch-${DateTime.now().millisecondsSinceEpoch}",
+              "${_appCtrl.store['name']}_-_product_-_epoch-${DateTime.now().millisecondsSinceEpoch}",
           resourceType: CloudinaryResourceType.image,
-          folder: getCloudinaryFolder(storeName: _appCtrl.storeName.value),
+          folder: getCloudinaryFolder(storeName: _appCtrl.store['name']),
           progressCallback: _onUpload);
       if (res.isResultOk) {
         var existingImgs = _formCtrl.form['images'] ?? [];
