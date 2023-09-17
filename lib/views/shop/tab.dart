@@ -155,7 +155,7 @@ class _HomeTabState extends State<HomeTab> {
                 hint: "Search",
                 prefixIcon: TuIcon(Icons.search),
                 radius: 5,
-                suffix: IconButton(
+                suffixIcon: IconButton(
                     splashRadius: 20,
                     padding: EdgeInsets.zero,
                     onPressed: () {

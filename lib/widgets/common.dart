@@ -121,6 +121,7 @@ class TuDropdownButton extends StatelessWidget {
 Widget iconText(String text, IconData icon,
     {double spacing = 4.0,
     double iconSize = 18,
+    double my = 0,
     double? fontSize,
     FontWeight? fw,
     Function()? onClick,
@@ -144,9 +145,12 @@ Widget iconText(String text, IconData icon,
     ],
   );
 
-  return onClick != null
-      ? InkWell(onTap: onClick, enableFeedback: false, child: child)
-      : child;
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: my),
+    child: onClick != null
+        ? InkWell(onTap: onClick, enableFeedback: false, child: child)
+        : child,
+  );
 }
 
 class TuButton extends StatefulWidget {

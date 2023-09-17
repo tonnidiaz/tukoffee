@@ -337,7 +337,7 @@ class _OrdersPageState extends State<OrdersPage> {
                     prefixIcon: TuIcon(Icons.search),
                     radius: 5,
                     value: _ctrl.orderId.value,
-                    suffix: IconButton(
+                    suffixIcon: IconButton(
                         splashRadius: 20,
                         padding: EdgeInsets.zero,
                         onPressed: () {

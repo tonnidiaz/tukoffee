@@ -230,7 +230,7 @@ class _ProductsState extends State<Products> {
                 hint: "Search",
                 prefixIcon: TuIcon(Icons.search),
                 radius: 5,
-                suffix: IconButton(
+                suffixIcon: IconButton(
                     splashRadius: 20,
                     padding: EdgeInsets.zero,
                     onPressed: () {

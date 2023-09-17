@@ -17,7 +17,7 @@ class _WelcomePageState extends State<WelcomePage> {
         child: Container(
       width: isMobile
           ? screenSize(context).width
-          : screenSize(context).width - bottomBarH,
+          : screenSize(context).width - appBarH,
       padding: const EdgeInsets.all(8),
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.center,
