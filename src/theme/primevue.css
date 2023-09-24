@@ -1,0 +1,12 @@
+body {
+    font-family: var(--font-family);
+
+} 
+
+body div.content{
+    background-color: red !important;
+}
+
+/* body div:not(.ion-page){
+    background-color: red !important;
+} */

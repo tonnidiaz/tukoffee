@@ -1,0 +1,38 @@
+@import "./colors";
+@import "./classes";
+@import "@flaticon/flaticon-uicons/css/all/all";
+@import "@icon/simple-line-icons/simple-line-icons.css";
+@font-face {
+    font-family: Pacifico;
+    src: url("/assets/fonts/Pacifico/Pacifico-Regular.ttf");
+}
+
+
+:root{
+    --ion-background-color: rgb(245, 245, 245);
+    /* --ion-text-color:rgba(255, 255, 255, 0.87); */
+}
+
+html, body{
+    background-color: var(--ion-background-color) !important;
+}
+i.fi {
+    font-size: 24px;
+}
+
+.font-pacifico {
+    font-family: Pacifico, sans-serif !important;
+}
+
+.rounded {
+    input, .searchbar-input {
+        border-radius: 100px;
+    }
+}
+
+.scroll-x{
+    overflow-x: scroll;
+}
+.orange{
+    color: $orange;
+}

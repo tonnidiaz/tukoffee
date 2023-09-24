@@ -15,19 +15,27 @@ const routes: Array<RouteRecordRaw> = [
         path: '',
         redirect: '/tabs/tab1'
       },
-      {
+  
+        {
         path: 'tab1',
         component: () => import('@/views/Tab1Page.vue')
-      },
-      {
-        path: 'tab2',
-        component: () => import('@/views/Tab2Page.vue')
-      },
+      }, {
+        path: 'shop',
+        component: () => import('@/views/ShopPage.vue')
+      }, 
       {
         path: 'tab3',
         component: () => import('@/views/Tab3Page.vue')
-      }
+      },
+      {
+        path: 'account',
+        component: () => import('@/views/AccountTab.vue')
+      },
     ]
+  }, 
+  {
+    path: '/product/:id',
+    component: ()=>  import('../views/ProductPage.vue')
   }
 ]
 
