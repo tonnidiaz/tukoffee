@@ -1,13 +1,15 @@
 <template>
     <ion-button slot="icon-only" class="relative cart-btn">
-        <div class="absolute cart-badge">0</div>
+        <div class="absolute cart-badge">{{userStore.cart?.products?.length ?? 0}}</div>
                         <i class="fi fi-rr-shopping-basket"></i>
                     </ion-button>
 </template>
 <script setup lang="ts">
 import {
-    IonButton,IonBadge
+    IonButton,IonBadge 
 } from "@ionic/vue";
+import {useUserStore} from '@/stores/user';
+const userStore = useUserStore()
 
 </script>
 <style lang="scss">

@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <Appbar :title="product?.name">
+        <Appbar :title="product?.name" :loading="!product">
             <ion-button @click="toggle"
                     aria-haspopup="true"
                     aria-controls="overlay_menu" shape="round" slot="icon-only">
@@ -25,11 +25,11 @@
                 />
         </Appbar>
         <ion-content>
- 
+
             <div class="" v-if="product">
-                <div class="">
+                <div class="mt-2">
                     <div
-                        class="image-area surface-card w-full relative flex flex-column align-items-center justify-content-center border-0"
+                        class="image-area surface-card w-full relative flex flex-col items-center justify-center border-0"
                     >
                         <div class="px-2 img-wrapper relative">
                             <img
@@ -39,71 +39,81 @@
                             />
                         </div>
                         <div
-                            class="relative h-82px thumbnails flex overflow-scroll gap-2 align-items-center px-2 flex-shrink-0"
+                            class="relative h-80px thumbnails flex overflow-scroll gap-2 items-center px-2 flex-shrink-0"
                         >
-                            <ion-thumbnail
+                            <div 
                                 @click="() => (selectedImg = i)"
-                                class="flex-shrink-0"
+                                class="flex-shrink-0 w-80px h-80px flex items-center"
                                 v-for="(e, i) in product.images"
                             >
                                 <img :src="e.url" alt="" />
-                            </ion-thumbnail>
+                            </div>
                         </div>
                     </div>
                     <div class="p-2">
                         <div class="p-3 mt-1 card shadow-1 surface-card br-10">
-                            <h2 class="font-poppins fs-22">
+                            <h2 class="font- fw-6 fs-22">
                                 {{ product.name }}
                             </h2>
-                            <div class="mt-2">
+                            <div class="mt-0">
                                 <p>
                                     {{ product.description }}
                                 </p>
                             </div>
-                            <div class="mt-2 m-auto w-full flex">
-                                <Button
-                                    severity="secondary"
-                                    label="Continue shopping"
-                                    class="m-auto"
-                                />
-                            </div>
+                          
                         </div>
+                          <div class="mt-2 m-auto w-full fle shadow-1 surface-card p-3 br-10">
+                             <h3>You may also like</h3>
+                             <div class="mt-3 flex overflow-scroll gap-2">
+                                <ProductCard class="flex-shrink-0 w-50p" v-for="e in [4,6,8.9]" :product="product"/>
+                             </div>
+                            </div>
                     </div>
                 </div>
             </div>
-            <div v-else class="p-2 flex flex-column w-full h-full justify-content-center align-items-center">
+            <div v-else class="p-2 flex flex-col w-full h-full justify-center items-center">
                     <h3>Failed to fetch product</h3>
             </div>
         </ion-content>
         <ion-footer v-if="product" class="surface-card">
             <ion-toolbar class="">
-                <div class="p-3 flex flex-column align-items-center gap-2">
+                <div class="p-3 flex flex-col items-center gap-2">
                     <div
-                        class="flex w-full align-items-center justify-content-between"
+                        class="flex w-full items-center justify-between"
                     >
-                        <Badge v-if="product.quantity" value="In stock" />
-                        <Badge v-else value="Out of stock" severity="danger" />
+                    <span v-if="product.quantity" class="badge badge-primary">
+                        In stock
+                    </span>
+                    <span v-else class="badge badge-neutral">
+                       Out of stock
+                    </span>
+                    
                         <Rating v-model="form.rating" :cancel="false" c />
                     </div>
                     <div
-                        class="flex w-full align-items-center justify-content-between"
+                        class="flex w-full items-center justify-between"
                     >
                         <span class="fw-8"
                             >R{{ product.price.toFixed(2) }}</span
                         >
-                        <Button
-                            v-if="false"
-                            icon="fi fi-rr-shopping-cart-add"
-                            size="small"
-                            label="Add"
-                        />
-                        <Button
+          
+                        <ion-button
+                            v-if="true"
+                            class="h-20px"
+                            color="success">
+                            <span>
+                                 <i  class="fi fi-rr-shopping-cart-add fs-16"></i>&nbsp;
+                            </span>
+                            Add</ion-button>
+          
+                        <ion-button
                             v-else
-                            icon="fi fi-rr-cart-minus"
-                            size="small"
-                            label="Remove"
-                            severity="secondary"
-                        />
+                            class="h-20px"
+                            color="dark">
+                            <span>
+                                 <i  class="fi fi-rr-cart-minus fs-16"></i>&nbsp;
+                            </span>
+                            Remove</ion-button>
                     </div>
                 </div>
             </ion-toolbar>
@@ -123,31 +133,29 @@ import { onBeforeMount, ref } from "vue";
 import {
     IonPage,
     IonContent,
-    IonThumbnail,
     IonFooter,
     IonToolbar,
     IonButton,
     IonToast,
+useIonRouter,
 } from "@ionic/vue";
 import { useRouter, useRoute } from "vue-router";
-import { apiURL, localhost } from "@/utils/constants";
+import { apiURL } from "@/utils/constants";
 import axios from "axios";
-import Button from "primevue/button";
-import Rating from "primevue/rating";
-import Badge from "primevue/badge";
-import Menu from "primevue/menu";
 const router = useRouter();
 const route = useRoute();
 const { id } = route.params;
 import Appbar from "@/components/Appbar.vue";
+import ProductCard from "@/components/ProductCard.vue";
 const product = ref<{ [key: string]: any }>();
 const form = ref<{ [key: string]: any }>({ rating: 2 });
 const menu = ref<any>();
 const toastOpen = ref(false);
 const selectedImg = ref(0);
-
+const ionRouter = useIonRouter()
 const toggle = (event: any) => {
     menu.value.toggle(event);
+    
 };
 
 async function getProduct() {
@@ -172,10 +180,10 @@ onBeforeMount(() => {
 
         img {
             height: 100%;
+           object-fit: cover;
         }
     }
-    img,
-    .img {
+    img {
         object-fit: contain;
     }
     .thumbnails {

@@ -18,24 +18,23 @@ import '@ionic/vue/css/float-elements.css';
 import '@ionic/vue/css/text-alignment.css';
 import '@ionic/vue/css/text-transformation.css';
 import '@ionic/vue/css/flex-utils.css';
-import '@ionic/vue/css/display.css';
-import "primeflex/primeflex.css";
-//import "primevue/resources/themes/soho-light/theme.css"
-import "primevue/resources/themes/lara-light-teal/theme.css"
-//import "primeflex/themes/primeone-light.css"
+import '@ionic/vue/css/display.css'; 
+
 /* Theme variables */
+import "@/theme/tw.css"
 import './theme/variables.css';
-import './theme/primevue.css';
 import './styles/main.scss';
-import PrimeVue from 'primevue/config';
+
+import { createPinia } from 'pinia';
+
+const pinia = createPinia()
 
 const app = createApp(App)
   .use(IonicVue)
   .use(router)
-  .use(PrimeVue);
+  .use(pinia)
   
 /* Primevue components */
-//app.component('prButton', Button);
 
 
 router.isReady().then(() => {

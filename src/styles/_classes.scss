@@ -97,7 +97,7 @@
 
 
 
-  @for $i from 0 through 60 {
+  @for $i from 0 through 90 {
     .fs-#{$i} {
         font-size: #{$i}px !important;
     }

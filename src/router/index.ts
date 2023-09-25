@@ -24,8 +24,8 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/ShopPage.vue')
       }, 
       {
-        path: 'tab3',
-        component: () => import('@/views/Tab3Page.vue')
+        path: 'cart',
+        component: ()=> import("@/views/CartPage.vue")
       },
       {
         path: 'account',
@@ -36,7 +36,16 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/product/:id',
     component: ()=>  import('../views/ProductPage.vue')
-  }
+  },
+  {
+    path: '/auth/logout',
+    component: ()=> import("@/views/auth/LogoutPage.vue")
+  },
+  {
+    path: '/cart',
+    component: ()=> import("@/views/CartPage.vue")
+  },
+ 
 ]
 
 const router = createRouter({

@@ -6,78 +6,40 @@
     font-family: Pacifico;
     src: url("/assets/fonts/Pacifico/Pacifico-Regular.ttf");
 }
+
+
+/* INCLUSEIVE SANS */
 @font-face {
-    font-family: Poppins;
-    src: url("/assets/fonts/Poppins/Poppins-Regular.ttf");
+    font-family: InclusiveSans;
+    src: url("/assets/fonts/InclusiveSans/InclusiveSans-Regular.ttf");
 }
 
-@font-face {
-    font-family: Poppins;
-    src: url("/assets/fonts/Poppins/Poppins-Medium.ttf");
-    font-weight: 500;
-}
-
-@font-face {
-    font-family: Poppins;
-    src: url("/assets/fonts/Poppins/Poppins-Bold.ttf");
-    font-weight: 700;
-    font-style: bold;
-}
-
-@font-face {
-    font-family: Poppins;
-    src: url("/assets/fonts/Poppins/Poppins-ExtraBold.ttf");
-    font-weight: 800;
-    font-style: "extra-bold";
-}
-
-/* DMSans */
-
-@font-face {
-    font-family: DMSans;
-    src: url("/assets/fonts/DMSans/static/DMSans-Regular.ttf");
-}
-
-@font-face {
-    font-family: DMSans;
-    src: url("/assets/fonts/DMSans/static/DMSans-Medium.ttf");
-    font-weight: 500;
-}
-
-@font-face {
-    font-family: DMSans;
-    src: url("/assets/fonts/DMSans/static/DMSans-Bold.ttf");
-    font-weight: 700;
-    font-style: bold;
-}
-
-@font-face {
-    font-family: DMSans;
-    src: url("/assets/fonts/DMSans/static/DMSans-ExtraBold.ttf");
-    font-weight: 800;
-    font-style: "extra-bold";
-}
-
-:root{
-    --background: var(--surface-ground);
-    --ion-background-color: var(--surface-ground);
+:root, :host{
+    --background: hsl(var(--b1));
+    --ion-background-color: hsl(var(--b2));
+    --ion-color-shade: rgba(40,40,40,.3);
     --ion-text-color: var(--surface-900);
-    --ion-font-family: 'DMSans', sans-serif;
+    --ion-font-family: 'InclusiveSans', sans-serif;
     --ion-toolbar-color: rgba(10,10,10, .7);
-    --amber: $amber
+    --amber: $amber;
+    --ion-color-primary: hsl(var(--p));/// hsl(var(--p) / var(--tw-bg-opacity));// var(--primary-color);
+    --ion-color-primary-rgb: 249, 215, 47;
+    
+    --ion-tab-bar-background: hsl(var(--b1));
     /* --ion-text-color:rgba(255, 255, 255, 0.87); */
 }
-
+$v: rgb(20, 184, 166);
+$h: rgb(249, 215, 47);
 html, body{
-    background-color: var(--surface-ground) !important;
+    background-color: hsl(var(--b2)) !important;
     font-family: DMSans, sans-serif;
 }
 h1, h2, h3, h4, h5, h6 {
-    color: var(--surface-900) !important;
+    color: #323232 !important;
     font-family: var(--ion-font-family) !important;
-    font-weight: 600;
+    font-weight: 700 !important;
     margin: 2px 0;
-    line-height: .8rem;
+    line-height: 1.5rem;
 }
 .p{
     color: var(--surface-900);
@@ -112,6 +74,18 @@ i.fi {
     object-fit: contain;
 }
 
+
+  .p-rating .p-rating-item.p-rating-item-active .p-rating-icon{
+    color: $amber !important;
+  }
+
+  .helper-text{
+    @apply mt-0 text-sm text-gray-500 dark:text-gray-400;
+  }
+
+  
+  /* IONIC */
+
 ion-thumbnail {
     --size: 65px;
     background-color: var(--surface-50);
@@ -120,6 +94,18 @@ img{
 }
   }
 
-  .p-rating .p-rating-item.p-rating-item-active .p-rating-icon{
-    color: $amber !important;
+  ion-button{
+    height: 45px;
+    font-weight: 700;
   }
+  ion-toast{
+
+    --background: #f4f4fa;
+    
+    &.danger{
+        --color: var(--ion-color-danger) !important
+    }
+    &:not(.danger, .success){
+        color: var(--ion-text-color);
+    }
+}
