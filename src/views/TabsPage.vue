@@ -1,5 +1,5 @@
 <template>
-         <ion-menu side="end" content-id="main-content">
+        <!--  <ion-menu side="end" content-id="main-content">
         <ion-header class="ion-no-border">
             <ion-toolbar>
                 <ion-title>Menu Content</ion-title>
@@ -8,7 +8,7 @@
         <ion-content iclass="ion-padding"
             >This is the menu content.</ion-content
         >
-    </ion-menu>
+    </ion-menu> -->
   <ion-page id="main-content">
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
@@ -38,20 +38,11 @@
 </template>
 
 <script setup lang="ts">
-import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet, IonButton } from '@ionic/vue';
+import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet, IonTitle, IonMenu, IonToolbar, IonHeader, IonContent } from '@ionic/vue';
 import { cart, ellipse, home, person, square, storefront, triangle } from 'ionicons/icons';
 </script>
 <style lang="scss">
-.bottom-nav{ 
-    /* padding: 10px;
-    border-radius: 10px;
-    background-color: #424242;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    bottom: 3px; */
-}
+
 ion-tab-bar {
   bottom: 20px;
   position: relative;
@@ -63,8 +54,8 @@ ion-tab-bar {
 
 ion-tab-button {
 --color: var(--surface-600);
-  --color-selected: rgb(255, 145,0);//var(--surface-800);
-
+  --color-selected:var(--primary-color);
+/* rgb(255, 145,0);/ */
   &::before {
     background-color: transparent;
     display: block;
@@ -80,8 +71,11 @@ ion-tab-button {
     width: 30px;
     
   }
-  &.tab-selected{
+  ion-icon{
     font-size: 20px;
+  }
+  &.tab-selected{
+    transform: scale(1.2);
   }
 }
 </style>

@@ -6,7 +6,7 @@
                 <ion-buttons slot="start">
                     <CartBtn/>
                 </ion-buttons>
-                <ion-title class="text-gray-600">Tunedbass</ion-title>
+                <ion-title class="fs-17 text-center">Tunedbass</ion-title>
                 <ion-buttons slot="end">
                     <ion-menu-toggle>
                         <ion-button fill="clear">
@@ -24,38 +24,38 @@
                 >
                 <ion-searchbar class="rounded"></ion-searchbar>
   
-                <div class="my-3">
+                <div class="my-2">
                     <!-- Top selling section -->
                     <ion-text class="fs-18">Top selling</ion-text>
-                    <div class="mt-4 flex overflow-scroll ">
-                        <InkWell @click="() => router.push(`/product/${i}`)" v-for="(e, i) in new Array(20).fill(3)" class="flex flex-column align-items-center	 flex-shrink-0">
+                    <div class="mt-2 flex overflow-scroll ">
+                        <InkWell v-if="topSelling" @click="() => router.push(`/product/${e.pid}`)" v-for="(e, i) in topSelling" class="flex flex-column align-items-center	 flex-shrink-0">
                             <div class="flex flex-column align-items-center">
                                      <ion-avatar  class="">
                             <img
-                                alt="Silhouette of a person's head"
-                                :src="randomImg()"
+                                alt=""
+                                :src="e.images[0].url"
                             />
                         </ion-avatar>
-                        <ion-text class="mt-1 orange fw-4">R{{i*10}}</ion-text>
-                        <ion-text>Coffee {{ i }}</ion-text>
+                        <h5 class="mt-2 text-black fs-14 fw-8">R{{e.price.toFixed(2)}}</h5>
+                        <h4 class="fs-16 fw-9" >{{e.name}}</h4>
                             </div>
                           
                         </InkWell>
                      
                     </div>
                 </div>
-                <div class="my-3">
+                <div class="my-2">
                     <!-- Special section -->
                     <ion-text class="fs-18">Today's special</ion-text>
-                    <div class="mt-4 flex gap- overflow-scroll ">
-                        <InkWell v-for="(e, i) in new Array(20).fill(3)" class="flex flex-column align-items-center	 flex-shrink-0">
+                    <div class="mt-2 flex gap- overflow-scroll ">
+                        <InkWell  @click="() => router.push(`/product/${e.pid}`)" v-if="special" v-for="(e, i) in special" class="flex flex-column align-items-center	 flex-shrink-0">
                                <ion-avatar  class="">
                             <img
-                                alt="Silhouette of a person's head"
-                                :src="randomImg()"
+                                alt=""
+                                :src="e.images[0].url"
                             />
                         </ion-avatar>
-                        <ion-text class="mt-1 orange fw-4">R{{i*10}}</ion-text>
+                        <h5 class="mt-2 text-black fs-14 fw-8">R{{e.price.toFixed(2)}}</h5>
                         </InkWell>
                      
                     </div>
@@ -65,8 +65,6 @@
         </ion-content>
     </ion-page>
   </template>
-  
-
   
 
 <script setup lang="ts">
@@ -85,13 +83,37 @@ import {
     IonAvatar,
     IonInfiniteScroll,
 } from "@ionic/vue";
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import InkWell from '@/components/InkWell.vue';
 import {randomImg} from '@/utils/funcs';
 import { useRouter } from 'vue-router';
 import CartBtn from '@/components/CartBtn.vue';
-
+import axios from "axios";
+import { apiURL } from "@/utils/constants";
+const special = ref<any[]>(), topSelling = ref<any[]>();
 const router = useRouter()
+
+const getProducts =async (q: string) => { 
+    try {
+        const res = await axios.get(`${apiURL}/products?q=${q}`)
+        return res.data.data
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+ }
+
+ async function getSpecial() {
+    special.value = await getProducts('special')
+ }
+ async function getTopSelling() {
+    topSelling.value = await getProducts('top-selling')
+ }
+
+ onBeforeMount(()=>{
+    getTopSelling()
+    getSpecial()
+ })
 </script>
 
 <style scoped>

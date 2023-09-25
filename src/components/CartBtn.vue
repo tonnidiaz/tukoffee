@@ -1,11 +1,33 @@
 <template>
-    <ion-button slot="icon-only">
+    <ion-button slot="icon-only" class="relative cart-btn">
+        <div class="absolute cart-badge">0</div>
                         <i class="fi fi-rr-shopping-basket"></i>
                     </ion-button>
 </template>
 <script setup lang="ts">
 import {
-    IonButton,
+    IonButton,IonBadge
 } from "@ionic/vue";
 
 </script>
+<style lang="scss">
+.cart-btn{
+    //background-color: red;
+    overflow: visible !important;
+}
+.cart-badge{
+    right:  -5px;
+    top: -3px; 
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   background-color: orange;
+   color: white;
+   font-size: 12px;
+   font-weight: 700;
+         border-radius: 50% ;
+    
+}
+</style>

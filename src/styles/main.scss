@@ -6,15 +6,81 @@
     font-family: Pacifico;
     src: url("/assets/fonts/Pacifico/Pacifico-Regular.ttf");
 }
+@font-face {
+    font-family: Poppins;
+    src: url("/assets/fonts/Poppins/Poppins-Regular.ttf");
+}
 
+@font-face {
+    font-family: Poppins;
+    src: url("/assets/fonts/Poppins/Poppins-Medium.ttf");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: Poppins;
+    src: url("/assets/fonts/Poppins/Poppins-Bold.ttf");
+    font-weight: 700;
+    font-style: bold;
+}
+
+@font-face {
+    font-family: Poppins;
+    src: url("/assets/fonts/Poppins/Poppins-ExtraBold.ttf");
+    font-weight: 800;
+    font-style: "extra-bold";
+}
+
+/* DMSans */
+
+@font-face {
+    font-family: DMSans;
+    src: url("/assets/fonts/DMSans/static/DMSans-Regular.ttf");
+}
+
+@font-face {
+    font-family: DMSans;
+    src: url("/assets/fonts/DMSans/static/DMSans-Medium.ttf");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: DMSans;
+    src: url("/assets/fonts/DMSans/static/DMSans-Bold.ttf");
+    font-weight: 700;
+    font-style: bold;
+}
+
+@font-face {
+    font-family: DMSans;
+    src: url("/assets/fonts/DMSans/static/DMSans-ExtraBold.ttf");
+    font-weight: 800;
+    font-style: "extra-bold";
+}
 
 :root{
-    --ion-background-color: rgb(245, 245, 245);
+    --background: var(--surface-ground);
+    --ion-background-color: var(--surface-ground);
+    --ion-text-color: var(--surface-900);
+    --ion-font-family: 'DMSans', sans-serif;
+    --ion-toolbar-color: rgba(10,10,10, .7);
+    --amber: $amber
     /* --ion-text-color:rgba(255, 255, 255, 0.87); */
 }
 
 html, body{
-    background-color: var(--ion-background-color) !important;
+    background-color: var(--surface-ground) !important;
+    font-family: DMSans, sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: var(--surface-900) !important;
+    font-family: var(--ion-font-family) !important;
+    font-weight: 600;
+    margin: 2px 0;
+    line-height: .8rem;
+}
+.p{
+    color: var(--surface-900);
 }
 i.fi {
     font-size: 24px;
@@ -22,6 +88,12 @@ i.fi {
 
 .font-pacifico {
     font-family: Pacifico, sans-serif !important;
+}
+.font-poppins {
+    font-family: Poppins, sans-serif !important;
+}
+.font-dmsans {
+    font-family: DMSans, sans-serif !important;
 }
 
 .rounded {
@@ -36,3 +108,18 @@ i.fi {
 .orange{
     color: $orange;
 }
+.img-contain{
+    object-fit: contain;
+}
+
+ion-thumbnail {
+    --size: 65px;
+    background-color: var(--surface-50);
+img{
+    object-fit: contain;
+}
+  }
+
+  .p-rating .p-rating-item.p-rating-item-active .p-rating-icon{
+    color: $amber !important;
+  }

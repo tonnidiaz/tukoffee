@@ -1,69 +1,68 @@
 <template>
     <ion-page>
-        <Appbar title="Shop"/> 
-        <ion-content :fullscreen="true" class="ion-padding">
-            <DataView :value="products" :layout="layout">
-    <template #header>
-        <div class="flex justify-content-end">
-            <DataViewLayoutOptions v-model="layout" />
-        </div>
-    </template>
+        <Appbar title="Shop" />
+        <ion-content :fullscreen="true" class="">
+            <div class="flex justify-content-center w-full mt-2">
+                <div class="px-3 flex justify-content-center w-full">
+                    <span class="p-input-icon-left p-input-icon-right w-full relative">
+                        <i class="fi fi-rr-search fs-18" />
+                        <InputText placeholder="Search" class="w-full"/>
+                        <i
+                            class="fi fi-rr-settings-sliders fs-18 bg-"
+                            id="open-modal"
+                            style="
+                                top: 25%;
+                                right: 1px;
+                                padding: 10px 13px 0px 10px;
+                            "
+                        />
+                    </span>
+                    <ion-modal
+                        ref="modal"
+                        
+                        trigger="open-modal"
+                        :initial-breakpoint="0.25"
+                        :breakpoints="[0, 0.25, 0.5, 0.75]"
+                    >
+                        <ion-content class="ion-padding flex flex-column justify-content-center align-items-center relative">
+                            <div
+                                class="w-full h-fu  my-3 flex flex-column justify-content-start align-items-start"
+                            >
+                            <div class="flex gap-2 w-full">
+                                 <Dropdown
+                                    v-model="sortBy"
+                                    :options="sorts"
+                                    optionLabel="name"
+                                    placeholder="Sort by"
+                                    class="w-full md:w-14rem"
+                                />
+                                 <Dropdown
+                                    v-model="sortBy"
+                                    :options="sorts"
+                                    optionLabel="name"
+                                    placeholder="Status"
+                                    class="w-full md:w-14rem"
+                                />
+                            </div>
+                               
+                            </div>
+                        </ion-content>
+                    </ion-modal>
 
-    <template #list="slotProps">
-        <div class="col-12">
-            <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
-                <img class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" :src="`https://primefaces.org/cdn/primevue/images/product/${slotProps.data.image}`" :alt="slotProps.data.name" />
-                <div class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
-                    <div class="flex flex-column align-items-center sm:align-items-start gap-3">
-                        <div class="text-2xl font-bold text-900">{{ slotProps.data.name }}</div>
-                        <Rating :modelValue="slotProps.data.rating" readonly :cancel="false"></Rating>
-                        <div class="flex align-items-center gap-3">
-                            <span class="flex align-items-center gap-2">
-                                <i class="pi pi-tag"></i>
-                                <span class="font-semibold">{{ slotProps.data.category }}</span>
-                            </span>
-                            <Tag :value="slotProps.data.inventoryStatus" :severity="getSeverity(slotProps.data)"></Tag>
-                        </div>
-                    </div>
-                    <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-                        <span class="text-2xl font-semibold">${{ slotProps.data.price }}</span>
-                        <Button icon="pi pi-shopping-cart" rounded :disabled="slotProps.data.inventoryStatus === 'OUTOFSTOCK'"></Button>
-                    </div>
+                    <!-- 
+ -->
                 </div>
             </div>
-        </div>
-    </template>
-
-    <template #grid="slotProps">
-        <div class="col-12 sm:col-6 lg:col-12 xl:col-4 p-2">
-            <div class="p-4 border-1 surface-border surface-card border-round">
-                <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                    <div class="flex align-items-center gap-2">
-                        <i class="pi pi-tag"></i>
-                        <span class="font-semibold">{{ slotProps.data.category }}</span>
-                    </div>
-                    <Tag :value="slotProps.data.inventoryStatus" :severity="getSeverity(slotProps.data)"></Tag>
-                </div>
-                <div class="flex flex-column align-items-center gap-3 py-5">
-                    <img class="w-9 shadow-2 border-round" :src="`https://primefaces.org/cdn/primevue/images/product/${slotProps.data.image}`" :alt="slotProps.data.name" />
-                    <div class="text-2xl font-bold">{{ slotProps.data.name }}</div>
-                                    <Rating :modelValue="slotProps.data.rating" readonly :cancel="false"></Rating>
-                </div>
-                <div class="flex align-items-center justify-content-between">
-                    <span class="text-2xl font-semibold">${{ slotProps.data.price }}</span>
-                    <Button icon="pi pi-shopping-cart" rounded :disabled="slotProps.data.inventoryStatus === 'OUTOFSTOCK'"></Button>
-                </div>
+            <div class="my-2 grid justify-content-center gap-2">
+                <ProductCard class="col-5" v-for="(e, i) in dummyProducts" :product="e" />
             </div>
-        </div>
-    </template>
-</DataView>
         </ion-content>
     </ion-page>
 </template>
 <script setup lang="ts">
 import {
     IonPage,
-    IonHeader,
+    IonModal,
     IonToolbar,
     IonTitle,
     IonContent,
@@ -76,29 +75,38 @@ import {
     IonAvatar,
     IonInfiniteScroll,
 } from "@ionic/vue";
-import {ref} from 'vue';
-import Appbar from '@/components/Appbar.vue';
-import DataView from 'primevue/dataview';
-import Tag from 'primevue/tag';
-import Button from 'primevue/button';
-import Rating from 'primevue/rating';
-
+import { ref, onMounted, onBeforeMount } from "vue";
+import Appbar from "@/components/Appbar.vue";
+import ProductCard from "@/components/ProductCard.vue";
+import DataView from "primevue/dataview";
+import Tag from "primevue/tag";
+import InputText from "primevue/inputtext";
+import Dropdown from "primevue/dropdown";
+import { dummyProducts } from "@/utils/dummies";
 const products = ref();
-const layout = ref<"grid" | "list" | undefined>('grid');
+const sortBy = ref();
+const sorts = [
+    {
+        name: "Name",
+        value: "name",
+    },
+    {
+        name: "Price",
+        value: "price",
+    },
+    {
+        name: "Date new to old",
+        value: "date1",
+    },
+    {
+        name: "Date old to new",
+        value: "date2",
+    },
+];
 
-const getSeverity = (product: any) => {
-    switch (product.inventoryStatus) {
-        case 'INSTOCK':
-            return 'success';
-
-        case 'LOWSTOCK':
-            return 'warning';
-
-        case 'OUTOFSTOCK':
-            return 'danger';
-
-        default:
-            return undefined;
-    }
-}
+onBeforeMount(() => {
+    /*  console.log(products.value)
+    if (!products.value)
+    products.value = dummyProducts */
+});
 </script>

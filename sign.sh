@@ -1,0 +1,1 @@
+jarsigner -keystore /home/tonni/Desktop/Keys/ionic-key.jks -storepass Baseline@072 app-release-unsigned.apk key0 && zipalign 4 app-release-unsigned.apk app-release.apk

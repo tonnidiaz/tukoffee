@@ -116,7 +116,9 @@
 .bg-1{
     background-color: $bg-1;
 }
-
+.text-amber{
+    color: $amber
+}
 @for $i from 1 through 9{
     .fw-#{$i}{
         font-weight: $i * 100;
