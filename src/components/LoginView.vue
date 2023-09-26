@@ -46,9 +46,9 @@
                 <p class="helper-text">Minimum of <code>6</code> characters.</p>
             </div>
             <div class="form-control mt-2">
-                <button type="submit" class="btn btn-md btn-primary">
+                <tu-button :on-click="onFormSubmit" class="btn btn-md btn-primary">
                     Next
-                </button>
+                </tu-button>
             </div>
         </form>
         <ion-toast :class="toastClass" @did-dismiss="()=>{setToastOpen(false); toastClass = ''}" :is-open="toastOpen" :duration="2000" :message="toastMsg" />
@@ -60,6 +60,7 @@ import { ref } from "vue";
 import { apiAxios } from "@/utils/constants";
 import { useUserStore } from "@/stores/user";
 import { setupCart } from "@/utils/funcs";
+import TuButton from '@/components/TuButton.vue';
 const form = ref<{ [key: string]: any }>({
     phone: '0726013383',
     password: 'Baselined'
@@ -94,7 +95,7 @@ async function onFormSubmit(e: any) {
         localStorage.setItem("authToken", res.data.token);
         userStore.setUser(res.data.user);
         setupCart(res.data.user["phone"], userStore);
-        window.location.href = '/'
+        location.reload()
     } catch (e: any) {
         
         toastClass.value = "danger"

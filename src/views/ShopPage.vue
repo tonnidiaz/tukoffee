@@ -2,24 +2,27 @@
     <ion-page>
         <Appbar title="Shop" />
         <ion-content :fullscreen="true" class="ion-padding">
-            <div class="flex justify-center w-ful">
+            <Refresher :on-refresh="init"/>
+            <div class="h-full w-full flex flex-col">
+                <div class="flex justify-center w-ful">
                 <div class="flex justify-center w-full flex-col">
-               <TuFormField/>
-                    <div class="relative mb-2 bg-gray- hidden">
-                        <div
-                            class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none"
+                    <TuFormField class="rounded-full w-full" placeholder="Search..." >
+                        <template #prefix-icon
+                            >
+                            <span class="btn btn-ghost btn-sm rounded-full field-icon">
+                                <i class="fs-18 fi fi-rr-search"></i
                         >
-                            <span id="open-modal">
-                                <i class="fi fi-rr-search fs-18"
-                            /></span>
-                        </div>
-                        <input
-                            type="text"
-                            id="input-group-1"
-                            class="input input-bordered w-full pl-10 rounded rounded-full"
-                            placeholder="Search"
-                        />
-                    </div>
+                            </span>
+                            </template>
+                        <template #suffix-icon 
+                            >
+                            <span class="btn btn-ghost btn-sm rounded-full field-icon" id="open-modal">
+                                <i class="fs-18 fi fi-rr-settings-sliders"></i
+                        >
+                            </span>
+                            </template>
+                    </TuFormField>
+
                     <ion-modal
                         ref="modal"
                         trigger="open-modal"
@@ -56,13 +59,19 @@
  -->
                 </div>
             </div>
-            <div class="my-2 grid justify-center gap-2 grid-cols-2">
+            <div v-if="products" class="my-2 grid justify-center gap-2 grid-cols-2">
                 <ProductCard
-                    class="col-"
-                    v-for="(e, i) in dummyProducts"
+                    v-for="(e, i) in products"
                     :product="e"
                 />
             </div>
+            <div style="flex: auto;" class="w-full flex items-center justify-center" v-else>
+                <h3 class="fs-20">Loading...</h3>
+            </div>
+            <tu-button :on-click="handleClick">Click</tu-button>
+
+            </div>
+            
         </ion-content>
     </ion-page>
 </template>
@@ -72,8 +81,11 @@ import { ref, onBeforeMount } from "vue";
 import Appbar from "@/components/Appbar.vue";
 import ProductCard from "@/components/ProductCard.vue";
 import TuFormField from "@/components/TuFormField.vue";
-import { dummyProducts } from "@/utils/dummies";
-import { eye } from "ionicons/icons";
+import TuButton from "@/components/TuButton.vue";
+
+import { apiAxios } from "@/utils/constants";
+import Refresher from "@/components/Refresher.vue";
+import { sleep } from "@/utils/funcs";
 
 const products = ref();
 const sortBy = ref();
@@ -96,32 +108,46 @@ const sorts = [
     },
 ];
 
+const handleClick =async () => { 
+    await sleep(2000)
+    console.log('Slept')
+ }
+async function getProducts(){
+    try {
+        products.value = undefined
+        const res = await apiAxios.get('/products')
+        products.value = res.data.data
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+const init = async () => { 
+    await getProducts()
+ }
+
 onBeforeMount(() => {
-    /*  console.log(products.value)
-    if (!products.value)
-    products.value = dummyProducts */
+    init()
 });
 </script>
 <style lang="scss">
-
-.inp-suffix{
+.inp-suffix {
     position: relative;
-    
-    input{
+
+    input {
         padding-right: 2rem !important;
     }
     .suffix-icon {
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: .7rem;
-    background-color: yellowgreen;
-    pointer-events: all;
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding: 0.7rem;
+        background-color: yellowgreen;
+        pointer-events: all;
+    }
 }
-}
-
 </style>

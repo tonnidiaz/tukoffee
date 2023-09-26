@@ -1,7 +1,12 @@
 <template>
-    <ion-button slot="icon-only" class="relative cart-btn">
-        <div class="absolute cart-badge">{{userStore.cart?.products?.length ?? 0}}</div>
-                        <i class="fi fi-rr-shopping-basket"></i>
+   
+    <ion-button class="relative cart-btn ">
+                      
+                         <div class="indicator">
+                    <span class="indicator-item badge badge-secondary fs-10"
+                        >{{userStore.cart?.products?.length ?? 0}}</span>
+                      <i class="fi fi-rr-shopping-basket"></i>
+                    </div>
                     </ion-button>
 </template>
 <script setup lang="ts">
@@ -15,7 +20,8 @@ const userStore = useUserStore()
 <style lang="scss">
 .cart-btn{
     //background-color: red;
-    overflow: visible !important;
+    --overflow: visible;
+    margin-right: 5px !important;
 }
 .cart-badge{
     right:  -5px;

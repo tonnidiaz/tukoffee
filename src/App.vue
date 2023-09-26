@@ -84,4 +84,48 @@ ion-thumbnail{
     align-items: center;
     justify-content: center;
 }
+
+.dropdown{
+    *{
+        white-space: nowrap;
+        text-transform: ellipsis;
+        overflow-x: hidden;
+    }
+}
+
+ion-popover::part(backdrop) {
+    background-color: rgb(165, 165, 165);
+  }
+
+  ion-action-sheet.tu .action-sheet-group {
+    //background: #f58840;
+  }
+
+  ion-action-sheet.tu .action-sheet-title {
+    //color: #fff;
+  }
+
+  ion-action-sheet.tu .action-sheet-cancel::after {
+    //background: #e97223;
+  }
+
+  ion-action-sheet.tu .action-sheet-button,
+  ion-action-sheet.tu .action-sheet-button.ion-focused {
+    color: hsl(var(--bc) / .8);
+    height: 50px;
+  }
+
+  @media (any-hover: hover) {
+    ion-action-sheet.tu .action-sheet-button:hover {
+      color: #000000;
+    }
+  }
+
+  ion-action-sheet.tu ion-backdrop {
+    opacity: 0.6;
+  }
+
+  .bg-base-100{
+    --background: hsl(var(--b1) / var(--tw-bg-opacity))
+  }
 </style>

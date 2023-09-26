@@ -16,7 +16,7 @@
                         <ion-item
                             class=""
                             color="clear"
-                            router-link="/cart"
+                            router-link="/tabs/cart"
                         >
                             <ion-label>Cart</ion-label>
                         </ion-item>

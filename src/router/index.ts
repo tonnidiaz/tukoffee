@@ -28,6 +28,10 @@ const routes: Array<RouteRecordRaw> = [
         component: ()=> import("@/views/CartPage.vue")
       },
       {
+        path: 'rf',
+        component: () => import('@/views/RFPage.vue')
+      },
+      {
         path: 'account',
         component: () => import('@/views/AccountTab.vue')
       },

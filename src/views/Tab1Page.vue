@@ -16,6 +16,9 @@
             </ion-toolbar>
         </ion-header>
         <ion-content :fullscreen="true">
+            <ion-refresher slot="fixed" @ion-refresh="onRefresh">
+                <ion-refresher-content/>
+            </ion-refresher>
             <div class="m-3 flex flex-col">
                 <IonText>The best coffee in town!</IonText>
                 <IonText class="text-xl my-2 font-pacifico fs-30 fw-8"
@@ -84,8 +87,10 @@ import {
     IonButtons,
     IonSearchbar,
     IonText,
+    IonRefresher,
+    IonRefresherContent,
 } from "@ionic/vue";
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 import InkWell from "@/components/InkWell.vue";
 import { useRouter } from "vue-router";
 import CartBtn from "@/components/CartBtn.vue";
@@ -97,7 +102,9 @@ const router = useRouter();
 
 const getProducts = async (q: string) => {
     try {
+        console.log(apiURL)
         const res = await axios.get(`${apiURL}/products?q=${q}`);
+        console.log(res.data)
         return res.data.data;
     } catch (error) {
         console.log(error);
@@ -106,15 +113,27 @@ const getProducts = async (q: string) => {
 };
 
 async function getSpecial() {
+    special.value = undefined
     special.value = await getProducts("special");
+    
 }
 async function getTopSelling() {
+    topSelling.value = undefined
     topSelling.value = await getProducts("top-selling");
 }
 
+ const init = async () => { 
+    await getTopSelling();
+    await getSpecial();
+  }
+const onRefresh = async (e:any) => { 
+    await init()
+  e.target.complete()
+ }
+
+
 onBeforeMount(() => {
-    getTopSelling();
-    getSpecial();
+   init()
 });
 </script>
 
