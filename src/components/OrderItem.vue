@@ -7,7 +7,7 @@
                 <ion-note class="fs-13">
                     {{ new Date(order.date_created).toLocaleDateString() }}
                 </ion-note>
-                <span :class="'badge badge-' +( order.status == 'pending' ? 'warning' : (order.status == 'cancelled' ? 'error' : 'success'))">{{order.status}}</span>
+                <span :class="'badge bg-' +( order.status == 'pending' ? 'warning' : (order.status == 'cancelled' ? 'error' : 'success'))">{{order.status}}</span>
             </div>
 
         </ion-label>

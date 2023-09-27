@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-2">
+    <div class="mt-2 p-3">
         <h3>Login / Signup</h3>
         <form @submit="onFormSubmit" class="mt-3" action="#">
             <div class="form-control">

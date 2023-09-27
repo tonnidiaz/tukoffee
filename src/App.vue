@@ -99,9 +99,11 @@ ion-thumbnail{
     }
 }
 
-ion-popover::part(backdrop) {
+ion-popover{
+    --width: 200px,
+    &::part(backdrop) {
     background-color: rgb(165, 165, 165);
-  }
+  }}
 
   ion-action-sheet.tu .action-sheet-group {
     //background: #f58840;

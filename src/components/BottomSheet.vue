@@ -1,5 +1,5 @@
 <template>
-    <ion-modal :ref="ref" :trigger="trigger" :initial-breakpoint="0.25" :breakpoints="breakpoints">
+    <ion-modal :ref="ref" :trigger="trigger" :initial-breakpoint="initialBreakpoint" :breakpoints="breakpoints" class="h-auto">
        <!--  <ion-content class="ion-padding flex flex-col justify-center items-center relative bg-base-100">
             <slot />
         </ion-content> -->
@@ -13,7 +13,11 @@ defineProps({
     trigger: String,
     breakpoints: {
         type: Array,
-        default: [0, .15, 0.25, 0.5, 0.75]
+        default: [0, 1]
+    },
+    initialBreakpoint: {
+        type: Number,
+        default: 1
     }
 });
 </script>
