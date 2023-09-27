@@ -7,8 +7,10 @@
                 <ion-note class="fs-13">
                     {{ new Date(order.date_created).toLocaleDateString() }}
                 </ion-note>
-                <span :class="'badge bg-' +( order.status == 'pending' ? 'warning' : (order.status == 'cancelled' ? 'error' : 'success'))">{{order.status}}</span>
-            </div>
+<!--                 <span :class="' ion-bg-' +( order.status == 'pending' ? 'warning' : (order.status == 'cancelled' ? 'danger' : 'success'))">{{order.status}}</span>
+ -->            
+<ion-badge class="px-3" mode="ios" :color=" order.status == 'pending' ? 'warning' : (order.status == 'cancelled' ? 'danger' : 'success')">{{ order.status }}</ion-badge>
+</div>
 
         </ion-label>
         <ion-checkbox @ion-change="onItemClick" :checked="selectedItems.findIndex(el => el._id == order._id) != -1" v-if="selectedItems?.length" slot="end" mode="ios"></ion-checkbox>
@@ -29,7 +31,7 @@ import {
     IonToolbar,
     IonTitle,
     IonContent,
-    IonButton,
+    IonBadge,
     IonMenuToggle,
     IonCheckbox,
     IonIcon,

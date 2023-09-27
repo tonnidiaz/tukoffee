@@ -148,4 +148,29 @@ ion-popover{
     --height: auto
     }
   }
+
+  .ion-bg-primary{
+    background: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
+  }
+  .ion-bg-secondary{
+    background: var(--ion-color-secondary);
+    color: var(--ion-color-secondary-contrast);
+  }
+  .ion-bg-success{
+    background: var(--ion-color-success);
+    color: var(--ion-color-success-contrast);
+  }
+  .ion-bg-warning{
+    background: var(--ion-color-warning);
+    color: var(--ion-color-warning-contrast);
+  }
+  .ion-bg-danger{
+    background: var(--ion-color-danger);
+    color: var(--ion-color-danger-contrast);
+  }
+  .ion-bg-medium{
+    background: var(--ion-color-medium);
+    color: var(--ion-color-medium-contrast);
+  }
 </style>

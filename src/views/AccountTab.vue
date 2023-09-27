@@ -22,8 +22,8 @@
                         </ion-item>
                         <ion-item
                             class=""
-                            lines="none"
                             color="clear"
+                            lines="none"
                             router-link="/orders"
                         >
                             <ion-label>Orders</ion-label>
@@ -41,8 +41,8 @@
                         </ion-item>
                         <ion-item
                             class=""
-                            lines="none"
                             color="clear"
+                            lines="none"
                         >
                             <ion-label>Help & Feedback</ion-label>
                         </ion-item>
@@ -52,7 +52,6 @@
                     <div v-if="!userStore.user?.phone">
                      <ion-button id="login-modal-trigger" class=" text-white  w-full bt bt-primary">Login</ion-button>
                     <BottomSheet
-                    :initial-breakpoint="0.5"
                     trigger="login-modal-trigger">
 
                         <LoginView/>

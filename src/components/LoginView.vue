@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-2 p-3">
+    <div class="p-3 bg-base-100  flex flex-col justify-center">
         <h3>Login / Signup</h3>
         <form @submit="onFormSubmit" class="mt-3" action="#">
             <div class="form-control">
@@ -32,6 +32,8 @@
                     v-model="form.password"
                     required
                     class="ion-invalid"
+                    :type="showPass ? 'text' : 'password'"
+                    :clear-on-edit="false"
                     :color="
                         form.password == null
                             ? 'primary'
@@ -39,14 +41,16 @@
                             ? 'success'
                             : 'danger'
                     "
-                    type="password"
+                    
                     error-text="Invalid password"
                 >
                 </ion-input>
                 <p class="helper-text">Minimum of <code>6</code> characters.</p>
+
+                <ion-checkbox v-model="showPass" class="my-2 " mode="md" label-placement="end" justify="start">Show password?</ion-checkbox>
             </div>
             <div class="form-control mt-2">
-                <tu-button :on-click="onFormSubmit" class="btn btn-md btn-primary">
+                <tu-button :ionic="true" :on-click="onFormSubmit" class="btn-primary">
                     Next
                 </tu-button>
             </div>
@@ -55,7 +59,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { IonToast, IonInput, useIonRouter } from "@ionic/vue";
+import { IonToast, IonInput, useIonRouter, IonCheckbox } from "@ionic/vue";
 import { ref } from "vue";
 import { apiAxios } from "@/utils/constants";
 import { useUserStore } from "@/stores/user";
@@ -71,7 +75,7 @@ const toastMsg = ref(""),
     toastOpen = ref(false),
     setToastOpen = (val: boolean) => (toastOpen.value = val);
 
-const toastClass = ref("")
+const toastClass = ref(""), showPass = ref(false)
 const userStore = useUserStore();
 const phoneValid = (phone: string | null) => {
     return !phone

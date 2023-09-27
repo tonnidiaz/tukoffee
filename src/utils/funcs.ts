@@ -23,3 +23,5 @@ export const setupCart = async (phone: string, userStore: any) => {
  export function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+export function strToDate(str: string){ return new Date(str)}

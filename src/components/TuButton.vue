@@ -1,5 +1,7 @@
 <template>
-    <button @click="_onClick" :disabled="disabled" class="btn flex items-center gap-3">
+    <ion-button @click="_onClick" :disabled="disabled" v-if="ionic">
+        <slot /></ion-button>
+    <button v-else @click="_onClick" :disabled="disabled" class="btn flex items-center gap-3">
         <span v-if="disabled" class="loading loading-spinner fs-14 hidden"></span>
         <slot />
     </button>
@@ -9,7 +11,8 @@ import { IonButton } from "@ionic/vue";
 import { ref } from "vue";
 const disabled = ref(false)
 const props = defineProps({
-    onClick: Function
+    onClick: Function,
+    ionic: Boolean
 })
 
 const _onClick = async (e:any) => { 
