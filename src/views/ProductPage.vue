@@ -154,7 +154,7 @@
     </ion-page>
 </template>
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue";
+import { onMounted, ref } from "vue";
 import {
     IonPage,
     IonContent,
@@ -215,7 +215,7 @@ async function getRelated(){
         related.value = res.data.data
     } catch (error) {
         console.log(error)
-        related.value = []
+        related.value = [] 
     }
 }
 async function getProduct() {
@@ -231,7 +231,7 @@ const init =async () => {
     await getProduct()
     await getRelated()
  }
-onBeforeMount(() => {
+onMounted(() => {
     init();
 });
 </script>

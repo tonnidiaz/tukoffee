@@ -23,6 +23,8 @@
     "@icon/simple-line-icons": "^2.5.5-alpha.0",
     "@ionic/vue": "^7.4.1",
     "@ionic/vue-router": "^7.4.1",
+    "@vueuse/components": "^10.4.1",
+    "@vueuse/core": "^10.4.1",
     "axios": "^1.5.0",
     "ionicons": "^7.0.0",
     "jquery": "^3.7.1",

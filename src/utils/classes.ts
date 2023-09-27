@@ -1,0 +1,1 @@
+export enum OrderMode { deliver, collect }

@@ -90,7 +90,7 @@ import {
     IonRefresher,
     IonRefresherContent,
 } from "@ionic/vue";
-import { onBeforeMount, onMounted, ref } from "vue";
+import {onMounted, ref } from "vue";
 import InkWell from "@/components/InkWell.vue";
 import { useRouter } from "vue-router";
 import CartBtn from "@/components/CartBtn.vue";
@@ -132,7 +132,8 @@ const onRefresh = async (e:any) => {
  }
 
 
-onBeforeMount(() => {
+
+onMounted(()=> {
    init()
 });
 </script>

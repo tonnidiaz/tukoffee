@@ -16,117 +16,7 @@
                             <li>
                                 <a>Clear cart</a>
                             </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
-                            <li>
-                                <a>Clear cart</a>
-                            </li>
+                           
                             <li>
                                 <a>Clear cart</a>
                             </li>
@@ -146,63 +36,7 @@
                             v-for="(e, i) in userStore.cart?.products"
                             :item="e"
                         >
-                            <ion-thumbnail
-                                class="h-45px shadow-lg card rounded-lg"
-                                slot="start"
-                            >
-                                <ion-img
-                                    v-if="e.product.images?.length"
-                                    class="rounded-lg"
-                                    :src="e.product.images[0].url"
-                                ></ion-img>
-                                <span v-else>
-                                    <i
-                                        class="fi fi-rr-image-slash text-gray-600"
-                                    ></i>
-                                </span>
-                            </ion-thumbnail>
-                            <ion-label>
-                                <h3>{{ e.product.name }}</h3>
-                                <ion-note
-                                    >R{{ e.product.price.toFixed(2) }}</ion-note
-                                >
-                            </ion-label>
-                            <div class="flex flex-col" slot="end">
-                                <span
-                                    class="relative"
-                                    @click="console.log('Edit')"
-                                >
-                                    <i
-                                        class="fi fi-br-pencil fs-13 text-gray-600"
-                                    ></i
-                                ></span>
-                                <span
-                                    class="relative"
-                                    @click="console.log('Remove')"
-                                >
-                                    <i
-                                        class="fi fi-br-cross fs-12 text-gray-600"
-                                    ></i
-                                ></span>
-                                <!--  <ion-button
-                                fill="clear"
-                                size="small"
-                                color="dark"
-                                shape="round"
-                                class=""
-                            >
-                                <ion-icon :md="closeOutline"></ion-icon>
-                            </ion-button>
-                            <ion-button
-                                fill="clear"
-                                size="small"
-                                class=""
-                                color="dark"
-                                shape="round"
-                            >
-                                <ion-icon :md="closeOutline"></ion-icon>
-                            </ion-button> -->
-                            </div>
+                           
                         </CartItem>
                     </div>
                 </div>
@@ -225,7 +59,7 @@
                     <span class="fw-7">Total:</span>
                     <span class="fw-6">R{{ total.toFixed(2) }}</span>
                 </div>
-                <ion-button class="w-full">Proceed to checkout</ion-button>
+                <ion-button router-link="/order/checkout" class="w-full">Proceed to checkout</ion-button>
             </ion-toolbar>
         </ion-footer>
     </ion-page>
@@ -255,7 +89,7 @@ import { dummyProduct, dummyProducts } from "@/utils/dummies";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import CartItem from "@/components/CartItem.vue";
-import { onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, ref, watch } from "vue";
+import {  onBeforeUnmount, onMounted, onUnmounted, ref, watch } from "vue";
 import $ from "jquery";
 import BottomSheet from "@/components/BottomSheet.vue";
 const userStore = useUserStore();

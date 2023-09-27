@@ -1,11 +1,11 @@
 <template>
-    <ion-item
+    <a
         lines="none"
-        class="cursor-pointer border-1 shadow-sm bg-base-100 ion-activatable relative product-card"
-        :router-link="`/product/${product.pid}`"
+        class="cursor-pointer border-1 shadow-sm bg-base-100 ion-activatable relative p-0 product-card"
+        :href="`/product/${product.pid}`"
     >
         <div>
-            <div class="py-2 flex flex-wrap items-center justify-center gap-2">
+            <div class="py-2 flex flex-wrap items-center justify-center">
                 <div
                     class="flex items-center justify-center flex-col overflow-hidden w-full"
                     style="white-space: nowrap; text-overflow: ellipsis"
@@ -28,14 +28,14 @@
                     >{{ product.name }}</ion-text
                 > -->
                     <h3
-                        class="mt-3 fw-6"
+                        class="mt-2 fw-6"
                         style="white-space: nowrap; text-overflow: ellipsis"
                     >
                         {{ product.name }}
                     </h3>
                 </div>
-                <div class="flex items-center justify-between w-full">
-                    <div class="badge badge-primary">
+                <div class="flex items-center justify-between w-full px-2">
+                    <div class="badge badge-primary fs-10 fw-6">
                         {{ inStock(product) ? "In stock" : "Out of stock" }}
                     </div>
                     <span class="flex items-center jent-center">
@@ -48,21 +48,21 @@
                         }}</span>
                     </span>
                 </div>
-                <div class="flex items-center justify-between w-full">
-                    <span class="text-md fw-6 text-gray-700"
-                        >R{{ product.price.toFixed(2) }}</span
+                <div class="flex items-center justify-between w-full px-2">
+                    <span class="text-md fw-6 fs-14 text-gray-700"
+                        >R{{ product.price }}</span
                     >
 
                     <tu-button
                         :on-click="addRemoveCart"
-                        :class="`rounded-full btn-sm h-30px flex items-center justify-center ${inCart(product) ? 'btn-accent' : 'btn-danger'}`"
+                        :class="`rounded-full btn-sm h-30px flex items-center justify-center ${inCart(product) ? 'btn-danger' : 'btn-danger'}`"
                         ><i v-if="!inCart(product)" class="fi fi-rr-shopping-cart-add fs-18"></i>
-                    <i v-else class="fi fi-rr-cart-minus fs-18 text-white"></i></tu-button
+                    <i v-else class="fi fi-rr-cart-minus fs-18 text-"></i></tu-button
                     >
                 </div>
             </div>
         </div>
-    </ion-item>
+    </a>
 </template>
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";

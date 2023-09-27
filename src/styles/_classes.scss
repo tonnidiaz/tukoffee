@@ -1,4 +1,4 @@
-@for $i from 1 to 50{
+@for $i from 0 to 50{
     .br-#{$i} {
         border-radius: #{$i}px !important;
     }

@@ -1,6 +1,10 @@
 <template>
   <ion-app>
-    <ion-router-outlet />
+    <ion-router-outlet v-if="userSetup"/>
+    <div v-else class="w-full h-full flex items-center justify-center">
+        <h1 class="fs-30 fw-7">Loading</h1>
+        
+    </div>
   </ion-app>
 </template>
 
@@ -9,11 +13,12 @@ import { IonApp, IonRouterOutlet } from '@ionic/vue';
 import { apiAxios, } from './utils/constants';
 import { onBeforeMount } from 'vue';
 import { useUserStore } from './stores/user';
-import { Store } from 'pinia';
+import { Store, storeToRefs } from 'pinia';
 import { setupCart } from './utils/funcs';
 const userStore = useUserStore()
-
+const { userSetup} = storeToRefs(userStore)
 const setupUser = async () => { 
+    userStore.setUserSetup(false)
     try{
         console.log('Setting up cart...')
         const authToken = localStorage.getItem('authToken')
@@ -29,6 +34,7 @@ const setupUser = async () => {
     }catch(e){
         console.log(e)
     }
+    userStore.setUserSetup(true)
  }
 
 
@@ -127,5 +133,17 @@ ion-popover::part(backdrop) {
 
   .bg-base-100{
     --background: hsl(var(--b1) / var(--tw-bg-opacity))
+  }
+  .m-block {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  ion-modal{
+    &.h-auto{
+    --height: auto
+    }
   }
 </style>

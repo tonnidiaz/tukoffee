@@ -23,7 +23,7 @@ import {
     IonAvatar,
     IonInfiniteScroll,useIonRouter
 } from "@ionic/vue";
-import {onBeforeMount, onMounted} from 'vue';
+import { onMounted} from 'vue';
 import { useRouter, useRoute,  } from "vue-router";
 const router = useRouter()
 const ionRouter = useIonRouter()

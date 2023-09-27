@@ -5,7 +5,7 @@
             :router-link="`/product/${item.product.pid}`"
             class="h-45px shadow-lg card rounded-lg"
             slot="start"
-        >
+        > 
             <ion-img
                 v-if="item.product.images?.length"
                 class="rounded-lg"
@@ -30,11 +30,13 @@
 
         <BottomSheet
         @did-dismiss="editSheetOpen = false"
-            :initial-breakpoint="0.15"
+            :initial-breakpoint="1"
+            class="h-auto"
+            :breakpoints="[0, 1]"
             :is-open="editSheetOpen"
         >
             <!-- Edit modal -->
-            <div class="w-full">
+            <div class="w-full  flex flex-col justify-center items-center relative bg-base-100 py-4 px-3">
                 <div class="flex items-center">
                     <TuFormField
                         class="rounded-full h-40px w-40 m-auto"
@@ -78,7 +80,6 @@
                         :buttons="actionSheetButtons"
                     ></ion-action-sheet>
                 </div>
-                <div class="my-2">
                     <!-- TODO: Edit  -->
                     <ion-button
                         @click="
@@ -86,11 +87,10 @@
                                 editSheetOpen = false;
                             }
                         "
-                        expand="full"
+                        class="w-full"
                         color="success"
                         >Save</ion-button
                     >
-                </div>
             </div>
         </BottomSheet>
     </ion-item>

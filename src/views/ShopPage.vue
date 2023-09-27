@@ -1,12 +1,14 @@
 <template>
     <ion-page>
         <Appbar title="Shop" />
-        <ion-content :fullscreen="true" class="ion-padding">
+        <ion-content :fullscreen="true">
             <Refresher :on-refresh="init"/>
-            <div class="h-full w-full flex flex-col">
+            <div class="h-full w-full flex flex-col p-3">
                 <div class="flex justify-center w-ful">
                 <div class="flex justify-center w-full flex-col">
-                    <TuFormField class="rounded-full w-full" placeholder="Search..." >
+                    <TuFormField class="rounded-full w-full" :field-props="{
+                        placeholder:'Search'
+                    }" placeholder="Search..." >
                         <template #prefix-icon
                             >
                             <span class="btn btn-ghost btn-sm rounded-full field-icon">
@@ -59,7 +61,7 @@
  -->
                 </div>
             </div>
-            <div v-if="products" class="my-2 grid justify-center gap-2 grid-cols-2">
+            <div v-if="products" class="my-2 grid justify-center gap-1 grid-cols-2">
                 <ProductCard
                     v-for="(e, i) in products"
                     :product="e"
@@ -68,7 +70,6 @@
             <div style="flex: auto;" class="w-full flex items-center justify-center" v-else>
                 <h3 class="fs-20">Loading...</h3>
             </div>
-            <tu-button :on-click="handleClick">Click</tu-button>
 
             </div>
             
@@ -77,7 +78,7 @@
 </template>
 <script setup lang="ts">
 import { IonPage, IonModal, IonContent, IonInput, IonItem } from "@ionic/vue";
-import { ref, onBeforeMount } from "vue";
+import { ref, onMounted } from "vue";
 import Appbar from "@/components/Appbar.vue";
 import ProductCard from "@/components/ProductCard.vue";
 import TuFormField from "@/components/TuFormField.vue";
@@ -126,7 +127,7 @@ const init = async () => {
     await getProducts()
  }
 
-onBeforeMount(() => {
+onMounted(() => {
     init()
 });
 </script>
