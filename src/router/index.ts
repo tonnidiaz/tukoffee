@@ -54,6 +54,10 @@ const routes: Array<RouteRecordRaw> = [
     component: ()=> import("@/views/OrdersPage.vue")
   },
   {
+    path: '/order/:id',
+    component: ()=> import("@/views/order/OrderPage.vue")
+  },
+  {
     path: '/order/checkout',
     component: ()=> import("@/views/order/CheckoutPage.vue")
   },

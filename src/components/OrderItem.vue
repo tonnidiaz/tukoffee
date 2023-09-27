@@ -1,6 +1,6 @@
 <template>
     <OnLongPress @trigger="onLongPress" >
-        <ion-item  color="clear" >
+        <ion-item  color="clear" :router-link="`/order/${order.oid}`" >
         <ion-label>
             <h3>#{{order.oid}}</h3>
             <div class="flex gap-4">
