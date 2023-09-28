@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <Appbar title="Orders">
+        <Appbar title="Orders" :show-cart="route.path == '/orders'">
             <button @click="openPopover" id="open-action-sheet"
                 class="btn btn-sm fs-20 btn-ghost p-0 w-35px h-35px rounded-full">
                 <ion-icon :md="ellipsisVertical"></ion-icon>
@@ -104,6 +104,7 @@ import { ellipsisVertical } from "ionicons/icons";
 import Refresher from "@/components/Refresher.vue";
 import BottomSheet from "@/components/BottomSheet.vue";
 import {SortOrder, OrderStatus} from '@/utils/classes';
+import { useRoute } from "vue-router";
 
 const userStore = useUserStore()
 const orderStore = useOrderStore()
@@ -115,6 +116,9 @@ const { orders, sortedOrders } = storeToRefs(orderStore)
 const { selectedItems } = storeToRefs(appStore)
 const _orders = ref<typeof sortedOrders.value>()
 const orderID = ref<number>()
+
+const route = useRoute()
+
 function openPopover(e: Event) {
     popoverEvent.value = e;
     popoverOpen.value = true;
@@ -123,7 +127,8 @@ function hidePopover() { popoverOpen.value = false }
 async function getOrders() {
     orderStore.setOrders(null)
     try {
-        const res = await apiAxios.get(`/orders?user=${user.value?._id}`)
+        const url = route.path == '/orders' ? `/orders?user=${user.value?._id}` : '/orders'
+        const res = await apiAxios.get(url)
         orderStore.setOrders(res.data.orders)
     } catch (e) {
         console.log(e)

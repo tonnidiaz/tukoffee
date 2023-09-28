@@ -5,7 +5,7 @@
             <div class="p-3">
                 <div class="bg-base-100">
                     <ion-item lines="none" color="clear">
-                        <ion-select v-model="checkoutStore.orderMode" label="Method" label-placement="floating">
+                        <ion-select interface="popover" v-model="checkoutStore.orderMode" label="Method" label-placement="floating">
                             <ion-select-option :value="OrderMode.deliver">Deliver</ion-select-option>
                             <ion-select-option :value="OrderMode.collect">Collect</ion-select-option>
                         </ion-select>
@@ -70,7 +70,7 @@
                         <span class="fw-7">Total:</span>
                         <span class="fw-6">R{{ getTotal(cart?.products) }}</span>
                     </div>
-                    <tu-button @click="onPayBtnClick" class="btn btn-success w-full br-0 shadow-lg">Pay now</tu-button>
+                    <tu-button :ionic="true" @click="onPayBtnClick" class="w-full br-0" color="success">Pay now</tu-button>
 
                 </div>
             </ion-toolbar>

@@ -1,5 +1,5 @@
 <template>
-    <div class="p-3 bg-base-100">
+    <div class="p-3 bg-base-100 h-full">
         <form action="#" class="mt-3" @submit="onFormSubmit">
             <div class="form-control my-1">
                 <ion-input
@@ -98,8 +98,14 @@
                 >
             </div>
             <div class="form-control">
-                <ion-button type="submit" color="dark" class="w-full"
-                    >Add product</ion-button
+                <tu-button
+                    :ionic="true"
+                    type="submit"
+                    color="dark"
+                    class="w-full"
+                    >{{
+                        mode == "add" ? "Add product" : "Save changes"
+                    }}</tu-button
                 >
             </div>
         </form>
@@ -126,14 +132,19 @@ import { Cloudinary } from "@capawesome/capacitor-cloudinary";
 
 import { useAppStore } from "@/stores/app";
 import { useRouter } from "vue-router";
+import TuButton from "./TuButton.vue";
+import { apiAxios } from "@/utils/constants";
 
 const appStore = useAppStore();
 const addProductStore = useAddProductStore();
 const { tempImgs, form } = storeToRefs(addProductStore);
 const { setTempImgs } = addProductStore;
 
-const router = useRouter()
+const router = useRouter();
 
+const props = defineProps({
+    mode: { type: String, default: "add" },
+});
 const initialize = async () => {
     await Cloudinary.initialize({ cloudName: "sketchi" });
     console.log("Cloudinary initialized");
@@ -151,30 +162,53 @@ const importImg = async () => {
         };
     });
     console.log(_imgs);
-   const existingImgs = form.value.images ?? []
+    const existingImgs = form.value.images ?? [];
     setTempImgs([...tempImgs.value, ..._imgs]);
-     res.files.forEach(async (it, i) => {
+    res.files.forEach(async (it, i) => {
         const res = await uploadImage(it.path, appStore.title);
         console.log(res);
-        const data = {url: res.secureUrl, publicId: res.publicId}
-        form.value.images = [...existingImgs, data]
-        tempImgs.value[i].loading = false
-        console.log('Uploaded')
+        const data = { url: res.secureUrl, publicId: res.publicId };
+        const newImgs = [...existingImgs, data];
+
+        if (props.mode == "edit") {
+            try {
+                const res = await apiAxios.post("/products/edit", {
+                    pid: form.value.pid,
+                    images: newImgs,
+                });
+                form.value.images = newImgs;
+                tempImgs.value[i].loading = false;
+            } catch (error) {
+                console.log(error);
+                addProductStore.setTempImgs(
+                    tempImgs.value.filter((el, index) => index !== i)
+                );
+            }
+        } else {
+            form.value.images = newImgs;
+            tempImgs.value[i].loading = false;
+        }
+
+        console.log("Uploaded");
     });
 };
 
-const onFormSubmit = async (e: any)=>{
-    e.preventDefault()
-    console.log(form.value)
-    const res = await saveProduct(form.value, 'add')
-    if (res){
-        router.push(`/product/${res}`)
-    }else{
-        console.log('Failed to add product')
+const onFormSubmit = async (e: any) => {
+    e.preventDefault();
+    console.log(form.value);
+    const res = await saveProduct(form.value, props.mode);
+    if (res) {
+        location.href = `/product/${res}`;
+    } else {
+        console.log("Failed to add product");
     }
-}
+};
 onMounted(() => {
     initialize();
+    const formImgs = addProductStore.form.images;
+    if (props.mode == "edit") {
+        addProductStore.setTempImgs(formImgs);
+    }
 });
 </script>
 

@@ -7,7 +7,33 @@
     src: url("/assets/fonts/Pacifico/Pacifico-Regular.ttf");
 }
 
+/* Poppins */
+@font-face {
+    font-family: Poppins;
+    src: url("/assets/fonts/Poppins/Poppins-Regular.ttf");
+  }
+  
+  @font-face {
+    font-family: Poppins;
+    src: url("/assets/fonts/Poppins/Poppins-Medium.ttf");
+    font-weight: 500;
+  }
+  
+  @font-face {
+    font-family: Poppins;
+    src: url("/assets/fonts/Poppins/Poppins-Bold.ttf");
+    font-weight: 700;
+    font-style: bold;
+  }
+  
+  @font-face {
+    font-family: Poppins;
+    src: url("/assets/fonts/Poppins/Poppins-ExtraBold.ttf");
+    font-weight: 800;
+    font-style: "extra-bold";
+  }
 
+  
 /* INCLUSEIVE SANS */
 @font-face {
     font-family: InclusiveSans;
@@ -36,8 +62,8 @@ html, body{
 }
 h1, h2, h3, h4, h5, h6 {
     color: #323232 !important;
-    font-family: var(--ion-font-family) !important;
-    font-weight: 700 !important;
+    font-family: Poppins !important;
+    font-weight: 700 ;
     margin: 2px 0;
     line-height: 1.5rem;
 }

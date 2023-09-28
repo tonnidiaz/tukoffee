@@ -1,6 +1,6 @@
 <template>
    
-    <ion-button class="relative cart-btn ">
+    <ion-button router-link="/cart" router-direction="forward" class="relative cart-btn ">
                       
                          <div class="indicator">
                     <span class="indicator-item badge badge-secondary fs-10"

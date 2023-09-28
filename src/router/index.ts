@@ -55,7 +55,7 @@ const routes: Array<RouteRecordRaw> = [
         },
         {
             path: 'orders',
-            component: ()=>import('@/views/admin/OrdersPage.vue')
+            component: ()=>import('@/views/OrdersPage.vue')
         },
         {
             path: 'accounts',

@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <Appbar title="Cart">
+        <Appbar title="Cart" :show-cart="false">
             <ion-button shape="round" id="click-trigger" slot="icon-only" @click="()=>console.log('Ellipsis')"
                 ><ion-icon :md="ellipsisVertical"></ion-icon
             ></ion-button>

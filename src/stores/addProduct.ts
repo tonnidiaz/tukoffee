@@ -14,6 +14,9 @@ export const useAddProductStore =  defineStore('add-product',{
     form: {} as Obj
     }),
     actions:{
-        setTempImgs (v: TypeImgs[]){this.tempImgs = v}
+        setTempImgs (v: TypeImgs[]){this.tempImgs = v},
+        setForm(v: typeof this.form){
+            this.form = v;
+        }
     }
 })
