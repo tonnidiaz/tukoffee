@@ -38,6 +38,32 @@ const routes: Array<RouteRecordRaw> = [
     ]
   }, 
   {
+    path: '/admin/',
+    component: () => import('@/views/admin/AdminPage.vue'),
+    children: [
+        {
+            path: '',
+            redirect: '/admin/dashboard'
+        },
+        {
+            path: 'dashboard',
+            component: ()=>import('@/views/admin/DashboardPage.vue')
+        },
+        {
+            path: 'products',
+            component: ()=>import('@/views/admin/ProductsPage.vue')
+        },
+        {
+            path: 'orders',
+            component: ()=>import('@/views/admin/OrdersPage.vue')
+        },
+        {
+            path: 'accounts',
+            component: ()=>import('@/views/admin/AccountsPage.vue')
+        },
+    ]
+  },
+  {
     path: '/product/:id',
     component: ()=>  import('../views/ProductPage.vue')
   },
@@ -52,6 +78,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/orders',
     component: ()=> import("@/views/OrdersPage.vue")
+  },
+  {
+    path: '/map',
+    component: ()=> import("@/views/MapPage.vue")
   },
   {
     path: '/order/:id',

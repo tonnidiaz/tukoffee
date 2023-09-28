@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:ns1="http://sozi.baierouge.fr" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" id="svg2" sodipodi:docname="marker-pin.svg" inkscape:export-filename="D:\klarsys\buscam-mean-server\public\assets\marker.png" viewBox="0 0 30 48" inkscape:export-xdpi="96.126602" version="1.1" inkscape:export-ydpi="96.126602" inkscape:version="0.48.1 ">
+  <sodipodi:namedview id="namedview14" fit-margin-left="0" inkscape:zoom="15.94" borderopacity="1" inkscape:current-layer="layer2" inkscape:cx="3.6135508" inkscape:cy="24" inkscape:window-maximized="1" showgrid="false" fit-margin-right="0" bordercolor="#666666" inkscape:window-x="-9" guidetolerance="10" objecttolerance="10" inkscape:window-y="-9" fit-margin-bottom="0" inkscape:window-width="1920" inkscape:pageopacity="0" inkscape:pageshadow="2" pagecolor="#ffffff" gridtolerance="10" inkscape:window-height="1003" fit-margin-top="0"/>
+  <defs id="defs4">
+    <radialGradient id="radialGradient3909" gradientUnits="userSpaceOnUse" cy="29.748" cx="9.7786" gradientTransform="matrix(.52225 -.30947 .74888 1.2638 -14.89 -3.349)" r="13.996" inkscape:collect="always">
+      <stop id="stop3863" style="stop-color:#000000;stop-opacity:.15686" offset="0"/>
+      <stop id="stop3865" style="stop-color:#000000;stop-opacity:0" offset="1"/>
+    </radialGradient>
+    <radialGradient id="radialGradient3929" gradientUnits="userSpaceOnUse" cy="582.93" cx="800.29" gradientTransform="matrix(.57687 -.60441 1.0597 1.0114 -279.12 477.04)" r="189.79" inkscape:collect="always">
+      <stop id="stop3845" style="stop-color:#ffffff;stop-opacity:.78431" offset="0"/>
+      <stop id="stop3847" style="stop-color:#ffffff;stop-opacity:.54902" offset="0.3"/>
+      <stop id="stop3849" style="stop-color:#ffffff;stop-opacity:.23529" offset="0.6"/>
+      <stop id="stop3841" style="stop-color:#ffffff;stop-opacity:0" offset="1"/>
+    </radialGradient>
+  </defs>
+  <g id="layer2" inkscape:label="BasePin" inkscape:groupmode="layer">
+    <path id="svg_2" style="fill-rule:evenodd;stroke:#d35009;stroke-miterlimit:10;stroke-width:.75;fill:#f77935" stroke-miterlimit="10" inkscape:connector-curvature="0" d="m15.036 46.004c-1.007-4.945-2.784-9.061-4.935-12.875-1.5957-2.829-3.4443-5.441-5.1547-8.184-0.571-0.916-1.0638-1.884-1.6125-2.834-1.0971-1.901-1.9866-4.105-1.93-6.963 0.0552-2.793 0.8629-5.033 2.0278-6.8652 1.9157-3.013 5.1247-5.4831 9.4304-6.1323 3.5205-0.53077 6.8212 0.36595 9.1616 1.7346 1.9126 1.1184 3.394 2.6125 4.5197 4.3732 1.1752 1.8377 1.9844 4.0088 2.0522 6.8407 0.03483 1.4509-0.2027 2.7944-0.53742 3.909-0.33862 1.1281-0.88331 2.0711-1.368 3.0782-0.9462 1.9662-2.1323 3.7677-3.3227 5.5701-3.5457 5.3693-6.8737 10.845-8.331 18.348z"/>
+  </g>
+  <g id="layer1" sodipodi:insensitive="true" style="opacity:.7" inkscape:label="LightShadow" inkscape:groupmode="layer">
+    <path id="use3905" style="fill-rule:evenodd;fill:url(#radialGradient3909)" inkscape:connector-curvature="0" stroke-miterlimit="10" d="m15.036 46.004c-1.007-4.945-2.784-9.061-4.935-12.875-1.5957-2.829-3.4443-5.441-5.1547-8.184-0.571-0.91587-1.0638-1.8835-1.6124-2.8339-1.0971-1.9006-1.9866-4.1044-1.9301-6.9628 0.05522-2.7929 0.86299-5.0332 2.0278-6.8651 1.9158-3.013 5.1247-5.4831 9.4303-6.1322 3.5205-0.53077 6.8212 0.36596 9.1616 1.7346 1.9126 1.1184 3.394 2.6125 4.5197 4.3732 1.1752 1.8377 1.9844 4.0088 2.0522 6.8407 0.03483 1.4509-0.2027 2.7944-0.53742 3.909-0.33862 1.1281-0.88331 2.0711-1.368 3.0782-0.9462 1.9662-2.1323 3.7677-3.3227 5.5701-3.5457 5.3693-6.8737 10.845-8.331 18.348z"/>
+    <circle id="svg_4" sodipodi:rx="183.33" sodipodi:ry="183.33" style="fill-rule:evenodd;fill:url(#radialGradient3929)" d="m 912.87999,651.04999 c 0,101.25036 -82.07964,183.33 -183.33,183.33 -101.25037,0 -183.33,-82.07964 -183.33,-183.33 0,-101.25037 82.07963,-183.33 183.33,-183.33 101.25036,0 183.33,82.07963 183.33,183.33 z" cx="729.55" cy="651.05" transform="matrix(.071391 0 0 .071391 -37.083 -31.015)" sodipodi:cy="651.04999" sodipodi:cx="729.54999" r="183.33"/>
+  </g>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/"/>
+        <dc:publisher>
+          <cc:Agent rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

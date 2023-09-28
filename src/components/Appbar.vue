@@ -10,7 +10,7 @@
                    </button> 
        
                 </ion-buttons>
-                <ion-title  class="fs-18">{{ selectedItems.length ? `${selectedItems.length} selected` : title }}</ion-title>
+                <ion-title  class="fs-18 fw-6">{{ selectedItems.length ? `${selectedItems.length} selected` : title }}</ion-title>
                 <ion-buttons slot="end">
                     <CartBtn v-if="showCart"/> 
                     <slot/>

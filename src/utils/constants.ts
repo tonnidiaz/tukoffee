@@ -6,3 +6,6 @@ export const apiURL = process.env.NODE_ENV != "development" ? "https://tukoffee.
 export const apiAxios = axios.create({baseURL: apiURL,headers:{
     Authorization: `Bearer ${localStorage.getItem('authToken')}`
 }})
+
+export const mapboxPublicToken =
+"pk.eyJ1IjoidG9ubmlkaWF6IiwiYSI6ImNsbTg5YTk1eTBhaHczZHJyYmR1ZHhsM2cifQ.ockDRt9KPFkge-1zeyDhhA";

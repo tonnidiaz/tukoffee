@@ -11,6 +11,8 @@
                 </div>
 
                 <div class="my-5">
+<ion-item router-link="/map"><ion-label>Map</ion-label></ion-item>
+
                     <audio controls :src="url"></audio>
                     <ion-list mode="ios">
                         <ion-item-sliding>

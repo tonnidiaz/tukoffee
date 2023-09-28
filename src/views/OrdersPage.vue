@@ -23,12 +23,12 @@
                     placeholder: 'Order ID',
                 }">
                     <template #prefix-icon>
-                        <span class="field-icon btn btn-sm btn-ghost">
+                        <span class="field-icon btn btn-sm btn-ghost px-4">
                             <i class="fi fi-rr-search fs-18"></i>
                         </span>
                     </template>
                     <template #suffix-icon>
-                        <span id="filter-sheet-trigger" class="field-icon btn btn-sm btn-ghost">
+                        <span id="filter-sheet-trigger" class="field-icon btn btn-sm btn-ghost px-4">
                             <i class="fi fi-rr-settings-sliders fs-18"></i>
                         </span>
                     </template>
@@ -61,13 +61,13 @@
 
 
                     <ion-item lines="none">
-                        <ion-select @ion-change="orderStore.setSortBy($event.target.value)" :value="orderStore.sortBy" mode="ios" label="Sort by" label-placement="floating">
+                        <ion-select  interface="popover" @ion-change="orderStore.setSortBy($event.target.value)" :value="orderStore.sortBy" mode="md" label="Sort by" label-placement="floating">
                             <ion-select-option :value="OrderSortBy.created">Date created</ion-select-option>
                             <ion-select-option :value="OrderSortBy.modified">Last modified</ion-select-option>
                         </ion-select>
                     </ion-item>
                     <ion-item class="my-1" lines="none">
-                        <ion-select  @ion-change="orderStore.setStatus($event.target.value)" :value="orderStore.status"  mode="ios" label="Status" label-placement="floating">
+                        <ion-select interface="popover"  @ion-change="orderStore.setStatus($event.target.value)" :value="orderStore.status"  mode="md" label="Status" label-placement="floating">
                             <ion-select-option :value="OrderStatus.all">All</ion-select-option>
                             <ion-select-option :value="OrderStatus.pending">Pending</ion-select-option>
                             <ion-select-option :value="OrderStatus.cancelled">Cancelled</ion-select-option>

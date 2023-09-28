@@ -31,6 +31,17 @@
                   
                     
                 </IonItemGroup>
+                <IonItemGroup v-if="userStore.user?.permissions > 1" class="mb-1 bg-base-100">
+                        <ion-item
+                            class=""
+                            color="clear"
+                            router-link="/admin/dashboard"
+                            lines="none"
+                        >
+                            <ion-label>Admin dashboard</ion-label>
+                        </ion-item>
+
+                </IonItemGroup>
                 <IonItemGroup class="mb-1 bg-base-100">
                         <ion-item
                             class=""

@@ -13,10 +13,14 @@ import { IonApp, IonRouterOutlet } from '@ionic/vue';
 import { apiAxios, } from './utils/constants';
 import { onBeforeMount } from 'vue';
 import { useUserStore } from './stores/user';
-import { Store, storeToRefs } from 'pinia';
+import { storeToRefs } from 'pinia';
 import { setupCart } from './utils/funcs';
+import { useStoreStore } from './stores/store';
 const userStore = useUserStore()
+const storeStore = useStoreStore()
+
 const { userSetup} = storeToRefs(userStore)
+
 const setupUser = async () => { 
     userStore.setUserSetup(false)
     try{
@@ -36,11 +40,20 @@ const setupUser = async () => {
     }
     userStore.setUserSetup(true)
  }
-
+const getStores = async () =>{
+    try{
+        const res = await apiAxios.get('/stores')
+        storeStore.setStores(res.data.stores)
+    }
+    catch(e){
+        console.log(e)
+    }
+}
 
 
  onBeforeMount(()=>{
     setupUser()
+    getStores()
  })
 </script>
 <style lang="scss">
@@ -57,6 +70,10 @@ ion-tab-bar {
    // border-top: 1px solid rgba(0, 0, 0, 0.178);
     padding: 0.2rem 0;
     //background-color: black;
+    i {
+        font-size: 20px !important;
+        line-height: .8rem !important;
+    }
 }
 
 ion-tab-button {

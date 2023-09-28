@@ -353,3 +353,323 @@ export const dummyOrder = {
     },
     "__v": 0
 }
+
+export const dummyFeatures = [
+    {
+        "id": "address.2512182055758606",
+        "type": "Feature",
+        "place_type": [
+            "address"
+        ],
+        "relevance": 1,
+        "properties": {
+            "accuracy": "street"
+        },
+        "text": "Undefined Road",
+        "place_name": "Undefined Road, 690523, Thodiyoor, Karunagappally, Kollam, Kerala, India",
+        "center": [
+            76.5738807,
+            9.0735648
+        ],
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                76.5738807,
+                9.0735648
+            ]
+        },
+        "context": [
+            {
+                "id": "postcode.120491627",
+                "mapbox_id": "dXJuOm1ieHBsYzpCeTZPYXc",
+                "text": "690523"
+            },
+            {
+                "id": "locality.4026559083",
+                "mapbox_id": "dXJuOm1ieHBsYzo4QUJxYXc",
+                "wikidata": "Q7786623",
+                "text": "Thodiyoor"
+            },
+            {
+                "id": "place.20654187",
+                "mapbox_id": "dXJuOm1ieHBsYzpBVHNvYXc",
+                "wikidata": "Q6373673",
+                "text": "Karunagappally"
+            },
+            {
+                "id": "district.2967147",
+                "mapbox_id": "dXJuOm1ieHBsYzpMVVpy",
+                "wikidata": "Q1356124",
+                "text": "Kollam"
+            },
+            {
+                "id": "region.99435",
+                "mapbox_id": "dXJuOm1ieHBsYzpBWVJy",
+                "wikidata": "Q1186",
+                "short_code": "IN-KL",
+                "text": "Kerala"
+            },
+            {
+                "id": "country.8811",
+                "mapbox_id": "dXJuOm1ieHBsYzpJbXM",
+                "wikidata": "Q668",
+                "short_code": "in",
+                "text": "India"
+            }
+        ]
+    },
+    {
+        "id": "poi.1142461304148",
+        "type": "Feature",
+        "place_type": [
+            "poi"
+        ],
+        "relevance": 0.96,
+        "properties": {
+            "wikidata": "Q1434547",
+            "landmark": true,
+            "address": "University Road",
+            "foursquare": "4bd801ffe914a593d24852fa",
+            "category": "college, university",
+            "maki": "college"
+        },
+        "text": "Loughborough University",
+        "place_name": "Loughborough University, University Road, Loughborough, England LE11 3TP, United Kingdom",
+        "matching_text": "undefined",
+        "matching_place_name": "undefined, University Road, Loughborough, England LE11 3TP, United Kingdom",
+        "center": [
+            -1.2289455,
+            52.7673425
+        ],
+        "geometry": {
+            "coordinates": [
+                -1.2289455,
+                52.7673425
+            ],
+            "type": "Point"
+        },
+        "context": [
+            {
+                "id": "postcode.6514224719",
+                "mapbox_id": "dXJuOm1ieHBsYzpBWVJITGs4",
+                "text": "LE11 3TP"
+            },
+            {
+                "id": "place.7014479",
+                "mapbox_id": "dXJuOm1ieHBsYzphd2hQ",
+                "wikidata": "Q537323",
+                "text": "Loughborough"
+            },
+            {
+                "id": "district.714319",
+                "mapbox_id": "dXJuOm1ieHBsYzpDdVpQ",
+                "wikidata": "Q23106",
+                "text": "Leicestershire"
+            },
+            {
+                "id": "region.9295",
+                "mapbox_id": "dXJuOm1ieHBsYzpKRTg",
+                "wikidata": "Q21",
+                "short_code": "GB-ENG",
+                "text": "England"
+            },
+            {
+                "id": "country.8783",
+                "mapbox_id": "dXJuOm1ieHBsYzpJazg",
+                "wikidata": "Q145",
+                "short_code": "gb",
+                "text": "United Kingdom"
+            }
+        ]
+    },
+    {
+        "id": "poi.68719511100",
+        "type": "Feature",
+        "place_type": [
+            "poi"
+        ],
+        "relevance": 0.944444,
+        "properties": {
+            "foursquare": "502686a6e4b00b8faaee478a",
+            "landmark": true,
+            "address": "718 N Buckner Blvd Ste 154",
+            "category": "bakery, shop"
+        },
+        "text": "Unrefined Bakery",
+        "place_name": "Unrefined Bakery, 718 N Buckner Blvd Ste 154, Dallas, Texas 75218, United States",
+        "center": [
+            -96.710815,
+            32.845981
+        ],
+        "geometry": {
+            "coordinates": [
+                -96.710815,
+                32.845981
+            ],
+            "type": "Point"
+        },
+        "context": [
+            {
+                "id": "neighborhood.468200684",
+                "mapbox_id": "dXJuOm1ieHBsYzpHK2dzN0E",
+                "text": "Old Lake Highlands"
+            },
+            {
+                "id": "postcode.257961708",
+                "mapbox_id": "dXJuOm1ieHBsYzpEMkF1N0E",
+                "text": "75218"
+            },
+            {
+                "id": "place.79161580",
+                "mapbox_id": "dXJuOm1ieHBsYzpCTGZvN0E",
+                "wikidata": "Q16557",
+                "text": "Dallas"
+            },
+            {
+                "id": "district.5826284",
+                "mapbox_id": "dXJuOm1ieHBsYzpXT2Jz",
+                "wikidata": "Q111168",
+                "text": "Dallas County"
+            },
+            {
+                "id": "region.181484",
+                "mapbox_id": "dXJuOm1ieHBsYzpBc1Rz",
+                "wikidata": "Q1439",
+                "short_code": "US-TX",
+                "text": "Texas"
+            },
+            {
+                "id": "country.8940",
+                "mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+                "wikidata": "Q30",
+                "short_code": "us",
+                "text": "United States"
+            }
+        ]
+    },
+    {
+        "id": "poi.1022202224037",
+        "type": "Feature",
+        "place_type": [
+            "poi"
+        ],
+        "relevance": 0.944444,
+        "properties": {
+            "foursquare": "526162e8498eb4aa4d18934c",
+            "landmark": true,
+            "category": "bakery, shop"
+        },
+        "text": "Unrefined Bakery",
+        "place_name": "Unrefined Bakery, Frisco, Texas 75034, United States",
+        "center": [
+            -96.807479,
+            33.107301
+        ],
+        "geometry": {
+            "coordinates": [
+                -96.807479,
+                33.107301
+            ],
+            "type": "Point"
+        },
+        "context": [
+            {
+                "id": "postcode.256847596",
+                "mapbox_id": "dXJuOm1ieHBsYzpEMDh1N0E",
+                "text": "75034"
+            },
+            {
+                "id": "place.119105772",
+                "mapbox_id": "dXJuOm1ieHBsYzpCeGxvN0E",
+                "wikidata": "Q128269",
+                "text": "Frisco"
+            },
+            {
+                "id": "district.4933356",
+                "mapbox_id": "dXJuOm1ieHBsYzpTMGJz",
+                "wikidata": "Q111174",
+                "text": "Collin County"
+            },
+            {
+                "id": "region.181484",
+                "mapbox_id": "dXJuOm1ieHBsYzpBc1Rz",
+                "wikidata": "Q1439",
+                "short_code": "US-TX",
+                "text": "Texas"
+            },
+            {
+                "id": "country.8940",
+                "mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+                "wikidata": "Q30",
+                "short_code": "us",
+                "text": "United States"
+            }
+        ]
+    },
+    {
+        "id": "poi.678604919259",
+        "type": "Feature",
+        "place_type": [
+            "poi"
+        ],
+        "relevance": 0.944444,
+        "properties": {
+            "foursquare": "531209d2498e34993f482cb8",
+            "landmark": true,
+            "address": "3426 Greenville Ave",
+            "category": "bakery, shop"
+        },
+        "text": "Unrefined Bakery",
+        "place_name": "Unrefined Bakery, 3426 Greenville Ave, Dallas, Texas 75206, United States",
+        "center": [
+            -96.76991,
+            32.829644
+        ],
+        "geometry": {
+            "coordinates": [
+                -96.76991,
+                32.829644
+            ],
+            "type": "Point"
+        },
+        "context": [
+            {
+                "id": "neighborhood.374557932",
+                "mapbox_id": "dXJuOm1ieHBsYzpGbE5NN0E",
+                "wikidata": "Q6693497",
+                "text": "Lower Greenville"
+            },
+            {
+                "id": "postcode.257871596",
+                "mapbox_id": "dXJuOm1ieHBsYzpEMTdPN0E",
+                "text": "75206"
+            },
+            {
+                "id": "place.79161580",
+                "mapbox_id": "dXJuOm1ieHBsYzpCTGZvN0E",
+                "wikidata": "Q16557",
+                "text": "Dallas"
+            },
+            {
+                "id": "district.5826284",
+                "mapbox_id": "dXJuOm1ieHBsYzpXT2Jz",
+                "wikidata": "Q111168",
+                "text": "Dallas County"
+            },
+            {
+                "id": "region.181484",
+                "mapbox_id": "dXJuOm1ieHBsYzpBc1Rz",
+                "wikidata": "Q1439",
+                "short_code": "US-TX",
+                "text": "Texas"
+            },
+            {
+                "id": "country.8940",
+                "mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+                "wikidata": "Q30",
+                "short_code": "us",
+                "text": "United States"
+            }
+        ]
+    }
+]
