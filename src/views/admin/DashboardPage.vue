@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <Appbar title="Dashboard"/> 
+        <Appbar title="Dashboard" :show-cart="false"/> 
         <ion-content :fullscreen="true"></ion-content>
     </ion-page>
 </template>

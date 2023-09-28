@@ -74,6 +74,10 @@ ion-tab-bar {
         font-size: 20px !important;
         line-height: .8rem !important;
     }
+    ion-label{
+        font-size: 12px;
+        font-weight: 600;
+    }
 }
 
 ion-tab-button {
@@ -99,13 +103,21 @@ ion-tab-button {
         font-size: 20px;
     }
     &.tab-selected {
-        transform: scale(1.3);
+        span{
+            transform: scale(1.3);
+        }
+        
     }
 }
 
 ion-thumbnail{
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .dropdown{
@@ -190,4 +202,14 @@ ion-popover{
     background: var(--ion-color-medium);
     color: var(--ion-color-medium-contrast);
   }
+  ion-searchbar.tu {
+    padding: 0;
+    --box-shadow: none;
+    --background: none
+}
+
+i.fi{
+    line-height: 0;
+}
+
 </style>

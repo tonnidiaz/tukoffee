@@ -161,9 +161,5 @@ async function searchAddress(query: string) {
     display: none
 }
 
-ion-searchbar.tu {
-    padding: 0;
-    --box-shadow: none;
-    --background: none
-}
+
 </style>
