@@ -68,6 +68,10 @@ const routes: Array<RouteRecordRaw> = [
     component: ()=>  import('../views/ProductPage.vue')
   },
   {
+    path: '/:mode/product',
+    component: ()=>  import('../views/AddProductPage.vue')
+  },
+  {
     path: '/auth/logout',
     component: ()=> import("@/views/auth/LogoutPage.vue")
   },

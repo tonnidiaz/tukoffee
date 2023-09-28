@@ -1,7 +1,6 @@
 <template>
     <div class="p-3 bg-base-100">
-        <h3>New Product</h3>
-        <form action="#" class="mt-3">
+        <form action="#" class="mt-3" @submit="onFormSubmit">
             <div class="form-control my-1">
                 <ion-input
                     label="Product name:"
@@ -57,7 +56,10 @@
                     </button>
                 </div>
                 <div class="mt-2 mb-4 flex gap-2 overflow-scroll">
-                    <ion-thumbnail class="relative w-65px h-65px" v-for="img in tempImgs">
+                    <ion-thumbnail
+                        class="relative w-65px h-65px"
+                        v-for="img in tempImgs"
+                    >
                         <ion-img :src="img.url ?? img.file"></ion-img>
                         <div v-if="!img.loading" class="thumb-overlay">
                             <button type="button" class="btn btn-sm btn-ghost">
@@ -105,53 +107,75 @@
 </template>
 
 <script setup lang="ts">
-import { Obj } from "@/utils/classes";
-import { randomImg } from "@/utils/funcs";
+import { saveProduct, uploadImage } from "@/utils/funcs";
 import { FilePicker } from "@capawesome/capacitor-file-picker";
 import {
-    IonPage,
-    IonHeader,
     IonThumbnail,
     IonInput,
     IonCheckbox,
     IonButton,
     IonImg,
     IonSpinner,
-    IonRippleEffect,
-    IonSearchbar,
     IonText,
-    IonAvatar,
-    IonInfiniteScroll,
 } from "@ionic/vue";
-import { ref } from "vue";
+import { onMounted } from "vue";
 import { Capacitor } from "@capacitor/core";
 import { TypeImgs, useAddProductStore } from "@/stores/addProduct";
 import { storeToRefs } from "pinia";
-const form = ref<Obj>({ top_selling: true });
+import { Cloudinary } from "@capawesome/capacitor-cloudinary";
 
-const addProductStore = useAddProductStore()
-const {tempImgs} = storeToRefs(addProductStore)
-const { setTempImgs } = addProductStore
+import { useAppStore } from "@/stores/app";
+import { useRouter } from "vue-router";
 
-const uploadImg = async ()=>{
-    
-}
+const appStore = useAppStore();
+const addProductStore = useAddProductStore();
+const { tempImgs, form } = storeToRefs(addProductStore);
+const { setTempImgs } = addProductStore;
 
-const importImg = async () => {
-    const res = await FilePicker.pickImages({
-        multiple: true
-    });
-    console.log(res.files);
-    const _imgs: TypeImgs[] = res.files.map((it) => {
-            return {
-                loading: true,
-                file: Capacitor.convertFileSrc(it.path!),
-            };
-        })
-        console.log(_imgs)
-    setTempImgs([...tempImgs.value, ..._imgs]
-    );
+const router = useRouter()
+
+const initialize = async () => {
+    await Cloudinary.initialize({ cloudName: "sketchi" });
+    console.log("Cloudinary initialized");
 };
+const importImg = async () => {
+    const res = await FilePicker.pickFiles({
+        multiple: true,
+        types: ["image/*"],
+    });
+
+    const _imgs: TypeImgs[] = res.files.map((it) => {
+        return {
+            loading: true,
+            file: Capacitor.convertFileSrc(it.path!),
+        };
+    });
+    console.log(_imgs);
+   const existingImgs = form.value.images ?? []
+    setTempImgs([...tempImgs.value, ..._imgs]);
+     res.files.forEach(async (it, i) => {
+        const res = await uploadImage(it.path, appStore.title);
+        console.log(res);
+        const data = {url: res.secureUrl, publicId: res.publicId}
+        form.value.images = [...existingImgs, data]
+        tempImgs.value[i].loading = false
+        console.log('Uploaded')
+    });
+};
+
+const onFormSubmit = async (e: any)=>{
+    e.preventDefault()
+    console.log(form.value)
+    const res = await saveProduct(form.value, 'add')
+    if (res){
+        router.push(`/product/${res}`)
+    }else{
+        console.log('Failed to add product')
+    }
+}
+onMounted(() => {
+    initialize();
+});
 </script>
 
 <style>

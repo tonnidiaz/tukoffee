@@ -36,14 +36,15 @@
                     <div
                         class="image-area bg-base-100 w-full relative flex flex-col items-center justify-center border-0"
                     >
-                        <div class="px-2 img-wrapper relative">
-                            <img
+                        <div class="px-2 img-wrapper relative flex items-center">
+                            <img v-if="product.images?.length"
                                 class="img"
                                 :src="product.images[selectedImg].url"
                                 alt=""
                             />
+                            <i v-else class="fi fi-rr-image-slash fs-70 text-gray-600"></i>
                         </div>
-                        <div
+                        <div v-if="product.images?.length"
                             class="relative h-80px thumbnails flex overflow-scroll gap-2 items-center px-2 flex-shrink-0"
                         >
                             <div

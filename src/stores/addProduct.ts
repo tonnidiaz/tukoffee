@@ -1,3 +1,4 @@
+import { Obj } from "@/utils/classes";
 import { defineStore } from "pinia";
 
 export interface TypeImgs {
@@ -10,6 +11,7 @@ export interface TypeImgs {
 export const useAddProductStore =  defineStore('add-product',{
     state: ()=>({
     tempImgs: [] as TypeImgs[],
+    form: {} as Obj
     }),
     actions:{
         setTempImgs (v: TypeImgs[]){this.tempImgs = v}

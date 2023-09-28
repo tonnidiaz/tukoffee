@@ -9,3 +9,7 @@ export const apiAxios = axios.create({baseURL: apiURL,headers:{
 
 export const mapboxPublicToken =
 "pk.eyJ1IjoidG9ubmlkaWF6IiwiYSI6ImNsbTg5YTk1eTBhaHczZHJyYmR1ZHhsM2cifQ.ockDRt9KPFkge-1zeyDhhA";
+ 
+export const CLOUDINARY_CLOUD_NAME="sketchi",
+CLOUDINARY_API_KEY="262393494665286",
+CLOUDINARY_SECRET="eQKKfmQ__WkvkCoPaUScVsqbj_o"

@@ -4,7 +4,7 @@
             vertical="bottom"
             horizontal="end"
         >
-            <ion-fab-button @click="newProductSheetOpen = true" color="dark">
+            <ion-fab-button @click="router.push('/add/product')" color="dark">
                 <span class="mt-1"><i class="fi fi-rr-plus"></i></span>
             </ion-fab-button>
         </ion-fab>
@@ -73,11 +73,13 @@ import AddProductView from "@/components/AddProductView.vue";
 import { onMounted, ref } from "vue";
 import { Obj } from "@/utils/classes";
 import { apiAxios } from "@/utils/constants";
+import { useRouter } from "vue-router";
 
 const newProductSheetOpen = ref(false)
 const products = ref<Obj[] | null>()
 const dashStore = useDashStore();
 
+const router = useRouter()
 const getProducts = async () => { 
     try {
         products.value = null
