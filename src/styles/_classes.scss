@@ -121,7 +121,7 @@
 }
 @for $i from 1 through 9{
     .fw-#{$i}{
-        font-weight: $i * 100;
+        font-weight: $i * 100 !important;
     }
 }
 

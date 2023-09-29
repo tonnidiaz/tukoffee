@@ -5042,6 +5042,11 @@ vue-tsc@^1.0.24:
     "@vue/typescript" "1.8.15"
     semver "^7.3.8"
 
+vue3-paystack@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/vue3-paystack/-/vue3-paystack-0.0.5.tgz#685013ced6b7f4cd10f335e822f105d5eda935cf"
+  integrity sha512-S+gobeLWQlRZ+xowuVrO7un/3CDQ7Bhrdvao4Mf/0YVDSRYDOJ93gf75qFEKt/6IgBKNBXKAz1DEHC6NcB8Slw==
+
 vue@^3.2.25, vue@^3.2.45:
   version "3.3.4"
   resolved "https://registry.npmjs.org/vue/-/vue-3.3.4.tgz"

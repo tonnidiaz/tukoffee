@@ -32,10 +32,7 @@
                     <ion-icon aria-hidden="true" :icon="person" />
                     <ion-label>Account</ion-label>
                 </ion-tab-button>
-                <ion-tab-button tab="rf" href="/tabs/rf">
-                    <ion-icon aria-hidden="true" :icon="flask" />
-                    <ion-label>RF</ion-label>
-                </ion-tab-button>
+             
             </ion-tab-bar>
         </ion-tabs>
     </ion-page>

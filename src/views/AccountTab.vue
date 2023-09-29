@@ -36,9 +36,16 @@
                             class=""
                             color="clear"
                             router-link="/admin/dashboard"
-                            lines="none"
                         >
                             <ion-label>Admin dashboard</ion-label>
+                        </ion-item>
+                        <ion-item
+                            class=""
+                            color="clear"
+                            router-link="/rf"
+                            lines="none"
+                        >
+                            <ion-label>RF</ion-label>
                         </ion-item>
 
                 </IonItemGroup>

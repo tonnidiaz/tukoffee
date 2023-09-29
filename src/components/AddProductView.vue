@@ -198,7 +198,7 @@ const onFormSubmit = async (e: any) => {
     console.log(form.value);
     const res = await saveProduct(form.value, props.mode);
     if (res) {
-        location.href = `/product/${res}`;
+        router.replace(`/product/${res}`);
     } else {
         console.log("Failed to add product");
     }

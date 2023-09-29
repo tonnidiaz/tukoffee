@@ -26,15 +26,20 @@ import './theme/variables.css';
 import './styles/main.scss';
 
 import { createPinia } from 'pinia';
+import BottomSheetVue from './components/BottomSheet.vue';
+import TuButtonVue from './components/TuButton.vue';
 
-const pinia = createPinia()
+const pinia = createPinia() 
 
-const app = createApp(App)
+const app = createApp(App,)
   .use(IonicVue)
   .use(router)
   .use(pinia)
-/* Primevue components */
 
+
+/*  components */
+app.component('bottom-sheet', BottomSheetVue)
+app.component('tu-btn', TuButtonVue)
 
 router.isReady().then(() => {
   app.mount('#app');
