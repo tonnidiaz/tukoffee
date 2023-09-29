@@ -17,30 +17,34 @@
         </Appbar>
         <ion-content :fullscreen="true">
             <Refresher :on-refresh="init" />
-            <div class="p-3 flex flex-col h-full">
-                <TuFormField class="rounded-full" :value="`${orderID ?? ''}`" :on-change="(e: any)=>orderID = e.target.value" :field-props="{
-                    class: 'rounded-full',
-                    placeholder: 'Order ID',
-                }">
-                    <template #prefix-icon>
-                        <span class="field-icon btn btn-sm btn-ghost px-4">
-                            <i class="fi fi-rr-search fs-18"></i>
-                        </span>
-                    </template>
-                    <template #suffix-icon>
-                        <span id="filter-sheet-trigger" class="field-icon btn btn-sm btn-ghost px-4">
-                            <i class="fi fi-rr-settings-sliders fs-18"></i>
-                        </span>
-                    </template>
-                </TuFormField>
-                <div class="dropdown hidden">
-                    <label tabindex="0" class="btn m-1"> <ion-icon :md="ellipsisVertical"></ion-icon> </label>
-                    <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                        <li><a>Item 1</a></li>
-                        <li><a>Item 2</a></li>
-                    </ul>
+            <div class="flex flex-col h-full">
+                <div class="my-0 bg-base-100 p-3">
+                <div
+                    class="bg-base-200 rounded-md flex items-center px-4 h-45px gap-2"
+                >
+                    <span class="mt-1"
+                        ><i class="fi fi-rr-search fs-18 text-gray-700"></i
+                    ></span>
+
+                    <ion-input
+                        color="clear"
+                        placeholder="Order ID"
+                        class="tu bg-primar"
+                        @ion-input="(e:any)=> orderID = e.target.value"
+                    ></ion-input>
+                    <button
+                        class="mt-2"
+                        id="filter-sheet-trigger"
+                        @click="console.log('click')"
+                    >
+                        <i
+                            class="fi fi-rr-settings-sliders fs-18 text-gray-700"
+                        ></i>
+                    </button>
                 </div>
-                <ion-list v-if="_orders && _orders.length" class="my-3 bg-base-100">
+            </div>
+
+                <ion-list v-if="_orders && _orders.length" class="my-0 bg-base-100">
                     <order-item v-for="(order, i) in _orders" :order="order" />
                 </ion-list>
                 <div v-else class="flex-auto flex items-center justify-center">
@@ -89,7 +93,8 @@ import {
     IonPopover,
     IonSelect,
     IonItem,
-    IonSelectOption
+    IonSelectOption,
+    IonInput
 } from "@ionic/vue";
 import Appbar from '@/components/Appbar.vue';
 import TuFormField from "@/components/TuFormField.vue";
@@ -143,15 +148,10 @@ const onSelectAll = () => {
 }
 
 async function onCancelSelected() {
-    hidePopover()
-
     const q = confirm("Are you sure you want to cancel the selected orders?")
     if (q) {
         const act = 'cancel'
-        const fd = new FormData()
         const ids = selectedItems.value.map(el => el._id)
-        fd.append('userId', user.value?._id)
-        fd.append('ids', JSON.stringify(ids))
         appStore.setSelectedItems([])
         try {
             const res = await apiAxios.post(`/order/cancel?action=${act}`, { userId: user.value?._id, ids: ids })
@@ -178,6 +178,7 @@ watch(sortedOrders, (val)=>{
      byIdinizer()
 }, {deep: true, immediate: true})
 watch(orderID, val=>{
+    console.log(val)
 byIdinizer()
 })
 onMounted(() => {

@@ -2,7 +2,7 @@
     <OnLongPress @trigger="onLongPress">
         <ion-item @click="onItemClick" color="clear" :router-link="`/order/${order.oid}`">
             <ion-label>
-                <h3>#{{ order.oid }}</h3>
+                <h3 class="fw-5 fs-16">#{{ order.oid }}</h3>
                 <div class="flex gap-4">
                     <ion-note class="fs-13">
                         {{ new Date(order.date_created).toLocaleDateString() }}
@@ -32,13 +32,12 @@
                 mode="ios"
             ></ion-checkbox>
 
-            <button
-                v-else
-                slot="end"
-                class="btn btn-sm rounded-full btn-ghost p-0 w-24px"
-            >
-                <ion-icon :md="ellipsisVertical"></ion-icon>
-            </button>
+            <div v-else slot="end">
+            <dropdown-btn :items="[
+                { label: 'Cancel', cmd: cancelOrder },
+                { label: 'Delete', cmd: () => {} },
+                ]" />
+        </div>
         </ion-item>
     </OnLongPress>
 </template>
@@ -56,8 +55,11 @@ import {
 import { ellipsisVertical } from "ionicons/icons";
 import { storeToRefs } from "pinia";
 import { OnLongPress } from "@vueuse/components";
+
 import { useAppStore } from "@/stores/app";
 import { ref } from "vue";
+import DropdownBtn from "./DropdownBtn.vue";
+import { apiAxios } from "@/utils/constants";
 
 const userStore = useUserStore();
 const orderStore = useOrderStore();
@@ -94,4 +96,21 @@ const onLongPress = (e: PointerEvent) => {
     toggleSelected();
     isHolding.value = false;
 };
+
+async function cancelOrder() {
+    const q = confirm("Are you sure you want to cancel this order?")
+    if (q) {
+        console.log('Cancelling')
+        const act = 'cancel'
+        appStore.setSelectedItems([])
+        try {
+            const res = await apiAxios.post(`/order/cancel?action=${act}`, { userId: user.value?._id, ids: [props.order._id] })
+            orderStore.setOrders(res.data.orders)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+}
 </script>
