@@ -5,7 +5,7 @@
             :router-link="`/product/${item.pid}`"
             class="h-45px shadow-lg card rounded-lg"
             slot="start"
-        > 
+        >
             <ion-img
                 v-if="item.images?.length"
                 class="rounded-lg"
@@ -19,17 +19,24 @@
             <h3>{{ item.name }}</h3>
             <ion-note>R{{ item.price.toFixed(2) }}</ion-note>
         </ion-label>
-        <button
-            slot="end"
-            @click="editSheetOpen = true"
-            class="relative rounded-full p-0 w-30px h-30px btn btn-ghost"
-            :id="`edit-btn-${item._id}`"
-        >
-            <i class="fi fi-br-menu-dots-vertical fs-13 text-gray-600"></i>
-        </button>
-
-      
+        <div slot="end">
+            <dropdown-btn :items="[
+                { label: 'Edit', cmd: onEditClick },
+                { label: 'Delete', cmd: () => {delAlertOpen = true} },
+                ]" />
+        </div>
+        <IonAlert
+        message="Are you sure you want to delete this product?"
+        header="Delete product" 
+        :is-open="delAlertOpen"
+        :buttons="[
+            {text: 'Cancel', role: 'cancel'},
+            {text: 'Yes', role: 'confirm', handler: delProduct},
+        ]"
+         @didDismiss="delAlertOpen = false"/>
     </ion-item>
+
+    <ion-loading color="dark" message="Please wait..." :is-open="isLoading" @didDismiss="isLoading = false"/>
 </template>
 <script setup lang="ts">
 import {
@@ -37,18 +44,27 @@ import {
     IonItem,
     IonImg,
     IonLabel,
-    IonActionSheet,
+    IonIcon,
     IonThumbnail,
-    IonButton,
+    IonLoading,
+IonAlert,
 } from "@ionic/vue";
 import { useUserStore } from "@/stores/user";
 import BottomSheet from "@/components/BottomSheet.vue";
 import TuFormField from "@/components/TuFormField.vue";
 import { storeToRefs } from "pinia";
-import { testClick } from "@/utils/funcs";
 import { ref } from "vue";
+import DropdownBtn from "./DropdownBtn.vue";
+import { useFormStore } from "@/stores/form";
+import router from "@/router";
+import { apiAxios } from "@/utils/constants";
+import { sleep } from "@/utils/funcs";
+
 const userStore = useUserStore();
-const editSheetOpen = ref(false);
+const formStore = useFormStore();
+
+
+const delAlertOpen = ref(false), isLoading = ref(false);
 const { cart } = storeToRefs(userStore);
 const actionSheetButtons = [
     {
@@ -67,10 +83,29 @@ const actionSheetButtons = [
         },
     },
 ];
+
+const onEditClick = () => { 
+    formStore.setForm(props.item)
+    router.push('/edit/product')
+ }
+
+const delProduct = async () =>{
+    const it = props.item
+    try {
+        isLoading.value = true
+       const res = await apiAxios.post(`/products/delete?pid=${it["pid"]}`)
+        isLoading.value = false
+        await sleep(100)
+        props.reload()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 const logResult = (ev: CustomEvent) => {
     const { action } = ev.detail.data;
     if (action == "delete") {
-        location.reload()
+        location.reload();
     }
     console.log(JSON.stringify(ev.detail, null, 2));
 };
@@ -79,5 +114,9 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    reload:{
+        type: Function,
+        required : true
+    }
 });
 </script>

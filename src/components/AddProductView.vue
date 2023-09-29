@@ -126,7 +126,7 @@ import {
 } from "@ionic/vue";
 import { onMounted } from "vue";
 import { Capacitor } from "@capacitor/core";
-import { TypeImgs, useAddProductStore } from "@/stores/addProduct";
+import { TypeImgs } from "@/stores/addProduct";
 import { storeToRefs } from "pinia";
 import { Cloudinary } from "@capawesome/capacitor-cloudinary";
 
@@ -134,11 +134,12 @@ import { useAppStore } from "@/stores/app";
 import { useRouter } from "vue-router";
 import TuButton from "./TuButton.vue";
 import { apiAxios } from "@/utils/constants";
+import { useFormStore } from "@/stores/form";
 
 const appStore = useAppStore();
-const addProductStore = useAddProductStore();
-const { tempImgs, form } = storeToRefs(addProductStore);
-const { setTempImgs } = addProductStore;
+const formStore = useFormStore();
+const { tempImgs, form } = storeToRefs(formStore);
+const { setTempImgs } = formStore;
 
 const router = useRouter();
 
@@ -180,7 +181,7 @@ const importImg = async () => {
                 tempImgs.value[i].loading = false;
             } catch (error) {
                 console.log(error);
-                addProductStore.setTempImgs(
+                formStore.setTempImgs(
                     tempImgs.value.filter((el, index) => index !== i)
                 );
             }
@@ -205,9 +206,9 @@ const onFormSubmit = async (e: any) => {
 };
 onMounted(() => {
     initialize();
-    const formImgs = addProductStore.form.images;
+    const formImgs = formStore.form.images;
     if (props.mode == "edit") {
-        addProductStore.setTempImgs(formImgs);
+        formStore.setTempImgs(formImgs);
     }
 });
 </script>

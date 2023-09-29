@@ -22,13 +22,9 @@
                     >
                         <div><i class="fi fi-rr-image-slash fs-25"></i></div>
                     </div>
-                    <!-- <ion-text
-                    class="text-lg fw-5 text-black-2 mt-2"
-                   
-                    >{{ product.name }}</ion-text
-                > -->
+          
                     <h3
-                        class="mt-2 fw-6"
+                        class="mt-2 fw-6 font-body"
                         style="white-space: nowrap; text-overflow: ellipsis"
                     >
                         {{ product.name }}
@@ -78,7 +74,7 @@ const { cart } = storeToRefs(userStore);
 const router = useRouter();
 
 function inCart(p: any) {
-    return cart.value?.products.find((it: any) => it.product._id == p._id);
+    return cart.value?.products?.find((it: any) => it.product._id == p._id);
 }
 function inStock(p: any) {
     return p.quantity > 0;

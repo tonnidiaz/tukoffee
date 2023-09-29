@@ -14,21 +14,21 @@
             <ion-router-outlet></ion-router-outlet>
 
             <ion-tab-bar class="bottom-nav" slot="bottom">
-                <ion-tab-button tab="tab1" href="/tabs/tab1">
+                <ion-tab-button tab="home" href="/~/home">
                     <ion-icon aria-hidden="true" :icon="home" />
                     <ion-label>Home</ion-label>
                 </ion-tab-button>
 
-                <ion-tab-button tab="shop" href="/tabs/shop">
+                <ion-tab-button tab="shop" href="/~/shop">
                     <ion-icon aria-hidden="true" :icon="storefront" />
                     <ion-label>Shop</ion-label>
                 </ion-tab-button>
 
-                <ion-tab-button tab="cart" href="/tabs/cart">
+                <ion-tab-button tab="cart" href="/~/cart">
                     <ion-icon aria-hidden="true" :icon="cart" />
                     <ion-label>Cart</ion-label>
                 </ion-tab-button>
-                <ion-tab-button tab="account" href="/tabs/account">
+                <ion-tab-button tab="account" href="/~/account">
                     <ion-icon aria-hidden="true" :icon="person" />
                     <ion-label>Account</ion-label>
                 </ion-tab-button>

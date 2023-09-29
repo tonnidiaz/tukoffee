@@ -28,6 +28,8 @@ import './styles/main.scss';
 import { createPinia } from 'pinia';
 import BottomSheetVue from './components/BottomSheet.vue';
 import TuButtonVue from './components/TuButton.vue';
+import AppbarVue from './components/Appbar.vue';
+import RefresherVue from './components/Refresher.vue';
 
 const pinia = createPinia() 
 
@@ -40,6 +42,8 @@ const app = createApp(App,)
 /*  components */
 app.component('bottom-sheet', BottomSheetVue)
 app.component('tu-btn', TuButtonVue)
+app.component('appbar', AppbarVue)
+app.component('refresher', RefresherVue)
 
 router.isReady().then(() => {
   app.mount('#app');

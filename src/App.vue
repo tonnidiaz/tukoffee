@@ -57,6 +57,9 @@ const getStores = async () =>{
  })
 </script>
 <style lang="scss">
-
+.flex-center{
+    justify-content: center !important;
+    align-items: center !important;
+}
 
 </style>

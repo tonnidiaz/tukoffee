@@ -70,7 +70,7 @@ ion-thumbnail{
 }
 
 ion-popover{
-    --width: 200px,
+    --width: auto,
     &::part(backdrop) {
     background-color: rgb(165, 165, 165);
   }}
@@ -142,6 +142,48 @@ ion-popover{
   .ion-bg-medium{
     background: var(--ion-color-medium);
     color: var(--ion-color-medium-contrast);
+  }
+  .ion-primary{
+    color: var(--ion-color-primary) !important;
+    
+    *{color: var(--ion-color-primary) !important;
+    }
+    //color: var(--ion-color-primary-contrast);
+  }
+  .ion-secondary{
+    color: var(--ion-color-secondary) !important;
+    
+    *{color: var(--ion-color-secondary) !important;
+    }
+    //color: var(--ion-color-secondary-contrast);
+  }
+  .ion-success{
+    color: var(--ion-color-success) !important;
+    
+    *{color: var(--ion-color-success) !important;
+    }
+    //color: var(--ion-color-success-contrast);
+  }
+  .ion-warning{
+    color: var(--ion-color-warning) !important;
+    
+    *{color: var(--ion-color-warning) !important;
+    }
+    //color: var(--ion-color-warning-contrast);
+  }
+  .ion-danger{
+    color: var(--ion-color-danger) !important;
+    
+    *{color: var(--ion-color-danger) !important;
+    }
+    //color: var(--ion-color-danger-contrast);
+  }
+  .ion-medium{
+    color: var(--ion-color-medium) !important;
+    
+    *{color: var(--ion-color-medium) !important;
+    }
+    //color: var(--ion-color-medium-contrast);
   }
   ion-searchbar.tu {
     padding: 0;

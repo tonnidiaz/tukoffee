@@ -2,6 +2,7 @@ import axios from "axios";
 import { CLOUDINARY_API_KEY, CLOUDINARY_SECRET, apiAxios } from "./constants";
 import { Cloudinary, ResourceType } from "@capawesome/capacitor-cloudinary";
 import { Obj } from "./classes";
+import { toastController } from "@ionic/vue";
 
 export function randomIntFromInterval(min: number, max: number) {
     // min and max included
@@ -63,4 +64,25 @@ export const saveProduct = async(product: Obj, mode = 'add')=>{
 }
 export function strToDate(str: string) {
     return new Date(str);
+}
+
+export async function showToast({
+    msg,
+    position = "bottom",
+    duration = 1500,
+    cssClass,
+}: {
+    msg: string;
+    position?: "top" | "middle" | "bottom";
+    duration?: number;
+    cssClass?: string;
+} ) {
+    const toast = await toastController.create({
+        message: msg,
+        duration: duration,
+        position: position,
+        cssClass: cssClass
+    });
+
+    await toast.present();
 }

@@ -1,22 +1,6 @@
 <template>
     <ion-page>
-        <ion-header class="ion-no-border border-b border-gray-200">
-            <ion-toolbar>
-                <ion-buttons slot="start">
-                    <CartBtn />
-                </ion-buttons>
-                <ion-title slot="start" class="fs-17 text-center"
-                    >Tunedbass</ion-title
-                >
-                <ion-buttons slot="end">
-                    <ion-menu-toggle>
-                        <ion-button fill="clear">
-                            <i class="fi fi-rr-menu-burger"></i>
-                        </ion-button>
-                    </ion-menu-toggle>
-                </ion-buttons>
-            </ion-toolbar>
-        </ion-header>
+       <appbar :show-back="false"/>
         <ion-content :fullscreen="true">
             <ion-refresher slot="fixed" @ion-refresh="onRefresh">
                 <ion-refresher-content />
@@ -53,10 +37,10 @@
                                     </span>
                                     </div>
                                 </div>
-                                <h5 class="mt-2 text-black fs-14 fw-8">
+                                <h5 class="mt-2 text-black fs-12 fw-6">
                                     R{{ e.price.toFixed(2) }}
                                 </h5>
-                                <h4 class="fs-16 fw-9">{{ e.name }}</h4>
+                                <h4 class="fs-14 fw-5">{{ e.name }}</h4>
                             </div>
                         </InkWell>
                     </div>
@@ -86,7 +70,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <h5 class="mt-2 text-black fs-14 fw-8">
+                            <h5 class="mt-2 text-black fs-12 fw-6">
                                 R{{ e.price.toFixed(2) }}
                             </h5>
                         </InkWell>
