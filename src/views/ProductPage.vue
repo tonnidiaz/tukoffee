@@ -216,7 +216,6 @@ const toggle = (event: any) => {
 const addRemoveCart = async (e: any) => {
     try {
         const act = inCart(product.value) ? "remove" : "add";
-        console.log(act);
         const fd = new FormData();
         fd.append("product", product.value?._id);
         const res = await apiAxios.post(`/user/cart?action=${act}`, fd);
@@ -243,7 +242,6 @@ async function getProduct() {
     if (res.data.data) {
         product.value = res.data.data[0];
     }
-    console.log(product.value);
 }
 
 const init = async () => {

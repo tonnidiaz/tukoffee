@@ -25,11 +25,11 @@ export const useProductsStore = defineStore('products', {
     actions: {
         setItems(val: typeof this.items) {
             this.items = val;
-            this.sort()
+            this.sort(val)
         },
         setSortedItems(val: typeof this.sortedItems) {
             this.sortedItems = val;
-            this.sort()
+            this.sort(val)
         },
         setStatus(val: typeof this.status) {
             this.status = val;

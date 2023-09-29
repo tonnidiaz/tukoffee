@@ -4,11 +4,18 @@
             <DropdownBtn
                 :items="[
                     {
-                        label: 'Select all',
+                        label:  selectedItems.length ? 'Deselect all' : 'Select all',
                         cmd: () => {
-                            console.log('selected all');
+                            let its = 
+                            selectedItems.length ? [] : sortedProducts!
+                           appStore.setSelectedItems(its)
                         },
                     },
+                    selectedItems.length ? {
+                        label: 'Delete selected',
+                        cmd: ()=>{delAlertOpen = true;}
+                    } : null
+
                 ]"
             />
         </Appbar>
@@ -19,7 +26,8 @@
             </ion-fab-button>
         </ion-fab>
         <ion-content :fullscreen="true">
-            <Refresher :on-refresh="getProducts" />
+            <div class="h-full flex flex-col">
+                 <Refresher :on-refresh="getProducts" />
             <div class="my-2 bg-base-100 p-3">
                 <div
                     class="bg-base-200 rounded-md flex items-center px-4 h-45px gap-2"
@@ -46,18 +54,23 @@
                 </div>
             </div>
             <div
-                v-if="!products"
+                v-if="!sortedProducts"
                 class="bg-base-100 h-full w-full flex items-center justify-center"
             >
                 <ion-spinner class="w-45px h-45px" color="medium"></ion-spinner>
             </div>
-            <div v-else class="bg-base-100 pb-4 my-2">
+            <div v-else-if="sortedProducts.length"  class="bg-base-100 pb-4 my-2">
                 <ProductItem
                     :reload="getProducts"
                     v-for="it in sortedProducts"
                     :item="it"
                 />
             </div>
+            <div v-else class="bg-base-100 my- flex-auto flex-center flex">
+                    <h3>Nothing to show</h3>
+            </div>
+            </div>
+           
         </ion-content>
         <!-- New product sheet -->
         <BottomSheet
@@ -120,13 +133,27 @@
                 </ion-item>
             </div>
         </BottomSheet>
+
+    <!-- ALert -->
+<IonAlert
+        message="Are you sure you want to delete the selected products?"
+        header="Delete products" 
+        :is-open="delAlertOpen"
+        :buttons="[
+            {text: 'Cancel', role: 'cancel'},
+            {text: 'Yes', role: 'confirm', handler: delProducts},
+        ]"
+         @didDismiss="delAlertOpen = false"/>
+        <!-- Loading -->
+        <ion-loading color="dark" message="Please wait..." :is-open="isLoading" @didDismiss="isLoading = false"/>
+
     </ion-page>
 </template>
 <script setup lang="ts">
 import {
     IonPage,
     IonIcon,
-    IonToolbar,
+    IonAlert,
     IonItem,
     IonContent,
     IonSelect,
@@ -134,7 +161,7 @@ import {
     IonFabButton,
     IonSpinner,
     IonInput,
-    IonText,
+    IonLoading,
     IonSelectOption,
     IonInfiniteScroll,
 } from "@ionic/vue";
@@ -144,21 +171,26 @@ import ProductItem from "@/components/ProductItem.vue";
 import BottomSheet from "@/components/BottomSheet.vue";
 import Refresher from "@/components/Refresher.vue";
 
-import { useDashStore } from "@/stores/dash";
 import AddProductView from "@/components/AddProductView.vue";
 import { onMounted, ref, watch } from "vue";
 import { Obj, SortOrder } from "@/utils/classes";
 import { apiAxios } from "@/utils/constants";
 import { useRouter } from "vue-router";
-import { ellipsisVertical } from "ionicons/icons";
 import DropdownBtn from "@/components/DropdownBtn.vue";
 import { useProductsStore, Status, SortBy } from "@/stores/products";
 import { storeToRefs } from "pinia";
+import { useAppStore } from "@/stores/app";
+import { sleep } from "@/utils/funcs";
 
 const productsStore = useProductsStore()
+const appStore = useAppStore()
+
 const { sortBy, sortOrder, sortedItems: sortedProducts, items: products, status} = storeToRefs(productsStore)
+const {selectedItems} = storeToRefs(appStore)
 const { setItems, setSortBy, toggleOrder, setSortedItems, setStatus} = productsStore
+
 const newProductSheetOpen = ref(false);
+const delAlertOpen = ref(false), isLoading = ref(false);
 
 const router = useRouter();
 
@@ -169,6 +201,7 @@ const onSearchInput = (e: any) => {
     const regQ = new RegExp(q, "i");
 
     const filt = (it: Obj) => {
+        console.log(it.name)
         return regQ.exec(it.name) ?? regQ.exec(`${it.pid}`);
     };
     if (_prods) {
@@ -187,6 +220,22 @@ const getProducts = async () => {
     }
 };
 
+const delProducts = async () =>{
+    const pids = selectedItems.value.map(it=> it.pid)
+    try {
+        isLoading.value = true
+        console.log(pids)
+        appStore.setSelectedItems([])
+       const res = await apiAxios.post(`/products/delete`, {pids})
+       //TODO: Delete images also
+        isLoading.value = false
+        await sleep(100)
+        getProducts()
+    } catch (error) {
+        console.log(error)
+        isLoading.value = false
+    }
+}
 onMounted(() => {
     getProducts();
 });

@@ -61,5 +61,8 @@ const getStores = async () =>{
     justify-content: center !important;
     align-items: center !important;
 }
-
+ion-content {
+    display: flex;
+    flex-direction: column;
+}
 </style>

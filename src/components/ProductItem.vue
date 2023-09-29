@@ -1,8 +1,9 @@
 <template>
     <!--  :router-link="`/product/${item.pid}`" -->
-    <ion-item color="clear">
+    <OnLongPress @trigger="onLongPress">
+        <ion-item color="clear" @click="onItemClick">
         <ion-thumbnail
-            :router-link="`/product/${item.pid}`"
+            
             class="h-45px shadow-lg card rounded-lg"
             slot="start"
         >
@@ -15,11 +16,19 @@
                 <i class="fi fi-rr-image-slash text-gray-600"></i>
             </span>
         </ion-thumbnail>
-        <ion-label :router-link="`/product/${item.pid}`">
-            <h3>{{ item.name }}</h3>
+        <ion-label >
+            <h3 class="fw-5 fs-16">{{ item.name }}</h3>
             <ion-note>R{{ item.price.toFixed(2) }}</ion-note>
         </ion-label>
-        <div slot="end">
+        <ion-checkbox
+                :checked="
+                    selectedItems.findIndex((el) => el._id == item._id) != -1
+                "
+                v-if="selectedItems?.length"
+                slot="end"
+                mode="ios"
+            ></ion-checkbox>
+        <div v-else slot="end">
             <dropdown-btn :items="[
                 { label: 'Edit', cmd: onEditClick },
                 { label: 'Delete', cmd: () => {delAlertOpen = true} },
@@ -36,6 +45,8 @@
          @didDismiss="delAlertOpen = false"/>
     </ion-item>
 
+    </OnLongPress>
+  
     <ion-loading color="dark" message="Please wait..." :is-open="isLoading" @didDismiss="isLoading = false"/>
 </template>
 <script setup lang="ts">
@@ -44,7 +55,7 @@ import {
     IonItem,
     IonImg,
     IonLabel,
-    IonIcon,
+    IonCheckbox,
     IonThumbnail,
     IonLoading,
 IonAlert,
@@ -59,32 +70,22 @@ import { useFormStore } from "@/stores/form";
 import router from "@/router";
 import { apiAxios } from "@/utils/constants";
 import { sleep } from "@/utils/funcs";
+import { useAppStore } from "@/stores/app";
+import { OnLongPress } from "@vueuse/components";
+
 
 const userStore = useUserStore();
 const formStore = useFormStore();
+const appStore = useAppStore()
 
-
+const { selectedItems } = storeToRefs(appStore);
 const delAlertOpen = ref(false), isLoading = ref(false);
 const { cart } = storeToRefs(userStore);
-const actionSheetButtons = [
-    {
-        text: "Confirm",
-        role: "destructive",
-        data: {
-            action: "delete",
-        },
-    },
 
-    {
-        text: "Cancel",
-        role: "cancel",
-        data: {
-            action: "cancel",
-        },
-    },
-];
+const isHolding = ref(false);
 
-const onEditClick = () => { 
+
+const onEditClick = (e: any) => { 
     formStore.setForm(props.item)
     router.push('/edit/product')
  }
@@ -93,7 +94,8 @@ const delProduct = async () =>{
     const it = props.item
     try {
         isLoading.value = true
-       const res = await apiAxios.post(`/products/delete?pid=${it["pid"]}`)
+       const res = await apiAxios.post(`/products/delete`, {pids: [it["pid"]]})
+       //TODO: Delete images also
         isLoading.value = false
         await sleep(100)
         props.reload()
@@ -102,12 +104,25 @@ const delProduct = async () =>{
     }
 }
 
-const logResult = (ev: CustomEvent) => {
-    const { action } = ev.detail.data;
-    if (action == "delete") {
-        location.reload();
+const toggleSelected = () => {
+    const inList = selectedItems.value.find((el) => el._id == props.item._id);
+    const data = inList
+        ? selectedItems.value.filter((el) => el._id != props.item._id)
+        : [...selectedItems.value, props.item];
+    appStore.setSelectedItems(data);
+};
+const onItemClick = (e: Event) => {
+if (e.defaultPrevented) return;
+
+    if (selectedItems.value.length) toggleSelected();
+    else{
+        router.push(`/product/${props.item.pid}`)
     }
-    console.log(JSON.stringify(ev.detail, null, 2));
+};
+const onLongPress = (e: PointerEvent) => {
+    isHolding.value = true;
+    toggleSelected();
+    isHolding.value = false;
 };
 const props = defineProps({
     item: {
