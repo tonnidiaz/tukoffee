@@ -6,22 +6,26 @@
             <ion-router-outlet></ion-router-outlet>
 
             <ion-tab-bar class="bottom-nav" slot="bottom">
+                <ion-tab-button tab="home" href="/~/home">
+                    <span><i class="fi fi-sr-home"></i></span>
+                    <ion-label>Home</ion-label>
+                </ion-tab-button>
                 <ion-tab-button tab="dashboard" href="/admin/dashboard">
-                    <span><i class="fi fi-br-apps"></i></span>
+                    <span><i class="fi fi-sr-apps"></i></span>
                     <ion-label>Dashboard</ion-label>
                 </ion-tab-button>
 
                 <ion-tab-button tab="products" href="/admin/products">
-                    <span><i class="fi fi-br-box-open-full"></i></span>
+                    <span><i class="fi fi-sr-box-open-full"></i></span>
                     <ion-label>Products</ion-label>
                 </ion-tab-button>
 
                 <ion-tab-button tab="orders" href="/admin/orders">
-                    <span><i class="fi fi-br-person-dolly"></i></span>
+                    <span><i class="fi fi-sr-person-dolly"></i></span>
                     <ion-label>Orders</ion-label>
                 </ion-tab-button>
                 <ion-tab-button tab="accounts" href="/admin/accounts">
-                    <span><i class="fi fi-br-users"></i></span>
+                    <span><i class="fi fi-sr-users"></i></span>
                     <ion-label>Accounts</ion-label>
                 </ion-tab-button>
                

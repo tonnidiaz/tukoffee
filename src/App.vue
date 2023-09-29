@@ -65,4 +65,13 @@ ion-content {
     display: flex;
     flex-direction: column;
 }
+
+.searchbar{
+    /* flex items-center px-4 h-45px gap-2 */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 1rem;
+    gap: 0.5rem
+}
 </style>

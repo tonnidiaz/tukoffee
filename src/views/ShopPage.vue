@@ -2,77 +2,89 @@
     <ion-page>
         <Appbar title="Shop" />
         <ion-content :fullscreen="true">
-            <Refresher :on-refresh="init"/>
-            <div class="h-full w-full flex flex-col p-3">
+            <Refresher :on-refresh="init" />
+            <div class="h-full w-full flex flex-col px-3">
                 <div class="flex justify-center w-ful">
-                <div class="flex justify-center w-full flex-col">
-                    <TuFormField class="rounded-full w-full" :field-props="{
-                        placeholder:'Search'
-                    }" placeholder="Search..." >
-                        <template #prefix-icon
-                            >
-                            <span class="btn btn-ghost btn-sm rounded-full field-icon">
-                                <i class="fs-18 fi fi-rr-search"></i
-                        >
-                            </span>
-                            </template>
-                        <template #suffix-icon 
-                            >
-                            <span class="btn btn-ghost btn-sm rounded-full field-icon" id="open-modal">
-                                <i class="fs-18 fi fi-rr-settings-sliders"></i
-                        >
-                            </span>
-                            </template>
-                    </TuFormField>
-
-                    <ion-modal
-                        ref="modal"
-                        trigger="open-modal"
-                        :initial-breakpoint="0.25"
-                        :breakpoints="[0, 0.25, 0.5, 0.75]"
-                    >
-                        <ion-content
-                            class="ion-padding flex flex-col justify-center items-center relative"
-                        >
+                    <div class="flex justify-center w-full flex-col">
+                        <div id="search-bar" class="my-1 bg-base-100 p-3">
                             <div
-                                class="w-full h-fu my-3 flex flex-col justify-start items-start"
+                                class="bg-base-200 rounded-md flex items-center px-4 h-45px gap-2"
                             >
-                                <div class="flex gap-2 w-full">
-                                    <Dropdown
-                                        v-model="sortBy"
-                                        :options="sorts"
-                                        optionLabel="name"
-                                        placeholder="Sort by"
-                                        class="w-full md:w-14rem"
-                                    />
-                                    <Dropdown
-                                        v-model="sortBy"
-                                        :options="sorts"
-                                        optionLabel="name"
-                                        placeholder="Status"
-                                        class="w-full md:w-14rem"
-                                    />
-                                </div>
-                            </div>
-                        </ion-content>
-                    </ion-modal>
+                                <span class="mt-1"
+                                    ><i
+                                        class="fi fi-rr-search fs-18 text-gray-700"
+                                    ></i
+                                ></span>
 
-                    <!-- 
+                                <ion-input
+                                    color="clear"
+                                    placeholder="Search"
+                                    class="tu bg-primar"
+                                    router-link="/search"
+                                    @ion-focus="console.log('object');"
+                                ></ion-input>
+                                <button
+                                    class="mt-2"
+                                    id="filter-sheet-trigger"
+                                    @click="console.log('click')"
+                                >
+                                    <i
+                                        class="fi fi-rr-settings-sliders fs-18 text-gray-700"
+                                    ></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <ion-modal
+                            ref="modal"
+                            trigger="open-modal"
+                            :initial-breakpoint="0.25"
+                            :breakpoints="[0, 0.25, 0.5, 0.75]"
+                        >
+                            <ion-content
+                                class="ion-padding flex flex-col justify-center items-center relative"
+                            >
+                                <div
+                                    class="w-full h-fu my-3 flex flex-col justify-start items-start"
+                                >
+                                    <div class="flex gap-2 w-full">
+                                        <Dropdown
+                                            v-model="sortBy"
+                                            :options="sorts"
+                                            optionLabel="name"
+                                            placeholder="Sort by"
+                                            class="w-full md:w-14rem"
+                                        />
+                                        <Dropdown
+                                            v-model="sortBy"
+                                            :options="sorts"
+                                            optionLabel="name"
+                                            placeholder="Status"
+                                            class="w-full md:w-14rem"
+                                        />
+                                    </div>
+                                </div>
+                            </ion-content>
+                        </ion-modal>
+
+                        <!-- 
  -->
+                    </div>
+                </div>
+                <div
+                    v-if="products"
+                    class="my-0 grid justify-center gap-1 grid-cols-2"
+                >
+                    <ProductCard v-for="(e, i) in products" :product="e" />
+                </div>
+                <div
+                    style="flex: auto"
+                    class="w-full flex items-center justify-center"
+                    v-else
+                >
+                    <h3 class="fs-20">Loading...</h3>
                 </div>
             </div>
-            <div v-if="products" class="my-2 grid justify-center gap-1 grid-cols-2">
-                <ProductCard
-                    v-for="(e, i) in products"
-                    :product="e"
-                />
-            </div>
-            <div style="flex: auto;" class="w-full flex items-center justify-center" v-else>
-                <h3 class="fs-20">Loading...</h3>
-            </div>
-
-            </div>
-            
         </ion-content>
     </ion-page>
 </template>
@@ -109,26 +121,25 @@ const sorts = [
     },
 ];
 
-const handleClick =async () => { 
-    await sleep(2000)
-    console.log('Slept')
- }
-async function getProducts(){
+const handleClick = async () => {
+    await sleep(2000);
+    console.log("Slept");
+};
+async function getProducts() {
     try {
-        products.value = undefined
-        const res = await apiAxios.get('/products')
-        products.value = res.data.data
-
+        products.value = undefined;
+        const res = await apiAxios.get("/products");
+        products.value = res.data.data;
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 }
-const init = async () => { 
-    await getProducts()
- }
+const init = async () => {
+    await getProducts();
+};
 
 onMounted(() => {
-    init()
+    init();
 });
 </script>
 <style lang="scss">

@@ -28,7 +28,7 @@
         <ion-content :fullscreen="true">
             <div class="h-full flex flex-col">
                  <Refresher :on-refresh="getProducts" />
-            <div class="my-2 bg-base-100 p-3">
+            <div class="my-1 bg-base-100 p-3">
                 <div
                     class="bg-base-200 rounded-md flex items-center px-4 h-45px gap-2"
                 >
@@ -59,7 +59,7 @@
             >
                 <ion-spinner class="w-45px h-45px" color="medium"></ion-spinner>
             </div>
-            <div v-else-if="sortedProducts.length"  class="bg-base-100 pb-4 my-2">
+            <div v-else-if="sortedProducts.length"  class="bg-base-100 pb-4 my-0">
                 <ProductItem
                     :reload="getProducts"
                     v-for="it in sortedProducts"

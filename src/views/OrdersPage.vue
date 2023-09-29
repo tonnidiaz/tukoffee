@@ -18,7 +18,7 @@
         <ion-content :fullscreen="true">
             <Refresher :on-refresh="init" />
             <div class="flex flex-col h-full">
-                <div class="my-0 bg-base-100 p-3">
+                <div class="my-1 bg-base-100 p-3">
                 <div
                     class="bg-base-200 rounded-md flex items-center px-4 h-45px gap-2"
                 >
