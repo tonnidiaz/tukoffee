@@ -44,7 +44,7 @@
                     ></ion-input>
                     <button
                         class="mt-2"
-                        id="filter-sheet-trigger"
+                        id="/products-filter-sheet-trigger"
                         @click="console.log('click')"
                     >
                         <i
@@ -81,7 +81,7 @@
         </BottomSheet>
 
         <!-- Filter sheet -->
-        <BottomSheet trigger="filter-sheet-trigger" id="filter-sheet">
+        <BottomSheet trigger="/products-filter-sheet-trigger" id="filter-sheet">
             <div class="p-3 bg-base-100 flex flex-col justify-center">
                 <div class="flex w-full justify-between my-3 items-center">
                     <h3 class="">FILTER</h3>
@@ -104,7 +104,7 @@
                             >Name</ion-select-option
                         >
                         <ion-select-option :value="SortBy.created"
-                            >Date created</ion-select-option
+                            >Date added</ion-select-option
                         >
                         <ion-select-option :value="SortBy.modified"
                             >Last modified</ion-select-option

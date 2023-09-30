@@ -21,12 +21,10 @@
                                     placeholder="Search"
                                     class="tu bg-primar"
                                     router-link="/search"
-                                    @ion-focus="console.log('object');"
                                 ></ion-input>
                                 <button
                                     class="mt-2"
-                                    id="filter-sheet-trigger"
-                                    @click="console.log('click')"
+                                    id="/shop-filter-sheet-trigger"
                                 >
                                     <i
                                         class="fi fi-rr-settings-sliders fs-18 text-gray-700"
@@ -35,103 +33,157 @@
                             </div>
                         </div>
 
-                        <ion-modal
-                            ref="modal"
-                            trigger="open-modal"
-                            :initial-breakpoint="0.25"
-                            :breakpoints="[0, 0.25, 0.5, 0.75]"
+                        <BottomSheet
+                            trigger="/shop-filter-sheet-trigger"
+                            id="filter-sheet"
                         >
-                            <ion-content
-                                class="ion-padding flex flex-col justify-center items-center relative"
+                            <div
+                                class="p-3 bg-base-100 flex flex-col justify-center"
                             >
                                 <div
-                                    class="w-full h-fu my-3 flex flex-col justify-start items-start"
+                                    class="flex w-full justify-between my-3 items-center"
                                 >
-                                    <div class="flex gap-2 w-full">
-                                        <Dropdown
-                                            v-model="sortBy"
-                                            :options="sorts"
-                                            optionLabel="name"
-                                            placeholder="Sort by"
-                                            class="w-full md:w-14rem"
-                                        />
-                                        <Dropdown
-                                            v-model="sortBy"
-                                            :options="sorts"
-                                            optionLabel="name"
-                                            placeholder="Status"
-                                            class="w-full md:w-14rem"
-                                        />
-                                    </div>
+                                    <h3 class="">FILTER</h3>
+                                    <button
+                                        @click="() => toggleOrder()"
+                                        class="btn btn-sm btn-ghost p- rounded-full"
+                                    >
+                                        <i
+                                            v-if="
+                                                sortOrder == SortOrder.ascending
+                                            "
+                                            class="fi fi-rr-sort-amount-down-alt fs-20 text-gray-600"
+                                        ></i>
+                                        <i
+                                            v-else
+                                            class="fi fi-rr-sort-amount-up-alt fs-20 text-gray-600"
+                                        ></i>
+                                    </button>
                                 </div>
-                            </ion-content>
-                        </ion-modal>
 
-                        <!-- 
- -->
+                                <ion-item lines="none">
+                                    <ion-select
+                                        interface="popover"
+                                        @ion-change="
+                                            setSortBy($event.target.value)
+                                        "
+                                        :value="sortBy"
+                                        mode="md"
+                                        label="Sort by"
+                                        label-placement="floating"
+                                    >
+                                        <ion-select-option :value="SortBy.price"
+                                            >Price</ion-select-option
+                                        >
+                                        <ion-select-option
+                                            :value="SortBy.created"
+                                            >Date added</ion-select-option
+                                        >
+                                        <ion-select-option
+                                            :value="SortBy.modified"
+                                            >Last modified</ion-select-option
+                                        >
+                                    </ion-select>
+                                </ion-item>
+                                <ion-item class="my-1" lines="none">
+                                    <ion-select
+                                        interface="popover"
+                                        @ion-change="
+                                            setStatus($event.target.value)
+                                        "
+                                        :value="status"
+                                        mode="md"
+                                        label="Status"
+                                        label-placement="floating"
+                                    >
+                                        <ion-select-option :value="Status.all"
+                                            >All</ion-select-option>
+                                        <ion-select-option :value="Status.topSelling"
+                                            >Top selling</ion-select-option>
+                                        <ion-select-option :value="Status.onSale"
+                                            >Today's special</ion-select-option>
+                                        <ion-select-option :value="Status.onSale"
+                                            >On sale</ion-select-option>
+                                        <ion-select-option :value="Status.in"
+                                            >In stock</ion-select-option
+                                        >
+                                        <ion-select-option :value="Status.out"
+                                            >Out of stock</ion-select-option
+                                        >
+                                    </ion-select>
+                                </ion-item>
+                            </div>
+                        </BottomSheet>
                     </div>
                 </div>
                 <div
-                    v-if="products"
+                    style="flex: auto"
+                    class="w-full flex items-center justify-center"
+                    v-if="!sortedProducts"
+                >
+                    <ion-spinner class="w-75px h75px"></ion-spinner>
+                </div>
+                <div
+                    v-else-if="sortedProducts.length"
                     class="my-0 grid justify-center gap-1 grid-cols-2"
                 >
-                    <ProductCard v-for="(e, i) in products" :product="e" />
+                    <ProductCard
+                        v-for="(e, i) in sortedProducts"
+                        :product="e"
+                    />
                 </div>
                 <div
                     style="flex: auto"
                     class="w-full flex items-center justify-center"
                     v-else
                 >
-                    <h3 class="fs-20">Loading...</h3>
+                    <h3 class="fs-20">Nothing to show</h3>
                 </div>
             </div>
         </ion-content>
     </ion-page>
 </template>
 <script setup lang="ts">
-import { IonPage, IonModal, IonContent, IonInput, IonItem } from "@ionic/vue";
+import {
+    IonPage,
+    IonContent,
+    IonInput,
+    IonItem,
+    IonSelect,
+    IonSelectOption,
+    IonSpinner
+} from "@ionic/vue";
 import { ref, onMounted } from "vue";
 import Appbar from "@/components/Appbar.vue";
 import ProductCard from "@/components/ProductCard.vue";
-import TuFormField from "@/components/TuFormField.vue";
-import TuButton from "@/components/TuButton.vue";
-
 import { apiAxios } from "@/utils/constants";
 import Refresher from "@/components/Refresher.vue";
 import { sleep } from "@/utils/funcs";
+import { Obj, SortOrder } from "@/utils/classes";
+import { useShopStore, SortBy, Status } from "@/stores/shop";
+import { storeToRefs } from "pinia";
+import BottomSheet from "@/components/BottomSheet.vue";
 
-const products = ref();
-const sortBy = ref();
-const sorts = [
-    {
-        name: "Name",
-        value: "name",
-    },
-    {
-        name: "Price",
-        value: "price",
-    },
-    {
-        name: "Date new to old",
-        value: "date1",
-    },
-    {
-        name: "Date old to new",
-        value: "date2",
-    },
-];
+const shopStore = useShopStore();
+const {
+    sortBy,
+    sortOrder,
+    sortedItems: sortedProducts,
+    items: products,
+    status,
+} = storeToRefs(shopStore);
+const { setItems, setSortBy, toggleOrder, setSortedItems, setStatus } =
+    shopStore;
 
-const handleClick = async () => {
-    await sleep(2000);
-    console.log("Slept");
-};
 async function getProducts() {
     try {
-        products.value = undefined;
+        setItems(null);
+        setStatus(Status.all)
         const res = await apiAxios.get("/products");
-        products.value = res.data.data;
+        setItems(res.data.data);
     } catch (error) {
         console.log(error);
+        setItems([]);
     }
 }
 const init = async () => {
