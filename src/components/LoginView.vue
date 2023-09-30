@@ -1,6 +1,6 @@
 <template>
     <div class="p-3 bg-base-100 flex flex-col justify-center">
-        <h3>Login / Signup</h3>
+        <h3 class="mt-5 fs-18">Login </h3>
         <form @submit="onFormSubmit" class="mt-3" action="#">
             <div class="form-control">
                 <ion-input

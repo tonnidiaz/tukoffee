@@ -84,13 +84,7 @@
 <script setup lang="ts">
 import {
     IonPage,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonContent,
-    IonButton,
-    IonMenuToggle,
-    IonButtons,
     IonSearchbar,
     IonText,
     IonRefresher,
@@ -99,7 +93,6 @@ import {
 import { onMounted, ref } from "vue";
 import InkWell from "@/components/InkWell.vue";
 import { useRouter } from "vue-router";
-import CartBtn from "@/components/CartBtn.vue";
 import axios from "axios";
 import { apiURL } from "@/utils/constants";
 const special = ref<any[]>(),
@@ -108,9 +101,7 @@ const router = useRouter();
 
 const getProducts = async (q: string) => {
     try {
-        console.log(apiURL);
         const res = await axios.get(`${apiURL}/products?q=${q}`);
-        console.log(res.data);
         return res.data.data;
     } catch (error) {
         console.log(error);

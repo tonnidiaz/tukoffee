@@ -67,6 +67,15 @@ const routes: Array<RouteRecordRaw> = [
     path: '/:mode/product',
     component: ()=>  import('../views/AddProductPage.vue')
   },
+
+        {
+            path: '/auth/login',
+            component: ()=> import('@/views/auth/LoginPage.vue')
+        },
+        {
+            path: '/auth/signup',
+            component: ()=> import('@/views/auth/SignupPage.vue')
+        },
   {
     path: '/auth/logout',
     component: ()=> import("@/views/auth/LogoutPage.vue")

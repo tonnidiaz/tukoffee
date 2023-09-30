@@ -51,7 +51,7 @@
 
                     <tu-button
                         :on-click="addRemoveCart"
-                        :class="`rounded-full btn-sm h-30px flex items-center justify-center ${inCart(product) ? 'btn-danger' : 'btn-danger'}`"
+                        :class="`rounded-full btn-sm h-30px flex items-center justify-center ${inCart(product) ? 'bg-primary' : 'btn-danger'}`"
                         ><i v-if="!inCart(product)" class="fi fi-rr-shopping-cart-add fs-18"></i>
                     <i v-else class="fi fi-rr-cart-minus fs-18 text-"></i></tu-button
                     >

@@ -3,7 +3,7 @@
     <ion-button router-link="/cart" router-direction="forward" class="relative cart-btn ">
                       
                          <div class="indicator">
-                    <span class="indicator-item badge badge-secondary fs-10"
+                    <span class="indicator-item badge badge-primary fs-10"
                         >{{userStore.cart?.products?.length ?? 0}}</span>
                       <i class="fi fi-rr-shopping-basket"></i>
                     </div>

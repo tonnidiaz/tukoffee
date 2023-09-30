@@ -65,9 +65,9 @@
                 <div class="bg-base-100 mb-2px p-2">
                     <div v-if="!userStore.user?.phone">
                         <ion-button
-                            id="login-modal-trigger"
-                            color="secondary"
+                            color="dark"
                             class="text-white w-full"
+                            router-link="/auth/login"
                             >Login</ion-button
                         >
                         <BottomSheet trigger="login-modal-trigger">

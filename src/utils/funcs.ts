@@ -86,3 +86,8 @@ export async function showToast({
 
     await toast.present();
 }
+
+export function errorHandler(e: any){
+    const msg: string = e.response?.data ?? "Something went wrong";
+        showToast({msg: msg.replace('tuned:', ''), cssClass: 'ion-danger', duration: 1500}  );
+}

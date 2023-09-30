@@ -10,28 +10,11 @@
 <script setup lang="ts">
 import {
     IonPage,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonButton,
-    IonMenuToggle,
-    IonButtons,
-    IonRippleEffect,
-    IonSearchbar,
-    IonText,
-    IonAvatar,
-    IonInfiniteScroll,useIonRouter
-} from "@ionic/vue";
+    IonContent} from "@ionic/vue";
 import { onMounted} from 'vue';
-import { useRouter, useRoute,  } from "vue-router";
-const router = useRouter()
-const ionRouter = useIonRouter()
 
 onMounted(() => {
-    console.log(localStorage.getItem('authToken'))
     localStorage.removeItem('authToken')
-    console.log('Pushing')
     location.href = '/'
 });
 
