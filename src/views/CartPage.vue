@@ -1,9 +1,10 @@
 <template>
     <ion-page>
         <Appbar title="Cart" :show-cart="false">
-            <ion-button shape="round" id="click-trigger" slot="icon-only" @click="()=>console.log('Ellipsis')"
-                ><ion-icon :md="ellipsisVertical"></ion-icon
-            ></ion-button>
+           <DropdownBtn :items="[{
+            label: 'Clear cart',
+            cmd: clearCart
+           }]"/>
         </Appbar>
         <ion-content :fullscreen="true">
             <ion-refresher slot="fixed" :pull-factor="0.5" :pull-min="100" :pull-max="200" @ionRefresh="handleRefresh($event)">
@@ -32,12 +33,15 @@
                             <ion-label>Items </ion-label>
                         </ion-item-divider>
 
-                        <CartItem
-                            v-for="(e, i) in userStore.cart?.products"
+                        <CartItem v-if="cart?.products.length"
+                            v-for="(e, i) in cart?.products"
                             :item="e"
                         >
                            
                         </CartItem>
+                        <div class="h-full flex flex-center py-7">
+                            <h3 class="fs-18 fw-5">Cart empty</h3>
+                        </div>
                     </div>
                 </div>
                 <div
@@ -68,14 +72,11 @@
 import {
     IonPage,
     IonItemDivider,
-    IonNote,
     IonFooter,
     IonContent,
     IonToolbar,
     IonButton,
-    IonImg,
     IonLabel,
-    IonThumbnail,
     IonPopover,
     IonIcon,
     IonRefresher,
@@ -83,24 +84,29 @@ import {
     useIonRouter,
 } from "@ionic/vue";
 import Appbar from "@/components/Appbar.vue";
-import { closeOutline, listCircle, ellipsisVertical } from "ionicons/icons";
-import { randomImg, setupCart } from "@/utils/funcs";
-import { dummyProduct, dummyProducts } from "@/utils/dummies";
+import { ellipsisVertical } from "ionicons/icons";
+import { errorHandler, setupCart } from "@/utils/funcs";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import CartItem from "@/components/CartItem.vue";
-import {  onBeforeUnmount, onMounted, onUnmounted, ref, watch } from "vue";
+import {  onBeforeUnmount, ref, watch } from "vue";
 import $ from "jquery";
-import BottomSheet from "@/components/BottomSheet.vue";
+import DropdownBtn from "@/components/DropdownBtn.vue";
+import { apiAxios } from "@/utils/constants";
 const userStore = useUserStore();
-const {user} = storeToRefs(userStore)
-const cart = ref<{[key: string]: any} | null>()
+const {user, cart} = storeToRefs(userStore)
+const {setCart} = userStore
 const total = ref(0);
 
 const ionRouter = useIonRouter();
 
-const clickOutside = () => {
-    $(".outside").trigger("click");
+const clearCart = async () => {
+    try{
+        const res = await apiAxios.post('/user/cart?action=clear')
+        setCart(res.data.cart)
+    }catch(e){
+        errorHandler(e)
+    }
 };
 
 

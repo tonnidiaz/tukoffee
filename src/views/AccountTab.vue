@@ -18,7 +18,7 @@
                     >
                         <ion-label>Profile</ion-label>
                     </ion-item>
-                    <ion-item class="" color="clear" router-link="/tabs/cart">
+                    <ion-item class="" color="clear" router-link="/~/cart">
                         <ion-label>Cart</ion-label>
                     </ion-item>
                     <ion-item
@@ -46,6 +46,7 @@
                         color="clear"
                         router-link="/rf"
                         lines="none"
+                        v-if="__DEV__"
                     >
                         <ion-label>RF</ion-label>
                     </ion-item>
@@ -102,7 +103,7 @@ import Appbar from "@/components/Appbar.vue";
 import BottomSheet from "@/components/BottomSheet.vue";
 import LoginView from "@/components/LoginView.vue";
 import { useUserStore } from "@/stores/user";
-
+import { __DEV__ } from "@/utils/constants";
 const userStore = useUserStore();
 const reload = () => {
     window.location.reload();

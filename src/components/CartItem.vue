@@ -17,7 +17,11 @@
         </ion-thumbnail>
         <ion-label :router-link="`/product/${item.product.pid}`">
             <h3>{{ item.product.name }}</h3>
-            <ion-note>R{{ item.product.price.toFixed(2) }}</ion-note>
+            <div class="flex gap-3 items-center">
+                            <ion-note>R{{ item.product.price.toFixed(2) }}</ion-note>
+                            <span class="fw-5">x{{ item.quantity }}</span>
+
+            </div>
         </ion-label>
         <button
             slot="end"
@@ -30,37 +34,24 @@
 
         <BottomSheet
         @did-dismiss="editSheetOpen = false"
-            :initial-breakpoint="1"
-            class="h-auto"
-            :breakpoints="[0, 1]"
+
             :is-open="editSheetOpen"
         >
             <!-- Edit modal -->
             <div class="w-full  flex flex-col justify-center items-center relative bg-base-100 py-4 px-3">
                 <div class="flex items-center">
-                    <TuFormField
-                        class="rounded-full h-40px w-40 m-auto"
-                        :value="item.quantity"
-                        :on-change="(e: any)=>{item.quantity = e.target.value}"
-                        :field-props="{
-                            placeholder: 'Qty',
-                            class: 'text-center',
-                            type: 'number',
-                            min: 2,
-                            max: 10,
-                        }"
-                    >
-                        <template #prefix-icon>
-                            <button class="cont" @click="item.quantity--">
-                                <i class="fs-20 fi fi-sr-minus-circle"></i>
+                    <div class="flex flex-center rounded-full h-40px w-40 border-1 border-success px-2 gap-2 relative">
+                 
+                            <button class="mt-2" @click="updateQty(true)">
+                                <i class="fs-20 fi fi-sr-minus-circle text-gray-500"></i>
                             </button>
-                        </template>
-                        <template #suffix-icon>
-                            <button class="cont" @click="item.quantity++">
-                                <i class="fs-20 fi fi-sr-add"></i>
+                            <ion-input color="clear" class="text-center" type="number" :min="0" placeholder="Qty" :value="form.quantity" 
+                            @ion-input="onQtyInput"
+                            ></ion-input>
+                            <button class="mt-2" @click="updateQty()">
+                                <i class="fs-20 fi fi-sr-add text-gray-500"></i>
                             </button>
-                        </template>
-                    </TuFormField>
+                        </div>
                     <ion-button
                         id="open-action-sheet"
                         shape="round"
@@ -80,16 +71,12 @@
                         :buttons="actionSheetButtons"
                     ></ion-action-sheet>
                 </div>
-                    <!-- TODO: Edit  -->
-                    <ion-button
-                        @click="
-                            () => {
-                                editSheetOpen = false;
-                            }
-                        "
+                    <tu-button
+                       :on-click="updateCart"
+                        ionic
                         class="w-full"
                         color="success"
-                        >Save</ion-button
+                        >Save</tu-button
                     >
             </div>
         </BottomSheet>
@@ -104,16 +91,23 @@ import {
     IonActionSheet,
     IonThumbnail,
     IonButton,
+    IonInput
 } from "@ionic/vue";
 import { useUserStore } from "@/stores/user";
 import BottomSheet from "@/components/BottomSheet.vue";
+
 import TuFormField from "@/components/TuFormField.vue";
 import { storeToRefs } from "pinia";
-import { testClick } from "@/utils/funcs";
-import { ref } from "vue";
+import { errorHandler, testClick } from "@/utils/funcs";
+import { ref, watch } from "vue";
+import { Obj } from "@/utils/classes";
+import TuButton from "./TuButton.vue";
+import { apiAxios } from "@/utils/constants";
 const userStore = useUserStore();
+
+const form = ref<Obj>({})
 const editSheetOpen = ref(false);
-const { cart } = storeToRefs(userStore);
+const { setCart } = userStore;
 const actionSheetButtons = [
     {
         text: "Confirm",
@@ -131,10 +125,37 @@ const actionSheetButtons = [
         },
     },
 ];
+
+const updateCart = async(act = 'add')=>{
+    try{
+    const res = await apiAxios.post(`/user/cart?action=${act}`, form.value)
+    setCart(res.data.cart)
+    editSheetOpen.value = false
+    }catch(e){
+        errorHandler(e)
+    }
+}
+
+const onQtyInput = (e: any) => { 
+    let  {value } = e.target
+    value = parseInt(value)
+    const {item} = props
+    let v = value <= 1 ? 1 : (value >= item.product.quantity ? item.product.quantity : value)
+    e.target.value = v
+ }
+
+ function updateQty(decrement = false){
+    const { quantity } = form.value
+    if (decrement && quantity > 1){
+        form.value.quantity--
+    }else if(!decrement && quantity < props.item.product.quantity) {
+        form.value.quantity++
+    }
+ }
 const logResult = (ev: CustomEvent) => {
     const { action } = ev.detail.data;
     if (action == "delete") {
-        location.reload()
+        updateCart('remove')
     }
     console.log(JSON.stringify(ev.detail, null, 2));
 };
@@ -144,4 +165,8 @@ const props = defineProps({
         required: true,
     },
 });
+watch(props.item, val=>{
+    form.value = {...form.value, quantity: val.quantity, product: val.product._id}
+}, {deep: true, immediate: true})
+
 </script>

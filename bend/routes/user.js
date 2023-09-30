@@ -90,6 +90,18 @@ router
                     res.json({ cart: c });
                 } else res.status(400).send("tuned:User has no cart");
             }
+            else if (action == 'clear'){
+                cart.products = []
+                await cart.save()
+                let c = await cart.populate("products.product");
+
+                    c = {
+                        ...c.toJSON(),
+                        products: c.products.filter((it) => it.product != null && it.product.quantity > 0),
+                        customer: {},
+                    };
+                res.json({cart: c})
+            }
         } catch (e) {
             console.log(e);
             res.status(500).send("tuned:Something went wrong");
