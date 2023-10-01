@@ -10,7 +10,7 @@
             <ion-refresher slot="fixed" :pull-factor="0.5" :pull-min="100" :pull-max="200" @ionRefresh="handleRefresh($event)">
                 <ion-refresher-content> </ion-refresher-content>
             </ion-refresher>
-            <div class="px-3 py-2 w-full h-full">
+            <div class="p-1 w-full h-full">
                 <ion-popover trigger="click-trigger" trigger-action="click">
                     <ion-content class="">
                         <ul tabindex="0" class="menu border-1 border-gray-200">

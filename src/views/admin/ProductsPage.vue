@@ -14,7 +14,8 @@
                     selectedItems.length ? {
                         label: 'Delete selected',
                         cmd: ()=>{delAlertOpen = true;}
-                    } : null
+                    } : null,
+                    {label: 'Back to home', cmd: ()=> $router.push('/')}
 
                 ]"
             />
@@ -230,3 +231,8 @@ onMounted(() => {
     getProducts();
 });
 </script>
+
+
+<style lang="scss">
+
+</style>

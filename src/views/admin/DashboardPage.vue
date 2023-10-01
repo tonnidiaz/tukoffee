@@ -1,6 +1,10 @@
 <template>
     <ion-page>
-        <Appbar title="Dashboard" :show-cart="false"/> 
+        <Appbar title="Dashboard" :show-cart="false">
+        <DropdownBtn :items="[
+            {label: 'Back to home', cmd: ()=> $router.push('/')}
+        ]"/>
+        </Appbar>
         <ion-content :fullscreen="true"></ion-content>
     </ion-page>
 </template>
@@ -21,5 +25,6 @@ import {
     IonInfiniteScroll,
 } from "@ionic/vue";
 import Appbar from '@/components/Appbar.vue';
+import DropdownBtn from "@/components/DropdownBtn.vue";
 
 </script>

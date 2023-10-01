@@ -188,3 +188,9 @@ ion-popover{
 i.fi{
     line-height: 0;
 }
+.alert-button{
+    color: rgb(17, 17, 17) !important;
+    &.alert-button-role-cancel{
+        color: rgba(17,17, 17, .7) !important;
+    }
+}

@@ -1,19 +1,14 @@
 <template>
     <ion-page>
         <Appbar title="Orders" :show-cart="route.path == '/orders'">
-            <button @click="openPopover" id="open-action-sheet"
-                class="btn btn-sm fs-20 btn-ghost p-0 w-35px h-35px rounded-full">
-                <ion-icon :md="ellipsisVertical"></ion-icon>
-            </button>
-            <ion-popover :event="popoverEvent" :is-open="popoverOpen" @did-dismiss="popoverOpen = false" class="">
+            <DropdownBtn :items="[
+               orders && !selectedItems.length ? {label: 'Select all', cmd: onSelectAll} : null,
+             selectedItems.length ? {label: 'Deselect all', cmd: ()=> selectedItems = []} : null,
 
-                <div class="bg-base-100">
-                    <ul class="menu">
-                        <li v-if="orders"><a @click="onSelectAll">Select all</a></li>
-                        <li v-if="selectedItems.length"><a @click="onCancelSelected">Cancel selected</a></li>
-                    </ul>
-                </div>
-            </ion-popover>
+               selectedItems.length ? {label: 'Cancel selected orders', cmd: onCancelSelected} : null,
+                {label: 'Back to home', cmd: ()=> $router.push('/')},
+            ]"/>
+       
         </Appbar>
         <ion-content :fullscreen="true">
             <Refresher :on-refresh="init" />
@@ -34,8 +29,7 @@
                     ></ion-input>
                     <button
                         class="mt-2"
-                        id="filter-sheet-trigger"
-                        @click="console.log('click')"
+                        @click="filterSheetOpen = true"
                     >
                         <i
                             class="fi fi-rr-settings-sliders fs-18 text-gray-700"
@@ -44,7 +38,7 @@
                 </div>
             </div>
 
-                <ion-list v-if="_orders && _orders.length" class="my-0 bg-base-100">
+                <ion-list v-if="_orders && _orders.length" class="my-0 mx-2 bg-base-100">
                     <order-item v-for="(order, i) in _orders" :order="order" />
                 </ion-list>
                 <div v-else class="flex-auto flex items-center justify-center">
@@ -53,7 +47,7 @@
             </div>
 
             <!-- Modals -->
-            <BottomSheet trigger="filter-sheet-trigger" id="filter-sheet">
+            <BottomSheet :is-open="filterSheetOpen" @did-dismiss="filterSheetOpen = false" id="filter-sheet">
                 <div class="p-3 bg-base-100  flex flex-col justify-center">
                     <div class="flex w-full justify-between my-3">
                         <h3 class="">FILTER</h3>
@@ -89,8 +83,6 @@ import {
     IonPage,
     IonContent,
     IonList,
-    IonIcon,
-    IonPopover,
     IonSelect,
     IonItem,
     IonSelectOption,
@@ -104,11 +96,11 @@ import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { useOrderStore, OrderSortBy,  } from "@/stores/order";
 import { useAppStore } from "@/stores/app";
-import { ellipsisVertical } from "ionicons/icons";
 import Refresher from "@/components/Refresher.vue";
 import BottomSheet from "@/components/BottomSheet.vue";
 import {SortOrder, OrderStatus} from '@/utils/classes';
 import { useRoute } from "vue-router";
+import DropdownBtn from "@/components/DropdownBtn.vue";
 
 const userStore = useUserStore()
 const orderStore = useOrderStore()
@@ -121,13 +113,10 @@ const { selectedItems } = storeToRefs(appStore)
 const _orders = ref<typeof sortedOrders.value>()
 const orderID = ref<number>()
 
+const filterSheetOpen = ref(false)
+
 const route = useRoute()
 
-function openPopover(e: Event) {
-    popoverEvent.value = e;
-    popoverOpen.value = true;
-}
-function hidePopover() { popoverOpen.value = false }
 async function getOrders() {
     orderStore.setOrders(null)
     try {

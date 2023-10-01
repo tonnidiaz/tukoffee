@@ -1,6 +1,8 @@
 <template>
-    <ion-app>
-        <ion-router-outlet v-if="userSetup" />
+    <ion-app
+        ><ion-loading class="tu" :is-open="isLoading" @did-dismiss="setIsLoading(false)" message="loadingMsg"/>
+        <ion-router-outlet v-if="userSetup"> </ion-router-outlet>
+
         <div v-else class="w-full h-full flex items-center justify-center">
             <h1 class="fs-30 fw-7">Loading</h1>
         </div>
@@ -8,17 +10,21 @@
 </template>
 
 <script setup lang="ts">
-import { IonApp, IonRouterOutlet } from "@ionic/vue";
+import { IonApp, IonRouterOutlet, IonLoading } from "@ionic/vue";
 import { apiAxios } from "./utils/constants";
 import { onBeforeMount } from "vue";
 import { useUserStore } from "./stores/user";
 import { storeToRefs } from "pinia";
 import { setupCart } from "./utils/funcs";
 import { useStoreStore } from "./stores/store";
+import { useAppStore } from "./stores/app";
 const userStore = useUserStore();
 const storeStore = useStoreStore();
 
 const { userSetup } = storeToRefs(userStore);
+const appStore = useAppStore()
+const { isLoading, loadingMsg } = storeToRefs(appStore)
+const {setIsLoading} = appStore
 
 const setupUser = async () => {
     userStore.setUserSetup(false);
@@ -83,7 +89,7 @@ ul.default {
     }
 }
 
-ion-tab-button{
+ion-tab-button {
     --padding-start: 0;
     --padding-end: 0;
 }

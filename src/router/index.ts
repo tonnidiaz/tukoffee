@@ -27,6 +27,10 @@ const routes: Array<RouteRecordRaw> = [
                 path: "wishlist",
                 component: () => import("@/views/WishlistPage.vue"),
             },
+            {
+                path: "cart",
+                component: () => import("@/views/CartPage.vue"),
+            },
 
             {
                 path: "account",

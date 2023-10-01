@@ -23,11 +23,15 @@
                     <span><i class="fi fi-br-shop"></i></span>
                     <ion-label>Shop</ion-label>
                 </ion-tab-button>
+                <ion-tab-button tab="cart" href="/~/cart">
+                    <span><i class="fi fi-br-shopping-cart"></i></span>
+                    <ion-label>Cart</ion-label>
+                </ion-tab-button>
 
-                <ion-tab-button tab="wishlist" href="/~/wishlist">
+                <!-- <ion-tab-button tab="wishlist" href="/~/wishlist">
                     <span><i class="fi fi-br-bookmark"></i></span>
                     <ion-label>Wishlist</ion-label>
-                </ion-tab-button>
+                </ion-tab-button> -->
                 <ion-tab-button tab="account" href="/~/account">
                     <span><i class="fi fi-br-user"></i></span>
                     <ion-label>Account</ion-label>
