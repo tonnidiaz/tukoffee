@@ -1,5 +1,17 @@
 const { OTP } = require("../models/otp");
 const jwt = require("jsonwebtoken");
+const cloudinary = require('cloudinary').v2
+
+const { env } = process
+
+function configCloudinary(){
+    cloudinary.config({
+    api_secret: env.CLOUDINARY_SECRET_KEY,
+    api_key: env.CLOUDINARY_API_KEY,
+    cloud_name: 'sketchi'
+})
+}
+
 function randomInRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
@@ -66,7 +78,7 @@ const sendSMS = async (number, message)=>{
         headers: {
             "content-type": "application/x-www-form-urlencoded",
             "X-RapidAPI-Key":
-                "71e962e760mshe177840eb7630a1p1ce7a7jsncff43c280599",
+                process.env.INTELTECH_API_KEY,
             "X-RapidAPI-Host": "inteltech.p.rapidapi.com",
         },
         data: encodedParams,
@@ -77,4 +89,9 @@ const sendSMS = async (number, message)=>{
 const tunedErr = (res, status, msg) => {
     return res.status(status).send(`tuned:${msg}`)
 }
-module.exports = { genToken, onGetGenToken, sendSMS, parseProducts, genOTP, randomInRange, tunedErr };
+
+const delCloudinary = async (publicId)=>{
+    configCloudinary()
+    return await cloudinary.uploader.destroy(publicId)
+}
+module.exports = { genToken, delCloudinary, onGetGenToken, sendSMS, parseProducts, genOTP, randomInRange, tunedErr };

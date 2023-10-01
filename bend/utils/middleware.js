@@ -30,4 +30,5 @@ const authenticator = async (req, res,next, isRequired)=>{
     if (!req.user && isRequired) return res.status(401).send("tuned:Not authenticated!");
     next()
 }
+
 module.exports = { auth, lightAuth };

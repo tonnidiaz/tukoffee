@@ -3,7 +3,7 @@
         <ion-icon :md="ellipsisVertical"></ion-icon>
     </ion-button>
  -->
- <button  @click="e=> {if(items.length) openPopover(e)}" class="btn btn-ghost rounded-lg p-0 w-30px h-30px fs-20">
+ <button v-if="items.filter(it=> it == null).length != items.length" @click="e=> {if(items.length) openPopover(e)}" class="btn btn-ghost rounded-lg p-0 w-30px h-30px fs-20">
     <ion-icon :md="ellipsisVertical"></ion-icon>
  </button>
     <ion-popover

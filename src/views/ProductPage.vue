@@ -1,36 +1,21 @@
 <template>
     <ion-page>
         <Appbar :title="product?.name" :loading="!product">
-            <button
-                @click="openPopover"
-                id="open-action-sheet"
-                class="btn btn-sm fs-20 btn-ghost p-0 w-35px h-35px rounded-full"
-            >
-                <ion-icon :md="ellipsisVertical"></ion-icon>
-            </button>
-            <ion-popover
-                :event="popoverEvent"
-                :is-open="popoverOpen"
-                @did-dismiss="popoverOpen = false"
-                class=""
-            >
-                <div class="bg-base-100">
-                    <ul class="menu">
-                        <li v-if="isAdmin()">
-                            <a
-                                @click="()=>{ hidePopover(); addProductStore.setForm(product!); ionRouter.push('/edit/product'); }"
-                                >Edit</a
-                            >
-                        </li>
-                        <li v-if="isAdmin()"><a>Delete</a></li>
-                    </ul>
-                </div>
-            </ion-popover>
+            <DropdownBtn :items="[
+                isAdmin() ? {
+                    label: 'Edit',
+                    cmd: ()=> {formStore.setForm(product!); ionRouter.push('/edit/product')}
+                }: null,
+                isAdmin() ? {
+                    label: 'Delete',
+                    cmd: ()=>{}
+                } : null
+            ]" />
         </Appbar>
         <ion-content>
             <Refresher :on-refresh="init" />
             <div class="" v-if="product">
-                <div class="mt-2">
+                <div class="mt-1">
                     <div
                         class="image-area bg-base-100 w-full relative flex flex-col items-center justify-center border-0"
                     >
@@ -63,10 +48,21 @@
                     </div>
                     <div class="p-">
                         <div class="p-3 mt-1 shadow-1 bg-base-100">
-                            <h2 class="font- fw-6 fs-22">
+                            <h2 class="fw-6 fs-18">
                                 {{ product.name }}
                             </h2>
                             <div class="mt-0">
+                                <div class="flex items center gap-3 mb-2 my-3 flex-wrap">
+                                    <ion-text v-if="product.top_selling" router-link="/shop/top-selling" class="badge ion-bg-medium py-3 fs-12">
+                                        Top selling
+                                    </ion-text>
+                                    <ion-text v-if="product.on_sale" router-link="/shop/sale" class="badge badge-primary py-3 fs-12">
+                                        On sale
+                                    </ion-text>
+                                    <ion-text v-if="product.on_sale" router-link="/shop/special" class="badge ion-bg-medium py-3 fs-12">
+                                        Special
+                                    </ion-text>
+                                </div>
                                 <p>
                                     {{ product.description }}
                                 </p>
@@ -92,7 +88,7 @@
                 v-else
                 class="p-2 flex flex-col w-full h-full justify-center items-center"
             >
-                <h3>Failed to fetch product</h3>
+                <ion-spinner/>
             </div>
         </ion-content>
         <ion-footer v-if="product" class="bg-base-100">
@@ -101,7 +97,7 @@
                     <div class="flex w-full items-center justify-between">
                         <span
                             v-if="product.quantity"
-                            class="badge badge-primary"
+                            class="badge ion-bg-medium py-3"
                         >
                           {{ product.quantity}}  In stock
                         </span>
@@ -109,17 +105,26 @@
                             Out of stock
                         </span>
 
-                        <Rating v-model="form.rating" :cancel="false" c />
+                        <Rating v-model="form.rating" :cancel="false"/>
                     </div>
                     <div class="flex w-full items-center justify-between">
-                        <span class="fw-8"
+                        <span v-if="!product.on_sale" class="fw-8"
                             >R{{ product.price.toFixed(2) }}</span
                         >
+                        <div v-else class="flex items-center gap-5">
+                             <span class="fw-8 linethrough"
+                            >R{{ product.price.toFixed(2) }}</span
+                        >
+                             <span class="fw-8" style="transform: scale(1.2);"
+                            >R{{ product.sale_price? product.sale_price.toFixed(2) :0.00}}</span
+                        >
+                        </div>
+                       
 
                         <tu-button
                             :on-click="addRemoveCart"
                             :class="`rounded-full btn-sm h-30px flex items-center justify-center ${
-                                inCart(product) ? 'btn-accent' : 'btn-danger'
+                                inCart(product) ? 'btn-error' : 'btn-primary'
                             }`"
                         >
                             <span
@@ -155,6 +160,7 @@
         ></ion-toast>
     </ion-page>
 </template>
+
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import {
@@ -162,17 +168,16 @@ import {
     IonContent,
     IonFooter,
     IonToolbar,
-    IonButton,
     IonToast,
-    IonIcon,
-    IonPopover,
     useIonRouter,
+    IonSpinner,
+    IonText
 } from "@ionic/vue";
 import { useRouter, useRoute } from "vue-router";
 import { apiAxios, apiURL } from "@/utils/constants";
 import axios from "axios";
-const router = useRouter();
 const route = useRoute();
+
 const { id } = route.params;
 import Appbar from "@/components/Appbar.vue";
 import Refresher from "@/components/Refresher.vue";
@@ -180,12 +185,13 @@ import ProductCard from "@/components/ProductCard.vue";
 import TuButton from "@/components/TuButton.vue";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
-import { ellipsisVertical } from "ionicons/icons";
-import { useAddProductStore } from "@/stores/addProduct";
+import DropdownBtn from "@/components/DropdownBtn.vue";
+import { useFormStore } from "@/stores/form";
+
 const userStore = useUserStore();
 const { cart, user } = storeToRefs(userStore);
 
-const addProductStore = useAddProductStore();
+const formStore = useFormStore();
 
 const related = ref<any[]>();
 const product = ref<{ [key: string]: any }>();
@@ -194,17 +200,10 @@ const menu = ref<any>();
 const toastOpen = ref(false);
 const selectedImg = ref(0);
 const ionRouter = useIonRouter();
-const popoverOpen = ref(false),
-    popoverEvent = ref<Event>();
 
-    const isAdmin = ()=> user.value?.permissions > 1
-function openPopover(e: Event) {
-    popoverEvent.value = e;
-    popoverOpen.value = true;
-}
-function hidePopover() {
-    popoverOpen.value = false;
-}
+
+    const isAdmin = ()=> user.value?.permissions > 0
+
 function inCart(p: any) {
     return cart.value?.products.find((it: any) => it.product._id == p._id);
 }
@@ -253,39 +252,5 @@ onMounted(() => {
 });
 </script>
 <style lang="scss">
-.image-area {
-    height: calc(35vh + 80px);
-    overflow: hidden;
 
-    .img-wrapper {
-        flex: auto;
-        overflow: hidden;
-        position: relative;
-
-        img {
-            height: 100%;
-            object-fit: cover;
-        }
-    }
-
-    img {
-        object-fit: contain;
-        height: 100%;
-    }
-
-    .thumbnails {
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.8);
-        width: 100%;
-    }
-}
-
-:root {
-    --ion-toolbar-background: var(--bg-base-100);
-}
-
-.m-auto {
-    margin-left: auto !important;
-    margin-right: auto !important;
-}
 </style>

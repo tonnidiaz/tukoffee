@@ -1,6 +1,6 @@
 <template>
     <div class="p-3 bg-base-100 h-full">
-        <form action="#" class="mt-3" @submit="onFormSubmit">
+        <form action="#" class="mt-3">
             <div class="form-control my-1">
                 <ion-input
                     label="Product name:"
@@ -27,9 +27,22 @@
                     label-placement="floating"
                     color="dark"
                     type="number"
+                    placeholder="In rands"
                     fill="solid"
                     :required="true"
                     v-model="form.price"
+                />
+            </div>
+            <div v-if="form.on_sale" class="form-control my-1">
+                <ion-input
+                    label="Sale price:"
+                    label-placement="floating"
+                    color="dark"
+                    placeholder="In rands"
+                    type="number"
+                    fill="solid"
+                    :required="true"
+                    v-model="form.sale_price"
                 />
             </div>
             <div class="form-control my-1">
@@ -58,15 +71,15 @@
                 <div class="mt-2 mb-4 flex gap-2 overflow-scroll">
                     <ion-thumbnail
                         class="relative w-65px h-65px"
-                        v-for="img in tempImgs"
+                        v-for="(img, i) in tempImgs"
                     >
                         <ion-img :src="img.url ?? img.file"></ion-img>
                         <div v-if="!img.loading" class="thumb-overlay">
-                            <button type="button" class="btn btn-sm btn-ghost">
+                            <tu-btn :on-click="()=>delImg(i)" type="button" class="btn btn-sm btn-ghost">
                                 <i
                                     class="fi fi-br-cross fs-18 text-gray-300"
                                 ></i>
-                            </button>
+                            </tu-btn>
                         </div>
                         <div v-if="img.loading" class="thumb-overlay">
                             <ion-spinner color="light"></ion-spinner>
@@ -97,38 +110,34 @@
                     >On sale</ion-checkbox
                 >
             </div>
-            <div class="form-control">
-                <tu-button
-                    :ionic="true"
-                    type="submit"
-                    color="dark"
-                    class="w-full"
-                    >{{
-                        mode == "add" ? "Add product" : "Save changes"
-                    }}</tu-button
-                >
-            </div>
+       
+           
         </form>
+
+        <!-- Loading -->
+        <ion-loading :is-open="loading" @did-dismiss="loading = false" message="Please wait..." class="tu"/>
     </div>
 </template>
 
 <script setup lang="ts">
-import { saveProduct, uploadImage } from "@/utils/funcs";
+import { errorHandler, saveProduct, uploadImage } from "@/utils/funcs";
 import { FilePicker } from "@capawesome/capacitor-file-picker";
 import {
     IonThumbnail,
     IonInput,
     IonCheckbox,
-    IonButton,
     IonImg,
     IonSpinner,
     IonText,
+    IonLoading,
+    IonFooter,
+    IonToolbar
 } from "@ionic/vue";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { Capacitor } from "@capacitor/core";
 import { TypeImgs } from "@/stores/addProduct";
 import { storeToRefs } from "pinia";
-import { Cloudinary } from "@capawesome/capacitor-cloudinary";
+import { Cloudinary,  } from "@capawesome/capacitor-cloudinary";
 
 import { useAppStore } from "@/stores/app";
 import { useRouter } from "vue-router";
@@ -141,18 +150,42 @@ const formStore = useFormStore();
 const { tempImgs, form } = storeToRefs(formStore);
 const { setTempImgs } = formStore;
 
+
+const loading = ref(false)
 const router = useRouter();
 
 const props = defineProps({
     mode: { type: String, default: "add" },
 });
+
+const delImg = async (i: number)=>{
+    const _form = form.value
+    try{
+
+        loading.value= true
+        //Delete image from clud
+        const {publicId} = _form.images[i]
+        const res = await apiAxios.post(`/cloudinary`, { 
+            act: 'del',
+            publicId,
+            product: _form._id
+        })
+        console.log(res.data)
+        form.value.images.splice(i, 1)
+        tempImgs.value.splice(i, 1)
+        loading.value=false
+    }catch(e){
+        console.log(e)
+        errorHandler(e, 'Failed to delete image', true)
+    }
+}
 const initialize = async () => {
     await Cloudinary.initialize({ cloudName: "sketchi" });
     console.log("Cloudinary initialized");
 };
 const importImg = async () => {
     const res = await FilePicker.pickFiles({
-        multiple: true,
+        multiple: false,
         types: ["image/*"],
     });
 
@@ -162,15 +195,16 @@ const importImg = async () => {
             file: Capacitor.convertFileSrc(it.path!),
         };
     });
-    console.log(_imgs);
     const existingImgs = form.value.images ?? [];
+    const oldTempImgs = tempImgs.value
     setTempImgs([...tempImgs.value, ..._imgs]);
-    res.files.forEach(async (it, i) => {
+    res.files.forEach(async (it, index) => {
+
+        const i = oldTempImgs.length + index;
         const res = await uploadImage(it.path, appStore.title);
-        console.log(res);
         const data = { url: res.secureUrl, publicId: res.publicId };
         const newImgs = [...existingImgs, data];
-
+           
         if (props.mode == "edit") {
             try {
                 const res = await apiAxios.post("/products/edit", {
@@ -181,6 +215,7 @@ const importImg = async () => {
                 tempImgs.value[i].loading = false;
             } catch (error) {
                 console.log(error);
+                errorHandler(error)
                 formStore.setTempImgs(
                     tempImgs.value.filter((el, index) => index !== i)
                 );

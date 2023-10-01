@@ -45,10 +45,18 @@
                     </span>
                 </div>
                 <div class="flex items-center justify-between w-full px-2">
-                    <span class="text-md fw-6 fs-14 text-gray-700"
-                        >R{{ product.price }}</span
-                    >
-
+                  
+                    <span v-if="!product.on_sale" class="text-md fw-6 fs-14 text-gray-700"
+                            >R{{ product.price.toFixed(2) }}</span
+                        >
+                        <div v-else class="flex items-center gap-2">
+                             <span class="text-md fw-5 fs-14 text-gray-700 linethrough"
+                            >R{{ product.price}}</span
+                        >
+                             <span class="text-md fw-6 fs-14 text-gray-700" style="transform: scale(1.2);"
+                            >R{{product.sale_price? product.sale_price.toFixed(2) :0.00}}</span
+                        >
+                        </div>
                     <tu-button
                         :on-click="addRemoveCart"
                         :class="`rounded-full btn-sm h-30px flex items-center justify-center ${inCart(product) ? 'bg-primary' : 'btn-danger'}`"

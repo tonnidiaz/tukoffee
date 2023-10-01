@@ -47,6 +47,7 @@ export const uploadImage = async (path: any, storeName: string)=>{
         publicId: cloudinaryFolder(storeName) + '/' + public_id,
         resourceType: ResourceType.Image,
         uploadPreset: 't6pie4cq',
+        
   
       });
       return res
@@ -59,6 +60,7 @@ export const saveProduct = async(product: Obj, mode = 'add')=>{
     }
     catch(e){
         console.log(e)
+        errorHandler(e,)
         return null
     }
 }

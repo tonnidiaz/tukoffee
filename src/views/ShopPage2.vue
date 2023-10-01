@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <Appbar title="Shop" />
+        <Appbar :title="title" />
         <ion-content :fullscreen="true">
             <Refresher :on-refresh="init" />
             <div class="h-full w-full flex flex-col">
@@ -24,7 +24,7 @@
                                 ></ion-input>
                                 <button
                                     class="mt-2"
-                                    id="/shop-filter-sheet-trigger"
+                                    id="/shop2-filter-sheet-trigger"
                                 >
                                     <i
                                         class="fi fi-rr-settings-sliders fs-18 text-gray-700"
@@ -34,7 +34,7 @@
                         </div>
 
                         <BottomSheet
-                            trigger="/shop-filter-sheet-trigger"
+                            trigger="/shop2-filter-sheet-trigger"
                             id="filter-sheet"
                         >
                             <div
@@ -97,13 +97,9 @@
                                         label-placement="floating"
                                     >
                                         <ion-select-option :value="Status.all"
-                                            >All</ion-select-option>
-                                        <ion-select-option :value="Status.topSelling"
-                                            >Top selling</ion-select-option>
-                                        <ion-select-option :value="Status.onSale"
-                                            >Today's special</ion-select-option>
-                                        <ion-select-option :value="Status.onSale"
-                                            >On sale</ion-select-option>
+                                            >All</ion-select-option
+                                        >
+                                    
                                         <ion-select-option :value="Status.in"
                                             >In stock</ion-select-option
                                         >
@@ -125,7 +121,7 @@
                 </div>
                 <div
                     v-else-if="sortedProducts.length"
-                    class="my-0 grid justify-center gap-1 px-2 grid-cols-2"
+                    class="my-0 px-2 grid justify-center gap-1 grid-cols-2"
                 >
                     <ProductCard
                         v-for="(e, i) in sortedProducts"
@@ -151,7 +147,7 @@ import {
     IonItem,
     IonSelect,
     IonSelectOption,
-    IonSpinner
+    IonSpinner,
 } from "@ionic/vue";
 import { ref, onMounted } from "vue";
 import Appbar from "@/components/Appbar.vue";
@@ -163,23 +159,28 @@ import { Obj, SortOrder } from "@/utils/classes";
 import { useShopStore, SortBy, Status } from "@/stores/shop";
 import { storeToRefs } from "pinia";
 import BottomSheet from "@/components/BottomSheet.vue";
+import { useRoute } from "vue-router";
 
 const shopStore = useShopStore();
 const {
     sortBy,
     sortOrder,
     sortedItems: sortedProducts,
-    items: products,
     status,
 } = storeToRefs(shopStore);
-const { setItems, setSortBy, toggleOrder, setSortedItems, setStatus } =
-    shopStore;
+
+const { setItems, setSortBy, toggleOrder, setStatus } = shopStore;
+const title = ref("Shop");
+
+const route = useRoute();
+const { category } = route.params;
 
 async function getProducts() {
+    console.log(category);
     try {
         setItems(null);
-        setStatus(Status.all)
-        const res = await apiAxios.get("/products");
+        setStatus(Status.all);
+        const res = await apiAxios.get("/products?q=" + category);
         setItems(res.data.data);
     } catch (error) {
         console.log(error);
@@ -191,6 +192,11 @@ const init = async () => {
 };
 
 onMounted(() => {
+    let t = "Shop";
+    if (category == "top-selling") t = "Top selling products";
+    else if (category == "sale") t = "Products on sale";
+    else if (category == "special") t = "Today's special";
+    title.value = t;
     init();
 });
 </script>

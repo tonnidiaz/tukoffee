@@ -2,7 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const { Order, Cart, User, Product } = require("../models");
 const { AddressSchema } = require("../models/user");
-const { genToken } = require("../utils/functions");
+const { genToken, tunedErr, delCloudinary } = require("../utils/functions");
 var router = express.Router();
 const fs = require("fs");
 const path = require("path");
@@ -149,7 +149,7 @@ router.get("/send-sms", async (req, res) => {
             headers: {
                 "content-type": "application/x-www-form-urlencoded",
                 "X-RapidAPI-Key":
-                    "71e962e760mshe177840eb7630a1p1ce7a7jsncff43c280599",
+                    process.env.INTELTECH_API_KEY,
                 "X-RapidAPI-Host": "inteltech.p.rapidapi.com",
             },
             data: encodedParams,
@@ -163,4 +163,26 @@ router.get("/send-sms", async (req, res) => {
         return res.status(500).send("tuned:Something went wrong");
     }
 });
+
+router.post('/cloudinary', auth, async (req, res)=>{
+    try{
+
+        const { act, publicId, product } = req.body
+       
+        if (act == 'del'){
+           const r = await delCloudinary(publicId)
+           console.log(r)
+           if (product){
+            const _product = await Product.findById(product).exec()
+            _product.images = _product.images.filter(it=> it.publicId != publicId)
+            await _product.save()
+           }
+        }
+        res.send('Ok')
+        
+    }catch(e){
+        console.log(e)
+        return tunedErr(res, 500, 'Something went wrong')
+    }
+})
 module.exports = router;

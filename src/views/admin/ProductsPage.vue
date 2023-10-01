@@ -21,7 +21,7 @@
         </Appbar>
 
         <ion-fab vertical="bottom" horizontal="end">
-            <ion-fab-button @click="router.push('/add/product')" color="dark">
+            <ion-fab-button router-link='/add/product' color="dark">
                 <span class="mt-1"><i class="fi fi-rr-plus"></i></span>
             </ion-fab-button>
         </ion-fab>
@@ -73,12 +73,6 @@
            
         </ion-content>
         <!-- New product sheet -->
-        <BottomSheet
-            @did-dismiss="newProductSheetOpen = false"
-            :is-open="newProductSheetOpen"
-        >
-            <AddProductView />
-        </BottomSheet>
 
         <!-- Filter sheet -->
         <BottomSheet trigger="/products-filter-sheet-trigger" id="filter-sheet">
@@ -152,7 +146,6 @@
 <script setup lang="ts">
 import {
     IonPage,
-    IonIcon,
     IonAlert,
     IonItem,
     IonContent,
@@ -163,7 +156,6 @@ import {
     IonInput,
     IonLoading,
     IonSelectOption,
-    IonInfiniteScroll,
 } from "@ionic/vue";
 
 import Appbar from "@/components/Appbar.vue";
@@ -171,8 +163,7 @@ import ProductItem from "@/components/ProductItem.vue";
 import BottomSheet from "@/components/BottomSheet.vue";
 import Refresher from "@/components/Refresher.vue";
 
-import AddProductView from "@/components/AddProductView.vue";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
 import { Obj, SortOrder } from "@/utils/classes";
 import { apiAxios } from "@/utils/constants";
 import { useRouter } from "vue-router";
@@ -195,9 +186,8 @@ const delAlertOpen = ref(false), isLoading = ref(false);
 const router = useRouter();
 
 const onSearchInput = (e: any) => {
-    let _prods = products.value,
-        _sorted = sortedProducts.value;
-    const q = e.target.value;
+    let _prods = products.value;
+        const q = e.target.value;
     const regQ = new RegExp(q, "i");
 
     const filt = (it: Obj) => {

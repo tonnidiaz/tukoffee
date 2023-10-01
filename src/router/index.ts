@@ -60,7 +60,10 @@ const routes: Array<RouteRecordRaw> = [
             },
         ],
     },
-
+    {
+        path: "/shop/:category",
+        component: () => import("@/views/ShopPage2.vue"),
+    },
     {
         path: "/product/:id",
         component: () => import("../views/ProductPage.vue"),

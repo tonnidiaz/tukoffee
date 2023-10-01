@@ -139,3 +139,45 @@ img{
         color: var(--ion-text-color);
     }
 }
+
+.image-area {
+    height: calc(35vh + 80px);
+    overflow: hidden;
+
+    .img-wrapper {
+        flex: auto;
+        overflow: hidden;
+        position: relative;
+
+        img {
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    img {
+        object-fit: contain;
+        height: 100%;
+    }
+
+    .thumbnails {
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+        width: 100%;
+    }
+}
+
+:root {
+    --ion-toolbar-background: var(--bg-base-100);
+}
+
+.m-auto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.linethrough{
+    background-color: transparent;
+   // background-image: gradient(linear, 19.1% -7.9%, 81% 107.9%, color-stop(0, transparent), color-stop(.48, transparent), color-stop(.5, #000), color-stop(.52, transparent), color-stop(1, transparent));
+    background-image: repeating-linear-gradient(163deg, transparent 0%, transparent 48%, #f50000 50%, transparent 52%, transparent 100%);
+}

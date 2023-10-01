@@ -6,7 +6,7 @@
                   <button v-if="selectedItems.length" class="btn btn-sm btn-ghost rounded-full w-40px h-40px p-0 "  router-direction="back" @click="()=> appStore.setSelectedItems([])" slot="icon-only">
                     <ion-icon class="w-40px h-20px" :md="close"></ion-icon>
                    </button> 
-                 <button v-else-if="showBack" class="btn btn-sm btn-ghost rounded-full w-40px h-40px p-0 "  router-direction="back" @click="()=> router.back()" slot="icon-only">
+                 <button v-else-if="showBack" class="btn btn-sm btn-ghost rounded-full w-40px h-40px p-0 "  router-direction="back" @click="console.log('back'); router.back()" slot="icon-only">
                     <ion-icon class="w-40px h-20px" :md="arrowBack"></ion-icon>
                    </button> 
                 </ion-buttons>
