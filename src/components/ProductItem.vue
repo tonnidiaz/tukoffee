@@ -61,8 +61,6 @@ import {
 IonAlert,
 } from "@ionic/vue";
 import { useUserStore } from "@/stores/user";
-import BottomSheet from "@/components/BottomSheet.vue";
-import TuFormField from "@/components/TuFormField.vue";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import DropdownBtn from "./DropdownBtn.vue";

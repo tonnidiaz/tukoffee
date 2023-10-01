@@ -97,7 +97,6 @@ import {
     IonInput
 } from "@ionic/vue";
 import Appbar from '@/components/Appbar.vue';
-import TuFormField from "@/components/TuFormField.vue";
 import OrderItem from "@/components/OrderItem.vue";
 import { onMounted, ref, watch } from "vue";
 import { apiAxios } from "@/utils/constants";

@@ -15,7 +15,7 @@
                 <div class="w-full  fixed top-2 left-0 z-[9999] py-2 px-4">
                     <div class="h-45px relative flex items-center rounded w-full bg-base-100 shadow-md rounded-">
 
-                        <ion-searchbar v-model="query" id="searchbar" class="tu" :debounce="500" :search-icon="ionLoc"
+                        <ion-searchbar  v-model="query" id="searchbar" class="tu h-50px" :debounce="500" :search-icon="ionLoc"
                             @ion-input="onSearchChange" @ion-focus="searchBarOpen = true" placeholder="Location"
                             type="search">
                         </ion-searchbar>
@@ -44,22 +44,18 @@
 
 <script setup lang="ts">
 import {
-    IonPage,
     IonList,
-    IonToolbar,
     IonIcon,
-    IonContent,
     IonFab,
     IonFabButton,
     IonSearchbar,
-    IonInput,
     IonLabel,
     IonItem,
     useIonRouter
 } from "@ionic/vue";
-import { location as ionLoc, checkmark, add, } from 'ionicons/icons';
+import { location as ionLoc, checkmark, } from 'ionicons/icons';
 import { OnClickOutside } from '@vueuse/components';
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet'
 import { LMap, LTileLayer, LMarker, } from "@vue-leaflet/vue-leaflet";
@@ -74,7 +70,7 @@ const searchBarOpen = ref(false)
 
 const router = useIonRouter()
 const jhbCenter = [-26.1974939, 28.0534776,]
-const zoom = ref(13), center = ref(jhbCenter), currCenter = ref(jhbCenter);
+const zoom = ref(13), center = ref<any>(jhbCenter), currCenter = ref(jhbCenter);
 
 const query = ref("")
 const
@@ -103,7 +99,6 @@ async function _onOk(){
 }
 async function goToCurrentLocation(){
     const coordinates = await Geolocation.getCurrentPosition();
-    console.log(coordinates)
     const {latitude, longitude} = coordinates.coords
     center.value =[latitude, longitude]
 
@@ -129,7 +124,7 @@ async function searchAddress(query: string) {
     setIsGeocoding(true)
     try {
 
-        if (true) {
+        if (false) {
             features.value = dummyFeatures;
             setIsGeocoding(false)
             return;
@@ -144,7 +139,6 @@ async function searchAddress(query: string) {
             })
 
             features.value = res.data.features
-            console.log(features.value)
         }
 
 

@@ -2,25 +2,14 @@
     <ion-page>
         <Appbar :title="mode == 'add' ? 'New product' : 'Edit product'"/> 
         <ion-content :fullscreen="true">
-        <AddProductView :mode="mode"/>
+        <AddProductView :mode="(mode as string)"/>
     </ion-content>
     </ion-page>
 </template>
 <script setup lang="ts">
 import {
     IonPage,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonContent,
-    IonButton,
-    IonMenuToggle,
-    IonButtons,
-    IonRippleEffect,
-    IonSearchbar,
-    IonText,
-    IonAvatar,
-    IonInfiniteScroll,
 } from "@ionic/vue";
 import Appbar from '@/components/Appbar.vue';
 import { useRoute } from "vue-router";

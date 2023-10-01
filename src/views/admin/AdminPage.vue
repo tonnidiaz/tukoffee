@@ -6,7 +6,7 @@
             <ion-router-outlet></ion-router-outlet>
 
             <ion-tab-bar class="bottom-nav" slot="bottom">
-                <ion-tab-button tab="home" href="/~/home">
+                <ion-tab-button  tab="home" href="/~/home">
                     <span><i class="fi fi-sr-home"></i></span>
                     <ion-label>Home</ion-label>
                 </ion-tab-button>

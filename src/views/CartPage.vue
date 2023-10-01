@@ -39,7 +39,7 @@
                         >
                            
                         </CartItem>
-                        <div class="h-full flex flex-center py-7">
+                        <div v-else class="h-full flex flex-center py-7">
                             <h3 class="fs-18 fw-5">Cart empty</h3>
                         </div>
                     </div>

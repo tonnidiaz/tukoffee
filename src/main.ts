@@ -30,6 +30,9 @@ import BottomSheetVue from './components/BottomSheet.vue';
 import TuButtonVue from './components/TuButton.vue';
 import AppbarVue from './components/Appbar.vue';
 import RefresherVue from './components/Refresher.vue';
+import IconBtn from './components/IconBtn.vue';
+import TuField from './components/TuField.vue';
+import MapViewVue from './components/MapView.vue';
 
 const pinia = createPinia() 
 
@@ -40,10 +43,14 @@ const app = createApp(App,)
 
 
 /*  components */
-app.component('bottom-sheet', BottomSheetVue)
-app.component('tu-btn', TuButtonVue)
-app.component('appbar', AppbarVue)
-app.component('refresher', RefresherVue)
+app.component('bottom-sheet', BottomSheetVue).
+component('tu-btn', TuButtonVue).
+component('appbar', AppbarVue).
+component('refresher', RefresherVue).
+component('icon-btn', IconBtn).
+component('icon-btn', IconBtn).
+component('tu-field', TuField)
+.component('map-view', MapViewVue)
 
 router.isReady().then(() => {
   app.mount('#app');

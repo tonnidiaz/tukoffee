@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.tb.tukoffee;
 
 import com.getcapacitor.BridgeActivity;
 

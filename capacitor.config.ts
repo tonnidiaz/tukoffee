@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'tb',
+  appId: 'com.tb.tukoffee',
+  appName: 'Tukoffee',
   webDir: 'dist',
   server: {
     androidScheme: 'https'
