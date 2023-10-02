@@ -6,7 +6,7 @@
              selectedItems.length ? {label: 'Deselect all', cmd: ()=> selectedItems = []} : null,
 
                selectedItems.length ? {label: 'Cancel selected orders', cmd: onCancelSelected} : null,
-                {label: 'Back to home', cmd: ()=> $router.push('/')},
+                {label: 'Back to home', cmd: ()=> $router.push('/~/home')},
             ]"/>
        
         </Appbar>

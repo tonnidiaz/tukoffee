@@ -1,6 +1,10 @@
 <template>
     <ion-page>
-        <Appbar title="Accounts" :show-cart="false" />
+        <Appbar title="Accounts" :show-cart="false" >
+            <DropdownBtn :items="[
+            {label: 'Back to home', cmd: ()=> $router.push('/~/home')}
+        ]"/>
+        </Appbar>
         <ion-content :fullscreen="true">
             <refresher :on-refresh="getAccounts" />
             <div class="my-1 bg-base-100 p-3">
@@ -17,11 +21,7 @@
                         placeholder="Search by name or email"
                         class="tu bg-primar"
                     ></ion-input>
-                    <span class="mt-2"
-                        ><i
-                            class="fi fi-rr-settings-sliders fs-18 text-gray-700"
-                        ></i
-                    ></span>
+                   
                 </div>
             </div>
             <div class="my-1 bg-base-100">
@@ -53,10 +53,30 @@
                                 :items="[
                                     {
                                         label: 'Delete',
-                                        cmd: () => delAccounts([acc]),
+                                        cmd: () => (delAccountAlert2 = true),
                                     },
                                 ]"
                             />
+                            <ion-alert
+                                header="Delete account"
+                                message="Are you sure you want to delete the account?"
+                                class="tu"
+                                @did-dismiss="delAccountAlert2 = false"
+                                :is-open="delAccountAlert2"
+                                :buttons="[
+                                    {
+                                        text: 'Cancel',
+                                        role: 'cancel',
+                                    },
+                                    {
+                                        text: 'Continue',
+                                        role: 'confirm',
+                                        handler: () => {
+                                            delAccounts([acc]);
+                                        },
+                                    },
+                                ]"
+                            ></ion-alert>
                         </ion-item>
                     </ion-list>
                     <div v-else class="p-4">
@@ -110,15 +130,15 @@
                                 :is-open="delAccountAlert"
                                 :buttons="[
                                     {
+                                        text: 'Cancel',
+                                        role: 'cancel',
+                                    },
+                                    {
                                         text: 'Continue',
                                         role: 'confirm',
                                         handler: () => {
                                             delAccounts([acc]);
                                         },
-                                    },
-                                    {
-                                        text: 'Cancel',
-                                        role: 'cancel',
                                     },
                                 ]"
                             ></ion-alert>
@@ -160,6 +180,7 @@ const accounts = ref<Obj[]>(),
     staff = ref<Obj[]>(),
     customers = ref<Obj[]>();
 const delAccountAlert = ref(false);
+const delAccountAlert2= ref(false);
 
 async function getAccounts() {
     accounts.value = undefined;

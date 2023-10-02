@@ -2,25 +2,24 @@
     <!--  :router-link="`/product/${item.pid}`" -->
     <OnLongPress @trigger="onLongPress">
         <ion-item color="clear" @click="onItemClick">
-        <ion-thumbnail
-            
-            class="h-45px shadow-lg card rounded-lg"
-            slot="start"
-        >
-            <ion-img
-                v-if="item.images?.length"
-                class="rounded-lg"
-                :src="item.images[0].url"
-            ></ion-img>
-            <span v-else>
-                <i class="fi fi-rr-image-slash text-gray-600"></i>
-            </span>
-        </ion-thumbnail>
-        <ion-label >
-            <h3 class="fw-5 fs-16">{{ item.name }}</h3>
-            <ion-note>R{{ item.price.toFixed(2) }}</ion-note>
-        </ion-label>
-        <ion-checkbox
+            <ion-thumbnail
+                class="h-45px shadow-lg card rounded-lg"
+                slot="start"
+            >
+                <ion-img
+                    v-if="item.images?.length"
+                    class="rounded-lg"
+                    :src="item.images[0].url"
+                ></ion-img>
+                <span v-else>
+                    <i class="fi fi-rr-image-slash text-gray-600"></i>
+                </span>
+            </ion-thumbnail>
+            <ion-label>
+                <h3 class="fw-5 fs-16">{{ item.name }}</h3>
+                <ion-note>R{{ item.price.toFixed(2) }}</ion-note>
+            </ion-label>
+            <ion-checkbox
                 :checked="
                     selectedItems.findIndex((el) => el._id == item._id) != -1
                 "
@@ -28,26 +27,38 @@
                 slot="end"
                 mode="ios"
             ></ion-checkbox>
-        <div v-else slot="end">
-            <dropdown-btn :items="[
-                { label: 'Edit', cmd: onEditClick },
-                { label: 'Delete', cmd: () => {delAlertOpen = true} },
-                ]" />
-        </div>
-        <IonAlert
-        message="Are you sure you want to delete this product?"
-        header="Delete product" 
-        :is-open="delAlertOpen"
-        :buttons="[
-            {text: 'Cancel', role: 'cancel'},
-            {text: 'Yes', role: 'confirm', handler: delProduct},
-        ]"
-         @didDismiss="delAlertOpen = false"/>
-    </ion-item>
-
+            <div v-else slot="end">
+                <dropdown-btn
+                    :items="[
+                        { label: 'Edit', cmd: onEditClick },
+                        {
+                            label: 'Delete',
+                            cmd: () => {
+                                delAlertOpen = true;
+                            },
+                        },
+                    ]"
+                />
+            </div>
+            <IonAlert
+                message="Are you sure you want to delete this product?"
+                header="Delete product"
+                :is-open="delAlertOpen"
+                :buttons="[
+                    { text: 'Cancel', role: 'cancel' },
+                    { text: 'Yes', role: 'confirm', handler: delProduct },
+                ]"
+                @didDismiss="delAlertOpen = false"
+            />
+        </ion-item>
     </OnLongPress>
-  
-    <ion-loading color="dark" message="Please wait..." :is-open="isLoading" @didDismiss="isLoading = false"/>
+
+    <ion-loading
+        color="dark"
+        message="Please wait..."
+        :is-open="isLoading"
+        @didDismiss="isLoading = false"
+    />
 </template>
 <script setup lang="ts">
 import {
@@ -58,7 +69,7 @@ import {
     IonCheckbox,
     IonThumbnail,
     IonLoading,
-IonAlert,
+    IonAlert,
 } from "@ionic/vue";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
@@ -71,36 +82,37 @@ import { sleep } from "@/utils/funcs";
 import { useAppStore } from "@/stores/app";
 import { OnLongPress } from "@vueuse/components";
 
-
 const userStore = useUserStore();
 const formStore = useFormStore();
-const appStore = useAppStore()
+const appStore = useAppStore();
 
 const { selectedItems } = storeToRefs(appStore);
-const delAlertOpen = ref(false), isLoading = ref(false);
+const delAlertOpen = ref(false),
+    isLoading = ref(false);
 const { cart } = storeToRefs(userStore);
 
 const isHolding = ref(false);
 
+const onEditClick = (e: any) => {
+    formStore.setForm(props.item);
+    router.push("/edit/product");
+};
 
-const onEditClick = (e: any) => { 
-    formStore.setForm(props.item)
-    router.push('/edit/product')
- }
-
-const delProduct = async () =>{
-    const it = props.item
+const delProduct = async () => {
+    const it = props.item;
     try {
-        isLoading.value = true
-       const res = await apiAxios.post(`/products/delete`, {pids: [it["pid"]]})
-       //TODO: Delete images also
-        isLoading.value = false
-        await sleep(100)
-        props.reload()
+        isLoading.value = true;
+        const res = await apiAxios.post(`/products/delete`, {
+            pids: [it["pid"]],
+        });
+        //TODO: Delete images also
+        isLoading.value = false;
+        await sleep(100);
+        props.reload();
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
-}
+};
 
 const toggleSelected = () => {
     const inList = selectedItems.value.find((el) => el._id == props.item._id);
@@ -109,13 +121,13 @@ const toggleSelected = () => {
         : [...selectedItems.value, props.item];
     appStore.setSelectedItems(data);
 };
-const onItemClick = (e: Event) => {
-if (e.defaultPrevented) return;
-
-    if (selectedItems.value.length) toggleSelected();
-    else{
-        router.push(`/product/${props.item.pid}`)
+const onItemClick = (e: any) => {
+    console.log(e.defaultPrevented);
+    if (!selectedItems.value.length && !e.defaultPrevented) {
+        router.push(`/product/${props.item.pid}`);
     }
+    e.preventDefault();
+    if (selectedItems.value.length) toggleSelected();
 };
 const onLongPress = (e: PointerEvent) => {
     isHolding.value = true;
@@ -127,9 +139,9 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    reload:{
+    reload: {
         type: Function,
-        required : true
-    }
+        required: true,
+    },
 });
 </script>

@@ -12,12 +12,15 @@
 <script setup lang="ts">
 import { IonApp, IonRouterOutlet, IonLoading } from "@ionic/vue";
 import { apiAxios } from "./utils/constants";
-import { onBeforeMount } from "vue";
+import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { useUserStore } from "./stores/user";
 import { storeToRefs } from "pinia";
 import { setupCart } from "./utils/funcs";
 import { useStoreStore } from "./stores/store";
 import { useAppStore } from "./stores/app";
+import { useRoute } from "vue-router";
+import { useFormStore } from "./stores/form";
+import { apps } from "ionicons/icons";
 const userStore = useUserStore();
 const storeStore = useStoreStore();
 
@@ -25,7 +28,8 @@ const { userSetup } = storeToRefs(userStore);
 const appStore = useAppStore()
 const { isLoading, loadingMsg } = storeToRefs(appStore)
 const {setIsLoading} = appStore
-
+const formStore = useFormStore()
+const route = useRoute()
 const setupUser = async () => {
     userStore.setUserSetup(false);
     try {
@@ -53,9 +57,27 @@ const getStores = async () => {
     }
 };
 
-onBeforeMount(() => {
+const setupStore = async () =>{
+    try{
+        const res  = await apiAxios.get('/store');
+        const {data} = res
+        storeStore.setStore(data.store)
+        storeStore.setOwner(data.owner)
+        storeStore.setDeveloper(data.developer)
+    }
+    catch(e){
+        console.log(e)
+    }
+}
+watch(route, val=>{
+    appStore.setSelectedItems([])
+})
+
+onMounted(() => {
     setupUser();
+    setupStore()
     getStores();
+
 });
 </script>
 <style lang="scss">
@@ -95,5 +117,19 @@ ion-tab-button {
 }
 .button-native {
     padding: 0 !important;
+}
+
+.h-full{
+    overflow-y: scroll;
+}
+ion-alert, ion-select, .item-radio-checked.sc-ion-select-popover-md{
+    --ion-color-primary: rgba(42,42,42, .5);
+--ion-color-primary-rgb: 42 42 42;
+}
+tr td:nth-child(2){
+    text-align: end;
+}
+th, th h3{
+    font-size: 18px;
 }
 </style>

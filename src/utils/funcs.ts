@@ -2,7 +2,7 @@ import axios from "axios";
 import { CLOUDINARY_API_KEY, CLOUDINARY_SECRET, apiAxios } from "./constants";
 import { Cloudinary, ResourceType } from "@capawesome/capacitor-cloudinary";
 import { Obj } from "./classes";
-import { toastController } from "@ionic/vue";
+import { alertController, toastController } from "@ionic/vue";
 
 export function randomIntFromInterval(min: number, max: number) {
     // min and max included
@@ -89,6 +89,17 @@ export async function showToast({
     await toast.present();
 }
 
+export const showAlert = async ({title, message} : {title?: string, message: string}) => {
+    const alert = await alertController.create({
+      header: title,
+      //subHeader: 'Important message',
+      message,
+      buttons: ['OK'],
+      mode: 'ios'
+    });
+
+    await alert.present();
+  };
 export function errorHandler(e: any, message = "Something went wrong", force = false){
     const msg: string = force ? message : (e.response?.data ?? message);
         showToast({msg: msg.replace('tuned:', ''), cssClass: 'ion-danger', duration: 1500}  );

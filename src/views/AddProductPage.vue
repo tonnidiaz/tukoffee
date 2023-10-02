@@ -5,7 +5,7 @@
             :show-cart="false"
         />
         <ion-content :fullscreen="true">
-            <div class="p-3 bg-base-100 h-full">
+            <div class="px-3 py-1 bg-base-100 h-full">
                 <form id="form" @submit="$event.preventDefault()" class="mt-3">
                     <div class="form-control my-1">
                         <ion-input
@@ -163,7 +163,7 @@ import { IonPage, IonContent, IonFooter, IonToolbar,
     IonLoading,
 } from "@ionic/vue";
 import Appbar from "@/components/Appbar.vue";
-import { onMounted, ref } from "vue";
+import { onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, ref } from "vue";
 import { Capacitor } from "@capacitor/core";
 import { TypeImgs } from "@/stores/addProduct";
 import { storeToRefs } from "pinia";
@@ -208,7 +208,6 @@ const delImg = async (i: number) => {
 };
 const initialize = async () => {
     await Cloudinary.initialize({ cloudName: "sketchi" });
-    console.log("Cloudinary initialized");
 };
 const importImg = async () => {
     const res = await FilePicker.pickFiles({
@@ -274,6 +273,10 @@ onMounted(() => {
         formStore.setTempImgs(formImgs);
     }
 });
+onBeforeUnmount(()=>{
+    formStore.setForm({})
+    formStore.setTempImgs([])
+})
 </script>
 
 <style>
@@ -283,7 +286,7 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3);
     position: absolute;
 }
 </style>

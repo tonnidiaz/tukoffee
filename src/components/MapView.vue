@@ -124,7 +124,7 @@ async function searchAddress(query: string) {
     setIsGeocoding(true)
     try {
 
-        if (false) {
+        if (true) {
             features.value = dummyFeatures;
             setIsGeocoding(false)
             return;

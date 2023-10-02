@@ -2,10 +2,18 @@
     <ion-page>
         <Appbar title="Dashboard" :show-cart="false">
         <DropdownBtn :items="[
-            {label: 'Back to home', cmd: ()=> $router.push('/')}
+            {label: 'Back to home', cmd: ()=> $router.push('/~/home')}
         ]"/>
         </Appbar>
-        <ion-content :fullscreen="true"></ion-content>
+        <ion-content :fullscreen="true">
+        <InkWell class="p-4 bg-primary w-150px" :on-long-press="()=>{
+            console.log('Long press')
+        }" @click="()=>{
+            console.log('Click')
+        }">
+            Hello fools
+        </InkWell>
+        </ion-content>
     </ion-page>
 </template>
 <script setup lang="ts">
@@ -26,5 +34,6 @@ import {
 } from "@ionic/vue";
 import Appbar from '@/components/Appbar.vue';
 import DropdownBtn from "@/components/DropdownBtn.vue";
+import InkWell from "@/components/InkWell.vue";
 
 </script>

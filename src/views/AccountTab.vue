@@ -23,10 +23,17 @@
                     <ion-item
                         class=""
                         color="clear"
-                        lines="none"
                         router-link="/orders"
                     >
                         <ion-label>Orders</ion-label>
+                    </ion-item>
+                    <ion-item
+                        class=""
+                        color="clear"
+                        lines="none"
+                        router-link="/store/info"
+                    >
+                        <ion-label>Store details</ion-label>
                     </ion-item>
                 </IonItemGroup>
                 <IonItemGroup

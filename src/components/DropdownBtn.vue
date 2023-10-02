@@ -49,8 +49,7 @@ const props = defineProps({
             default: []
     }
 })
-const openPopover = (e: Event) => {
-    console.log('Ope')
+const openPopover = (e: any) => {
     e.preventDefault()
     event.value = e;
     isOpen.value = true;

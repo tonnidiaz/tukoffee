@@ -1,13 +1,15 @@
 <template>
     <ion-page>
-        <Appbar :title="account ? `${account.first_name} ${account.last_name}`: 'Profile'"  :show-cart="false"/>
+        <Appbar :title="account ? `${account.first_name} ${account.last_name}`: 'Profile'"  :show-cart="false">
+        <icon-btn router-link="/account/settings"> <i class="fi fi-sr-settings"></i> </icon-btn>
+        </Appbar>
         <ion-content :fullscreen="true">
             <refresher :on-refresh="getAccount"/>
             <div v-if="account">
                 <div class="my-1 bg-base-100 p-3">
                     <table class="table w-full">
                         <tr>
-                            <th colspan="2">
+                            <th colspan="2" class="p-0 pl-4">
                                 <div class="flex justify-between items-center">
                                     <h3 class="fs-18 fw-5">Personal details</h3>
                                     <icon-btn

@@ -1,6 +1,6 @@
 <template>
-    <OnLongPress @trigger="onLongPress">
-        <ion-item @click="onItemClick" color="clear" :router-link="`/order/${order.oid}`">
+    <OnLongPress @trigger="onLongPress" >
+        <ion-item  color="clear" @click="onItemClick" :router-link="`/order/${order.oid}`">
             <ion-label>
                 <h3 class="fw-5 fs-16">#{{ order.oid }}</h3>
                 <div class="flex gap-4">
@@ -9,7 +9,7 @@
                     </ion-note>
 
                     <ion-badge
-                        class="px-3"
+                        class="px-3" 
                         mode="ios"
                         :color="
                             order.status == 'pending'
@@ -23,7 +23,7 @@
                 </div>
             </ion-label>
             <ion-checkbox
-                @ion-change="onItemClick"
+                
                 :checked="
                     selectedItems.findIndex((el) => el._id == order._id) != -1
                 "
@@ -51,6 +51,7 @@ import {
     IonItem,
     IonNote,
     IonLabel,
+useIonRouter,
 } from "@ionic/vue";
 import { ellipsisVertical } from "ionicons/icons";
 import { storeToRefs } from "pinia";
@@ -60,6 +61,7 @@ import { useAppStore } from "@/stores/app";
 import { ref } from "vue";
 import DropdownBtn from "./DropdownBtn.vue";
 import { apiAxios } from "@/utils/constants";
+import { useRoute } from "vue-router";
 
 const userStore = useUserStore();
 const orderStore = useOrderStore();
@@ -85,11 +87,14 @@ const toggleSelected = () => {
         : [...selectedItems.value, props.order];
     appStore.setSelectedItems(data);
 };
+
+const router = useIonRouter()
+const route = useRoute()
+const { path} = route
 const onItemClick = (e: any) => {
+    console.log(e.defaultPrevented)
     e.preventDefault()
-    console.log(isHolding.value);
     if (selectedItems.value.length) toggleSelected();
-    return false
 };
 const onLongPress = (e: PointerEvent) => {
     isHolding.value = true;
@@ -104,7 +109,9 @@ async function cancelOrder() {
         const act = 'cancel'
         appStore.setSelectedItems([])
         try {
-            const res = await apiAxios.post(`/order/cancel?action=${act}`, { userId: user.value?._id, ids: [props.order._id] })
+
+            const data = path == '/orders' ? { userId: user.value?._id, ids: [props.order._id] } :{ids: [props.order._id]} 
+            const res = await apiAxios.post(`/order/cancel?action=${act}`, data)
             orderStore.setOrders(res.data.orders)
         } catch (error) {
             console.log(error)

@@ -33,6 +33,7 @@ import RefresherVue from './components/Refresher.vue';
 import IconBtn from './components/IconBtn.vue';
 import TuField from './components/TuField.vue';
 import MapViewVue from './components/MapView.vue';
+import InkWellVue from './components/InkWell.vue';
 
 const pinia = createPinia() 
 
@@ -51,6 +52,7 @@ component('icon-btn', IconBtn).
 component('icon-btn', IconBtn).
 component('tu-field', TuField)
 .component('map-view', MapViewVue)
+.component('ink-well', InkWellVue)
 
 router.isReady().then(() => {
   app.mount('#app');

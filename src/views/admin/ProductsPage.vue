@@ -15,7 +15,7 @@
                         label: 'Delete selected',
                         cmd: ()=>{delAlertOpen = true;}
                     } : null,
-                    {label: 'Back to home', cmd: ()=> $router.push('/')}
+                    {label: 'Back to home', cmd: ()=> $router.push('/~/home')}
 
                 ]"
             />
@@ -232,7 +232,3 @@ onMounted(() => {
 });
 </script>
 
-
-<style lang="scss">
-
-</style>

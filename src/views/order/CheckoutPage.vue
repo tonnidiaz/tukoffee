@@ -5,7 +5,7 @@
             <div v-if="cart" class="p-3">
                 <div class="bg-base-100">
                     <ion-item lines="none" color="clear">
-                        <ion-select interface="popover" v-model="form.mode" label="Method" label-placement="floating">
+                        <ion-select color="dark" interface="popover" v-model="form.mode" label="Method" label-placement="floating">
                             <ion-select-option :value="OrderMode.deliver">Deliver</ion-select-option>
                             <ion-select-option :value="OrderMode.collect">Collect</ion-select-option>
                         </ion-select>
@@ -50,7 +50,7 @@
                                         {{ addr.location.name }}
                                     </ion-note>
                                     <br>
-                                    <ion-note class="fw-7 text-accent">
+                                    <ion-note class="fw-7 text-primary">
                                         {{ addr.phone }}
                                     </ion-note>
                                 </ion-label>
@@ -150,7 +150,7 @@ import { useCheckoutStore } from "@/stores/checkout";
 import { storeToRefs } from "pinia";
 import { add, car } from "ionicons/icons";
 import { useUserStore } from "@/stores/user";
-import { sleep } from "@/utils/funcs";
+import { showAlert, sleep } from "@/utils/funcs";
 import TuButton from '@/components/TuButton.vue';
 import PaystackBtn from "@/components/PaystackBtn.vue";
 import { useStoreStore } from "@/stores/store";
@@ -179,11 +179,12 @@ async function onBtnPayClick(){
     const _form = form.value
 
     if (_form.mode == OrderMode.collect && !_form.store){
-       alert('Store is required')
+       showAlert({message: "Please select a store"})
         return;
     }
     else if (_form.mode == OrderMode.deliver && !_form.address){
-        alert('Delivery address is required')
+        showAlert({message: 'Please select or add a delivery address'})
+        return
     }
 
     const btn : any = document.querySelector('.btn-paystack')
@@ -229,3 +230,7 @@ const onCheckoutSuccess = (res: any) => {
     }
  })
 </script>
+
+<style lang="scss">
+
+</style>

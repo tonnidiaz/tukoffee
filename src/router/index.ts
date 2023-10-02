@@ -126,8 +126,16 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/app/SettingsPage.vue"),
     },
     {
+        path: "/store/info",
+        component: () => import("@/views/StoreDetailsPage.vue"),
+    },
+    {
         path: "/account/profile",
         component: () => import("@/views/account/ProfilePage.vue"),
+    },
+    {
+        path: "/account/settings",
+        component: () => import("@/views/account/SettingsPage.vue"),
     },
     {
         path: "/account/:id",
