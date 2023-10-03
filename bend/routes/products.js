@@ -1,8 +1,8 @@
-var express = require("express");
-const { Product } = require("../models");
-const { parseProducts } = require("../utils/functions");
+const express = require("express");
+const { Product, Order, Review } = require("../models");
+const { parseProducts, tunedErr } = require("../utils/functions");
 const { auth, lightAuth } = require("../utils/middleware");
-var router = express.Router();
+const router = express.Router();
 
 const genPID = async () => {
     const pid = Math.floor(Math.random() * 999999) + 1;
@@ -11,7 +11,7 @@ const genPID = async () => {
     return pid;
 };
 
-router.get("/", async (req, res, next) => {
+router.get("/", lightAuth, async (req, res, next) => {
     const args = req.query;
     const { pid, q } = args;
 
@@ -31,6 +31,12 @@ router.get("/", async (req, res, next) => {
             case "sale":
                 prods = prods.filter((it) => it.on_sale);
                 break;
+            case "received":
+                let orders = await Order.find({customer: req.user._id, status: 'completed'}).exec()
+                orders = await  Promise.all(orders.map(async it=> await it.populate('products.product')))//
+                
+                
+                return res.json(orders.map(it=> {return {date: it.last_modified, items: it.products.map(p=>p.product).filter(it=> it)}}))
                 
         }
         let data = parseProducts(prods);
@@ -49,6 +55,7 @@ router.post("/add", auth, async (req, res) => {
         for (let key of Object.keys(body)) {
             prod[key] = body[key];
         }
+
         prod.pid = await genPID();
         await prod.save();
         console.log("Product added!");
@@ -59,11 +66,48 @@ router.post("/add", auth, async (req, res) => {
     }
 });
 
+router.get('/reviews', auth, async (req, res)=>{
+    try {
+
+        const { id } = req.query
+        let reviews = id ? [await Review.findById(id).exec()] : await Review.find({user: req.user._id}).exec()
+        reviews = await Promise.all(reviews.map(async it=> (await it.populate('product')).toJSON()))
+        res.json({reviews})
+    } catch (error) {
+        console.log(error)
+        return tunedErr(res, 500, 'Something went wrong')
+    }
+})
+
+router.post('/review', auth, async (req, res)=>{
+    try {
+        const { act } = req.query
+        const { pid, id, review } = req.body
+        const prod = await Product.findOne({ pid }).exec() ?? await Product.findById(id).exec();
+        if (!prod) return tunedErr(res, 404, 'Product not found')
+        if (act == 'add'){
+            const _review = new Review()
+            for (let key of Object.keys(review)){
+                _review.set(key, review[key])
+            }
+            _review.user = req.user._id
+            await _review.save()
+            prod.reviews.push(_review)
+        }
+
+        await prod.save()
+        res.json({reviews: prod.reviews})
+
+    } catch (e) {
+        tunedErr(res, 500, 'Something went wrong')
+        
+    }
+})
 router.post("/edit", auth, async (req, res) => {
     try {
         const { body } = req;
 
-        const prod = await Product.findOne({ pid: body.pid }).exec();
+        const prod = await Product.findOne({ pid: body.pid }).exec() ?? await Product.findById(body.id).exec();
         if (!prod) return res.status(404).json({ msg: "Product not found" });
 
         for (let key of Object.keys(body)) {

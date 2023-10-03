@@ -1,0 +1,85 @@
+<template>
+    <ion-page>
+        <Appbar title="Product review" :show-cart="false"/> 
+        <ion-content :fullscreen="true">
+            <Refresher :on-refresh="getReview"/>
+            <div class="h-full flex flex-col">
+                 <div class="my-1 bg-base-100 p-3" v-if="review">
+            <ion-item
+                color="clear"
+            >
+                <ion-thumbnail
+                    class="h-45px shadow-lg card rounded-lg"
+                    slot="start"
+                >
+                    <ion-img
+                        v-if="review.product.images?.length"
+                        class="rounded-lg"
+                        :src="review.product.images[0].url"
+                    ></ion-img>
+                    <span v-else>
+                        <i class="fi fi-rr-image-slash text-gray-600"></i>
+                    </span>
+                </ion-thumbnail>
+
+                <ion-label>
+                    <h3 class="fs-18 fw-5">{{ review.product.name }}</h3>
+                    <div class="flex items-center gap-3">
+                        <star-rating
+                            :show-rating="false"
+                            :star-size="15"
+                            :padding="6"
+                            :rating="review.rating"
+                            :increment="0.5"
+                        ></star-rating>
+                        <ion-badge mode="ios" color="medium" class="py-1">{{
+                            reviewStatuses[review.status]
+                        }}</ion-badge>
+                    </div>
+                </ion-label>
+            </ion-item></div>
+
+            <div class="my-1 bg-base-100 p-3 flex flex-center flex-auto" v-else>
+
+                <ion-spinner class="w-50px h-50px"></ion-spinner>
+            </div>
+            </div>
+       
+        </ion-content>
+
+    </ion-page>
+</template>
+<script setup lang="ts">
+import {
+    IonPage,
+    IonContent,
+    IonItem,
+    IonLabel,
+    IonSpinner,
+    IonBadge, IonThumbnail, IonImg
+} from "@ionic/vue";
+import Appbar from '@/components/Appbar.vue';
+import { Obj } from "@/utils/classes";
+import { onMounted, ref } from "vue";
+import { apiAxios, reviewStatuses } from "@/utils/constants";
+import { useRoute } from "vue-router";
+import { errorHandler } from "@/utils/funcs";
+import Refresher from "@/components/Refresher.vue";
+
+const review = ref<Obj | null>()
+
+const { id } = useRoute().params
+async function getReview() {
+    try {
+        review.value = null;
+        const res = await apiAxios.get("/products/reviews?id=" + id);
+        review.value = res.data.reviews[0];
+    } catch (e) {
+        console.log(e);
+        errorHandler(e, "Failed to fetch reviews");
+    }
+}
+onMounted(()=>{
+    getReview()
+})
+</script>

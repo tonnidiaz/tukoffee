@@ -54,7 +54,7 @@
                             <div class="mt-0">
                                 <div class="flex items center gap-3 mb-2 my-3 flex-wrap">
                                     <ion-text v-if="product.top_selling" router-link="/shop/top-selling" class="badge ion-bg-medium py-3 fs-12">
-                                        Top selling
+                                         Top selling
                                     </ion-text>
                                     <ion-text v-if="product.on_sale" router-link="/shop/sale" class="badge badge-primary py-3 fs-12">
                                         On sale
@@ -68,8 +68,13 @@
                                 </p>
                             </div>
                         </div>
+                        <div class="my-1 p-3 bg-base-100 flex items-center gap-2">
+                            <span class="relative" style="top: 2px" ><i class="fi fi-ss-star amber fs-16"></i></span>
+                            <span class="fw-6">{{ product.rating ?? (0).toFixed(1) }}</span>
+                            <ion-text :router-link="`/product/${product.pid}/reviews`" class="ml-2 fw-6 ion-primary">{{ product.reviews.length }} REVIEWS</ion-text>
+                        </div>
                         <div
-                            class="mt-2 m-auto w-full fle shadow-1 bg-base-100 p-3"
+                            class="my-1 m-auto w-full fle shadow-1 bg-base-100 p-3"
                         >
                             <h3>You may also like</h3>
                             <div class="mt-3 flex overflow-scroll gap-2">
@@ -236,11 +241,16 @@ async function getRelated() {
     }
 }
 async function getProduct() {
-    product.value = undefined;
-    const res = await axios.get(`${apiURL}/products?pid=${id}`);
+    try{
+        product.value = undefined;
+    const res = await apiAxios.get(`/products?pid=${id}`);
     if (res.data.data) {
         product.value = res.data.data[0];
     }
+    }catch(e){
+        console.log(e)
+    }
+    
 }
 
 const init = async () => {

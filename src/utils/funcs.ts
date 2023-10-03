@@ -39,7 +39,6 @@ const cloudinaryFolder = (storeName: string, folder = 'products')=>{
     return `TunedBass/${storeName}/${dev ? "DEV" : "PROD"}/images/${folder}`
 }
 
-
 export const uploadImage = async (path: any, storeName: string)=>{
     const public_id = `${storeName}_-_product_-_epoch-${Date.now()}`;
     const res = await Cloudinary.uploadResource({
@@ -49,7 +48,7 @@ export const uploadImage = async (path: any, storeName: string)=>{
         uploadPreset: 't6pie4cq',
         
   
-      });
+      }); 
       return res
 }
 

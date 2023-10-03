@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <Appbar title="Tunedbass"/> 
+        <Appbar title="Tunedbass" :show-cart="false"/> 
         <ion-content :fullscreen="true"></ion-content>
     </ion-page>
 </template>

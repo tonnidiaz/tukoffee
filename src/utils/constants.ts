@@ -20,3 +20,4 @@ export const mapboxPublicToken =
 export const CLOUDINARY_CLOUD_NAME="sketchi",
 CLOUDINARY_API_KEY="262393494665286",
 CLOUDINARY_SECRET="eQKKfmQ__WkvkCoPaUScVsqbj_o"
+export const reviewStatuses = ["pending", "approved", "rejected"];

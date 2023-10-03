@@ -24,6 +24,15 @@ const ProductSchema = new Schema({
     sale_price: {
         type: Number,
     },
+    delivery_fee: {
+        type: Number,
+        default: 0
+    },
+   reviews: {
+        type: [Schema.ObjectId],
+        ref: 'Review',
+        default: []
+    },
     quantity: {
         type: Number,
         required: true,

@@ -116,7 +116,7 @@
 .bg-1{
     background-color: $bg-1;
 }
-.text-amber{
+.text-amber, .amber{
     color: $amber
 }
 @for $i from 1 through 9{

@@ -1,3 +1,4 @@
+const { Schema } = require("mongoose")
 const multer = require("multer")
 
 const OrderStatus = {
@@ -22,5 +23,6 @@ const AddressSchema = {
     phone: String,
     name: String,
 }
+
 const parser = multer().none()
 module.exports = {OrderStatus, UserPermissions,parser,  AddressSchema, OrderMode}
