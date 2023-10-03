@@ -77,6 +77,10 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/products/reviews/ProductReviewPage.vue"),
     },
     {
+        path: "/products/reviews/:id/:ep",
+        component: () => import("../views/product/ReviewPage.vue"),
+    },
+    {
         path: "/product/:id",
         component: () => import("../views/ProductPage.vue"),
     },
@@ -84,6 +88,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "/product/:id/review",
         component: () => import("../views/product/ReviewPage.vue"),
     },
+  
     {
         path: "/product/:id/reviews",
         component: () => import("../views/product/ReviewsPage.vue"),
