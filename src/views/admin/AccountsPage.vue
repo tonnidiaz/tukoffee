@@ -2,7 +2,7 @@
     <ion-page>
         <Appbar title="Accounts" :show-cart="false" >
             <DropdownBtn :items="[
-            {label: 'Back to home', cmd: ()=> $router.push('/~/home')}
+            {label: 'Back to home', cmd: ()=> toHome()}
         ]"/>
         </Appbar>
         <ion-content :fullscreen="true">
@@ -173,7 +173,7 @@ import { apiAxios } from "@/utils/constants";
 import { onMounted, ref, watch } from "vue";
 import { Obj } from "@/utils/classes";
 import DropdownBtn from "@/components/DropdownBtn.vue";
-import { errorHandler } from "@/utils/funcs";
+import { errorHandler, toHome } from "@/utils/funcs";
 
 const accounts = ref<Obj[]>(),
     sortedAccounts = ref<Obj[]>(),

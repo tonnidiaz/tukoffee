@@ -103,3 +103,7 @@ export function errorHandler(e: any, message = "Something went wrong", force = f
     const msg: string = force ? message : (e.response?.data ?? message);
         showToast({msg: msg.replace('tuned:', ''), cssClass: 'ion-danger', duration: 1500}  );
 }
+
+export function toHome(){
+    location.href = '/'
+}

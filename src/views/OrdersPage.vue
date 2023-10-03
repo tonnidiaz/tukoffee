@@ -6,7 +6,7 @@
              selectedItems.length ? {label: 'Deselect all', cmd: ()=> selectedItems = []} : null,
 
                selectedItems.length ? {label: 'Cancel selected orders', cmd: onCancelSelected} : null,
-                {label: 'Back to home', cmd: ()=> $router.push('/~/home')},
+                {label: 'Back to home', cmd: ()=> toHome()},
             ]"/>
        
         </Appbar>
@@ -101,6 +101,7 @@ import BottomSheet from "@/components/BottomSheet.vue";
 import {SortOrder, OrderStatus} from '@/utils/classes';
 import { useRoute } from "vue-router";
 import DropdownBtn from "@/components/DropdownBtn.vue";
+import { toHome } from "@/utils/funcs";
 
 const userStore = useUserStore()
 const orderStore = useOrderStore()
@@ -169,6 +170,7 @@ watch(orderID, val=>{
     console.log(val)
 byIdinizer()
 })
+
 onMounted(() => {
     init()
 })

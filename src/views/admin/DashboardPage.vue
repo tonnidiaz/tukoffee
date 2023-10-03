@@ -2,7 +2,7 @@
     <ion-page>
         <Appbar title="Dashboard" :show-cart="false">
         <DropdownBtn :items="[
-            {label: 'Back to home', cmd: ()=> $router.push('/~/home')}
+            {label: 'Back to home', cmd: ()=> toHome()}
         ]"/>
         </Appbar>
         <ion-content :fullscreen="true">
@@ -35,5 +35,6 @@ import {
 import Appbar from '@/components/Appbar.vue';
 import DropdownBtn from "@/components/DropdownBtn.vue";
 import InkWell from "@/components/InkWell.vue";
+import { toHome } from "@/utils/funcs";
 
 </script>

@@ -15,7 +15,7 @@
                         label: 'Delete selected',
                         cmd: ()=>{delAlertOpen = true;}
                     } : null,
-                    {label: 'Back to home', cmd: ()=> $router.push('/~/home')}
+                    {label: 'Back to home', cmd: ()=> toHome()}
 
                 ]"
             />
@@ -172,7 +172,7 @@ import DropdownBtn from "@/components/DropdownBtn.vue";
 import { useProductsStore, Status, SortBy } from "@/stores/products";
 import { storeToRefs } from "pinia";
 import { useAppStore } from "@/stores/app";
-import { sleep } from "@/utils/funcs";
+import { sleep, toHome } from "@/utils/funcs";
 
 const productsStore = useProductsStore()
 const appStore = useAppStore()
