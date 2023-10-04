@@ -10,6 +10,7 @@
 - product reviews
 - Admin -> reviews and edit
 -Opt to report review
+- Check updates on startup
 
 ## TOUCH UPS
 
@@ -26,3 +27,6 @@
 - rm selector for products
 - Proper confirm alert for cancelling order
 - Store details
+- Search page overflow
+- Add address sheet fields overflow
+- chekout flicker after add address
