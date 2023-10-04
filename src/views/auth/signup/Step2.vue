@@ -26,10 +26,9 @@ import TuButton from "@/components/TuButton.vue";
 import { IonInput, IonText } from "@ionic/vue";
 
 const authStore = useAuthStore()
-
+const TIMEOUT = 120
 const {form, step} = storeToRefs(authStore)
-/* TODO: Timer to 60 secs */
-const timer =  ref(10)
+const timer =  ref(TIMEOUT)
 
 const submitOTP = async (e: any) => { 
     e.preventDefault()
@@ -67,7 +66,7 @@ const resendCode = async () =>{
 
 const initTimer = () => { 
     console.log('INit timer')
-    timer.value = 10
+    timer.value = TIMEOUT
      const timerInterval  = setInterval(()=>{
         if (timer.value <= 0){
             clearInterval(timerInterval)

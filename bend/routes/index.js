@@ -134,6 +134,7 @@ router.post("/encode", parser, async (req, res) => {
 });
 
 const axios = require("axios");
+const { Schema, Types } = require("mongoose");
 
 router.get("/send-sms", async (req, res) => {
     try {
@@ -185,4 +186,6 @@ router.post('/cloudinary', auth, async (req, res)=>{
         return tunedErr(res, 500, 'Something went wrong')
     }
 })
+
+
 module.exports = router;

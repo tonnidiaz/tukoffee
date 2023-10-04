@@ -7,7 +7,7 @@ const { CartSchema } = require("./cart");
 const { ReviewSchema } = require("./review");
 
 const Product = model("Product", ProductSchema)
-const User = model("User", UserSchema)
+const User = model("User", UserSchema, )
 const Order = model("Order", OrderSchema)
 const Cart = model("Cart", CartSchema)
 const Store = model("Store", StoreSchema)
