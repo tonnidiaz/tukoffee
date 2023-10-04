@@ -38,7 +38,7 @@
                 </ion-label>
             </ion-item>
         </ion-list>
-        <div v-else class="p-3 h-full flex flex-center bg-base-100">
+        <div v-else class="p-3 h-full flex flex-center bg-base-100 mt-1">
             <h3 class="fs-20 fw-5 text-center">
                 You have not written any product reviews yet
             </h3>
@@ -64,13 +64,15 @@ import { apiAxios, reviewStatuses } from "@/utils/constants";
 import { onMounted, ref } from "vue";
 import { errorHandler } from "@/utils/funcs";
 import Refresher from "@/components/Refresher.vue";
-
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/user";
+const { user }= storeToRefs(useUserStore())
 const reviews = ref<Obj[] | null>([]);
 
 async function getReviews() {
     try {
         reviews.value = null;
-        const res = await apiAxios.get("/products/reviews");
+        const res = await apiAxios.get(`/products/reviews?user=${user.value?._id}`);
         reviews.value = res.data.reviews;
     } catch (e) {
         console.log(e);

@@ -24,7 +24,7 @@
                             <div class="flex flex-col items-center">
                                 <div class="avatar">
                                     <div style="display: flex !important;"
-                                    class="w-80px rounded-full bg-base-300 flex items-center justify-center"
+                                    class="w-80px rounded-full bg-base-100 flex items-center justify-center"
                                 >
                                     <img
                                         v-if="e.images?.length"
@@ -57,7 +57,7 @@
                         >
                             <div class="avatar">
                                 <div style="display: flex !important;"
-                                    class="w-80px rounded-full bg-base-300 flex items-center justify-center"
+                                    class="w-80px rounded-full bg-base-100 flex items-center justify-center"
                                 >
                                     <img
                                         v-if="e.images?.length"
@@ -87,7 +87,7 @@
                         >
                             <div class="avatar">
                                 <div style="display: flex !important;"
-                                    class="w-80px rounded-full bg-base-300 flex items-center justify-center"
+                                    class="w-80px rounded-full bg-base-100 flex items-center justify-center"
                                 >
                                     <img
                                         v-if="e.images?.length"

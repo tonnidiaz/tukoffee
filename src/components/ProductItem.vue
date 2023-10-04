@@ -27,29 +27,7 @@
                 slot="end"
                 mode="ios"
             ></ion-checkbox>
-            <div v-else slot="end">
-                <dropdown-btn
-                    :items="[
-                        { label: 'Edit', cmd: onEditClick },
-                        {
-                            label: 'Delete',
-                            cmd: () => {
-                                delAlertOpen = true;
-                            },
-                        },
-                    ]"
-                />
-            </div>
-            <IonAlert
-                message="Are you sure you want to delete this product?"
-                header="Delete product"
-                :is-open="delAlertOpen"
-                :buttons="[
-                    { text: 'Cancel', role: 'cancel' },
-                    { text: 'Yes', role: 'confirm', handler: delProduct },
-                ]"
-                @didDismiss="delAlertOpen = false"
-            />
+     
         </ion-item>
     </OnLongPress>
 
@@ -98,21 +76,7 @@ const onEditClick = (e: any) => {
     router.push("/edit/product");
 };
 
-const delProduct = async () => {
-    const it = props.item;
-    try {
-        isLoading.value = true;
-        const res = await apiAxios.post(`/products/delete`, {
-            pids: [it["pid"]],
-        });
-        //TODO: Delete images also
-        isLoading.value = false;
-        await sleep(100);
-        props.reload();
-    } catch (error) {
-        console.log(error);
-    }
-};
+
 
 const toggleSelected = () => {
     const inList = selectedItems.value.find((el) => el._id == props.item._id);

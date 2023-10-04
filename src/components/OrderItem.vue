@@ -35,7 +35,6 @@
             <div v-else slot="end">
             <dropdown-btn :items="[
                 { label: 'Cancel', cmd: cancelOrder },
-                { label: 'Delete', cmd: () => {} },
                 ]" />
         </div>
         </ion-item>

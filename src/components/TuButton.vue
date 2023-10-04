@@ -12,7 +12,7 @@ import { ref } from "vue";
 const disabled = ref(false)
 const props = defineProps({
     onClick: Function,
-    ionic: Boolean
+    ionic: {type: Boolean, default: true}
 })
 
 const _onClick = async (e:any) => { 

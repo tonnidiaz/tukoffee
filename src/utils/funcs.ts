@@ -2,7 +2,7 @@ import axios from "axios";
 import { CLOUDINARY_API_KEY, CLOUDINARY_SECRET, apiAxios } from "./constants";
 import { Cloudinary, ResourceType } from "@capawesome/capacitor-cloudinary";
 import { Obj } from "./classes";
-import { alertController, toastController } from "@ionic/vue";
+import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
 
 export function randomIntFromInterval(min: number, max: number) {
     // min and max included
@@ -106,4 +106,19 @@ export function errorHandler(e: any, message = "Something went wrong", force = f
 
 export function toHome(){
     location.href = '/'
+}
+export const showLoading = async ({msg = 'Please wait...',  duration = undefined} : {msg?: string, duration? : number | undefined})=>{
+    const loading = await loadingController.create({
+        message: msg,
+        duration,
+        cssClass: 'tu'
+      });
+
+      loading.present();
+}
+export function hideModal(){
+    modalController.dismiss(null, 'close')
+}
+export function hideLoader(){
+    loadingController.dismiss(null, 'close')
 }

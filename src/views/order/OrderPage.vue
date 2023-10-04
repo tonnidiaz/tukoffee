@@ -55,11 +55,11 @@
                         <tbody>
                             <tr>
                                 <td class="fw-6 fs-16">Name</td>
-                                <td class=" fs-16 " style="text-align: end;">{{ order.collector.name }}</td>
+                                <td class=" fs-16 " style="text-align: end;">{{ order.delivery_address?.name ?? order.collector.name }}</td>
                             </tr>
                             <tr>
                                 <td class="fw-6 fs-16">Phone</td>
-                                <td class=" fs-16 " style="text-align: end;">{{ order.collector.phone }}</td>
+                                <td class=" fs-16 " style="text-align: end;">{{ order.delivery_address?.phone ?? order.collector.phone }}</td>
                             </tr>
 
                         </tbody>
@@ -67,8 +67,9 @@
                     <table v-if="order.mode == OrderMode.deliver" class="table my-2 bg-base-200 br-0">
                         <th colspan="2" class="flex items-center justify-between">
                             <h3 class="fs-20">Delivery address</h3>
-                            <icon-btn @click="mapSheetOpen = true"
-                                class="btn btn-sm btn-ghost rounded-full w-30px h-30px">
+                            <!-- TODO: Implement -->
+                            <icon-btn disabled @click="mapSheetOpen = true"
+                                class="btn btn-sm btn-ghost rounded-full w-40px h-40px">
                                 <i class="fi fi-br-pencil fs-18"></i>
                             </icon-btn>
                             <BottomSheet :no-swipe-dismiss="true"  :is-open="mapSheetOpen" @did-dismiss="mapSheetOpen = false">

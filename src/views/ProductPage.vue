@@ -1,7 +1,8 @@
 <template>
     <ion-page>
         <Appbar :title="product?.name" :loading="!product">
-            <DropdownBtn :items="[
+            <DropdownBtn
+                :items="[
                 isAdmin() ? {
                     label: 'Edit',
                     cmd: ()=> {formStore.setForm(product!); ionRouter.push('/edit/product')}
@@ -10,7 +11,8 @@
                     label: 'Delete',
                     cmd: ()=>{}
                 } : null
-            ]" />
+            ]"
+            />
         </Appbar>
         <ion-content>
             <Refresher :on-refresh="init" />
@@ -52,14 +54,28 @@
                                 {{ product.name }}
                             </h2>
                             <div class="mt-0">
-                                <div class="flex items center gap-3 mb-2 my-3 flex-wrap">
-                                    <ion-text v-if="product.top_selling" router-link="/shop/top-selling" class="badge ion-bg-medium py-3 fs-12">
-                                         Top selling
+                                <div
+                                    class="flex items center gap-3 mb-2 my-3 flex-wrap"
+                                >
+                                    <ion-text
+                                        v-if="product.top_selling"
+                                        router-link="/shop/top-selling"
+                                        class="badge ion-bg-medium py-3 fs-12"
+                                    >
+                                        Top selling
                                     </ion-text>
-                                    <ion-text v-if="product.on_sale" router-link="/shop/sale" class="badge badge-primary py-3 fs-12">
+                                    <ion-text
+                                        v-if="product.on_sale"
+                                        router-link="/shop/sale"
+                                        class="badge badge-primary py-3 fs-12"
+                                    >
                                         On sale
                                     </ion-text>
-                                    <ion-text v-if="product.on_sale" router-link="/shop/special" class="badge ion-bg-medium py-3 fs-12">
+                                    <ion-text
+                                        v-if="product.on_sale"
+                                        router-link="/shop/special"
+                                        class="badge ion-bg-medium py-3 fs-12"
+                                    >
                                         Special
                                     </ion-text>
                                 </div>
@@ -68,10 +84,20 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="my-1 p-3 bg-base-100 flex items-center gap-2">
-                            <span class="relative" style="top: 2px" ><i class="fi fi-ss-star amber fs-16"></i></span>
-                            <span class="fw-6">{{ product.rating ?? (0).toFixed(1) }}</span>
-                            <ion-text :router-link="`/product/${product.pid}/reviews`" class="ml-2 fw-6 ion-primary">{{ product.reviews.length }} REVIEWS</ion-text>
+                        <div
+                            class="my-1 p-3 bg-base-100 flex items-center gap-2"
+                        >
+                            <span class="relative" style="top: 2px"
+                                ><i class="fi fi-ss-star amber fs-16"></i
+                            ></span>
+                            <span class="fw-6">{{
+                                product.rating ?? (0).toFixed(1)
+                            }}</span>
+                            <ion-text
+                                :router-link="`/product/${product.pid}/reviews`"
+                                class="ml-2 fw-6 ion-primary"
+                                >{{ product.reviews.length }} REVIEWS</ion-text
+                            >
                         </div>
                         <div
                             class="my-1 m-auto w-full fle shadow-1 bg-base-100 p-3"
@@ -93,7 +119,7 @@
                 v-else
                 class="p-2 flex flex-col w-full h-full justify-center items-center"
             >
-                <ion-spinner/>
+                <ion-spinner />
             </div>
         </ion-content>
         <ion-footer v-if="product" class="bg-base-100">
@@ -104,29 +130,33 @@
                             v-if="product.quantity"
                             class="badge ion-bg-medium py-3"
                         >
-                          {{ product.quantity}}  In stock
+                            {{ product.quantity }} In stock
                         </span>
                         <span v-else class="badge badge-neutral">
                             Out of stock
                         </span>
 
-                        <Rating v-model="form.rating" :cancel="false"/>
+                        <Rating v-model="form.rating" :cancel="false" />
                     </div>
                     <div class="flex w-full items-center justify-between">
                         <span v-if="!product.on_sale" class="fw-8"
                             >R{{ product.price.toFixed(2) }}</span
                         >
                         <div v-else class="flex items-center gap-5">
-                             <span class="fw-8 linethrough"
-                            >R{{ product.price.toFixed(2) }}</span
-                        >
-                             <span class="fw-8" style="transform: scale(1.2);"
-                            >R{{ product.sale_price? product.sale_price.toFixed(2) :0.00}}</span
-                        >
+                            <span class="fw-8 linethrough"
+                                >R{{ product.price.toFixed(2) }}</span
+                            >
+                            <span class="fw-8" style="transform: scale(1.2)"
+                                >R{{
+                                    product.sale_price
+                                        ? product.sale_price.toFixed(2)
+                                        : 0.0
+                                }}</span
+                            >
                         </div>
-                       
 
                         <tu-button
+                            :ionic="false"
                             :on-click="addRemoveCart"
                             :class="`rounded-full btn-sm h-30px flex items-center justify-center ${
                                 inCart(product) ? 'btn-error' : 'btn-primary'
@@ -155,7 +185,6 @@
                 </div>
             </ion-toolbar>
         </ion-footer>
-
         <!-- Toasts -->
         <ion-toast
             :is-open="toastOpen"
@@ -176,7 +205,7 @@ import {
     IonToast,
     useIonRouter,
     IonSpinner,
-    IonText
+    IonText,
 } from "@ionic/vue";
 import { useRouter, useRoute } from "vue-router";
 import { apiAxios, apiURL } from "@/utils/constants";
@@ -206,11 +235,12 @@ const toastOpen = ref(false);
 const selectedImg = ref(0);
 const ionRouter = useIonRouter();
 
-
-    const isAdmin = ()=> user.value?.permissions > 0
+const isAdmin = () => user.value?.permissions > 0;
 
 function inCart(p: any) {
-    return cart.value?.products.find((it: any) => it.product._id == p._id);
+    return !cart.value?.products
+        ? false
+        : cart.value?.products?.find((it: any) => it.product._id == p._id);
 }
 
 const toggle = (event: any) => {
@@ -241,16 +271,15 @@ async function getRelated() {
     }
 }
 async function getProduct() {
-    try{
+    try {
         product.value = undefined;
-    const res = await apiAxios.get(`/products?pid=${id}`);
-    if (res.data.data) {
-        product.value = res.data.data[0];
+        const res = await apiAxios.get(`/products?pid=${id}`);
+        if (res.data.data) {
+            product.value = res.data.data[0];
+        }
+    } catch (e) {
+        console.log(e);
     }
-    }catch(e){
-        console.log(e)
-    }
-    
 }
 
 const init = async () => {
@@ -261,6 +290,4 @@ onMounted(() => {
     init();
 });
 </script>
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

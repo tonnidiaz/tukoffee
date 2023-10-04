@@ -4,11 +4,11 @@
                 <ion-buttons slot="start">
                  
                   <button v-if="selectedItems.length" class="btn btn-sm btn-ghost rounded-full w-40px h-40px p-0 "  router-direction="back" @click="()=> appStore.setSelectedItems([])" slot="icon-only">
-                    <ion-icon class="w-40px h-20px" :md="close"></ion-icon>
+                    <ion-icon class="w-45px h-25px fs-40" :md="close"></ion-icon>
                    </button> 
-                 <button v-else-if="showBack" class="btn btn-sm btn-ghost rounded-full w-40px h-40px p-0 "  router-direction="back" @click=" router.back()" slot="icon-only">
+           <button v-else-if="showBack" class="btn btn-sm btn-ghost rounded-full w-40px h-40px p-0 "  router-direction="back" @click=" router.back()" slot="icon-only">
                     <ion-icon class="w-40px h-20px" :md="arrowBack"></ion-icon>
-                   </button> 
+                   </button>
                 </ion-buttons>
                 <ion-title  class="fs-18 fw-6">{{ selectedItems.length ? `${selectedItems.length} selected` : (title ?? appStore.title) }}</ion-title>
                 <ion-buttons slot="end">
@@ -21,7 +21,7 @@
         </ion-header>
 </template>
 <script setup lang="ts">
-import {IonTitle, IonHeader, IonToolbar,IonButton, IonButtons,IonProgressBar, IonIcon, IonNavLink} from '@ionic/vue';
+import {IonTitle, IonHeader, IonToolbar,IonButton, IonButtons,IonProgressBar, IonIcon, useBackButton, useIonRouter} from '@ionic/vue';
 import CartBtn from '@/components/CartBtn.vue';  
 import { useRouter } from 'vue-router';
 import { arrowBack, close } from 'ionicons/icons';
@@ -30,7 +30,7 @@ import { storeToRefs } from 'pinia';
 
 const appStore = useAppStore()
 const {selectedItems} = storeToRefs(appStore)
-
+const ionRouter = useIonRouter()
 const router = useRouter()
 defineProps({
     title: {type: String},

@@ -1,6 +1,6 @@
 <template>
     <div v-if="products" class="h-full">
-        <div class="bg-base-100 p-3">
+        <div v-if="products.length" class="bg-base-100 p-3">
             <ion-item v-for="product in products" color="clear">
                 <ion-thumbnail
                     class="h-45px shadow-lg card rounded-lg"
@@ -29,6 +29,12 @@
                 </ion-label>
             </ion-item>
         </div>
+        <div v-else class="bg-base-100 p-3 h- flex flex-center mt-1">
+            <h3 class="fs-18 fw-5 text-center">You have not ordered and received any products using this app yet</h3>
+        </div>
+    </div>
+    <div  v-else class="h-full">
+        <!-- TODO: Loader -->
     </div>
 </template>
 

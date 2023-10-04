@@ -1,10 +1,11 @@
 <template>
     <ion-page>
-        <Appbar title="Product reviews" :show-cart="false" />
-        
+        <Appbar :title="product?.name" :show-cart="false" />
+
         <ion-content :fullscreen="true">
-            <div class="h-full" v-if="product">
-                <div class="my-1 p-3 bg-base-100">
+            <Refresher :on-refresh="getProduct" />
+            <div class="h-full flex flex-col" v-if="product">
+                <div class=" p-3 bg-base-100">
                     <ion-item color="clear">
                         <ion-thumbnail
                             class="h-45px shadow-lg card rounded-lg"
@@ -28,7 +29,32 @@
                     </ion-item>
                 </div>
 
-                <div class="my-1 p-3 bg-base-100"></div>
+                <div class="flex-auto" v-if="reviews">
+                    <ion-list
+                        class="bg-base-10 px-2"
+                        v-if="reviews.length"
+                    >
+                    <div class="border-1 w-full p-3 bg-base-100" v-for='rev in reviews'>
+                        <star-rating :star-size="16" :padding="4" :show-rating="false" :rating="rev.rating"/>
+                       <div class="flex items-center justify-between">
+                         <h3 class='fs-18 fw-5'>{{ rev.title }}</h3>
+                         <!-- TODO: Implement review options -->
+                         <icon-btn class="rounded-lg w-30px h-30px"><i class="fi fi-br-menu-dots-vertical fs-18 fw-8"></i></icon-btn>
+                       </div>
+                       
+                        <p class="helper-text">{{ rev.name }} - {{ new Date(rev.date_created).toLocaleDateString() }}</p>
+                        <p class="mt-2">
+                            {{ rev.body }}
+                        </p>
+                    </div>
+                </ion-list>
+                    <div v-else class="p-3 bg-base-100 h-full flex flex-center">
+                        <h3 class="fs-20">This product has no reviews yet</h3>
+                    </div>
+                </div>
+                <div v-else class="bg-base-100 flex-auto flex flex-center">
+                    <ion-spinner class="w-55px h-55px "></ion-spinner>
+                </div>
             </div>
 
             <ion-fab vertical="bottom" horizontal="end">
@@ -49,15 +75,19 @@ import {
     IonItem,
     IonThumbnail,
     IonImg,
-   
+    IonSpinner,
+    IonList
 } from "@ionic/vue";
 import Appbar from "@/components/Appbar.vue";
 import { Obj } from "@/utils/classes";
 import { apiAxios } from "@/utils/constants";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
+import { errorHandler } from "@/utils/funcs";
+import Refresher from "@/components/Refresher.vue";
 
-const product = ref<Obj>();
+const product = ref<Obj>(),
+    reviews = ref<Obj[] | null>();
 
 const { id } = useRoute().params;
 async function getProduct() {
@@ -66,9 +96,23 @@ async function getProduct() {
         const res = await apiAxios.get(`/products?pid=${id}`);
         if (res.data.data) {
             product.value = res.data.data[0];
+            getReviews(res.data.data[0]._id);
         }
     } catch (e) {
         console.log(e);
+        errorHandler(e, "Failed to fetch product");
+    }
+}
+async function getReviews(pid: string) {
+    reviews.value = null;
+    try {
+        const res = await apiAxios.get("/products/reviews?pid=" + pid);
+        reviews.value = res.data.reviews;
+        console.log(reviews.value);
+    } catch (e) {
+        console.log(e);
+        reviews.value = [];
+        errorHandler(e, "Failed to fetch product");
     }
 }
 onMounted(() => {

@@ -1,14 +1,57 @@
 <template>
-    <ion-textarea v-if="textarea" label-placement="floating" fill="solid" color="dark"/>
-    <ion-input v-else
+    <ion-textarea
+        v-if="textarea"
         label-placement="floating"
         fill="solid"
         color="dark"
+        :required="required"
+    />
+    <ion-input
+        v-else
+        :autocomplete="(auto as any)"
+        label-placement="floating"
+        fill="solid"
+        color="dark"
+        :required="required"
+        :error-text="errorTxt"
+        @ion-blur="$event.target.classList.add('ion-touched')"
+        @ion-input="onInput"
     />
 </template>
 <script setup lang="ts">
 import { IonInput, IonTextarea } from "@ionic/vue";
-defineProps({
-    textarea: Boolean
-})
+import { ref } from "vue";
+const errorTxt = ref<string>();
+const props = defineProps({
+    textarea: Boolean,
+    auto: String,
+    validator: Function,
+    required: Boolean
+});
+
+function onInput(e: any) {
+    const val = e.target.value
+    if (props.validator) {
+        const ret = props.validator(val);
+        if (ret) {
+            e.target.classList.remove("ion-valid");
+            e.target.classList.add("ion-invalid");
+            errorTxt.value = ret;
+        } else {
+            e.target.classList.remove("ion-invalid");
+            errorTxt.value = undefined
+        }
+    }
+    else if (props.required){
+        if (!val?.length){
+            e.target.classList.remove("ion-valid");
+            e.target.classList.add("ion-invalid");
+            errorTxt.value = 'Field is required';
+        }
+        else{
+            e.target.classList.remove("ion-invalid");
+            errorTxt.value = undefined
+        }
+    }
+}
 </script>

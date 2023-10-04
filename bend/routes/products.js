@@ -83,10 +83,15 @@ router.post("/add", auth, async (req, res) => {
 
 router.get("/reviews", auth, async (req, res) => {
     try {
-        const { id } = req.query;
-        let reviews = id
-            ? [await Review.findById(id).exec()]
-            : await Review.find({ user: req.user._id }).exec();
+        const { id, pid, user } = req.query;
+        let reviews = [];
+        if (pid) reviews = await Review.find({ product: pid }).exec();
+        else if (id) reviews = [await Review.findById(id).exec()];
+        else if (user) reviews = await Review.find({ user }).exec();
+        else {
+            reviews = await Review.find().exec();
+        }
+
         reviews = await Promise.all(
             reviews.map(async (it) => (await it.populate("product")).toJSON())
         );
@@ -117,14 +122,14 @@ router.post("/review", auth, async (req, res) => {
             await prod.save();
             res.json({ reviews: prod.reviews });
         } else if (act == "edit") {
-            const rev = await Review.findById(id).exec()
-            for (let key of Object.keys(review)){
-                rev.set(key, review[key])
+            const rev = await Review.findById(id).exec();
+            for (let key of Object.keys(review)) {
+                rev.set(key, review[key]);
             }
 
-            rev.last_modified = new Date()
-            await rev.save()
-            res.send('ok')
+            rev.last_modified = new Date();
+            await rev.save();
+            res.send("ok");
         }
     } catch (e) {
         tunedErr(res, 500, "Something went wrong");

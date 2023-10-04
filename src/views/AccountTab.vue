@@ -8,7 +8,7 @@
         />
         <appbar  v-else title="Account" />
         <ion-content :fullscreen="true">
-            <div class="p-1">
+            <div class="px-1">
                 <IonItemGroup class="mb-1 bg-base-100">
                     <ion-item
                         class=""
@@ -135,6 +135,8 @@ const appStore = useAppStore()
 const form = ref<Obj>({})
 const feedbackSheetOpen = ref(false)
 
+
+const goBack = ()=> window.history.back()
 const sendMsg = async (e: Event) => {
     e.preventDefault()
     try {

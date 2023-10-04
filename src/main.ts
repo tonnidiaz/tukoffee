@@ -32,6 +32,7 @@ import AppbarVue from './components/Appbar.vue';
 import RefresherVue from './components/Refresher.vue';
 import IconBtn from './components/IconBtn.vue';
 import TuField from './components/TuField.vue';
+import TuForm from './components/TuForm.vue';
 import MapViewVue from './components/MapView.vue';
 import InkWellVue from './components/InkWell.vue';
 import StarRating from 'vue-star-rating'
@@ -54,6 +55,7 @@ component('icon-btn', IconBtn).
 component('tu-field', TuField)
 .component('map-view', MapViewVue)
 .component('ink-well', InkWellVue)
+.component('tu-form', TuForm)
 .component('star-rating', StarRating)
 
 router.isReady().then(() => {

@@ -1,15 +1,22 @@
 <template>
-    <a
+    <div
         lines="none"
         class="cursor-pointer border-1 shadow-sm bg-base-100 ion-activatable relative p-0 product-card"
-        :href="`/product/${product.pid}`"
+        @click="(e: Event)=>{ if (!e.defaultPrevented) $router.push(`/product/${product.pid}`)}"
     >
         <div>
             <div class="py-2 flex flex-wrap items-center justify-center">
                 <div
-                    class="flex items-center justify-center flex-col overflow-hidden w-full"
+                    class="flex items-center justify-center flex-col overflow-hidden w-full relative"
                     style="white-space: nowrap; text-overflow: ellipsis"
                 >
+                <tu-button
+                        :on-click="addRemoveCart"
+                        :ionic="false"
+                        :class="`rounded-full btn-sm h-45px w-45px absolute right-0 top-0 flex items-center justify-center shadow-md ${inCart(product) ? 'bg-primary' : 'btn-danger'}`"
+                        ><i v-if="!inCart(product)" class="fi fi-rr-shopping-cart-add fs-23"></i>
+                    <i v-else class="fi fi-rr-cart-minus fs-23 text-"></i></tu-button
+                    >
                     <img
                         v-if="product.images.length"
                         class="w-full shadow-2 rounded-lg h-70px"
@@ -44,12 +51,12 @@
                         }}</span>
                     </span>
                 </div>
-                <div class="flex items-center justify-between w-full px-2">
+                <div class="flex flex-center w-full px-2 mt-1">
                   
                     <span v-if="!product.on_sale" class="text-md fw-6 fs-14 text-gray-700"
                             >R{{ product.price.toFixed(2) }}</span
                         >
-                        <div v-else class="flex items-center gap-2">
+                        <div v-else class="flex items-center gap-4">
                              <span class="text-md fw-5 fs-14 text-gray-700 linethrough"
                             >R{{ product.price}}</span
                         >
@@ -57,16 +64,11 @@
                             >R{{product.sale_price? product.sale_price.toFixed(2) :0.00}}</span
                         >
                         </div>
-                    <tu-button
-                        :on-click="addRemoveCart"
-                        :class="`rounded-full btn-sm h-30px flex items-center justify-center ${inCart(product) ? 'bg-primary' : 'btn-danger'}`"
-                        ><i v-if="!inCart(product)" class="fi fi-rr-shopping-cart-add fs-18"></i>
-                    <i v-else class="fi fi-rr-cart-minus fs-18 text-"></i></tu-button
-                    >
+                    
                 </div>
             </div>
         </div>
-    </a>
+    </div>
 </template>
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
@@ -95,6 +97,7 @@ const props = defineProps({
 });
 
 const addRemoveCart = async (e: any) => {
+    e.preventDefault()
     try {
         const act = inCart(props.product) ? "remove" : "add";
         console.log(act);

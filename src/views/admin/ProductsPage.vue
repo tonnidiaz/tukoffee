@@ -11,10 +11,7 @@
                            appStore.setSelectedItems(its)
                         },
                     },
-                    selectedItems.length ? {
-                        label: 'Delete selected',
-                        cmd: ()=>{delAlertOpen = true;}
-                    } : null,
+
                     {label: 'Back to home', cmd: ()=> toHome()}
 
                 ]"
@@ -129,16 +126,7 @@
             </div>
         </BottomSheet>
 
-    <!-- ALert -->
-<IonAlert
-        message="Are you sure you want to delete the selected products?"
-        header="Delete products" 
-        :is-open="delAlertOpen"
-        :buttons="[
-            {text: 'Cancel', role: 'cancel'},
-            {text: 'Yes', role: 'confirm', handler: delProducts},
-        ]"
-         @didDismiss="delAlertOpen = false"/>
+
         <!-- Loading -->
         <ion-loading color="dark" message="Please wait..." :is-open="isLoading" @didDismiss="isLoading = false"/>
 
@@ -211,22 +199,7 @@ const getProducts = async () => {
     }
 };
 
-const delProducts = async () =>{
-    const pids = selectedItems.value.map(it=> it.pid)
-    try {
-        isLoading.value = true
-        console.log(pids)
-        appStore.setSelectedItems([])
-       const res = await apiAxios.post(`/products/delete`, {pids})
-       //TODO: Delete images also
-        isLoading.value = false
-        await sleep(100)
-        getProducts()
-    } catch (error) {
-        console.log(error)
-        isLoading.value = false
-    }
-}
+
 onMounted(() => {
     getProducts();
 });
