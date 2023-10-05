@@ -101,7 +101,7 @@ export const showAlert = async ({title, message, buttons = ['Ok']} : {title?: st
   };
 export function errorHandler(e: any, message = "Something went wrong", force = false){
     const msg: string = force ? message : (e.response?.data ?? message);
-        showToast({msg: msg.replace('tuned:', ''), cssClass: 'ion-danger', duration: 1500}  );
+        showToast({msg: msg.replace('tuned:', ''), cssClass: 'ion-danger', duration: 2000}  );
 }
 
 export function toHome(){
@@ -129,4 +129,8 @@ export function hidePopover(){
 export function openSheet(id: string){
     console.log($('#' + id))
     $('#' + id).trigger('click')
+}
+
+export const passValidator = (pwd: string | null)=>{
+    return !pwd?.length ? 'Password is required' : (pwd?.length < 6 ? 'Should me 6 or more characters' : null)
 }

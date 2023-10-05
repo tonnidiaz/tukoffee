@@ -24,9 +24,7 @@
                     v-model="form.password"
                     required
                     :type="showPass ? 'text' : 'password'"
-                    :validator="()=>{
-                        return !form.password?.length ? 'Password is required' : (form.password?.length < 6 ? 'Should me 6 or more characters' : null)
-                    }"
+                    :validator="()=> passValidator(form.password)"
                 >
                 </tu-field>
  
@@ -77,19 +75,16 @@
 import {
     IonPage,
     IonContent,
-    IonInput,
     IonCheckbox,
     IonToast,
     IonText,
-    IonItem,
-    useIonRouter,
 } from "@ionic/vue";
 import Appbar from '@/components/Appbar.vue';
 
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { apiAxios } from "@/utils/constants";
 import { useUserStore } from "@/stores/user";
-import { errorHandler, setupCart, sleep } from "@/utils/funcs";
+import { errorHandler, setupCart, passValidator } from "@/utils/funcs";
 import TuButton from "@/components/TuButton.vue";
 import { useRoute } from "vue-router";
 const form = ref<{ [key: string]: any }>({

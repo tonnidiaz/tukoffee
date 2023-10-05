@@ -52,9 +52,8 @@ const submitOTP = async (e: any) => {
             otp: _form.otp,
             phone: _form.phone,
         });
-        console.log(res.data);
-        localStorage.setItem("authToken", res.data.token);
-        location.href = "/";
+        step.value = 2
+
     } catch (e: any) {
         console.log(e);
         errorHandler(e);

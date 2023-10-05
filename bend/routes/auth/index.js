@@ -131,23 +131,3 @@ router.use("/password", passwordRouter);
 
 router.use("/otp", otpRouter);
 module.exports = router;
-
-/* Signup */
-/*   else {
-                user = new User();
-                user.phone = phone;
-                user.password = bcrypt.hashSync(password, 10);
-
-                const otp = randomInRange(1000, 9999);
-                user.otp = otp;
-                console.log(otp);
-                // Send the otp && save user
-                const number = phone.startsWith("+")
-                    ? phone
-                    : "+27" + phone.slice(1);
-
-                // const smsRes = await sendSMS(number, `Tukoffee - your code is: ${otp}`)
-                //console.log(smsRes.data)
-                await user.save();
-                res.json({ msg: "OTP Generated" });
-            } */

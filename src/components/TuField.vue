@@ -17,7 +17,7 @@
         :clear-on-edit="false"
         :required="required"
         :error-text="errorTxt"
-        @ion-blur="$event.target.classList.add('ion-touched')"
+        @ion-blur="onBlur"
         @ion-input="onInput"
     />
 </template>
@@ -34,6 +34,10 @@ const props = defineProps({
 
 function onInput(e: any) {
     const val = e.target.value
+   validate(e, val)
+}
+
+function validate(e: any, val: any){
     if (props.validator) {
         const ret = props.validator(val);
         if (ret) {
@@ -56,5 +60,9 @@ function onInput(e: any) {
             errorTxt.value = undefined
         }
     }
+}
+function onBlur(e: any){
+    e.target.classList.add('ion-touched')
+    validate(e, e.target.value)
 }
 </script>
