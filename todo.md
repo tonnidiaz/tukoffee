@@ -7,7 +7,6 @@
 - brush up auth
 - Brush up Map
 - product reviews
-- Admin -> reviews and edit
 -Opt to report review
 - Check updates on startup
 
@@ -19,8 +18,12 @@
 -Loader for product reviews -> items tab
 - remove del opt for product
 - loader for cart
-
+- del multiple reviews
+- show only approved reviews
+- filter reviews
+- One rev per product per person
 ## FIXES
+
 
 - Edit cart item
 - rm selector for products

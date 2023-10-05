@@ -38,7 +38,6 @@ import { apiAxios } from "@/utils/constants";
 import { errorHandler, sleep } from "@/utils/funcs";
 import { onMounted, ref } from "vue";
 import TuButton from "@/components/TuButton.vue";
-import { IonInput, IonText } from "@ionic/vue";
 
 const authStore = useAuthStore();
 const TIMEOUT = 120;

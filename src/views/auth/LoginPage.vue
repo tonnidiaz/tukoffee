@@ -3,51 +3,36 @@
         <Appbar title="Login" :show-cart="false"/> 
         <ion-content :fullscreen="true">
             <div class="p-3 bg-base-100 flex flex-col justify- h-full">
-        <form @submit="onFormSubmit" class="mt-3" action="#">
-            <div class="form-control">
-                <ion-input
+        <tu-form @submit="onFormSubmit" class="mt-3" action="#">
+            <div class="my-1">
+                <tu-field
                     label="Phone"
                     placeholder="e.g. 0723456789"
-                    label-placement="floating"
-                    fill="solid"
                     v-model="form.phone"
                     required
-                    class="ion-invalid"
-                    :color="
-                        phoneValid(form.phone) == null
-                            ? 'primary'
-                            : phoneValid(form.phone)
-                            ? 'success'
-                            : 'danger'
-                    "
+                    :validator="()=>{
+                        return !form.phone?.length ? 'Phone is required' : (phoneValid(form.phone) == false ? 'Invalid phone number' : null)
+                    }"
                     type="tel"
-                    error-text="Invalid phone number"
-                >
-                </ion-input>
+                    />
             </div>
-            <div class="form-control">
-                   <ion-input
+            <div class="my-1">
+                   <tu-field
                    
                     label="Password"
                     placeholder="Enter password..."
-                    label-placement="floating"
                     v-model="form.password"
                     required
-                    fill="solid"
                     :type="showPass ? 'text' : 'password'"
-                    :clear-on-edit="false"
-                    :color="
-                        form.password == null
-                            ? 'primary'
-                            : form.password?.length > 6
-                            ? 'success'
-                            : 'danger'
-                    "
-                    error-text="Invalid password"
+                    :validator="()=>{
+                        return !form.password?.length ? 'Password is required' : (form.password?.length < 6 ? 'Should me 6 or more characters' : null)
+                    }"
                 >
-                </ion-input>
+                </tu-field>
  
-                
+                <div class="mt-1">
+                    <ion-text router-link="/auth/forgot" color="secondary">Forgot password?</ion-text>
+                </div>
                 <ion-checkbox
                     v-model="showPass"
                     class="my-2"
@@ -57,15 +42,15 @@
                     >Show password?</ion-checkbox
                 >
             </div>
-            <div class="form-control mt-2">
-                <tu-button @click="onFormSubmit" type="submit" class="tu" :ionic="true" color="dark">
+            <div class="my-1 mt-2">
+                <tu-button  type="submit" class="tu">
                     Login
                 </tu-button>
             </div>
             <div class=" fs-18 flex items-center gap-2">
-                <span>Or</span><ion-text router-link="/auth/signup" color="primary">Create new account</ion-text>
+                <span>Or</span><ion-text router-link="/auth/signup" color="secondary">Create new account</ion-text>
             </div>
-        </form>
+        </tu-form>
         <div class="toast toast-end hidden">
             <div class="alert alert-error">
                 <span>Message sent successfully.</span>

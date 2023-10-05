@@ -107,6 +107,10 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/auth/SignupPage.vue"),
     },
     {
+        path: "/auth/forgot",
+        component: () => import("@/views/auth/forgot/ForgotPassPage.vue"),
+    },
+    {
         path: "/auth/logout",
         component: () => import("@/views/auth/LogoutPage.vue"),
     },
