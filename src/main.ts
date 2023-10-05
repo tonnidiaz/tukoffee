@@ -28,11 +28,13 @@ import './styles/main.scss';
 import { createPinia } from 'pinia';
 import BottomSheetVue from './components/BottomSheet.vue';
 import TuButtonVue from './components/TuButton.vue';
+import DropdownBtn from './components/DropdownBtn.vue';
 import AppbarVue from './components/Appbar.vue';
 import RefresherVue from './components/Refresher.vue';
 import IconBtn from './components/IconBtn.vue';
 import TuField from './components/TuField.vue';
 import TuForm from './components/TuForm.vue';
+import TuAccordion from './components/TuAccordion.vue';
 import MapViewVue from './components/MapView.vue';
 import InkWellVue from './components/InkWell.vue';
 import StarRating from 'vue-star-rating'
@@ -57,6 +59,8 @@ component('tu-field', TuField)
 .component('ink-well', InkWellVue)
 .component('tu-form', TuForm)
 .component('star-rating', StarRating)
+.component('dropdown-btn', DropdownBtn)
+.component('tu-accordion', TuAccordion)
 
 router.isReady().then(() => {
   app.mount('#app');

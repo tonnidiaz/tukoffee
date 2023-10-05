@@ -1,9 +1,10 @@
 <template>
     <ion-page>
         <Appbar title="Product review" :show-cart="false">
-            <icon-btn disabled v-if="review"
+            <icon-btn  v-if="review" @click="delReview(review)"
                 ><i class="fi fi-br-trash fs-18"></i
             ></icon-btn>
+
             <icon-btn v-if="review" id="trigger-edit-sheet"
                 ><i class="fi fi-br-pencil fs-18"></i
             ></icon-btn>
@@ -45,7 +46,7 @@
                                     ></star-rating>
                                     <ion-badge
                                         mode="ios"
-                                        color="medium"
+                                        :color=" review.status == 0 ? 'medium' : (review.status == 1 ? 'success' : 'danger')"
                                         class="py-1"
                                         >{{
                                             reviewStatuses[review.status]
@@ -57,7 +58,7 @@
                     </div>
                     <!-- Edit sheet -->
                     <BottomSheet trigger="trigger-edit-sheet">
-                        <div class="h-99vh">
+                        <div class="h-99vhh">
                             <div class="bg-base-100 p-3">
                                 <h3 class="fs-20">Edit review</h3>
                             </div>
@@ -126,10 +127,11 @@ import { Obj } from "@/utils/classes";
 import { onMounted, ref } from "vue";
 import { apiAxios, reviewStatuses } from "@/utils/constants";
 import { useRoute } from "vue-router";
-import { errorHandler } from "@/utils/funcs";
+import { errorHandler, hideLoader, showAlert, showLoading } from "@/utils/funcs";
 import Refresher from "@/components/Refresher.vue";
 import BottomSheet from "@/components/BottomSheet.vue";
 import ReviewView from "@/components/ReviewView.vue";
+import router from "@/router";
 
 const review = ref<Obj | null>();
 
@@ -144,6 +146,38 @@ async function getReview() {
         errorHandler(e, "Failed to fetch reviews");
     }
 }
+
+async function delReview(rev: Obj) {
+    showAlert({
+        title: "Delete review",
+        message: "Are you sure you want to delete the review?",
+        buttons: [
+            {
+                text: "Cancel",
+                role: "cancel",
+            },
+            {
+                text: "Yes",
+                handler: async () => {
+                    try {
+                        showLoading({ msg: "Deleting review..." });
+                        const res = await apiAxios.post(
+                            "/products/review?act=del",
+                            { id: rev._id }
+                        );
+                       
+                        hideLoader();
+                        router.back()
+                    } catch (e) {
+                        errorHandler(e, "Failed to delete review");
+                        hideLoader();
+                    }
+                },
+            },
+        ],
+    });
+}
+
 onMounted(() => {
     getReview();
 });

@@ -33,68 +33,7 @@
                             </div>
                         </div>
                         <ion-list class="bg-base-100">
-                            <ion-item
-                                :router-link="`/products/reviews/${rev._id}`"
-                                color="clear"
-                                v-for="rev in reviews"
-                            >
-                                <ion-thumbnail
-                                    class="h-45px shadow-lg card rounded-lg"
-                                    slot="start"
-                                >
-                                    <ion-img
-                                        v-if="rev.product.images?.length"
-                                        class="rounded-lg"
-                                        :src="rev.product.images[0].url"
-                                    ></ion-img>
-                                    <span v-else>
-                                        <i
-                                            class="fi fi-rr-image-slash text-gray-600"
-                                        ></i>
-                                    </span>
-                                </ion-thumbnail>
-                                <ion-label>
-                                    <h3 class="fw-5 fs-16">{{ rev.title }}</h3>
-                                    <ion-note>
-                                        <span class="fw-6">{{ rev.name }}</span>
-                                        &middot;
-                                        {{
-                                            new Date(
-                                                rev.last_modified
-                                            ).toLocaleDateString()
-                                        }}
-                                    </ion-note>
-                                    <br />
-                                    <ion-badge
-                                        mode="ios"
-                                        color="medium"
-                                        class="py-1"
-                                    >
-                                        {{ reviewStatuses[rev.status] }}
-                                    </ion-badge>
-                                </ion-label>
-                                <icon-btn
-                                    
-                                    @click="(e: Event)=>{e.preventDefault(); $('#btn-item-menu').trigger('click')}"
-                                    class="w-30px"
-                                    slot="end"
-                                >
-                                    <span
-                                        ><i
-                                            class="fi fi-br-menu-dots-vertical fs-20 text-gray-600"
-                                        ></i
-                                    ></span>
-                                    <button id="btn-item-menu" class="hidden"></button>
-                                </icon-btn>
-                                <ion-popover
-                                    trigger="btn-item-menu"
-                                    trigger-action="click"
-                                >
-                                    <ion-content class="ion-padding"
-                                        >Hello World!</ion-content
-                                    >
-                                </ion-popover>
-                            </ion-item>
+                            <ReviewItem v-for="rev in reviews" :rev="rev" :set-reviews="(val : Obj[])=>reviews = val"/>
                         </ion-list>
                     </div>
                     <div class="bg-base-100 h-full flex flex-center" v-else>
@@ -115,11 +54,7 @@ import {
     IonPage,
     IonContent,
     IonSpinner,
-    IonItem,
-    IonThumbnail,
-    IonImg,
-    IonLabel,
-    IonNote,
+    
     IonList,
     IonBadge,
     IonInput,
@@ -128,10 +63,11 @@ import {
 import Appbar from "@/components/Appbar.vue";
 import { onMounted, ref } from "vue";
 import { Obj } from "@/utils/classes";
-import { errorHandler } from "@/utils/funcs";
+import { errorHandler, hidePopover } from "@/utils/funcs";
 import { apiAxios, reviewStatuses } from "@/utils/constants";
 import Refresher from "@/components/Refresher.vue";
-import $ from 'jquery'
+import ReviewItem from "./ReviewItem.vue";
+
 const reviews = ref<Obj[] | null>();
 
 const getReviews = async () => {

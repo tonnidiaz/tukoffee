@@ -1,27 +1,56 @@
 <template>
- <!--    <ion-button @click="openPopover" slot="icon-only" class="clear button-clear in-toolbar" color="clear" shape="round">
+    <icon-btn v-if="hasSlot" @click="openPopover">
         <ion-icon :md="ellipsisVertical"></ion-icon>
-    </ion-button>
- -->
- <button v-if="items.filter(it=> it == null).length != items.length" @click="e=> {if(items.length) openPopover(e)}" class="btn btn-ghost rounded-lg p-0 w-30px h-30px fs-20">
-    <ion-icon :md="ellipsisVertical"></ion-icon>
- </button>
-    <ion-popover
-        size="auto"
-        :isOpen="isOpen"
-        :event="event"
-        @didDismiss="isOpen = false"
+        <ion-popover
+            size="auto"
+            :isOpen="isOpen"
+            :event="event"
+            @didDismiss="isOpen = false"
+        >
+            <ion-content class="bg-base-100">
+                <slot />
+            </ion-content>
+        </ion-popover>
+    </icon-btn>
+    <button
+        v-else-if="items.filter((it) => it == null).length != items.length"
+        @click="
+            (e) => {
+                if (items.length) openPopover(e);
+            }
+        "
+        class="btn btn-ghost rounded-lg p-0 w-30px h-30px fs-20"
     >
-        <ion-content class="bg-base-100">
-            <ul class="tu-menu">
-                <li v-for="(item, i) in items.filter(it => it != null)" @click="async()=>{isOpen = false; await sleep(100); item!.cmd()}" class="item ion-activatable">
-                    <ion-ripple-effect />
-                    {{ item!.label }}
-                </li>
-  
-            </ul>
-        </ion-content>
-    </ion-popover>
+        <ion-icon :md="ellipsisVertical"></ion-icon>
+        <ion-popover
+            size="auto"
+            :isOpen="isOpen"
+            :event="event"
+            @didDismiss="isOpen = false"
+        >
+            <ion-content class="bg-base-100">
+                <ul class="tu-menu">
+                    <li
+                        v-for="(item, i) in items.filter((it) => it != null)"
+                        :id="item?.id"
+                        @click="
+                            async () => {
+                                isOpen = false;
+                                if (item?.cmd) {
+                                    await sleep(100);
+                                    item!.cmd();
+                                }
+                            }
+                        "
+                        class="item ion-activatable"
+                    >
+                        <ion-ripple-effect />
+                        {{ item!.label }}
+                    </li>
+                </ul>
+            </ion-content>
+        </ion-popover>
+    </button>
 </template>
 <script setup lang="ts">
 import { sleep } from "@/utils/funcs";
@@ -33,24 +62,26 @@ import {
     IonRippleEffect,
 } from "@ionic/vue";
 import { ellipsisVertical } from "ionicons/icons";
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue";
 
 const isOpen = ref(false),
     event = ref<Event>();
 
-interface DropdownItem{
-    label: string, cmd: Function
+interface DropdownItem {
+    label: string;
+    cmd?: Function;
+    id?: string;
 }
-
 
 const props = defineProps({
     items: {
         type: Array<DropdownItem | null>,
-            default: []
-    }
-})
+        default: [],
+    },
+    hasSlot: Boolean,
+});
 const openPopover = (e: any) => {
-    e.preventDefault()
+    e.preventDefault();
     event.value = e;
     isOpen.value = true;
     return false;
@@ -59,6 +90,7 @@ const openPopover = (e: any) => {
 defineComponent({
     name: "DropdownBtn",
 });
+onMounted(() => {});
 </script>
 
 <style lang="scss">
@@ -68,5 +100,9 @@ defineComponent({
         padding: 10px 14px;
         position: relative;
     }
+}
+
+ion-popover {
+    --ion-backdrop-color: rgba(30, 30, 30, 0.3);
 }
 </style>

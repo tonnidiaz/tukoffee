@@ -2,8 +2,8 @@ import axios from "axios";
 import { CLOUDINARY_API_KEY, CLOUDINARY_SECRET, apiAxios } from "./constants";
 import { Cloudinary, ResourceType } from "@capawesome/capacitor-cloudinary";
 import { Obj } from "./classes";
-import { AlertButton, alertController, loadingController, modalController, toastController } from "@ionic/vue";
-
+import { AlertButton, alertController, loadingController, modalController, popoverController, toastController } from "@ionic/vue";
+import $ from 'jquery'
 export function randomIntFromInterval(min: number, max: number) {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -121,4 +121,12 @@ export function hideModal(){
 }
 export function hideLoader(){
     loadingController.dismiss(null, 'close')
+}
+export function hidePopover(){
+    popoverController.dismiss(null, )
+}
+
+export function openSheet(id: string){
+    console.log($('#' + id))
+    $('#' + id).trigger('click')
 }

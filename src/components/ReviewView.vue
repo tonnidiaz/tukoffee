@@ -72,7 +72,8 @@ const { id } = useRoute().params;
 const router = useRouter()
 
 const props = defineProps({
-    reviewId: String
+    reviewId: String,
+    admin: Boolean
 })
 async function getProduct() {
     try {
