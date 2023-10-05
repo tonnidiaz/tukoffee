@@ -41,26 +41,7 @@ import {
     IonPage,
     IonRouterOutlet,
 } from "@ionic/vue";
-import {useDashStore} from '@/stores/dash';
-import { apiAxios } from "@/utils/constants";
-import { onMounted } from "vue";
-const dashStore = useDashStore()
 
-const setupDash = async () => { 
-    try {
-        const res = await apiAxios.get('/admin/dash')
-        const { data }= res
-        dashStore.setProducts(data.products)
-        dashStore.setOrders(data.orders)
-        dashStore.setAccounts(data.customers)
-    } catch (e) {
-        console.log(e)
-    }
- }
- onMounted(()=>{
-    console.log('setting up dash')
-    setupDash()
- })
 </script>
 <style lang="scss">
 

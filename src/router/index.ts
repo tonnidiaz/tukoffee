@@ -131,6 +131,10 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/order/OrderPage.vue"),
     },
     {
+        path: "/admin/reviews",
+        component: () => import("@/views/admin/ReviewsPage.vue"),
+    },
+    {
         path: "/order/checkout",
         component: () => import("@/views/order/CheckoutPage.vue"),
     },

@@ -1,6 +1,5 @@
 <template>
     <div
-        lines="none"
         class="cursor-pointer border-1 shadow-sm bg-base-100 ion-activatable relative p-0 product-card"
         @click="(e: Event)=>{ if (!e.defaultPrevented) $router.push(`/product/${product.pid}`)}"
     >
@@ -73,15 +72,10 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
 import { apiAxios } from "@/utils/constants";
-import { IonRippleEffect, IonButton, IonItem } from "@ionic/vue";
 import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
 import TuButton from "./TuButton.vue";
-import { sleep } from "@/utils/funcs";
-import { add } from "ionicons/icons";
 const userStore = useUserStore();
 const { cart } = storeToRefs(userStore);
-const router = useRouter();
 
 function inCart(p: any) {
     return cart.value?.products?.find((it: any) => it.product._id == p._id);

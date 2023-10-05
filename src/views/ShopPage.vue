@@ -6,20 +6,20 @@
             <div class="h-full w-full flex flex-col">
                 <div class="flex justify-center w-ful">
                     <div class="flex justify-center w-full flex-col">
-                        <div id="search-bar" class="my-1 bg-base-100 p-3">
+                        <div id="search-bar" class="my-1 bg-base-100 p-2">
                             <div
                                 class="bg-base-200 rounded-md flex items-center px-4 h-45px gap-2"
                             >
                                 <span class="mt-1"
                                     ><i
-                                        class="fi fi-rr-search fs-18 text-gray-700"
+                                        class="fi fi-br-search fs-18 text-gray-500"
                                     ></i
                                 ></span>
 
                                 <ion-input
                                     color="clear"
                                     placeholder="Search"
-                                    class="tu bg-primar"
+                                    class=""
                                     router-link="/search"
                                 ></ion-input>
                                 <button
@@ -27,7 +27,7 @@
                                     id="/shop-filter-sheet-trigger"
                                 >
                                     <i
-                                        class="fi fi-rr-settings-sliders fs-18 text-gray-700"
+                                        class="fi fi-br-settings-sliders fs-18 text-gray-500"
                                     ></i>
                                 </button>
                             </div>

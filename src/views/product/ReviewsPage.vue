@@ -31,11 +31,11 @@
 
                 <div class="flex-auto" v-if="reviews">
                     <ion-list
-                        class="bg-base-10 px-2"
+                        class="bg-base-10 px-2 py-1"
                         v-if="reviews.length"
                     >
                     <div class="border-1 w-full p-3 bg-base-100" v-for='rev in reviews'>
-                        <star-rating :star-size="16" :padding="4" :show-rating="false" :rating="rev.rating"/>
+                        <star-rating read-only :star-size="16" :padding="4" :show-rating="false" :rating="rev.rating"/>
                        <div class="flex items-center justify-between">
                          <h3 class='fs-18 fw-5'>{{ rev.title }}</h3>
                          <!-- TODO: Implement review options -->

@@ -36,6 +36,7 @@
                                 </h3>
                                 <div class="flex items-center gap-3">
                                     <star-rating
+                                        read-only
                                         :show-rating="false"
                                         :star-size="15"
                                         :padding="6"
@@ -89,7 +90,11 @@
                     <div class="my-1 bg-base-100 p-3">
                         
                         <h3 class="fs-18">{{ review.title }}</h3>
-                        <div class="mt-3">
+                        <div class="mt-2">
+                            <p class="helper-text">{{ review.name }}</p>
+                        </div>
+                        
+                        <div class="mt">
                             <p class="">{{ review.body }}</p>
                         </div>
                     </div>

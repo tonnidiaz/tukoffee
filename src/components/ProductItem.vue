@@ -1,5 +1,4 @@
 <template>
-    <!--  :router-link="`/product/${item.pid}`" -->
     <OnLongPress @trigger="onLongPress">
         <ion-item color="clear" @click="onItemClick">
             <ion-thumbnail
@@ -47,16 +46,12 @@ import {
     IonCheckbox,
     IonThumbnail,
     IonLoading,
-    IonAlert,
 } from "@ionic/vue";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
-import DropdownBtn from "./DropdownBtn.vue";
 import { useFormStore } from "@/stores/form";
 import router from "@/router";
-import { apiAxios } from "@/utils/constants";
-import { sleep } from "@/utils/funcs";
 import { useAppStore } from "@/stores/app";
 import { OnLongPress } from "@vueuse/components";
 

@@ -163,4 +163,10 @@ select:-webkit-autofill:focus {
   transition: background-color 5000s ease-in-out 0s;
 
 }
+
+ion-avatar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 </style>
