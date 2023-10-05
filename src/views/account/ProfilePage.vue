@@ -5,8 +5,8 @@
         </Appbar>
         <ion-content :fullscreen="true">
             <refresher :on-refresh="getAccount"/>
-            <div v-if="account">
-                <div class="my-1 bg-base-100 p-3">
+            <div v-if="account" class="px-2">
+                <div class="my-1">
                     <table class="table w-full">
                         <tr>
                             <th colspan="2" class="p-0 pl-4">
@@ -59,7 +59,7 @@
                                 </form>
                             </div>
                         </bottom-sheet>
-                        <tbody>
+                        <tbody class="bg-base-100">
                             <tr>
                                 <td class="fw-5 fs-16">First name</td>
                                 <td class="fs-16">{{ account.first_name }}</td>
@@ -71,12 +71,12 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="my-1 bg-base-100 p-3">
+                <div class="my-1">
                     <table class="table">
                         <th colspan="2">
                             <h2 class="fs-18 fw-5">Contact details</h2>
                         </th>
-                        <tbody>
+                        <tbody class="bg-base-100">
                             <tr>
                                 <td class="fw-5 fs-16">Email</td>
                                 <td class="fs-16">{{ account.email }}</td>
@@ -88,8 +88,8 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="my-1 bg-base-100 p-3 pl-7">
-                    <div class="flex items-center justify-between">
+                <div class="my-1">
+                    <div class="flex items-center justify-between pl-4">
                         <h2 class="fs-18 fw-5">Residential address</h2>
                         <icon-btn @click="addressSheetOpen = true"
                             ><i class="fi fi-br-pencil fs-18"></i
@@ -106,13 +106,18 @@
                             </div>
                         </bottom-sheet>
                     </div>
-
-                    <p class="fw-5 fs-16 mt-4">
-                        {{ account?.address?.location?.name }}
+                    <div v-if="account?.address" class="bg-base-100 p-3">
+                         <p  class="fw-5 fs-16">
+                        {{ account.address.location?.name }}
                     </p>
+                    </div>
+                   
+                    <div class="bg-base-100 p-3" v-else>
+                        <h3 class="fw-5 text-center">No address</h3>
+                    </div>
                 </div>
-                <div class="my-1 bg-base-100 p-3 pl-7">
-                    <div class="flex items-center justify-between">
+                <div class="mt-3">
+                    <div class="flex items-center justify-between pl-4">
                         <h2 class="fs-18 fw-5">Permissions</h2>
                         <icon-btn v-if="user?.permissions > 0" @click="permissionsSheetOpen = true"
                             ><i class="fi fi-br-pencil fs-18"></i
@@ -154,7 +159,7 @@
                         </bottom-sheet>
                     </div>
 
-                    <div class="mt-4 gap-2 flex flex-wrap">
+                    <div class="mt-4 gap-2 flex flex-wrap bg-base-100 p-4">
                         <ion-checkbox
                             :checked="account.permissions >= 0"
                             @ion-change="
@@ -185,11 +190,14 @@
                     </div>
                 </div>
             </div>
+            <div class="h-full bg-base-100 flex flex-center" v-else>
+                <ion-spinner class="h-55px w-55px"></ion-spinner>
+            </div>
         </ion-content>
     </ion-page>
 </template>
 <script setup lang="ts">
-import { IonPage, IonContent, IonCheckbox, IonInput } from "@ionic/vue";
+import { IonPage, IonContent, IonCheckbox, IonSpinner } from "@ionic/vue";
 import Appbar from "@/components/Appbar.vue";
 import { useRoute } from "vue-router";
 import { onMounted, ref, watch } from "vue";
@@ -208,7 +216,6 @@ const form = ref<Obj>({});
 
 /* Sheets */
 const personalDetailsSheetOpen = ref(false);
-const contactDetailsSheetOpen = ref(false);
 const addressSheetOpen = ref(false);
 const permissionsSheetOpen = ref(false);
 
@@ -217,6 +224,7 @@ const { id } = route.params;
 
 const getAccount = async () => {
     try {
+        account.value = null
         const res = await apiAxios.get(`/users?id=${id ??user.value?._id}`);
         account.value = res.data.users[0];
     } catch (e) {

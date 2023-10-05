@@ -77,7 +77,6 @@ export const useShopStore = defineStore("shop", {
         sorter(a: any, b: any) {
             let s;
             const _sortOrder = this.sortOrder;
-            console.log(this.status)
             switch (this.sortBy) {
                 case SortBy.price:
                     if (_sortOrder == SortOrder.ascending) {

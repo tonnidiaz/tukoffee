@@ -1,5 +1,5 @@
 <template>
-    <ion-button @click="_onClick" :disabled="disabled" v-if="ionic">
+    <ion-button expand="block" color="dark" @click="_onClick" :disabled="disabled" v-if="ionic">
         <slot /></ion-button>
     <button v-else @click="_onClick" :disabled="disabled" class="btn flex items-center gap-3">
         <span v-if="disabled" class="loading loading-spinner fs-14 hidden"></span>

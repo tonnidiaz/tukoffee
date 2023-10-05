@@ -7,9 +7,7 @@
            }]"/>
         </Appbar>
         <ion-content :fullscreen="true">
-            <ion-refresher slot="fixed" :pull-factor="0.5" :pull-min="100" :pull-max="200" @ionRefresh="handleRefresh($event)">
-                <ion-refresher-content> </ion-refresher-content>
-            </ion-refresher>
+           <refresher :on-refresh="async () => await _setupCart(user)"/>
             <div class="p-1 w-full h-full">
                 <ion-popover trigger="click-trigger" trigger-action="click">
                     <ion-content class="">
@@ -98,7 +96,6 @@ const {user, cart} = storeToRefs(userStore)
 const {setCart} = userStore
 const total = ref(0);
 
-const ionRouter = useIonRouter();
 
 const clearCart = async () => {
     try{
@@ -110,21 +107,18 @@ const clearCart = async () => {
 };
 
 
-const _setupCart = async () => { 
+const _setupCart = async (user: Obj | null) => { 
+    console.log(user?.first_name, 'Setup cart')
     cart.value = null
-     if (user.value?.phone){
-       cart.value = await setupCart(user.value['phone'], userStore)
+     if (user?.phone){
+       cart.value = await setupCart(user.phone, userStore)
     }
  }
-const handleRefresh = async (e: any) => {
-   
-    await _setupCart()
-    e.target.complete()
-};
 
-watch(user, ()=>{
-    _setupCart()
-}, {deep: true, immediate: true})
+
+watch(user, (val)=>{
+    _setupCart(val)
+}, {deep: true})
 watch(
     cart,
     (_cart) => {
@@ -139,8 +133,6 @@ watch(
     { deep: true, immediate: true }
 );
 
-onBeforeUnmount(()=>{
-  cart.value = null
-})
+
  
 </script>

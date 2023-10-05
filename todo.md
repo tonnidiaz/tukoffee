@@ -1,6 +1,5 @@
 ## TODO
 
-- Acc settings page
 - Environment variables
 - Sending feedback
 - Geocode current user location

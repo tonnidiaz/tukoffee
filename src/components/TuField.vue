@@ -4,6 +4,7 @@
         label-placement="floating"
         fill="solid"
         color="dark"
+        autocapitalize="words"
         :required="required"
     />
     <ion-input
@@ -12,6 +13,8 @@
         label-placement="floating"
         fill="solid"
         color="dark"
+        autocapitalize="words"
+        :clear-on-edit="false"
         :required="required"
         :error-text="errorTxt"
         @ion-blur="$event.target.classList.add('ion-touched')"

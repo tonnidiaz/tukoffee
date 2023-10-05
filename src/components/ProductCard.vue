@@ -100,7 +100,6 @@ const addRemoveCart = async (e: any) => {
     e.preventDefault()
     try {
         const act = inCart(props.product) ? "remove" : "add";
-        console.log(act);
         const fd = new FormData();
         fd.append("product", props.product._id);
         const res = await apiAxios.post(`/user/cart?action=${act}`, fd);

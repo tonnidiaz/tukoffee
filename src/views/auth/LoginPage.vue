@@ -101,11 +101,12 @@ import {
 } from "@ionic/vue";
 import Appbar from '@/components/Appbar.vue';
 
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { apiAxios } from "@/utils/constants";
 import { useUserStore } from "@/stores/user";
 import { errorHandler, setupCart, sleep } from "@/utils/funcs";
 import TuButton from "@/components/TuButton.vue";
+import { useRoute } from "vue-router";
 const form = ref<{ [key: string]: any }>({
     phone: "0726013383",
     password: "Baselined",
@@ -128,10 +129,10 @@ const phoneValid = (phone: string | null) => {
         : (phone.startsWith("0") && phone.length == 10) ||
               (phone.startsWith("+") && phone.length == 12);
 };
-const router = useIonRouter();
+const route = useRoute();
+const { red } = route.query
 
 async function onFormSubmit(e: any) {
-    console.log("Submi");
     e.preventDefault();
     try {
         const _form = form.value;
@@ -141,18 +142,18 @@ async function onFormSubmit(e: any) {
         }
 
         const res = await apiAxios.post("/auth/login", fd);
-        console.log(res.data);
         localStorage.setItem("authToken", res.data.token);
         userStore.setUser(res.data.user);
         setupCart(res.data.user["phone"], userStore);
-        location.href = '/'
-        //location.reload();
+        location.href = red as string ??  '/'
     } catch (e: any) {
         console.log(e);
         errorHandler(e)
         return;
     }
 }
+
+
 </script>
 
 <style>

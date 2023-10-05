@@ -58,7 +58,7 @@
             </div>
 
             <ion-fab vertical="bottom" horizontal="end">
-                <ion-fab-button router-link="/products/reviews" color="dark">
+                <ion-fab-button @click="if (user?.first_name) $router.push('/products/reviews'); else $router.push('/auth/login?red=' + $route.fullPath)" color="dark">
                     <span><i class="fi fi-rr-plus"></i></span>
                 </ion-fab-button>
             </ion-fab>
@@ -85,7 +85,9 @@ import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { errorHandler } from "@/utils/funcs";
 import Refresher from "@/components/Refresher.vue";
-
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/user";
+const { user } = storeToRefs(useUserStore())
 const product = ref<Obj>(),
     reviews = ref<Obj[] | null>();
 
