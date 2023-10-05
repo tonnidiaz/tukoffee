@@ -98,7 +98,7 @@ router.post("/update-field", multer().none(), async (req, res) => {
     }
 });
 const baseDir = path.resolve("./");
-const jsonPath = path.join(baseDir, "assets", "store.json");
+const jsonPath = __dirname + '/../assets/store.json' //path.join(__dirname, "assets", "store.json");
 router.get("/store", async (req, res) => {
     const buff = fs.readFileSync(jsonPath, { encoding: "utf-8" });
     res.json(JSON.parse(buff));

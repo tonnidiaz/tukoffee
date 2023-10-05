@@ -7,10 +7,7 @@
                     label: 'Edit',
                     cmd: ()=> {formStore.setForm(product!); ionRouter.push('/edit/product')}
                 }: null,
-                isAdmin() ? {
-                    label: 'Delete',
-                    cmd: ()=>{}
-                } : null
+       
             ]"
             />
         </Appbar>
@@ -242,10 +239,6 @@ function inCart(p: any) {
         ? false
         : cart.value?.products?.find((it: any) => it.product._id == p._id);
 }
-
-const toggle = (event: any) => {
-    menu.value.toggle(event);
-};
 
 const addRemoveCart = async (e: any) => {
     try {

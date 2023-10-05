@@ -1,6 +1,10 @@
 <template>
-    <OnLongPress @trigger="onLongPress" >
-        <ion-item  color="clear" @click="onItemClick" :router-link="`/order/${order.oid}`">
+    <OnLongPress @trigger="onLongPress">
+        <ion-item
+            color="clear"
+            @click="onItemClick"
+            :router-link="`/order/${order.oid}`"
+        >
             <ion-label>
                 <h3 class="fw-5 fs-16">#{{ order.oid }}</h3>
                 <div class="flex gap-4">
@@ -9,7 +13,7 @@
                     </ion-note>
 
                     <ion-badge
-                        class="px-3" 
+                        class="px-3"
                         mode="ios"
                         :color="
                             order.status == 'pending'
@@ -23,7 +27,6 @@
                 </div>
             </ion-label>
             <ion-checkbox
-                
                 :checked="
                     selectedItems.findIndex((el) => el._id == order._id) != -1
                 "
@@ -33,10 +36,10 @@
             ></ion-checkbox>
 
             <div v-else slot="end">
-            <dropdown-btn :items="[
-                { label: 'Cancel', cmd: cancelOrder },
-                ]" />
-        </div>
+                <dropdown-btn
+                    :items="[{ label: 'Cancel', cmd: cancelOrder }]"
+                />
+            </div>
         </ion-item>
     </OnLongPress>
 </template>
@@ -50,7 +53,7 @@ import {
     IonItem,
     IonNote,
     IonLabel,
-useIonRouter,
+    useIonRouter,
 } from "@ionic/vue";
 import { ellipsisVertical } from "ionicons/icons";
 import { storeToRefs } from "pinia";
@@ -61,6 +64,12 @@ import { ref } from "vue";
 import DropdownBtn from "./DropdownBtn.vue";
 import { apiAxios } from "@/utils/constants";
 import { useRoute } from "vue-router";
+import {
+    errorHandler,
+    hideLoader,
+    showAlert,
+    showLoading,
+} from "@/utils/funcs";
 
 const userStore = useUserStore();
 const orderStore = useOrderStore();
@@ -87,12 +96,12 @@ const toggleSelected = () => {
     appStore.setSelectedItems(data);
 };
 
-const router = useIonRouter()
-const route = useRoute()
-const { path} = route
+const router = useIonRouter();
+const route = useRoute();
+const { path } = route;
 const onItemClick = (e: any) => {
-    console.log(e.defaultPrevented)
-    e.preventDefault()
+    console.log(e.defaultPrevented);
+    e.preventDefault();
     if (selectedItems.value.length) toggleSelected();
 };
 const onLongPress = (e: PointerEvent) => {
@@ -102,21 +111,41 @@ const onLongPress = (e: PointerEvent) => {
 };
 
 async function cancelOrder() {
-    const q = confirm("Are you sure you want to cancel this order?")
-    if (q) {
-        console.log('Cancelling')
-        const act = 'cancel'
-        appStore.setSelectedItems([])
-        try {
-
-            const data = path == '/orders' ? { userId: user.value?._id, ids: [props.order._id] } :{ids: [props.order._id]} 
-            const res = await apiAxios.post(`/order/cancel?action=${act}`, data)
-            orderStore.setOrders(res.data.orders)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-
+    showAlert({
+        message: "Are you sure you want to cancel this order?",
+        title: "Cancel order",
+        buttons: [
+            {
+                text: "Cancel",
+                role: "cancel",
+            },
+            {
+                text: "Yes",
+                handler: async () => {
+                    showLoading({ msg: "Cancelling order..." });
+                    const act = "cancel";
+                    appStore.setSelectedItems([]);
+                    try {
+                        const data =
+                            path == "/orders"
+                                ? {
+                                      userId: user.value?._id,
+                                      ids: [props.order._id],
+                                  }
+                                : { ids: [props.order._id] };
+                        const res = await apiAxios.post(
+                            `/order/cancel?action=${act}`,
+                            data
+                        );
+                        orderStore.setOrders(res.data.orders);
+                        hideLoader();
+                    } catch (error) {
+                        errorHandler(error, "Failed to cancel order");
+                        hideLoader();
+                    }
+                },
+            },
+        ],
+    });
 }
 </script>

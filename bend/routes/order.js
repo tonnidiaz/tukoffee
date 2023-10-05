@@ -15,9 +15,7 @@ const genOID = async () => {
 router.post("/cancel", auth, async (req, res) => {
     const { ids, userId } = req.body;
     const { action } = req.query;
-    console.log(userId)
     try {
-        console.log(ids)
         for (let id of ids) {
             try {
                 console.log(action);

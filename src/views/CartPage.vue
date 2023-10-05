@@ -91,6 +91,7 @@ import {  onBeforeUnmount, ref, watch } from "vue";
 import $ from "jquery";
 import DropdownBtn from "@/components/DropdownBtn.vue";
 import { apiAxios } from "@/utils/constants";
+import { Obj } from "@/utils/classes";
 const userStore = useUserStore();
 const {user, cart} = storeToRefs(userStore)
 const {setCart} = userStore
@@ -108,7 +109,6 @@ const clearCart = async () => {
 
 
 const _setupCart = async (user: Obj | null) => { 
-    console.log(user?.first_name, 'Setup cart')
     cart.value = null
      if (user?.phone){
        cart.value = await setupCart(user.phone, userStore)
@@ -125,7 +125,7 @@ watch(
         if (_cart) {
             let _total = 0;
             for (let it of _cart.products) {
-                _total += it.product.price;
+                _total +=( it.product.price * it.quantity);
             }
             total.value = _total;
         }

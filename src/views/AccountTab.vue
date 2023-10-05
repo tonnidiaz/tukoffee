@@ -70,7 +70,7 @@
                         <bottom-sheet :is-open="feedbackSheetOpen" @did-dismiss="feedbackSheetOpen = false"  id="help-feedback-sheet">
                             <div class="p-4 bg-base-100">
                                 <h3 class="my-4">Help & Feedback</h3>
-                                <form action="">
+                                <tu-form :on-submit="sendMsg" action="">
                                     <div class="my-2">
                                         <tu-field v-model="form.name" label="Name:" placeholder="e.g. John Doe" required/>
                                     </div>
@@ -81,9 +81,9 @@
                                         <tu-field required v-model="form.msg" label="Type your message (Issues, help, or suggestions)" textarea/>
                                     </div>
                                     <div class="my-1">
-                                        <tu-btn :on-click="(e: Event) => sendMsg(e)" ionic color="dark" class="w-full tu" type="submit">Submit</tu-btn>
+                                        <tu-btn class="w-full tu" type="submit">Submit</tu-btn>
                                     </div>
-                                </form>
+                                </tu-form>
                             </div>
                         </bottom-sheet>
                     </ion-item>
@@ -123,7 +123,7 @@ import {
 import Appbar from "@/components/Appbar.vue";
 import BottomSheet from "@/components/BottomSheet.vue";
 import { useUserStore } from "@/stores/user";
-import { __DEV__ } from "@/utils/constants";
+import { __DEV__, apiAxios } from "@/utils/constants";
 import { Obj } from "@/utils/classes";
 import { ref } from "vue";
 import axios from "axios";
@@ -136,14 +136,13 @@ const form = ref<Obj>({})
 const feedbackSheetOpen = ref(false)
 
 
-const goBack = ()=> window.history.back()
 const sendMsg = async (e: Event) => {
-    e.preventDefault()
     try {
         console.log(form.value)
-        await axios.post('/message/send', {app: appStore.title, ...form.value})
-        showToast({msg: "Feedback sent"})
-        feedbackSheetOpen.value = false
+        await apiAxios.post('/message/send', {app: appStore.title, ...form.value})
+         feedbackSheetOpen.value = false
+         showToast({msg: "Feedback sent"})
+       
     } catch (error) {
         errorHandler(error, "Failed to send feedback", true)
     }

@@ -76,7 +76,7 @@
                                         />
                                     </div>
                                     <div
-                                        class="my-1 flex items-start justify-between gap-1"
+                                        class="my-1"
                                     >
                                         <tu-field
                                             v-model="addressForm.name"
@@ -84,6 +84,9 @@
                                             required
                                             placeholder="e.g. John Doe"
                                         />
+                                      
+                                    </div>
+                                    <div class="my-1">
                                         <tu-field
                                             v-model="addressForm.phone"
                                             label="Recipient phone"

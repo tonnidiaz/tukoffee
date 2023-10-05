@@ -38,8 +38,7 @@
                         <star-rating read-only :star-size="16" :padding="4" :show-rating="false" :rating="rev.rating"/>
                        <div class="flex items-center justify-between">
                          <h3 class='fs-18 fw-5'>{{ rev.title }}</h3>
-                         <!-- TODO: Implement review options -->
-                         <icon-btn class="rounded-lg w-30px h-30px"><i class="fi fi-br-menu-dots-vertical fs-18 fw-8"></i></icon-btn>
+                         <icon-btn class="rounded-lg w-30px h-30px hidden"><i class="fi fi-br-menu-dots-vertical fs-18 fw-8"></i></icon-btn>
                        </div>
                        
                         <p class="helper-text">{{ rev.name }} - {{ new Date(rev.date_created).toLocaleDateString() }}</p>
@@ -110,7 +109,6 @@ async function getReviews(pid: string) {
     try {
         const res = await apiAxios.get("/products/reviews?pid=" + pid);
         reviews.value = res.data.reviews;
-        console.log(reviews.value);
     } catch (e) {
         console.log(e);
         reviews.value = [];

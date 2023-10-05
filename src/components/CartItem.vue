@@ -72,7 +72,7 @@
                     ></ion-action-sheet>
                 </div>
                     <tu-button
-                       :on-click="updateCart"
+                       :on-click="()=>updateCart()"
                         ionic
                         class="w-full"
                         color="success"

@@ -33,13 +33,13 @@
             <h3 class="fs-18 fw-5 text-center">You have not ordered and received any products using this app yet</h3>
         </div>
     </div>
-    <div  v-else class="h-full">
-        <!-- TODO: Loader -->
+    <div  v-else class="h-full bg-base-100 flex flex-center">
+     <ion-spinner class="w-50px h-50px"></ion-spinner>
     </div>
 </template>
 
 <script setup lang="ts">
-import { IonText, IonLabel, IonItem, IonThumbnail, IonImg } from "@ionic/vue";
+import { IonText, IonLabel, IonItem, IonThumbnail, IonImg, IonSpinner } from "@ionic/vue";
 import { Obj } from "@/utils/classes";
 import { apiAxios } from "@/utils/constants";
 import { onMounted, ref } from "vue";

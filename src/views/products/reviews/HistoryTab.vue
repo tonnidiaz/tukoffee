@@ -28,10 +28,11 @@
                             :show-rating="false"
                             :star-size="15"
                             :padding="6"
+                            read-only
                             :rating="review.rating"
                             :increment="0.5"
                         ></star-rating>
-                        <ion-badge mode="ios" color="medium" class="py-1">{{
+                        <ion-badge mode="ios" :color=" review.status == 0 ? 'medium' : (review.status == 1 ? 'success' : 'danger')" class="py-1">{{
                             reviewStatuses[review.status]
                         }}</ion-badge>
                     </div>

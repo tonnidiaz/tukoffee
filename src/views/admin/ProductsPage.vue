@@ -3,14 +3,7 @@
         <Appbar title="Products" :show-cart="false">
             <DropdownBtn
                 :items="[
-                    {
-                        label:  selectedItems.length ? 'Deselect all' : 'Select all',
-                        cmd: () => {
-                            let its = 
-                            selectedItems.length ? [] : sortedProducts!
-                           appStore.setSelectedItems(its)
-                        },
-                    },
+
 
                     {label: 'Back to home', cmd: ()=> toHome()}
 

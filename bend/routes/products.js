@@ -54,7 +54,7 @@ router.get("/", lightAuth, async (req, res, next) => {
                     })
                 );
         }
-        let data = parseProducts(prods);
+        let data = await parseProducts(prods);
 
         res.json({ data });
     } catch (err) {
@@ -184,7 +184,7 @@ router.post("/delete", auth, async (req, res) => {
             }
 
             const newProducts = await Product.find().exec();
-            return res.json({ products: parseProducts(newProducts) });
+            return res.json({ products: await parseProducts(newProducts) });
         }
     } catch (e) {
         console.log(e);
@@ -192,25 +192,5 @@ router.post("/delete", auth, async (req, res) => {
     }
 });
 
-router.post("/rate", auth, async (req, res) => {
-    // remove existing rating by user and add new one or add the rating
-    try {
-        const { pid } = req.query;
-        const { rating } = req.body;
 
-        const product = await Product.findOne({ pid }).exec();
-        if (!product) return res.status(404).json({ msg: "Product not found" });
-
-        product.ratings = [
-            ...product.ratings.filter((it) => it.customer != req.user),
-            { ...rating, customer: req.user },
-        ];
-        product.last_modified = new Date();
-        await product.save();
-        res.status(200).send("Product rated successfully!");
-    } catch (e) {
-        console.log(e);
-        res.status(500).send("tuned:Something went wrong");
-    }
-});
 module.exports = router;

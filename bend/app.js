@@ -8,6 +8,7 @@ const indexRouter = require('./routes/index');
 const orderRouter = require('./routes/order');
 const adminRouter = require('./routes/admin');
 const usersRouter = require('./routes/users');
+const messageRouter = require('./routes/message');
 const ordersRouter = require('./routes/orders');
 const productsRouter = require('./routes/products');
 const authRouter = require('./routes/auth');
@@ -61,6 +62,7 @@ app.use('/auth', parser, authRouter);
 app.use('/search', parser, searchRouter);
 app.use('/user', parser, userRouter);
 app.use('/stores', parser, storesRouter);
+app.use('/message', parser, messageRouter);
 app.get("/gen-token", onGetGenToken)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

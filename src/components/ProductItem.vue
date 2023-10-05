@@ -89,6 +89,7 @@ const onItemClick = (e: any) => {
     if (selectedItems.value.length) toggleSelected();
 };
 const onLongPress = (e: PointerEvent) => {
+    return
     isHolding.value = true;
     toggleSelected();
     isHolding.value = false;

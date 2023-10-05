@@ -41,7 +41,7 @@
         <ion-content :fullscreen="true">
             <div class="h-full flex flex-column w-full">
 
-                <div class="my-1 bg-base-100 p-3 w-full relative">
+                <div class="my-1 bg-base-100 p-3 w-full relative" style="overflow-y: scroll;">
                     <div class="flex flex-center h-full" v-if="!items">
                         <div v-if="query.length">
                                 <ion-spinner color="dark" class="w-50px h-50px"></ion-spinner>
