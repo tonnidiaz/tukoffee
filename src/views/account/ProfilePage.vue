@@ -1,7 +1,7 @@
 <template>
     <ion-page>
         <Appbar :title="account ? `${account.first_name} ${account.last_name}`: 'Profile'"  :show-cart="false">
-        <icon-btn router-link="/account/settings"> <i class="fi fi-sr-settings"></i> </icon-btn>
+        <icon-btn v-if="account?._id == user?._id" router-link="/account/settings"> <i class="fi fi-sr-settings"></i> </icon-btn>
         </Appbar>
         <ion-content :fullscreen="true">
             <refresher :on-refresh="getAccount"/>
@@ -92,15 +92,17 @@
                     <div class="flex items-center justify-between pl-4">
                         <h2 class="fs-18 fw-5">Residential address</h2>
                         <icon-btn @click="addressSheetOpen = true"
-                            ><i class="fi fi-br-pencil fs-18"></i
-                        ></icon-btn>
+                            >
+                            <i v-if="account?.address" class="fi fi-br-pencil fs-18"></i>
+                            <i v-else class="fi fi-br-plus fs-18"></i>
+                        </icon-btn>
                         <bottom-sheet
                             no-swipe-dismiss
                             :is-open="addressSheetOpen"
                             @did-dismiss="addressSheetOpen = false"
                         >
                             <div class="h-100vh">
-                                <map-view
+                                <map-view :location="account?.address?.location"
                                     :on-ok="(val: any)=>editAddress(val)"
                                 />
                             </div>
@@ -206,7 +208,7 @@ import { Obj } from "@/utils/classes";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user";
 import BottomSheet from "@/components/BottomSheet.vue";
-import { errorHandler } from "@/utils/funcs";
+import { errorHandler, hideLoader, showLoading, sleep } from "@/utils/funcs";
 
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
@@ -236,6 +238,7 @@ const editPersonalDetails = async (e: Event) => {
     const _form = form.value;
     try {
         const res = await apiAxios.post("/user/edit", {
+            userId: account.value!._id,
             value: {
                 first_name: _form.first_name,
                 last_name: _form.last_name,
@@ -251,6 +254,7 @@ const editPermissions = async (e: Event) => {
     const _form = form.value;
     try {
         const res = await apiAxios.post("/user/edit", {
+            userId: account.value!._id,
             value: {
                 permissions: _form.permissions,
             },
@@ -265,16 +269,22 @@ const editAddress = async (addr: Obj) => {
     try {
         addressSheetOpen.value = false;
         if (!addr) return;
+        showLoading({msg: 'Adding address...'})
         const res = await apiAxios.post("/user/edit", {
+            userId: account.value!._id,
             value: {
                 address: {
                     location: addr,
                 },
             },
         });
+        await sleep(4000)
         account.value = res.data.user;
+        hideLoader()
     } catch (error) {
+        hideLoader()
         errorHandler(error);
+        
     }
 };
 

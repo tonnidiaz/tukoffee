@@ -1,11 +1,12 @@
 <template>
     <ion-page>
-        <Appbar title="Dashboard" :show-cart="false">
+        <Appbar title="Dashboard" :show-cart="false" :loading="!data">
             <DropdownBtn
                 :items="[{ label: 'Back to home', cmd: () => toHome() }]"
             />
         </Appbar>
         <ion-content :fullscreen="true">
+            <refresher :on-refresh="setupDash"/>
             <div class="grid justify-center gap-1 p-3 grid-cols-3">
                 <router-link
                     to="/admin/products"
@@ -21,7 +22,7 @@
                         </ion-avatar>
                     </div>
                     <p class="text-center fw-6 text-gray-500">
-                        {{ products?.length ?? 0 }}
+                        {{ data?.products?.length ?? 0 }}
                     </p>
                     <h3 class="fs-15 fw-5 text-center">Products</h3>
                 </router-link>
@@ -39,7 +40,7 @@
                         </ion-avatar>
                     </div>
                     <p class="text-center fw-6 text-gray-500">
-                        {{ orders?.length ?? 0 }}
+                        {{ data?.orders?.length ?? 0 }}
                     </p>
                     <h3 class="fs-15 fw-5 text-center">Orders</h3>
                 </router-link>
@@ -57,7 +58,7 @@
                         </ion-avatar>
                     </div>
                     <p class="text-center fw-6 text-gray-500">
-                        {{ orders?.length ?? 0 }}
+                        {{ data?.customers?.length ?? 0 }}
                     </p>
                     <h3 class="fs-15 fw-5 text-center">Accounts</h3>
                 </router-link>
@@ -75,11 +76,12 @@
                         </ion-avatar>
                     </div>
                     <p class="text-center fw-6 text-gray-500">
-                        {{ orders?.length ?? 0 }}
+                        {{ data?.reviews?.length ?? 0 }}
                     </p>
                     <h3 class="fs-15 fw-5 text-center">Product reviews</h3>
                 </router-link>
             </div>
+            
         </ion-content>
     </ion-page>
 </template>
@@ -91,19 +93,22 @@ import { toHome } from "@/utils/funcs";
 
 import { useDashStore } from "@/stores/dash";
 import { apiAxios } from "@/utils/constants";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
+import { Obj } from "@/utils/classes";
 const dashStore = useDashStore();
-const { products, accounts, orders } = storeToRefs(dashStore);
+
+const data = ref<Obj | null>()
+
 const setupDash = async () => {
     try {
+        data.value = null
         const res = await apiAxios.get("/admin/dash");
-        const { data } = res;
-        dashStore.setProducts(data.products);
-        dashStore.setOrders(data.orders);
-        dashStore.setAccounts(data.customers);
+        
+        data.value = res.data
     } catch (e) {
         console.log(e);
+
     }
 };
 onMounted(() => {

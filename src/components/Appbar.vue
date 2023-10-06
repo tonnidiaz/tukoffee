@@ -15,7 +15,7 @@
                     <CartBtn v-if="showCart"/> 
                     <slot/>
                 </ion-buttons>
-                <ion-progress-bar v-if="loading" type="indeterminate"></ion-progress-bar>
+                <ion-progress-bar color="medium" v-if="loading" type="indeterminate"></ion-progress-bar>
 
             </ion-toolbar> 
         </ion-header>

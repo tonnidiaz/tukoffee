@@ -11,13 +11,20 @@
 - show only approved reviews
 - filter reviews
 - One rev per product per person
-- dark btn on edit rev sheet
-- del acc alert to ios
+- Internet connection check?
+- Replac Poppins (more space)
+
 ## FIXES
-- Admin dash products count
 - chekout flicker after add address
-- Loader for adding user res address
-- admin cannot go to user acc settings
+
+# FINALS
+
+- Send SMS for auth
+- Use real search for address
+- Clear user cart after creating order
+
+- Real payments
+- Splash screen and app icon
 
 # FUTURE FEATURES
 

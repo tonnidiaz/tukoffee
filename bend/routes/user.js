@@ -128,10 +128,11 @@ router.post("/delivery-address", parser, auth, async (req, res) => {
         res.status(500).send("tuned:Something went wrong");
     }
 });
-router.post("/edit", parser, auth, async (req, res) => {
+router.post("/edit", auth, async (req, res) => {
     try {
         const { field } = req.query;
         const { value, userId } = req.body;
+        console.log(userId)
         const _user = userId ? await User.findById(userId).exec() : req.user;
         if (!field) {
             for (let key of Object.keys(value)) {

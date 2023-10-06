@@ -72,7 +72,7 @@
     </ion-page>
 </template>
 <script setup lang="ts">
-import { IonPage, IonContent, IonInput } from "@ionic/vue";
+import { IonPage, IonContent } from "@ionic/vue";
 import Appbar from "@/components/Appbar.vue";
 import { Obj } from "@/utils/classes";
 import { ref } from "vue";

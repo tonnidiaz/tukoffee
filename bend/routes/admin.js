@@ -1,5 +1,5 @@
 const express = require('express');
-const { Product, User, Order, Store } = require('../models');
+const { Product, User, Order, Store, Review } = require('../models');
 const { parseProducts } = require('../utils/functions');
 const router = express.Router();
 
@@ -11,8 +11,10 @@ router.get('/dash', async function(req, res, next) {
     customers = customers.map(it=>it.toJSON())
     let orders = await Order.find().exec()
     orders = orders.map(it=>it.toJSON())
+    let reviews = await Review.find().exec()
+    reviews = reviews.map(it=>it.toJSON())
   
-    const data = {products: parseProducts(products), customers, orders}
+    const data = {products: await parseProducts(products), customers, orders, reviews};
   res.json(data)
 });
 

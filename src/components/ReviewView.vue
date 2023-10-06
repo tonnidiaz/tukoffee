@@ -39,7 +39,7 @@
                         <tu-field textarea :counter="true" :maxlength="MAX_CHARS" v-model="form.body" label="Review" placeholder="Write your review..." required/>
                     </div>
                     <div class="my">
-                        <tu-btn  ionic type="submit" :on-click="submitReview" class="w-full tu" color="secondary">SUBMIT</tu-btn>
+                        <tu-btn  ionic type="submit" :on-click="submitReview" class="w-full tu" color="dark">SUBMIT</tu-btn>
                     </div>
                     </form>
                     
