@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const { Order, Cart, User, Product } = require("../models");
+const { Order, Cart, User, Product, Review } = require("../models");
 const { AddressSchema } = require("../models/user");
 const { genToken, tunedErr, delCloudinary } = require("../utils/functions");
 var router = express.Router();
@@ -49,6 +49,20 @@ router.get("/clean", async (req, res) => {
                 ).products.filter((it) => it.product != null);
                 await order.save();
             }
+        }
+
+       console.log('Cleaning products')
+        
+        for (let prod of await Product.find().exec()){
+            const revs = prod.reviews ?? [];
+            for (let rev of revs){
+                // Search for review with the id, if no exist, rm it from product
+                if (!(await Review.findById(rev).exec())){
+                    prod.reviews = prod.reviews.filter(it=> it != rev)
+                }
+            }
+
+            await prod.save()
         }
         res.send("cleanup complete!");
     } catch (e) {

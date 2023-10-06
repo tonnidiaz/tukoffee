@@ -88,7 +88,10 @@ router.post("/create", auth, async (req, res) => {
             await user.save();
 
             // delete the cart
-            //await Cart.findByIdAndDelete(cartId).exec()
+            await Cart.findByIdAndUpdate(cartId, {$set: {
+                products: []
+            }}).exec()
+            await cart.save()
             //user.cart = null
             //await user.save()
             console.log("Cart deleted");

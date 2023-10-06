@@ -39,7 +39,7 @@ router.get("/", lightAuth, async (req, res, next) => {
                 }).exec();
                 orders = await Promise.all(
                     orders.map(
-                        async (it) => await it.populate("products.product")
+                        async (it) => (await it.populate("products.product")).populate('products.product.reviews')
                     )
                 ); //
 
@@ -83,7 +83,7 @@ router.post("/add", auth, async (req, res) => {
 
 router.get("/reviews", auth, async (req, res) => {
     try {
-        const { id, pid, user } = req.query;
+        const { id, pid, user, ids } = req.query;
         let reviews = [];
         if (pid) reviews = await Review.find({ product: pid }).exec();
         else if (id) reviews = [await Review.findById(id).exec()];
@@ -105,7 +105,7 @@ router.get("/reviews", auth, async (req, res) => {
 router.post("/review", auth, async (req, res) => {
     try {
         const { act } = req.query;
-        const { pid, id, review, admin } = req.body;
+        const { pid, id, review, ids } = req.body;
 
         if (act == "add") {
             const prod =
@@ -131,14 +131,25 @@ router.post("/review", auth, async (req, res) => {
             await rev.save();
            
         }
-        else if (act =='del'){
-            await Review.findByIdAndDelete(id).exec()
+        else if (act == 'del'){
+            if (ids){
+                for (let id of ids){
+                    const rev = await Review.findById(id).exec()
+                    await Review.findByIdAndDelete(id).exec()
+                    const prod = await Product.findById(rev.product).exec()  
+                    prod.reviews = prod.reviews.filter(it => it != id)
+                        await prod.save()
+                }
+            }
+            else
+           { await Review.findByIdAndDelete(id).exec()}
         }
         let revs =  await Review.find().exec()
         revs = await Promise.all(revs.map(async it=> (await it.populate('product')).toJSON()))
         
         res.json({reviews: revs})
     } catch (e) {
+        console.log(e)
         tunedErr(res, 500, "Something went wrong");
     }
 });

@@ -108,7 +108,7 @@ async function getReviews(pid: string) {
     reviews.value = null;
     try {
         const res = await apiAxios.get("/products/reviews?pid=" + pid);
-        reviews.value = res.data.reviews;
+        reviews.value = res.data.reviews.filter((it : Obj)=> it.status == 1);
     } catch (e) {
         console.log(e);
         reviews.value = [];

@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="my-1 p-3 bg-base-100">
-                    <form ref="formRef" @submit="$event.preventDefault()">
+                    <tu-form ref="formRef" @submit="submitReview">
                         <div class="mb-3 flex flex-center" >
                         <star-rating  :star-size="30" :padding="6" v-model:rating="form.rating" :increment="0.5"></star-rating>
                     </div>
@@ -39,9 +39,9 @@
                         <tu-field textarea :counter="true" :maxlength="MAX_CHARS" v-model="form.body" label="Review" placeholder="Write your review..." required/>
                     </div>
                     <div class="my">
-                        <tu-btn  ionic type="submit" :on-click="submitReview" class="w-full tu" color="dark">SUBMIT</tu-btn>
+                        <tu-btn  ionic type="submit" class="w-full tu" color="dark">SUBMIT</tu-btn>
                     </div>
-                    </form>
+                    </tu-form>
                     
                 </div>
             </div>
@@ -60,11 +60,14 @@ import { Obj } from "@/utils/classes";
 import { apiAxios } from "@/utils/constants";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { errorHandler, showAlert } from "@/utils/funcs";
+import { errorHandler, hideLoader, showAlert, showLoading } from "@/utils/funcs";
 const product = ref<Obj>();
 const formRef = ref<HTMLFormElement>()
 const form = ref<Obj>({
-    rating: 0
+    rating: 0,
+    name: 'Thomas',
+    title: 'Keeps me moving',
+    body: 'This coffee really keeps me in motion'
 });
 const MAX_CHARS = 1000
 const { id } = useRoute().params; 
@@ -110,16 +113,17 @@ const submitReview = async (e: any) => {
     e.preventDefault()
     const _form = form.value
 
-    if( !formRef.value?.checkValidity()) {
-        showAlert({title: 'Form invalid', message: 'Please fill all the required fields'})
-        return};
     try{
         if (props.reviewId){
+            showLoading({})
         await apiAxios.post('/products/review?act=edit', {id: props.reviewId, review: _form})
+        hideLoader()
         await showAlert({message: 'Review edited successfully'})
         location.reload()
         }else{
+            showLoading({})
             await apiAxios.post('/products/review?act=add', {pid: product.value!.pid, review: _form})
+            hideLoader()
         await showAlert({message: 'Review added successfully'})
         router.back()
         }
@@ -127,6 +131,7 @@ const submitReview = async (e: any) => {
     }catch(e){
         console.log(e)
         errorHandler(e, 'Failed to add review')
+        hideLoader()
     }
  }
 onMounted(() => {

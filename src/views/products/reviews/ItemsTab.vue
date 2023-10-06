@@ -1,7 +1,8 @@
 <template>
+    <refresher :on-refresh="getProducts"/>
     <div v-if="products" class="h-full">
         <div v-if="products.length" class="bg-base-100 p-3">
-            <ion-item v-for="product in products" color="clear">
+            <ion-item  :router-link="review(product) ? `/products/reviews/${review(product)._id}`:undefined" v-for="product in products" color="clear">
                 <ion-thumbnail
                     class="h-45px shadow-lg card rounded-lg"
                     slot="start"
@@ -18,7 +19,20 @@
 
                 <ion-label>
                     <h3 class="fs-18 fw-5">{{ product.name }}</h3>
-                    <div class="flex items-center justify-end">
+                    <div v-if="review(product)" class="flex items-center gap-3">
+                        <star-rating
+                            :show-rating="false"
+                            :star-size="15"
+                            :padding="6"
+                            read-only
+                            :rating="review(product).rating"
+                            :increment="0.5"
+                        ></star-rating>
+                        <ion-badge mode="ios" :color=" review(product).status == 0 ? 'medium' : (review(product).status == 1 ? 'success' : 'danger')" class="py-1">{{
+                            reviewStatuses[review(product).status]
+                        }}</ion-badge>
+                    </div>
+                    <div v-else class="flex items-center justify-end">
                         <ion-text
                             :router-link="`/product/${product.pid}/review`"
                             class="fs-14 fw-6"
@@ -41,10 +55,12 @@
 <script setup lang="ts">
 import { IonText, IonLabel, IonItem, IonThumbnail, IonImg, IonSpinner } from "@ionic/vue";
 import { Obj } from "@/utils/classes";
-import { apiAxios } from "@/utils/constants";
+import { apiAxios, reviewStatuses } from "@/utils/constants";
 import { onMounted, ref } from "vue";
 import { errorHandler } from "@/utils/funcs";
-
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/user";
+const { user} = storeToRefs(useUserStore())
 const products = ref<Obj[] | null>();
 
 const getProducts = async () => {
@@ -64,7 +80,9 @@ const getProducts = async () => {
         errorHandler(e, "Failed to fetch products");
     }
 };
-
+const review = (product: Obj)=>{
+    return product.reviews.find((it: Obj)=> it.user == user.value?._id)
+}
 onMounted(() => {
     getProducts();
 });

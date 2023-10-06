@@ -25,22 +25,22 @@
                         </ul>
                     </ion-content>
                 </ion-popover>
-                <div v-if="cart" class="bg-base-100 pb-4">
-                    <div>
+                <div v-if="cart" class="h-full">
+                    <div v-if="cart?.products.length" class="bg-base-100 py-4">
                         <ion-item-divider color="clear">
-                            <ion-label>Items </ion-label>
+                            <h3 class="fs-20 fw-5">Items</h3>
                         </ion-item-divider>
 
-                        <CartItem v-if="cart?.products.length"
+                        <CartItem
                             v-for="(e, i) in cart?.products"
                             :item="e"
                         >
                            
                         </CartItem>
-                        <div v-else class="h-full flex flex-center py-7">
-                            <h3 class="fs-18 fw-5">Cart empty</h3>
+                       
+                    </div> <div v-else class="h-full flex flex-center py-7">
+                            <h3 class="fs-20 fw-5">Cart empty</h3>
                         </div>
-                    </div>
                 </div>
                 <div
                     v-else

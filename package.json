@@ -10,7 +10,8 @@
     "test:e2e": "cypress run",
     "test:unit": "vitest",
     "lint": "eslint",
-    "droid": "ionic cap run android -l --external --consolelogs --serverlogs --target A00000K150132704901"
+    "droid": "ionic cap run android -l --external --consolelogs --serverlogs --target A00000K150132704901",
+    "gen-icons": "npx capacitor-assets generate"
   },
   "dependencies": {
     "@capacitor-community/file-opener": "^1.0.5",
@@ -45,6 +46,7 @@
     "vue3-paystack": "^0.0.5"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.1",
     "@capacitor/cli": "5.4.1",
     "@types/jquery": "^3.5.19",
     "@types/leaflet": "^1.9.6",

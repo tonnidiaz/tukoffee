@@ -1,5 +1,6 @@
 <template>
-    <ion-item :router-link="`/products/reviews/${rev._id}`" color="clear">
+    <OnLongPress @trigger="onLongPress">
+        <ion-item :router-link="`/products/reviews/${rev._id}`"  @click="onItemClick" color="clear">
         <ion-thumbnail class="h-45px shadow-lg card rounded-lg" slot="start">
             <ion-img
                 v-if="rev.product.images?.length"
@@ -32,7 +33,16 @@
                 {{ reviewStatuses[rev.status] }}
             </ion-badge>
         </ion-label>
+        <ion-checkbox
+                :checked="
+                    selectedItems.findIndex((el) => el._id == rev._id) != -1
+                "
+                v-if="selectedItems?.length"
+                slot="end"
+                mode="ios"
+            ></ion-checkbox>
         <DropdownBtn
+        v-else
             :has-slot="false"
             :items="[
                 {
@@ -81,6 +91,8 @@
             </div>
         </bottom-sheet>
     </ion-item>
+    </OnLongPress>
+    
 </template>
 
 <script setup lang="ts">
@@ -93,10 +105,12 @@ import {
     IonImg,
     IonLabel,
     IonNote,
+    IonCheckbox,
     IonBadge,
 } from "@ionic/vue";
 import { Obj } from "@/utils/classes";
 import { apiAxios, reviewStatuses } from "@/utils/constants";
+import { OnLongPress } from "@vueuse/components";
 import {
     errorHandler,
     hideLoader,
@@ -106,6 +120,12 @@ import {
 } from "@/utils/funcs";
 import { ref, watch, watchEffect } from "vue";
 import DropdownBtn from "@/components/DropdownBtn.vue";
+import { useAppStore } from "@/stores/app";
+import { storeToRefs } from "pinia";
+const appStore = useAppStore()
+const { selectedItems } = storeToRefs(appStore);
+
+const isHolding = ref(false);
 const editRevForm = ref<Obj>({});
 
 const editSheetOpen = ref(false);
@@ -166,6 +186,25 @@ const saveChanges = async () => {
         hideLoader();
     }
 };
+
+const toggleSelected = () => {
+    const inList = selectedItems.value.find((el) => el._id == props.rev._id);
+    const data = inList
+        ? selectedItems.value.filter((el) => el._id != props.rev._id)
+        : [...selectedItems.value, props.rev];
+    appStore.setSelectedItems(data);
+};
+
+const onItemClick = (e: any) => {
+    e.preventDefault();
+    if (selectedItems.value.length) toggleSelected();
+};
+const onLongPress = (e: PointerEvent) => {
+    isHolding.value = true;
+    toggleSelected();
+    isHolding.value = false;
+};
+
 watch(editRevForm, (_form) => {
     console.log(_form);
 });

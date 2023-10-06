@@ -1,35 +1,57 @@
 <template>
     <ion-app
-        ><ion-loading class="tu" :is-open="isLoading" @did-dismiss="setIsLoading(false); setLoadingMsg('Please wait...')" :message="loadingMsg"/>
-        <ion-router-outlet v-if="userSetup"> </ion-router-outlet>
-
-        <div v-else class="w-full h-full flex items-center justify-center">
-            <h1 class="fs-30 fw-7">Loading</h1>
+        ><ion-loading
+            class="tu"
+            :is-open="isLoading"
+            @did-dismiss="
+                setIsLoading(false);
+                setLoadingMsg('Please wait...');
+            "
+            :message="loadingMsg"
+        />
+        <div v-if="!isConnected" class="w-full h-full flex flex-col items-center gap-3 justify-center">
+                <h3>Offline</h3>
+                <tu-btn :on-click="checkInternet" fill="outline">Refresh</tu-btn>
         </div>
+        <div v-else class="w-full h-full flex flex-col items-center gap-3 justify-center">
+             <div v-if="userSetup">
+            <updates-view />
+            <ion-router-outlet> </ion-router-outlet>
+        </div>
+
+        <div v-else style="background-color: white;" class="w-full h-full flex flex-col items-center gap-3 justify-center">
+            <ion-img class="w-100px" src="/splash.png"></ion-img>
+            <h1 style="font-size: 2.5em;" class="fw-8" >TuKoffee</h1>
+        </div>
+        </div>
+       
     </ion-app>
 </template>
 
 <script setup lang="ts">
-import { IonApp, IonRouterOutlet, IonLoading, useBackButton } from "@ionic/vue";
+import { IonApp, IonRouterOutlet, IonLoading, IonImg } from "@ionic/vue";
 import { apiAxios } from "./utils/constants";
 import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { useUserStore } from "./stores/user";
 import { storeToRefs } from "pinia";
-import { setupCart } from "./utils/funcs";
+import { hideLoader, setupCart, showLoading, sleep } from "./utils/funcs";
 import { useStoreStore } from "./stores/store";
 import { useAppStore } from "./stores/app";
 import { useRoute } from "vue-router";
 import { useFormStore } from "./stores/form";
 import { apps } from "ionicons/icons";
+import UpdatesView from "./components/UpdatesView.vue";
+
 const userStore = useUserStore();
 const storeStore = useStoreStore();
 
 const { userSetup } = storeToRefs(userStore);
-const appStore = useAppStore()
-const { isLoading, loadingMsg } = storeToRefs(appStore)
-const {setIsLoading, setLoadingMsg} = appStore
-const formStore = useFormStore()
-const route = useRoute()
+const appStore = useAppStore();
+const { isLoading, loadingMsg } = storeToRefs(appStore);
+const { setIsLoading, setLoadingMsg } = appStore;
+const formStore = useFormStore();
+const isConnected = ref(false)
+const route = useRoute();
 const setupUser = async () => {
     userStore.setUserSetup(false);
     try {
@@ -57,30 +79,44 @@ const getStores = async () => {
     }
 };
 
-const setupStore = async () =>{
-    try{
-        const res  = await apiAxios.get('/store');
-        const {data} = res
-        storeStore.setStore(data.store)
-        storeStore.setOwner(data.owner)
-        storeStore.setDeveloper(data.developer)
+const setupStore = async () => {
+    try {
+        const res = await apiAxios.get("/store");
+        const { data } = res;
+        storeStore.setStore(data.store);
+        storeStore.setOwner(data.owner);
+        storeStore.setDeveloper(data.developer);
+    } catch (e) {
+        console.log(e);
     }
-    catch(e){
-        console.log(e)
-    }
+};
+watch(route, (val) => {
+    appStore.setSelectedItems([]);
+});
+async function checkInternet(load: boolean = true){
+    console.log('show')
+    load && showLoading({
+        msg: 'Checking connection...'
+    })
+   isConnected.value = window.navigator.onLine
+   await sleep(500)
+   console.log('hide')
+   load && hideLoader()
 }
-watch(route, val=>{
-    appStore.setSelectedItems([])
-})
-
 onMounted(() => {
-    setupUser();
-    setupStore()
-    getStores();
+    checkInternet(false)
+   
     /* useBackButton(10, () => {
       console.log('Handler was called!');
     }); */
 });
+watch(isConnected, val=>{
+    if (val){
+        setupUser();
+    setupStore();
+    getStores();
+    }
+}, {deep: true})
 </script>
 <style lang="scss">
 .flex-center {
@@ -121,50 +157,39 @@ ion-tab-button {
     padding: 0 !important;
 }
 
-.h-full{
+.h-full {
     overflow-y: scroll;
 }
-ion-alert, ion-select, .item-radio-checked.sc-ion-select-popover-md{
-    --ion-color-primary: rgba(42,42,42, .5);
---ion-color-primary-rgb: 42 42 42;
+ion-alert,
+ion-select,
+.item-radio-checked.sc-ion-select-popover-md {
+    --ion-color-primary: rgba(42, 42, 42, 0.5);
+    --ion-color-primary-rgb: 42 42 42;
 }
-tr td:nth-child(2){
+tr td:nth-child(2) {
     text-align: end;
 }
-th, th h3{
+th,
+th h3 {
     font-size: 18px;
 }
 
-
 input:-webkit-autofill,
-
 input:-webkit-autofill:hover,
-
-input:-webkit-autofill:focus
-
-input:-webkit-autofill,
-
+input:-webkit-autofill:focus input:-webkit-autofill,
 textarea:-webkit-autofill,
-
-textarea:-webkit-autofill:hover
-
-textarea:-webkit-autofill:focus,
-
+textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
-
 select:-webkit-autofill:hover,
-
 select:-webkit-autofill:focus {
+    border: none !important;
+    -webkit-text-fill-color: inherit !important;
 
-  border:none !important;
-  -webkit-text-fill-color: inherit !important;
-
-   -webkit-box-shadow: 0 0px 0px 1000px var(--background) inset; 
-  transition: background-color 5000s ease-in-out 0s;
-
+    -webkit-box-shadow: 0 0px 0px 1000px var(--background) inset;
+    transition: background-color 5000s ease-in-out 0s;
 }
 
-ion-avatar{
+ion-avatar {
     display: flex;
     justify-content: center;
     align-items: center;

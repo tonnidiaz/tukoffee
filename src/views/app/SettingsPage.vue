@@ -180,7 +180,7 @@ const checkUpdates = async () => {
                 uid: "com.tb.tukoffee",
                 v: appVersion.value,
             },
-        });
+        });  
 
         update.value = res.data;
         updatesLoadingOpen.value = false;

@@ -8,26 +8,26 @@
         />
         <appbar  v-else title="Account" />
         <ion-content :fullscreen="true">
-            <div class="px-1">
-                <IonItemGroup class="mb-1 bg-base-100">
-                    <ion-item
+            <div class="px-2">
+                <IonItemGroup class="my-1 bg-base-100 rounded-lg">
+                    <ion-item :button="true"  mode="ios"
                         class=""
                         color="clear"
                         router-link="/account/profile"
                     >
                         <ion-label>Profile</ion-label>
                     </ion-item>
-                    <ion-item class="" color="clear" router-link="/cart">
+                    <ion-item :button="true"  mode="ios" class="" color="clear" router-link="/cart">
                         <ion-label>Cart</ion-label>
                     </ion-item>
-                    <ion-item
+                    <ion-item :button="true"  mode="ios"
                         class=""
                         color="clear"
                         router-link="/orders"
                     >
                         <ion-label>Orders</ion-label>
                     </ion-item>
-                    <ion-item
+                    <ion-item :button="true"  mode="ios"
                         class=""
                         color="clear"
                         lines="none"
@@ -38,16 +38,16 @@
                 </IonItemGroup>
                 <IonItemGroup
                     v-if="userStore.user?.permissions > 0"
-                    class="mb-1 bg-base-100"
+                    class="my-1 bg-base-100 rounded-lg"
                 >
-                    <ion-item
+                    <ion-item :button="true"  mode="ios"
                         class=""
                         color="clear"
                         router-link="/admin/dashboard"
                     >
                         <ion-label>Admin dashboard</ion-label>
                     </ion-item>
-                    <ion-item
+                    <ion-item :button="true"  mode="ios"
                         class=""
                         color="clear"
                         router-link="/rf"
@@ -57,15 +57,15 @@
                         <ion-label>RF</ion-label>
                     </ion-item>
                 </IonItemGroup>
-                <IonItemGroup class="mb-1 bg-base-100">
-                    <ion-item
+                <IonItemGroup class="my-1 bg-base-100 rounded-lg">
+                    <ion-item :button="true"  mode="ios"
                         class=""
                         color="clear"
                         router-link="/app/settings"
                     >
                         <ion-label>Settings</ion-label>
                     </ion-item>
-                    <ion-item @click="feedbackSheetOpen = true" class="" color="clear" lines="none">
+                    <ion-item :button="true"  mode="ios" @click="feedbackSheetOpen = true" class="" color="clear" lines="none">
                         <ion-label>Help & Feedback</ion-label>
                         <bottom-sheet :is-open="feedbackSheetOpen" @did-dismiss="feedbackSheetOpen = false"  id="help-feedback-sheet">
                             <div class="p-4 bg-base-100">
@@ -88,7 +88,7 @@
                         </bottom-sheet>
                     </ion-item>
                 </IonItemGroup>
-                <div class="bg-base-100 mb-2px p-2">
+                <div class="bg-base-100 mb-2px p-2 rounded-lg">
                     <div v-if="!userStore.user?.phone">
                         <ion-button
                             color="dark"
@@ -119,6 +119,7 @@ import {
     IonLabel,
     IonContent,
     IonItemGroup,
+    IonItemDivider
 } from "@ionic/vue";
 import Appbar from "@/components/Appbar.vue";
 import BottomSheet from "@/components/BottomSheet.vue";

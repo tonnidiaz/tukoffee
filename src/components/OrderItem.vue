@@ -73,10 +73,9 @@ import {
 
 const userStore = useUserStore();
 const orderStore = useOrderStore();
-const appStore = useAppStore();
 
 const { user } = storeToRefs(userStore);
-const { orders } = storeToRefs(orderStore);
+const appStore = useAppStore();
 const { selectedItems } = storeToRefs(appStore);
 
 const isHolding = ref(false);
@@ -88,6 +87,9 @@ const props = defineProps({
     },
 });
 
+const router = useIonRouter();
+const route = useRoute();
+const { path } = route;
 const toggleSelected = () => {
     const inList = selectedItems.value.find((el) => el._id == props.order._id);
     const data = inList
@@ -96,11 +98,7 @@ const toggleSelected = () => {
     appStore.setSelectedItems(data);
 };
 
-const router = useIonRouter();
-const route = useRoute();
-const { path } = route;
 const onItemClick = (e: any) => {
-    console.log(e.defaultPrevented);
     e.preventDefault();
     if (selectedItems.value.length) toggleSelected();
 };

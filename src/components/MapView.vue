@@ -97,7 +97,7 @@ import {
 } from "@ionic/vue";
 import { location as ionLoc, checkmark, arrowBack, add } from "ionicons/icons";
 import { OnClickOutside } from "@vueuse/components";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import "leaflet/dist/leaflet.css";
 import L, { LatLngExpression } from "leaflet";
 import { LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
@@ -151,9 +151,9 @@ async function goToCurrentLocation() {
     const { latitude, longitude } = coordinates.coords;
     center.value = [latitude, longitude];
     goTo(center.value);
+    reverseGeocode(longitude, latitude)
 }
 const onSuggestionClick = (val: any) => {
-    query.value = val.place_name;
     hideSearchbar();
     const _center = val.center;
     center.value = [_center[1], _center[0]];
@@ -173,7 +173,7 @@ async function searchAddress(query: string) {
     if (isGeocoding.value || query.length < 3) return;
     setIsGeocoding(true);
     try {
-        if (true) {
+        if (false) {
             features.value = dummyFeatures;
             setIsGeocoding(false);
             return;
@@ -195,12 +195,34 @@ async function searchAddress(query: string) {
     setIsGeocoding(false);
 }
 
+const reverseGeocode = async(lng: number, lat: number)=>{
+    try{    
+        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json`
+        const res = await axios.get(url,{
+            params: {
+                access_token: mapboxPublicToken,
+                limit: 1
+            }
+        })
+        const ft = res.data.features[0]
+        address.value =   { name: ft.place_name, center: ft.center.reverse() }
+    }
+    catch(e){
+        console.log(e)
+    }
+}
+
+watch(address, _address=>{
+    if (_address){
+        query.value = _address.name
+    }
+}, {deep: true})
 onMounted(() => {
     if (props.location) {
         const _center = props.location.center;
         center.value = [_center[1], _center[0]];
         address.value = props.location as TypeAddr
-        query.value = address.value.name
+        
     }
 });
 </script>

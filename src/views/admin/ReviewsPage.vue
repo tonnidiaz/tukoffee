@@ -1,6 +1,27 @@
 <template>
     <ion-page>
-        <Appbar title="Reviews" :show-cart="false" />
+        <Appbar title="Reviews" :show-cart="false" >
+            <DropdownBtn v-if="reviews"
+                :items="[
+                    reviews && !selectedItems.length
+                        ? { label: 'Select all', cmd: ()=> selectedItems = reviews! }
+                        : null,
+                    selectedItems.length
+                        ? {
+                              label: 'Deselect all',
+                              cmd: () => (selectedItems = []),
+                          }
+                        : null,
+
+                    selectedItems.length
+                        ? {
+                              label: 'Delete selected',
+                              cmd: ()=> delReviews(selectedItems),
+                          }
+                        : null,
+                ]"
+            />
+        </Appbar>
         <ion-content :fullscreen="true">
             <Refresher :on-refresh="getReviews" />
             <div class="flex flex-col h-full">
@@ -24,6 +45,7 @@
                                 ></ion-input>
                                 <button
                                     class="mt-2"
+                                    disabled
                                     id="/shop-filter-sheet-trigger"
                                 >
                                     <i
@@ -33,7 +55,7 @@
                             </div>
                         </div>
                         <ion-list class="bg-base-100">
-                            <ReviewItem v-for="rev in reviews" :rev="rev" :set-reviews="(val : Obj[])=>reviews = val"/>
+                             <ReviewItem v-for="rev in reviews" :rev="rev" :set-reviews="(val : Obj[])=>reviews = val"/>
                         </ion-list>
                     </div>
                     <div class="bg-base-100 h-full flex flex-center" v-else>
@@ -63,10 +85,15 @@ import {
 import Appbar from "@/components/Appbar.vue";
 import { onMounted, ref } from "vue";
 import { Obj } from "@/utils/classes";
-import { errorHandler, hidePopover } from "@/utils/funcs";
+import { errorHandler, hideLoader, hidePopover, showAlert, showLoading } from "@/utils/funcs";
 import { apiAxios, reviewStatuses } from "@/utils/constants";
 import Refresher from "@/components/Refresher.vue";
 import ReviewItem from "./ReviewItem.vue";
+import { useAppStore } from "@/stores/app";
+import { storeToRefs } from "pinia";
+import DropdownBtn from "@/components/DropdownBtn.vue";
+const appStore = useAppStore();
+const { selectedItems } = storeToRefs(appStore);
 
 const reviews = ref<Obj[] | null>();
 
@@ -80,6 +107,39 @@ const getReviews = async () => {
         reviews.value = [];
     }
 };
+
+async function delReviews(revs: Obj[]) {
+    const ids = revs.map(it=> it._id)
+    selectedItems.value = []
+    showAlert({
+        title: "Delete review",
+        message: "Are you sure you want to delete the selected reviews?",
+        buttons: [
+            {
+                text: "Cancel",
+                role: "cancel",
+            },
+            {
+                text: "Yes",
+                handler: async () => {
+                    try {
+                        
+                        showLoading({ msg: "Deleting reviews..." });
+                        const res = await apiAxios.post(
+                            "/products/review?act=del",
+                            { ids}
+                        );
+                            reviews.value = res.data.reviews;
+                        hideLoader();
+                    } catch (e) {
+                        errorHandler(e, "Failed to delete reviews");
+                        hideLoader();
+                    }
+                },
+            },
+        ],
+    });
+}
 
 onMounted(() => {
     getReviews();

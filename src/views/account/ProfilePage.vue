@@ -278,7 +278,6 @@ const editAddress = async (addr: Obj) => {
                 },
             },
         });
-        await sleep(4000)
         account.value = res.data.user;
         hideLoader()
     } catch (error) {
@@ -288,16 +287,6 @@ const editAddress = async (addr: Obj) => {
     }
 };
 
-watch(
-    account,
-    (val) => {
-        console.log("on account");
-        if (val) {
-            // form.value = val;
-        }
-    },
-    { immediate: true }
-);
 onMounted(() => {
     if (id) {
         getAccount();
