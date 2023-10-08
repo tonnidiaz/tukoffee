@@ -30,7 +30,7 @@
                     </div>
           
                     <h3
-                        class="mt-2 fw-6 font-body"
+                        class="mt-2 px-1 fw-6 font-body overflow-hidden w-full text-center"
                         style="white-space: nowrap; text-overflow: ellipsis"
                     >
                         {{ product.name }}
@@ -59,7 +59,7 @@
                              <span class="text-md fw-5 fs-14 text-gray-700 linethrough"
                             >R{{ product.price}}</span
                         >
-                             <span class="text-md fw-6 fs-14 text-gray-700" style="transform: scale(1.2);"
+                             <span class="text-md fw-6 fs-14 text-gray-700" style="transform: scale(1.1);"
                             >R{{product.sale_price? product.sale_price.toFixed(2) :0.00}}</span
                         >
                         </div>
@@ -74,8 +74,11 @@ import { useUserStore } from "@/stores/user";
 import { apiAxios } from "@/utils/constants";
 import { storeToRefs } from "pinia";
 import TuButton from "./TuButton.vue";
+import { showAlert } from "@/utils/funcs";
+import router from "@/router";
+import { useRoute } from "vue-router";
 const userStore = useUserStore();
-const { cart } = storeToRefs(userStore);
+const { cart, user } = storeToRefs(userStore);
 
 function inCart(p: any) {
     return cart.value?.products?.find((it: any) => it.product._id == p._id);
@@ -90,9 +93,14 @@ const props = defineProps({
     },
 });
 
+const route = useRoute()
 const addRemoveCart = async (e: any) => {
     e.preventDefault()
     try {
+        if (!user.value?._id){
+            router.push(`/auth/login?red=${route.path}`)
+            return 
+        }
         const act = inCart(props.product) ? "remove" : "add";
         const fd = new FormData();
         fd.append("product", props.product._id);
