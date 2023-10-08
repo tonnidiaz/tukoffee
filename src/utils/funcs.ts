@@ -4,6 +4,8 @@ import { Cloudinary, ResourceType } from "@capawesome/capacitor-cloudinary";
 import { Obj } from "./classes";
 import { AlertButton, alertController, loadingController, modalController, popoverController, toastController } from "@ionic/vue";
 import $ from 'jquery'
+import { Router } from "vue-router";
+import { App } from "@capacitor/app";
 export function randomIntFromInterval(min: number, max: number) {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -50,6 +52,31 @@ export const uploadImage = async (path: any, storeName: string)=>{
   
       }); 
       return res
+}
+
+export const onBack = (path: string, router: Router)=>{
+    if (path.startsWith('/~/')){
+        if (path == '/~/home'){
+            // Exit app
+            App.minimizeApp()
+        }else{
+            // Back to home
+            router.replace('/')
+        }
+      }
+      else if((path.startsWith('/admin'))){
+        if (path == "/admin/dashboard"){
+            // Back to home
+            router.replace('/')
+            
+        }else{
+            // To dashboard home
+            router.replace('/admin/dashboard')
+        }
+      }
+      else{
+        router.back()
+      }
 }
 
 export const saveProduct = async(product: Obj, mode = 'add')=>{

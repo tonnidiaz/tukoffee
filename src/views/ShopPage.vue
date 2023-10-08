@@ -125,7 +125,7 @@
                 </div>
                 <div
                     v-else-if="sortedProducts.length"
-                    class="my-0 grid justify-center gap-1 px-2 grid-cols-2"
+                    class="mb-2 grid justify-center gap-1 px-2 grid-cols-2"
                 >
                     <ProductCard
                         v-for="(e, i) in sortedProducts"
@@ -153,13 +153,12 @@ import {
     IonSelectOption,
     IonSpinner
 } from "@ionic/vue";
-import { ref, onMounted } from "vue";
+import { onMounted } from "vue";
 import Appbar from "@/components/Appbar.vue";
 import ProductCard from "@/components/ProductCard.vue";
 import { apiAxios } from "@/utils/constants";
 import Refresher from "@/components/Refresher.vue";
-import { sleep } from "@/utils/funcs";
-import { Obj, SortOrder } from "@/utils/classes";
+import { SortOrder } from "@/utils/classes";
 import { useShopStore, SortBy, Status } from "@/stores/shop";
 import { storeToRefs } from "pinia";
 import BottomSheet from "@/components/BottomSheet.vue";

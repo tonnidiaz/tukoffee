@@ -7,7 +7,7 @@
                     <ion-item slot="header" color="light">
                         <ion-label class="fs-18">Store details</ion-label>
                     </ion-item>
-                    <div class="ion-padding" slot="content">
+                    <div class="p-1" slot="content">
                         <table class="table bg-base-200 br-0">
                             <th class="hidden"></th>
                             <tbody>
@@ -43,7 +43,7 @@
                     <ion-item slot="header" color="light">
                         <ion-label class="fs-18">Owner details</ion-label>
                     </ion-item>
-                    <div class="ion-padding" slot="content">
+                    <div class="p-1" slot="content">
                         <table class="table bg-base-200 br-0">
                             <th class="hidden"></th>
                             <tbody>
@@ -79,7 +79,7 @@
                     <ion-item slot="header" color="light">
                         <ion-label class="fs-18">Developer details</ion-label>
                     </ion-item>
-                    <div class="ion-padding" slot="content">
+                    <div class="p-1" slot="content">
                         <table class="table bg-base-200 br-0">
                             <th class="hidden"></th>
                             <tbody>
@@ -117,7 +117,7 @@
                     <ion-item slot="header" color="light">
                         <ion-label class="fs-18">Locations and times</ion-label>
                     </ion-item>
-                    <div class="ion-padding" slot="content">
+                    <div class="p-1" slot="content">
                         <ion-list>
                             <ion-item v-for="el in stores" class="bg-base-10">
                                 <span slot="start">

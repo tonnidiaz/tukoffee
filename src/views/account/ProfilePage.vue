@@ -109,7 +109,7 @@
                         </bottom-sheet>
                     </div>
                     <div v-if="account?.address" class="bg-base-100 p-3">
-                         <p  class="fw-5 fs-16">
+                         <p  class="fw-5 fs-16  selectable">
                         {{ account.address.location?.name }}
                     </p>
                     </div>

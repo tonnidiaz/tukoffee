@@ -34,10 +34,10 @@ import { apiAxios } from "./utils/constants";
 import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { useUserStore } from "./stores/user";
 import { storeToRefs } from "pinia";
-import { hideLoader, setupCart, showLoading, sleep } from "./utils/funcs";
+import { hideLoader, onBack, setupCart, showLoading, sleep } from "./utils/funcs";
 import { useStoreStore } from "./stores/store";
 import { useAppStore } from "./stores/app";
-import { useRoute, useRouter } from "vue-router";
+import { Router, useRoute, useRouter } from "vue-router";
 import { useFormStore } from "./stores/form";
 import UpdatesView from "./components/UpdatesView.vue";
 import rrouter from '@/router/index';
@@ -93,45 +93,21 @@ const setupStore = async () => {
 };
 watch(route, (val) => {
     appStore.setSelectedItems([]);
-    console.log(rrouter.options.history.state)
-    console.log(val)
 });
 async function checkInternet(load: boolean = true){
-    console.log('show')
     load && showLoading({
         msg: 'Checking connection...'
     })
    isConnected.value = window.navigator.onLine
    await sleep(500)
-   console.log('hide')
    load && hideLoader()
 }
 
+
 const initBackListener = ()=>{
-        useBackButton(10, (processNextHandler) => {
+        useBackButton(10, () => {
             const { path } = route
-      if (path.startsWith('/~/')){
-        if (path == '/~/home'){
-            // Exit app
-            App.minimizeApp()
-        }else{
-            // Back to home
-            router.replace('/')
-        }
-      }
-      else if((path.startsWith('/admin'))){
-        if (path == "/admin/dashboard"){
-            // Back to home
-            router.replace('/')
-            
-        }else{
-            // To dashboard home
-            router.replace('/admin/dashboard')
-        }
-      }
-      else{
-        history.back()
-      }
+            onBack(path, router)
     }); 
 }
 onMounted(() => {
@@ -205,12 +181,15 @@ tr td:nth-child(2) {
     text-align: end;
     white-space: wrap;
     word-wrap: break-word;
+    user-select: text;
 }
 th,
 th h3 {
     font-size: 18px;
 }
-
+.selectable{
+    user-select: text;
+}
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus input:-webkit-autofill,

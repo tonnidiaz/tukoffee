@@ -6,7 +6,7 @@
                   <button v-if="selectedItems.length" class="btn btn-sm btn-ghost rounded-full w-40px h-40px p-0 "  router-direction="back" @click="()=> appStore.setSelectedItems([])" slot="icon-only">
                     <ion-icon class="w-45px h-25px fs-40" :md="close"></ion-icon>
                    </button> 
-           <button v-else-if="showBack" class="btn btn-sm btn-ghost rounded-full w-40px h-40px p-0 "  router-direction="back" @click=" router.back()" slot="icon-only">
+           <button v-else-if="showBack" class="btn btn-sm btn-ghost rounded-full w-40px h-40px p-0 "  router-direction="back" @click="onBack($route.path, $router)" slot="icon-only">
                     <ion-icon class="w-40px h-20px" :md="arrowBack"></ion-icon>
                    </button>
                 </ion-buttons>
@@ -27,6 +27,7 @@ import { useRouter } from 'vue-router';
 import { arrowBack, close } from 'ionicons/icons';
 import { useAppStore } from '@/stores/app';
 import { storeToRefs } from 'pinia';
+import { onBack } from '@/utils/funcs';
 
 const appStore = useAppStore()
 const {selectedItems} = storeToRefs(appStore)
