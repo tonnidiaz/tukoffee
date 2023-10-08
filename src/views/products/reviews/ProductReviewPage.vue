@@ -35,7 +35,7 @@
                                 <h3 class="fs-18 fw-5">
                                     {{ review.product.name }}
                                 </h3>
-                                <div class="flex items-center gap-3">
+                                <div class="flex items-center gap-x-3 flex-wrap">
                                     <star-rating
                                         read-only
                                         :show-rating="false"

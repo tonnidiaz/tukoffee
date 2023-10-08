@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonApp, IonRouterOutlet, IonLoading, IonImg } from "@ionic/vue";
+import { IonApp, IonRouterOutlet, IonLoading, IonImg, useBackButton } from "@ionic/vue";
 import { apiAxios } from "./utils/constants";
 import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { useUserStore } from "./stores/user";
@@ -37,11 +37,11 @@ import { storeToRefs } from "pinia";
 import { hideLoader, setupCart, showLoading, sleep } from "./utils/funcs";
 import { useStoreStore } from "./stores/store";
 import { useAppStore } from "./stores/app";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useFormStore } from "./stores/form";
-import { apps } from "ionicons/icons";
 import UpdatesView from "./components/UpdatesView.vue";
-
+import rrouter from '@/router/index';
+import {App} from '@capacitor/app';
 const userStore = useUserStore();
 const storeStore = useStoreStore();
 
@@ -52,6 +52,7 @@ const { setIsLoading, setLoadingMsg } = appStore;
 const formStore = useFormStore();
 const isConnected = ref(false)
 const route = useRoute();
+const router = useRouter();
 const setupUser = async () => {
     userStore.setUserSetup(false);
     try {
@@ -92,6 +93,8 @@ const setupStore = async () => {
 };
 watch(route, (val) => {
     appStore.setSelectedItems([]);
+    console.log(rrouter.options.history.state)
+    console.log(val)
 });
 async function checkInternet(load: boolean = true){
     console.log('show')
@@ -103,12 +106,38 @@ async function checkInternet(load: boolean = true){
    console.log('hide')
    load && hideLoader()
 }
+
+const initBackListener = ()=>{
+        useBackButton(10, (processNextHandler) => {
+            const { path } = route
+      if (path.startsWith('/~/')){
+        if (path == '/~/home'){
+            // Exit app
+            App.minimizeApp()
+        }else{
+            // Back to home
+            router.replace('/')
+        }
+      }
+      else if((path.startsWith('/admin'))){
+        if (path == "/admin/dashboard"){
+            // Back to home
+            router.replace('/')
+            
+        }else{
+            // To dashboard home
+            router.replace('/admin/dashboard')
+        }
+      }
+      else{
+        history.back()
+      }
+    }); 
+}
 onMounted(() => {
     checkInternet(false)
-   
-    /* useBackButton(10, () => {
-      console.log('Handler was called!');
-    }); */
+   initBackListener()
+ 
 });
 watch(isConnected, val=>{
     if (val){
@@ -166,8 +195,16 @@ ion-select,
     --ion-color-primary: rgba(42, 42, 42, 0.5);
     --ion-color-primary-rgb: 42 42 42;
 }
+table {
+            border-spacing: 0px;
+            table-layout: fixed;
+       //     margin-left: auto;
+            margin-right: auto;
+        }
 tr td:nth-child(2) {
     text-align: end;
+    white-space: wrap;
+    word-wrap: break-word;
 }
 th,
 th h3 {

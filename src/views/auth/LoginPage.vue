@@ -88,8 +88,6 @@ import { errorHandler, setupCart, passValidator } from "@/utils/funcs";
 import TuButton from "@/components/TuButton.vue";
 import { useRoute } from "vue-router";
 const form = ref<{ [key: string]: any }>({
-    phone: "0726013383",
-    password: "Baselined",
 });
 
 const toastMsg = ref(""),

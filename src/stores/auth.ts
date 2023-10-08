@@ -3,10 +3,10 @@ import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore('auth', {
     state: ()=>({
-        form: { phone: "0726013383",
-        password: "Baseline",
-        first_name: "Larry",
-        last_name: "Boseman",} as Obj,
+        form: { phone: "",
+        password: "",
+        first_name: "",
+        last_name: "",} as Obj,
         step: 0
     })
 })

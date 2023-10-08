@@ -6,7 +6,7 @@
         />
         <ion-content :fullscreen="true">
             <div class="px-3 py-1 bg-base-100 h-full">
-                <form id="form" @submit="$event.preventDefault()" class="mt-3">
+                <tu-form id="form" :onSubmit="onFormSubmit"  class="mt-3">
                     <div class="form-control my-1">
                         <ion-input
                             label="Product name:"
@@ -82,9 +82,10 @@
                                 <ion-img :src="img.url ?? img.file"></ion-img>
                                 <div v-if="!img.loading" class="thumb-overlay">
                                     <tu-btn
+                                    :ionic="false"
                                         :on-click="() => delImg(i)"
                                         type="button"
-                                        class="btn btn-sm btn-ghost"
+                                        class="btn btn-sm btn-ghost btn-circle"
                                     >
                                         <i
                                             class="fi fi-br-cross fs-18 text-gray-300"
@@ -122,7 +123,18 @@
                             >On sale</ion-checkbox
                         >
                     </div>
-                </form>
+                <div class="form-control  bg-base-100">
+                    <tu-btn
+                        :ionic="true"
+                        type="submit"
+                        color="dark"
+                        class="w-full"
+                        >{{
+                            mode == "add" ? "Add product" : "Save changes"
+                        }}</tu-btn
+                    >
+                </div>
+                </tu-form>
 
                 <!-- Loading -->
                 <ion-loading
@@ -133,23 +145,7 @@
                 />
             </div>
         </ion-content>
-        <ion-footer>
-            <ion-toolbar>
-                <div class="form-control p-4 bg-base-100">
-                    <tu-btn
-                        form="form"
-                        :ionic="true"
-                        type="submit"
-                        :on-click="onFormSubmit"
-                        color="dark"
-                        class="w-full"
-                        >{{
-                            mode == "add" ? "Add product" : "Save changes"
-                        }}</tu-btn
-                    >
-                </div>
-            </ion-toolbar>
-        </ion-footer>
+       
     </ion-page>
 </template>
 <script setup lang="ts">
@@ -255,9 +251,9 @@ const importImg = async () => {
 };
 
 const onFormSubmit = async (e: any) => {
-    e.preventDefault();
+/*     console.log(e)
    const frm  = document.getElementById(e.target.form) as HTMLFormElement | null;
-   if (!frm?.checkValidity()) return;
+   if (!frm?.checkValidity()) return; */
 
     const res = await saveProduct(form.value, mode);
     if (res) {

@@ -13,10 +13,13 @@
         </ion-thumbnail>
         <ion-label>
             <h3 class="fw-5 fs-16">{{ rev.title }}</h3>
-            <ion-note>
+            <ion-note class="">
                 <span class="fw-6">{{ rev.name }}</span>
                 &middot;
-                {{ new Date(rev.last_modified).toLocaleDateString() }}
+                <span class="fs-12">
+                     {{ new Date(rev.last_modified).toLocaleDateString() }}
+                </span>
+               
             </ion-note>
             <br />
             <ion-badge

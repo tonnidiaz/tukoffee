@@ -5,7 +5,7 @@
                 :items="[
                 isAdmin() ? {
                     label: 'Edit',
-                    cmd: ()=> {formStore.setForm(product!); ionRouter.push('/edit/product')}
+                    cmd: ()=> {formStore.setForm({...product!}); ionRouter.push('/edit/product')}
                 }: null,
        
             ]"
@@ -148,8 +148,7 @@
                                     product.sale_price
                                         ? product.sale_price.toFixed(2)
                                         : 0.0
-                                }}</span
-                            >
+                                }}</span>
                         </div>
 
                         <tu-button
@@ -193,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import {
     IonPage,
     IonContent,
@@ -282,5 +281,8 @@ const init = async () => {
 onMounted(() => {
     init();
 });
+
+watch(product, val=>{
+}, {deep: true})
 </script>
 <style lang="scss"></style>
