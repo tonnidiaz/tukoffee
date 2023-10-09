@@ -384,8 +384,7 @@ async function createOrder() {
             _form
         );
         hideLoader()
-        console.log(res.data);    
-        location.href = `/order/${res.data.order.oid}`
+       router.push(`/order/${res.data.order.oid}`) 
     } catch (error) {
         console.log(error);
         showAlert({message: 'Failed to create order. Please contact us at ' + store.value?.email})

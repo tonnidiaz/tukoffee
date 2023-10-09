@@ -7,7 +7,7 @@ var router = express.Router();
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
-const { parser } = require("../utils/constants");
+const { parser, OrderStatus } = require("../utils/constants");
 const { auth } = require("../utils/middleware");
 
 /* GET home page. */
@@ -204,6 +204,8 @@ router.post('/cloudinary', auth, async (req, res)=>{
 router.get('/migrate', async (req, res)=>{
     try{
         const stores = await Store.find().exec()
+        //let ord = await Order.findOne({status: }).exec()
+await Order.deleteMany({status: OrderStatus.cancelled}).exec()
         for (let store of stores){
            /*  store.open_time_weekend = store.open_time_weekends
             store.close_time_weekend = store.close_time_weekends */
