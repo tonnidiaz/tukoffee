@@ -130,7 +130,7 @@
                                     >
                                         <ion-note class="fw-6">{{ isOpen(el) ? 'OPEN' :  'CLOSED' }}</ion-note>
                                         <ion-badge color="medium" mode="ios" class="px-2 py-1">
-                                            {{ isOpen(el) ? `Closes at ${el.close_time}`: `Opens at ${el.open_time}`}}
+                                            {{ isOpen(el) ? `Closes at ${el.close_time.slice(0,5)}`: `Opens at ${el.open_time.slice(0,5)}`}}
                                         </ion-badge>
                                     </div>
                                 </ion-label>

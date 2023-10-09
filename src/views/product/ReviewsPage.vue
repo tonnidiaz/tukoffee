@@ -48,7 +48,7 @@
                     </div>
                 </ion-list>
                     <div v-else class="p-3 bg-base-100 h-full flex flex-center">
-                        <h3 class="fs-20">This product has no reviews yet</h3>
+                        <h3 class="fs-18">This product has no reviews yet</h3>
                     </div>
                 </div>
                 <div v-else class="bg-base-100 flex-auto flex flex-center">

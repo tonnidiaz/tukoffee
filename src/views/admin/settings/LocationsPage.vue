@@ -14,21 +14,10 @@
                         </span>
                         <ion-label>
                             <h3 class="fs-17 fw-5">{{ el.location.name }}</h3>
-                            <div class="flex items-center justify-between mt-1">
-                                <ion-note class="fw-6">{{
-                                    isOpen(el) ? "OPEN" : "CLOSED"
-                                }}</ion-note>
-                                <ion-badge
-                                    color="medium"
-                                    mode="ios"
-                                    class="px-2 py-1"
-                                >
-                                    {{
-                                        isOpen(el)
-                                            ? `Closes at ${el.close_time.replace(':00', '')}`
-                                            : `Opens at ${el.open_time.replace(':00', '')}`
-                                    }}
-                                </ion-badge>
+                            <div class="flex flex-col mt-1 text-gray-700">
+                                <span class="fw-4">OPENS @ <span class="fw-6"> {{ el.open_time.slice(0,5) }}</span></span>
+                                <span class="fw-4">CLOSES @ <span class="fw-6"> {{ el.close_time.slice(0,5) }}</span></span>
+                                
                             </div>
                         </ion-label>
                     </ion-item>

@@ -26,8 +26,8 @@
                             @did-dismiss="personalDetailsSheetOpen = false"
                         >
                             <div class="bg-base-100 p-3">
-                                <form
-                                    @submit="$event.preventDefault()"
+                                <tu-form
+                                    @submit="editPersonalDetails"
                                     action=""
                                 >
                                     <div class="my-1">
@@ -35,6 +35,7 @@
                                             label="First name:"
                                             placeholder="e.g. John"
                                             required
+                                            v-bind:value="account.first_name"
                                             v-model="form.first_name"
                                         />
                                     </div>
@@ -43,20 +44,18 @@
                                             label="Last name:"
                                             placeholder="e.g. Doe"
                                             required
+                                            v-bind:value="account.last_name"
                                             v-model="form.last_name"
                                         />
                                     </div>
                                     <div class="my-2">
                                         <tu-btn
                                             type="submit"
-                                            :on-click="editPersonalDetails"
-                                            color="dark"
-                                            ionic
                                             class="w-full"
                                             >Save changed</tu-btn
                                         >
                                     </div>
-                                </form>
+                                </tu-form>
                             </div>
                         </bottom-sheet>
                         <tbody class="bg-base-100">
@@ -212,7 +211,7 @@ import { errorHandler, hideLoader, showLoading, sleep } from "@/utils/funcs";
 
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
-
+const {setUser} = userStore
 const account = ref<Obj | null>();
 const form = ref<Obj>({});
 
@@ -245,6 +244,7 @@ const editPersonalDetails = async (e: Event) => {
             },
         });
         account.value = res.data.user;
+        setUser(res.data.user)
         personalDetailsSheetOpen.value = false;
     } catch (error) {
         errorHandler(error);
