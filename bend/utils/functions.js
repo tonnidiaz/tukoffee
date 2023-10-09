@@ -63,7 +63,7 @@ const parseProducts = async (products) => {
         }
       }
       if (prod.reviews?.length){
-rating = (rating / (prod.reviews.length)).toFixed(1)
+            rating = (rating / (prod.reviews.length)).toFixed(1)
       }
       
       data.push({...prod.toJSON(), rating})
@@ -227,7 +227,7 @@ const sendMail = async (subject, body, clients, sender) => {
   
       console.log("Message sent: %s", info.messageId);
       // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-      return "Ok";
+      return "Email sent";
     } catch (err) {
       console.log(err);
       return null;

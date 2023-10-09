@@ -79,7 +79,7 @@ export const onBack = (path: string, router: Router)=>{
         router.back()
       }
 }
-
+ 
 export const saveProduct = async(product: Obj, mode = 'add')=>{
     try{
         const res = await apiAxios.post(`/products/${mode}`, product)
