@@ -1,8 +1,7 @@
 ## TODO
 
 - Environment 
-- Stores and times dash item
-- Disolay reject reason if review isZ
+- Display reject reason if review is
 ## TOUCH UPS
 
 

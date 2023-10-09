@@ -62,7 +62,19 @@ const routes: Array<RouteRecordRaw> = [
                 path: "accounts",
                 component: () => import("@/views/admin/AccountsPage.vue"),
             },
+           
         ],
+    }, {
+                path: "/_admin/settings",
+                component: () => import("@/views/admin/settings/SettingsPage.vue"),
+            },
+    {
+        path: "/_admin/settings/locations",
+        component: () => import("@/views/admin/settings/LocationsPage.vue"),
+    },
+    {
+        path: "/_admin/settings/details",
+        component: () => import("@/views/admin/settings/DetailsPage.vue"),
     },
     {
         path: "/shop/:category",

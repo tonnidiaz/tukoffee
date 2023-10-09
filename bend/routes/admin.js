@@ -13,8 +13,10 @@ router.get('/dash', async function(req, res, next) {
     orders = orders.map(it=>it.toJSON())
     let reviews = await Review.find().exec()
     reviews = reviews.map(it=>it.toJSON())
+    let stores = await Store.find().exec()
+    stores = stores.map(it=>it.toJSON())
   
-    const data = {products: await parseProducts(products), customers, orders, reviews};
+    const data = {products: await parseProducts(products), customers, orders, reviews, stores};
   res.json(data)
 });
 

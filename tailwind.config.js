@@ -12,7 +12,7 @@ export default {
         themes: ["light", "winter", "cupcake", "bumblebee", 'cymk',
         {tu: {
             "primary": "#f9dc68",
-          
+           
             "secondary": "#59db69",
                      
             "accent": "#a37af4",

@@ -55,7 +55,6 @@ export const uploadImage = async (path: any, storeName: string)=>{
 }
 
 export const onBack = (path: string, router: Router)=>{
-     console.log(history.state)
     if (path.startsWith('/~/') || history.state.back == '/order/checkout'){
        
         if (path == '/~/home'){
@@ -156,7 +155,6 @@ export function hidePopover(){
 }
 
 export function openSheet(id: string){
-    console.log($('#' + id))
     $('#' + id).trigger('click')
 }
 

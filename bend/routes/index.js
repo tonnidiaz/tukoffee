@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const { Order, Cart, User, Product, Review } = require("../models");
+const { Order, Cart, User, Product, Review, Store } = require("../models");
 const { AddressSchema } = require("../models/user");
 const { genToken, tunedErr, delCloudinary } = require("../utils/functions");
 var router = express.Router();
@@ -201,5 +201,20 @@ router.post('/cloudinary', auth, async (req, res)=>{
     }
 })
 
-
+router.get('/migrate', async (req, res)=>{
+    try{
+        const stores = await Store.find().exec()
+        for (let store of stores){
+           /*  store.open_time_weekend = store.open_time_weekends
+            store.close_time_weekend = store.close_time_weekends */
+            
+            await store.save()
+        }
+        res.send('OK')
+    }
+    catch(e){
+        console.log(e)
+        return tunedErr(res, 500, 'Failed to migrate')
+    }
+})
 module.exports = router;

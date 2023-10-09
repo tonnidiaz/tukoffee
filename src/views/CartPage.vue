@@ -39,18 +39,18 @@
                         </CartItem>
                        
                     </div> <div v-else class="h-full flex flex-center py-7">
-                            <h3 class="fs-20 fw-5">Cart empty</h3>
+                        <span
+                        ><i
+                            class="fi fi-rr-person-dolly-empty fs-80 text-gray-500"
+                        ></i
+                    ></span>
                         </div>
                 </div>
                 <div
                     v-else
                     class="h-full w-full flex items-center justify-center"
                 >
-                    <span
-                        ><i
-                            class="fi fi-rr-person-dolly-empty fs-80 text-gray-500"
-                        ></i
-                    ></span>
+                    <ion-spinner color="medium" class="w-55px h-55px"></ion-spinner>
                 </div>
             </div>
 
@@ -74,21 +74,15 @@ import {
     IonContent,
     IonToolbar,
     IonButton,
-    IonLabel,
+    IonSpinner,
     IonPopover,
-    IonIcon,
-    IonRefresher,
-    IonRefresherContent,
-    useIonRouter,
 } from "@ionic/vue";
 import Appbar from "@/components/Appbar.vue";
-import { ellipsisVertical } from "ionicons/icons";
 import { errorHandler, setupCart } from "@/utils/funcs";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import CartItem from "@/components/CartItem.vue";
-import {  onBeforeUnmount, ref, watch } from "vue";
-import $ from "jquery";
+import {  ref, watch } from "vue";
 import DropdownBtn from "@/components/DropdownBtn.vue";
 import { apiAxios } from "@/utils/constants";
 import { Obj } from "@/utils/classes";

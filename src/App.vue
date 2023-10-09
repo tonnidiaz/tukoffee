@@ -9,8 +9,12 @@
             "
             :message="loadingMsg"
         />
-        <div v-if="!isConnected" class="w-full h-full flex flex-col items-center gap-3 justify-center">
-                <h3>Offline</h3>
+        <div v-if="isConnected == null" style="background-color: white;" class="w-full h-full flex flex-col items-center gap-3 justify-center">
+            <ion-img class="w-100px" src="/splash.png"></ion-img>
+            <h1 style="font-size: 2.5em;" class="fw-8" >TuKoffee</h1>
+        </div>
+        <div v-else-if="!isConnected" class="w-full h-full flex flex-col items-center gap-0 justify-center">
+                <h3 class="fw-6 fs-14">OFFLINE</h3>
                 <tu-btn :on-click="checkInternet" fill="outline">Refresh</tu-btn>
         </div>
         <div v-else class="w-full h-full flex flex-col items-center gap-3 justify-center">
@@ -31,13 +35,13 @@
 <script setup lang="ts">
 import { IonApp, IonRouterOutlet, IonLoading, IonImg, useBackButton } from "@ionic/vue";
 import { apiAxios } from "./utils/constants";
-import { onBeforeMount, onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useUserStore } from "./stores/user";
 import { storeToRefs } from "pinia";
 import { hideLoader, onBack, setupCart, showLoading, sleep } from "./utils/funcs";
 import { useStoreStore } from "./stores/store";
 import { useAppStore } from "./stores/app";
-import { Router, useRoute, useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useFormStore } from "./stores/form";
 import UpdatesView from "./components/UpdatesView.vue";
 import { Network } from '@capacitor/network';
@@ -50,7 +54,7 @@ const appStore = useAppStore();
 const { isLoading, loadingMsg } = storeToRefs(appStore);
 const { setIsLoading, setLoadingMsg } = appStore;
 const formStore = useFormStore();
-const isConnected = ref(false)
+const isConnected = ref<boolean | null>()
 const route = useRoute();
 const router = useRouter();
 const setupUser = async () => {
@@ -95,6 +99,7 @@ watch(route, (val) => {
     appStore.setSelectedItems([]);
 });
 async function checkInternet(load: boolean = true){
+    isConnected.value = null
     load && showLoading({
         msg: 'Checking connection...'
     })
@@ -155,10 +160,7 @@ ul.default {
     }
 }
 
-ion-tab-button {
-    --padding-start: 0;
-    --padding-end: 0;
-}
+
 .button-native {
     padding: 0 !important;
 }
@@ -172,6 +174,63 @@ ion-select,
     --ion-color-primary: rgba(42, 42, 42, 0.5);
     --ion-color-primary-rgb: 42 42 42;
 }
+
+ion-toolbar{
+    --ion-toolbar-background: hsl(var(--b1));
+    //border-bottom: 1px solid rgb(156 163 175 /.2);
+}
+ion-tab-bar {
+    bottom: 0px;
+    position: relative;
+    //border-radius: 16px;
+    width: 100%;
+    margin: 0 auto;
+   // border-top: 1px solid rgba(0, 0, 0, 0.178);
+    padding: 0.2rem 0;
+    //background-color: black;
+    i {
+        font-size: 20px !important;
+        line-height: .8rem !important;
+    }
+    ion-label{
+        font-size: 12px;
+        font-weight: 600;
+    }
+  
+}
+
+ion-tab-button {
+     --padding-start: 0;
+    --padding-end: 0;
+    --color: var(--surface-600);
+    --color-selected: hsl(
+        var(--bc)
+    ); // hsl(var(--p) / var(--tw-bg-opacity))//var(--primary-color);
+    /* rgb(255, 145,0);/ */
+    &::before {
+        background-color: transparent;
+        display: block;
+        content: "";
+        margin: 0 auto;
+        width: 20px;
+        height: 2px;
+    }
+
+
+    &.tab-selected::before {
+        width: 30px;
+    }
+    ion-icon {
+        font-size: 20px;
+    }
+    &.tab-selected {
+        color: var(--ion-color-primary);
+        
+        
+    }
+}
+
+
 table {
             border-spacing: 0px;
             table-layout: fixed;

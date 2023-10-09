@@ -168,9 +168,18 @@ const isOpen = (store: Obj)=>{
     openTime = store.open_time.split(':').map((it: string)=> parseInt(it)),
     closeTime = store.close_time.split(':').map((it: string)=> parseInt(it));
 
-    const h = now.getHours(), m = now.getMinutes()
-    return (h >= openTime[0] && m >= openTime[1]) && (h < closeTime[0] && m < closeTime[1])
+    const h = now.getHours(), m = now.getMinutes();
+    let _isOpen = false
+    if (h >= openTime[0] && m >= openTime[1] && h <= closeTime[0]) {
+        _isOpen = h < closeTime[0] ? true : ( h == closeTime[0] && m <= closeTime[1]) 
+        
+    }
+    else{
+        _isOpen = false
+    }
+    return _isOpen
 }
 onMounted(() => {
 });
 </script>
+ 

@@ -71,7 +71,7 @@
                                         On sale
                                     </ion-text>
                                     <ion-text
-                                        v-if="product.on_sale"
+                                        v-if="product.on_special"
                                         router-link="/shop/special"
                                         class="badge ion-bg-medium py-3 fs-12"
                                     >

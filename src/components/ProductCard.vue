@@ -12,7 +12,8 @@
                 <tu-button
                         :on-click="addRemoveCart"
                         :ionic="false"
-                        :class="`rounded-full btn-sm h-45px w-45px absolute right-0 top-0 flex items-center justify-center shadow-md ${inCart(product) ? 'bg-primary' : 'btn-danger'}`"
+                        v-if="product.quantity > 0"
+                        :class="`btn-sm btn-circle h-45px w-45px absolute right-0 top-0 flex items-center justify-center shadow-md ${inCart(product) ? 'bg-primary' : 'btn-danger'}`"
                         ><i v-if="!inCart(product)" class="fi fi-rr-shopping-cart-add fs-23"></i>
                     <i v-else class="fi fi-rr-cart-minus fs-23 text-"></i></tu-button
                     >
@@ -37,9 +38,9 @@
                     </h3>
                 </div>
                 <div class="flex items-center justify-between w-full px-2">
-                    <div class="badge badge-primary fs-10 fw-6">
+                    <ion-badge mode="ios" :color="inStock(product) ? 'primary' : 'medium'" class="fs-10 fw-6">
                         {{ inStock(product) ? "In stock" : "Out of stock" }}
-                    </div>
+                    </ion-badge>
                     <span class="flex items-center jent-center">
                         <span>
                             <i class="fi fi-ss-star text-amber fs-18"></i>
@@ -79,7 +80,7 @@ import router from "@/router";
 import { useRoute } from "vue-router";
 const userStore = useUserStore();
 const { cart, user } = storeToRefs(userStore);
-
+import {IonBadge} from '@ionic/vue';
 function inCart(p: any) {
     return cart.value?.products?.find((it: any) => it.product._id == p._id);
 }

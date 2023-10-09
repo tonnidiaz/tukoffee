@@ -80,6 +80,7 @@
                     </p>
                     <h3 class="fs-15 fw-5 text-center">Product reviews</h3>
                 </router-link>
+               
                 <a
                     target="_blank" href="https://dashboard.paystack.com/#/dashboard?period=30"
                     class="bg-base-100 cursor-pointer border-1 shadow-sm ion-activatable relative rounded-lg product-card p-1 flex flex-col  justify-center"
@@ -96,6 +97,22 @@
                  
                     <h3 class="fs-15 fw-5 text-center">Paystack Dashboard</h3>
                 </a>
+                <router-link
+                    to="/_admin/settings"
+                    class="bg-base-100  flex flex-col flex-center cursor-pointer border-1 shadow-sm ion-activatable relative rounded-lg product-card p-1"
+                >
+                    <div class="my-2 flex flex-center">
+                        <ion-avatar class="bg-base-200">
+                            <span>
+                                <i
+                                    class="fi fi-sr-settings text-gray-500"
+                                ></i>
+                            </span>
+                        </ion-avatar>
+                    </div>
+                    
+                    <h3 class="fs-15 fw-5 text-center">Settings</h3>
+                </router-link>
             </div>
             <div class="m-3 hidden">
                 <ion-item class="bg-base-100" target="_blank" href="https://dashboard.paystack.com/#/dashboard?period=30">
