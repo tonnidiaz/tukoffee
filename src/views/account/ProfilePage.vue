@@ -81,7 +81,7 @@
                                 <td class="fw-5 fs-16">Email</td>
                                 <td class="fs-16">{{ account.email }}</td>
                             </tr>
-                            <tr class="hidden">
+                            <tr class="">
                                 <td class="fw-5 fs-16">Phone</td>
                                 <td class="fs-16">{{ account.phone }}</td>
                             </tr>

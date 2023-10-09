@@ -50,7 +50,7 @@ const submitOTP = async (e: any) => {
     try {
         const res = await apiAxios.post("/auth/otp/verify", {
             otp: _form.otp,
-            phone: _form.phone,
+            email: _form.email,
         });
         step.value = 2
 
@@ -71,7 +71,7 @@ const onOTPInput = (e: any) => {
 const resendCode = async () => {
     const _form = form.value;
     try {
-        await apiAxios.post("/auth/otp/resend", { phone: _form.phone });
+        await apiAxios.post("/auth/otp/resend", { email: _form.email });
         initTimer();
     } catch (e) {
         errorHandler(e);

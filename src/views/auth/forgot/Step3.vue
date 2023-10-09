@@ -46,7 +46,7 @@ const onFormSubmit = async ()=>{
     try{
         const _form  = form.value
        await apiAxios.post('/auth/password/reset?act=reset', {
-            phone: _form.phone,
+            email: _form.email,
             password: _form.password
         })
         router.replace('/auth/login')

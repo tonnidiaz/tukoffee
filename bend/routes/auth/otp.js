@@ -8,11 +8,15 @@ router.post("/resend", async (req, res) => {
         phone ? (await User.findOne({ phone }).exec()) : email ?
         (await User.findOne({ email }).exec()) : null;
 
-      if (!user) return tunedErr(res, 400, "User does not exist")
+      if (!user) {return tunedErr(res, 400, "User does not exist")}
             const otp = randomInRange(1000, 9999)
-            console.log(otp)
-            //TODO: Send OTP via SMS
-            user.otp = otp;
+            
+            user.otp = otp
+            await sendMail("Tukoffee Verification Email",
+                `<h2 style="font-weight: 500">Here is your Email verification One-Time-PIN:</h2>
+                    <p style="font-size: 20px; font-weight: 600">${otp}</p>
+                ` , email
+               )
             await user.save();
         
         res.send("OTP endpoint");
@@ -22,6 +26,7 @@ router.post("/resend", async (req, res) => {
 });
 router.post("/verify", async (req, res) => {
     const { phone, email, otp, new_email } = req.body;
+    console.log(email)
     let user;
     if (!otp) return res.status(400).send("tuned:Please provide OTP.");
     if (phone) {
@@ -37,6 +42,7 @@ router.post("/verify", async (req, res) => {
         user.otp = null
     } else if (email) {
         // Email verification
+        
         user = await User.findOne({ email }).exec();
         if (!user)
             return tunedErr(res, 400, `Account with email: ${email} does not exist!`)

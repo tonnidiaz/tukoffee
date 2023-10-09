@@ -6,21 +6,19 @@
         <tu-form @submit="onFormSubmit" class="mt-3" action="#">
             <div class="my-1">
                 <tu-field
-                    label="Phone"
-                    placeholder="e.g. 0723456789"
-                    v-model="form.phone"
+                    label="Email address:"
+                    placeholder="Enter your email..."
+                    v-model="form.email"
                     required
-                    :validator="()=>{
-                        return !form.phone?.length ? 'Phone is required' : (phoneValid(form.phone) == false ? 'Invalid phone number' : null)
-                    }"
-                    type="tel"
+                  
+                    type="email"
                     />
             </div>
             <div class="my-1">
                    <tu-field
                    
                     label="Password"
-                    placeholder="Enter password..."
+                    placeholder="Enter your password..."
                     v-model="form.password"
                     required
                     :type="showPass ? 'text' : 'password'"

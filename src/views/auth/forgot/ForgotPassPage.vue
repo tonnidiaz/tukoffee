@@ -21,6 +21,7 @@ import Step3 from "../forgot/Step3.vue"
 import { useAuthStore } from "@/stores/auth";
 import { storeToRefs } from "pinia";
 import Step1 from "./Step1.vue";
+import { onMounted } from "vue";
 
 const authStore = useAuthStore()
 
@@ -28,6 +29,10 @@ const {step} = storeToRefs(authStore)
 const steps = [
     Step1, Step2, Step3
 ]
+
+onMounted(()=>{
+    step.value = 0
+})
 </script>
 
 <style>

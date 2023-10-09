@@ -1,5 +1,5 @@
 const { User } = require("../../models");
-const { genOTP, randomInRange } = require("../../utils/functions");
+const { genOTP, randomInRange, sendMail } = require("../../utils/functions");
 const { auth, lightAuth } = require("../../utils/middleware");
 const bcrypt = require("bcrypt");
 const router = require("express").Router();
@@ -27,8 +27,11 @@ router.post("/reset", async (req, res) => {
         } else if (act == "gen-otp") {
             const _otp = randomInRange(1000, 9999);
             user.otp = _otp;
-            //send the sms
-            console.log(_otp);
+            await sendMail("Tukoffee Verification Email",
+            `<h2 style="font-weight: 500">Here is your Email verification One-Time-PIN:</h2>
+                <p style="font-size: 20px; font-weight: 600">${_otp}</p>
+            ` , email
+           )
         }
 
         await user.save();

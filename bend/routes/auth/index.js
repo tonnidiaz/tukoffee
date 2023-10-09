@@ -7,6 +7,7 @@ const {
     randomInRange,
     sendSMS,
     tunedErr,
+    sendMail,
 } = require("../../utils/functions");
 const { auth, lightAuth } = require("../../utils/middleware");
 const { UserPermissions } = require("../../utils/constants");
@@ -24,8 +25,15 @@ router.post("/signup", async (req, res) => {
 
         // Delete existing user with unverified number
         await User.findOneAndDelete({phone: body.phone, phone_verified: false}).exec()
+        
+        // Delete existing user with unverified email
+        await User.findOneAndDelete({email: body.email, email_verified: false}).exec()
+        
         if (await User.findOne({phone: body.phone, phone_verified: true}).exec())
-            return tunedErr(res, 400, 'User already exists')
+            return tunedErr(res, 400, 'User already with same number already exists')
+
+        if (await User.findOne({email: body.email, email_verified: true}).exec())
+            return tunedErr(res, 400, 'User already with same email already exists')
         const user = new User()
         for (let key of Object.keys(body)){
             if (key == 'password')
@@ -39,7 +47,11 @@ router.post("/signup", async (req, res) => {
         
         const otp = randomInRange(1000, 9999);
         user.otp = otp;
-        console.log(otp);
+        await sendMail("Tukoffee Verification Email",
+                `<h2 style="font-weight: 500">Here is your signup verification One-Time-PIN:</h2>
+                    <p style="font-size: 20px; font-weight: 600">${user.otp}</p>
+                ` , user.email
+               )
         // Send the otp && save user
         const number = body.phone.startsWith("+")
             ? phone

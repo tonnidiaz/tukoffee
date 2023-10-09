@@ -1,65 +1,49 @@
 <template>
     <ion-page>
-        <Appbar title="Signup" :show-cart="false" />
+        <Appbar title="Signup" :show-cart="false" :loading="isLoading" />
         <ion-content :fullscreen="true">
             <div class="p-3 bg-base-100 flex flex-col justify- h-full">
                 <ul class="steps">
                     <li @click="()=>{if (i < step) step = i}" v-for="(el, i) in steps" :class="`step step-${step >= i ?  'success' : ''}`">{{el}}</li>
                 </ul> 
-                <form v-if="step == 0" @submit="onFormSubmit" class="mt-3" action="#">
+                <tu-form v-if="step == 0" @submit="onFormSubmit" class="mt-3" action="#">
                     <div class="flex gap-2 my-1">
-                        <ion-input
+                        <tu-field
                             label="First name"
                             placeholder="e.g. John"
-                            label-placement="floating"
-                            fill="solid"
                             v-model="form.first_name"
-                            required
-                            color="dark"
-                        >
-                        </ion-input>
-                        <ion-input
+                            required/>
+                        <tu-field
                             label="Last name"
                             placeholder="e.g. Doe"
-                            label-placement="floating"
-                            fill="solid"
                             v-model="form.last_name"
-                            required
-                            color="dark"
-                        >
-                        </ion-input>
+                            required/>
                     </div>
                     <div class="form-control my-">
-                        <ion-input
-                            label="Phone"
-                            placeholder="e.g. 0723456789"
-                            label-placement="floating"
-                            fill="solid"
-                            v-model="form.phone"
+                        <tu-field
+                            label="Email address:"
+                            placeholder="e.g. john@gmail.com"
+                            v-model="form.email"
                             required
-                            class="ion-invalid"
-                            :color="
-                                phoneValid(form.phone) == null
-                                    ? 'dark'
-                                    : phoneValid(form.phone)
-                                    ? 'success'
-                                    : 'danger'
-                            "
+                            type="email"
+                            error-text="Invalid email address"/>
+                    </div>
+                    <div class="form-control my-">
+                        <tu-field
+                            label="Phone:"
+                            placeholder="e.g. 0712345678"
+                            v-model="form.phone"
+                            
                             type="tel"
-                            error-text="Invalid phone number"
-                        >
-                        </ion-input>
+                            error-text="Invalid email address"/>
                     </div>
                     <div class="form-control">
-                        <ion-input
+                        <tu-field
                             label="Password"
                             placeholder="Enter password..."
-                            label-placement="floating"
                             v-model="form.password"
                             required
-                            fill="solid"
                             :type="showPass ? 'text' : 'password'"
-                            :clear-on-edit="false"
                             :color="
                                 form.password == null
                                     ? 'dark'
@@ -67,9 +51,7 @@
                                     ? 'success'
                                     : 'danger'
                             "
-                            error-text="Invalid password"
-                        >
-                        </ion-input>
+                            error-text="Invalid password"/>
 
                         <ion-checkbox
                             v-model="showPass"
@@ -82,7 +64,6 @@
                     </div>
                     <div class="form-control mt-2">
                         <tu-button
-                            @click="onFormSubmit"
                             type="submit"
                             class="tu"
                             :ionic="true"
@@ -97,7 +78,7 @@
                             >Login</ion-text
                         >
                     </div>
-                </form>
+                </tu-form>
                <Step2 v-else/>
         
 
@@ -119,7 +100,7 @@ import Appbar from "@/components/Appbar.vue";
 import { ref } from "vue";
 import { apiAxios } from "@/utils/constants";
 import { useUserStore } from "@/stores/user";
-import { errorHandler } from "@/utils/funcs";
+import { errorHandler, showLoading } from "@/utils/funcs";
 import TuButton from "@/components/TuButton.vue";
 import Step2 from "./signup/Step2.vue"
 import { useAuthStore } from "@/stores/auth";
@@ -130,7 +111,7 @@ const authStore = useAuthStore()
 const {form, step} = storeToRefs(authStore)
 
 const steps = ['Register', 'Verify number']
-
+const isLoading = ref(false), setIsLoading = (v: boolean) => isLoading.value = v;
 const toastClass = ref(""),
     showPass = ref(false); 
 const userStore = useUserStore();
@@ -145,8 +126,9 @@ const router = useIonRouter();
 
 
 async function onFormSubmit(e: any) {
-    console.log("Submi");
+    
     e.preventDefault();
+    setIsLoading(true)
     try {
         const _form = form.value;
         const fd = new FormData();
@@ -155,10 +137,12 @@ async function onFormSubmit(e: any) {
         }
 
         await apiAxios.post("/auth/signup", fd);
+        setIsLoading(false)
         step.value = 1
    
     } catch (e: any) {
         console.log(e);
+        setIsLoading(false)
         errorHandler(e);
         return;
     }

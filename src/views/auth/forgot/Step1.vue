@@ -3,11 +3,11 @@
                
                <div class="form-control my-">
                    <tu-field
-                       label="Phone"
-                       placeholder="e.g. 0723456789"
-                       v-model="form.phone"
+                       label="Email address:"
+                       placeholder="Enter your email..."
+                       v-model="form.email"
                        required                          
-                       type="tel"
+                       type="email"
                    >
                    </tu-field>
                </div>
@@ -47,7 +47,7 @@ async function onFormSubmit(e: any) {
         }
 
         await apiAxios.post("/auth/password/reset?act=gen-otp", {
-            phone: _form.phone
+            email: _form.email
         });
         step.value = 1
    
