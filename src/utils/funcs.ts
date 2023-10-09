@@ -133,7 +133,7 @@ export function errorHandler(e: any, message = "Something went wrong", force = f
 }
 
 export function toHome(){
-    location.href = '/'
+    location.href = '/~/home'
 }
 export const showLoading = async ({msg = 'Please wait...',  duration = undefined} : {msg?: string, duration? : number | undefined})=>{
     const loading = await loadingController.create({
