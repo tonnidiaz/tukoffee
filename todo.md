@@ -1,7 +1,7 @@
 ## TODO
 
 - Environment 
-- Product Weight
+- Stores and times dash item
 - Disolay reject reason if review isZ
 ## TOUCH UPS
 

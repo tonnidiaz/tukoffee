@@ -5,7 +5,9 @@
                 :items="[
                 isAdmin() ? {
                     label: 'Edit',
-                    cmd: ()=> {formStore.setForm({...product!}); ionRouter.push('/edit/product')}
+                    cmd: ()=> {
+                        $('#edit-opt').trigger('click')
+                        /* formStore.setForm({...product!}); ionRouter.push('/edit/product') */}
                 }: null,
        
             ]"
@@ -97,6 +99,23 @@
                             >
                         </div>
                         <div
+                            class="my-1 p- bg-base-100"
+                        >
+                            <table class="table">
+                                <tr>
+                                    <th colspan="2" class="pt-2 pb-0">
+                                        <h3 class="fs-16">SPECIFICATIONS</h3>
+                                    </th>
+                                </tr>
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-5 py-2">Weight</td>
+                                        <td  class=" py-2">{{ product.weight }} KG</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                    </div>
+                        <div
                             class="my-1 m-auto w-full fle shadow-1 bg-base-100 p-3"
                         >
                             <h3>You may also like</h3>
@@ -111,6 +130,12 @@
                         </div>
                     </div>
                 </div>
+            <button class="hidden" id="edit-opt"></button>
+                <BottomSheet trigger="edit-opt" >
+                <div class="h-100vh">
+                    <AddProductView mode="edit" :product="product" />
+                </div>
+            </BottomSheet>
             </div>
             <div
                 v-else
@@ -124,16 +149,15 @@
                 <div class="p-3 flex flex-col items-center gap-2">
                     <div class="flex w-full items-center justify-between">
                         <span
-                            v-if="product.quantity"
+                            v-if="product.quantity > 0"
                             class="badge ion-bg-medium py-3"
                         >
                             {{ product.quantity }} In stock
                         </span>
-                        <span v-else class="badge badge-neutral">
+                        <span v-else class="badge ion-bg-medium py-3">
                             Out of stock
                         </span>
 
-                        <Rating v-model="form.rating" :cancel="false" />
                     </div>
                     <div class="flex w-full items-center justify-between">
                         <span v-if="!product.on_sale" class="fw-8"
@@ -152,6 +176,7 @@
                         </div>
 
                         <tu-button
+                            :disabled="product.quantity < 1"
                             :ionic="false"
                             :on-click="addRemoveCart"
                             :class="`rounded-full btn-sm h-30px flex items-center justify-center ${
@@ -205,7 +230,7 @@ import {
 } from "@ionic/vue";
 import { useRouter, useRoute } from "vue-router";
 import { apiAxios, apiURL } from "@/utils/constants";
-import axios from "axios";
+import $ from "jquery";
 const route = useRoute();
 
 const { id } = route.params;
@@ -217,6 +242,8 @@ import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import DropdownBtn from "@/components/DropdownBtn.vue";
 import { useFormStore } from "@/stores/form";
+import AddProductView from "@/components/AddProductView.vue";
+import BottomSheet from "@/components/BottomSheet.vue";
 
 const userStore = useUserStore();
 const { cart, user } = storeToRefs(userStore);

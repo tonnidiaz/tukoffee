@@ -145,8 +145,8 @@ export const showLoading = async ({msg = 'Please wait...',  duration = undefined
 
       loading.present();
 }
-export function hideModal(){
-    modalController.dismiss(null, 'close')
+export async function hideModal(){
+   await modalController.dismiss(null, 'close')
 }
 export function hideLoader(){
     loadingController.dismiss(null, 'close')
