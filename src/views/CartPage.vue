@@ -26,7 +26,7 @@
                     </ion-content>
                 </ion-popover>
                 <div v-if="cart" class="h-full">
-                    <div v-if="cart?.products.length" class="bg-base-100 py-4">
+                    <div v-if="cart?.products?.length" class="bg-base-100 py-4">
                         <ion-item-divider color="clear">
                             <h3 class="fs-20 fw-5">Items</h3>
                         </ion-item-divider>
@@ -102,21 +102,22 @@ const clearCart = async () => {
 };
 
 
-const _setupCart = async (user: Obj | null) => { 
+const _setupCart = async (user: Obj | null) => {
     cart.value = null
-     if (user?.phone){
-       cart.value = await setupCart(user.phone, userStore)
+     if (user?._id){
+        
+       cart.value = await setupCart(user._id, userStore)
     }
  }
 
 
 watch(user, (val)=>{
     _setupCart(val)
-}, {deep: true})
+}, {deep: true, immediate: true})
 watch(
     cart,
     (_cart) => {
-        if (_cart) {
+        if (_cart?.products) {
             let _total = 0;
             for (let it of _cart.products) {
                 _total +=( it.product.price * it.quantity);

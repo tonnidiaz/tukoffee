@@ -44,7 +44,7 @@
                 <div class="my-1 bg-base-100 p-3 w-full relative" style="overflow-y: scroll;">
                     <div class="flex flex-center h-full" v-if="!items">
                         <div v-if="query.length">
-                                <ion-spinner color="dark" class="w-50px h-50px"></ion-spinner>
+                                <ion-spinner color="medium" class="w-50px h-50px"></ion-spinner>
                         </div>
                     </div>
                     <div v-else>

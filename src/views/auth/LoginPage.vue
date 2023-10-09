@@ -120,7 +120,7 @@ async function onFormSubmit(e: any) {
         const res = await apiAxios.post("/auth/login", fd);
         localStorage.setItem("authToken", res.data.token);
         userStore.setUser(res.data.user);
-        setupCart(res.data.user["phone"], userStore);
+        setupCart(res.data.user["_id"], userStore);
         location.href = red as string ??  '/'
     } catch (e: any) {
         console.log(e);

@@ -24,8 +24,8 @@ router
     .get( async (req, res) => {
         try {
             const { user } = req.query;
-            const _user = await User.findOne({ phone: user }).exec();
-            const cart = await Cart.findOne({ customer: _user }).exec();
+            //const _user = await User.findById(user).exec();
+            const cart = await Cart.findOne({ customer: user }).exec();
             if (!cart) return res.status(404).send("tuned:Cart not found");
             let c = await cart.populate("products.product");
             c = {

@@ -14,28 +14,41 @@
                     router-link="/search"
                     class="rounded"
                 ></ion-searchbar>
-                <div class="my-2" v-if="topSelling">
+                <div class="my-2" v-if="(topSelling && topSelling.length) || !topSelling">
                     <!-- Top selling section -->
                     <h3 class="fs-20 fw-5 my-3">Top selling</h3>
                     <div class="mt-2 flex overflow-scroll gap-x-3">
-                       <ProductAvatar  v-if="topSelling"
-                            v-for="(e, i) in topSelling" :item="e"/>
+                        <ProductAvatar
+                            v-if="topSelling"
+                            v-for="(e, i) in topSelling"
+                            :item="e"
+                        />
+                        <ProductAvatar v-else v-for="i in 20" />
                     </div>
                 </div>
-                <div class="my-2" v-if="special">
+                <div v-if="(special && special.length) || !special" class="my-2">
                     <!-- Special section -->
-                    <h3 class="fs-20 fw-5 my-3">Today's special</h3>
-                    <div class="mt-2 flex gap-x-3 overflow-scroll">
-                       <ProductAvatar  v-if="special"
-                            v-for="(e, i) in special" :item="e"/>
-                    </div>
+                        <h3 class="fs-20 fw-5 my-3">Today's special</h3>
+                        <div class="mt-2 flex gap-x-3 overflow-scroll">
+                            <ProductAvatar
+                                v-if="special"
+                                v-for="(e, i) in special"
+                                :item="e"
+                            />
+                            <ProductAvatar v-else v-for="i in 20" />
+                        </div>
                 </div>
-                <div class="my-2" v-if="sale">
+                <div class="my-2" v-if="(sale && sale.length) || !sale">
                     <!-- Special section -->
                     <h3 class="fs-20 fw-5 my-3">On sale</h3>
                     <div class="mt-2 flex gap-x-3 overflow-scroll">
-                        <ProductAvatar  v-if="sale"
-                            v-for="(e, i) in sale" :item="e" sale/>
+                        <ProductAvatar
+                            v-if="sale"
+                            v-for="(e, i) in sale"
+                            :item="e"
+                            sale
+                        />
+                        <ProductAvatar v-else v-for="i in 20" />
                     </div>
                 </div>
             </div>
@@ -51,7 +64,7 @@ import {
     IonText,
     IonRefresher,
     IonRefresherContent,
-    IonRippleEffect
+    IonRippleEffect,
 } from "@ionic/vue";
 import { onMounted, ref } from "vue";
 import InkWell from "@/components/InkWell.vue";
@@ -59,6 +72,7 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { apiURL } from "@/utils/constants";
 import ProductAvatar from "@/components/ProductAvatar.vue";
+import { sleep } from "@/utils/funcs";
 const special = ref<any[]>(),
     topSelling = ref<any[]>(),
     sale = ref<any[]>();

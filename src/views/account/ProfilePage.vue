@@ -192,7 +192,7 @@
                 </div>
             </div>
             <div class="h-full bg-base-100 flex flex-center" v-else>
-                <ion-spinner class="h-55px w-55px"></ion-spinner>
+                <ion-spinner color="medium" class="h-55px w-55px"></ion-spinner>
             </div>
         </ion-content>
     </ion-page>

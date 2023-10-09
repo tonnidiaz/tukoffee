@@ -16,16 +16,16 @@ export const randomImg = () => {
         100
     )}`;
 };
-export const setupCart = async (phone: string, userStore: any) => {
+export const setupCart = async (userId: string, userStore: any) => {
     try {
         userStore.setCart(null);
         console.log("Setting up cart...");
-        const res = await apiAxios.get(`/user/cart?user=${phone}`);
+        const res = await apiAxios.get(`/user/cart?user=${userId}`);
         userStore.setCart(res.data.cart);
         return res.data.cart;
     } catch (e) {
         console.log(e);
-        return null;
+        return {};
     }
 };
 export const testClick = (e: any) => {

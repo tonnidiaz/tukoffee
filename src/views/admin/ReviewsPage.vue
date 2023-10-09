@@ -65,7 +65,7 @@
                     </div>
                 </div>
                 <div class="bg-base-100 flex-auto flex flex-center" v-else>
-                    <ion-spinner class="w-55px h-55px" />
+                    <ion-spinner color="medium" class="w-55px h-55px" />
                 </div>
             </div>
         </ion-content>

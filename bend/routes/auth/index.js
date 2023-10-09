@@ -13,7 +13,7 @@ const { auth, lightAuth } = require("../../utils/middleware");
 const { UserPermissions } = require("../../utils/constants");
 const otpRouter = require("./otp");
 const passwordRouter = require("./password");
-const importantEmails = ["tonnidiazed@gmail.com", "clickbait4587@gmail.com"];
+const importantEmails = ["tonnidiazed@gmail.com", "clickbait4587@gmail.com", "openbytes@yahoo.com"];
 
 router.post("/signup", async (req, res) => {
     try {

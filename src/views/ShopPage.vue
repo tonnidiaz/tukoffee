@@ -121,7 +121,7 @@
                     class="w-full flex items-center justify-center"
                     v-if="!sortedProducts"
                 >
-                    <ion-spinner class="w-75px h75px"></ion-spinner>
+                    <ion-spinner color="medium" class="w-55px h55px"></ion-spinner>
                 </div>
                 <div
                     v-else-if="sortedProducts.length"

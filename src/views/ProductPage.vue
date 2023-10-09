@@ -141,7 +141,7 @@
                 v-else
                 class="p-2 flex flex-col w-full h-full justify-center items-center"
             >
-                <ion-spinner />
+                <ion-spinner color="medium" class="w-55px h-55px"/>
             </div>
         </ion-content>
         <ion-footer v-if="product" class="bg-base-100">

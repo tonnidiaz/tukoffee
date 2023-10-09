@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { User } =  require("../models/index")
+const { User, Cart, Order, Review } =  require("../models/index")
 /* GET users listing. */
 router.get('/', async function(req, res, next) {
 
@@ -30,7 +30,12 @@ router.post('/delete', async (req, res)=>{
         for (let id of ids){
             try{
                 console.log(`Deleting ${id}`);
+                
                 await User.findByIdAndDelete(id).exec() 
+                //Delete cart, orders, and reviews
+                await Cart.findOneAndDelete({customer: id}).exec()
+                await Order.findOneAndDelete({ customer: id }).exec()
+                await Review.findOneAndDelete({user: id}).exec()
             }
              catch(e){
                 console.log(e);

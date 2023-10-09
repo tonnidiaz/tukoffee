@@ -53,7 +53,7 @@ const submitOTP = async (e: any) => {
     try {
         const res = await apiAxios.post("/auth/otp/verify", {
             otp: _form.otp,
-            phone: _form.email,
+            email: _form.email,
         });
         console.log(res.data);
         localStorage.setItem("authToken", res.data.token);
@@ -75,7 +75,7 @@ const onOTPInput = (e: any) => {
 const resendCode = async () => {
     const _form = form.value;
     try {
-        await apiAxios.post("/auth/otp/resend", { phone: _form.email });
+        await apiAxios.post("/auth/otp/resend", { email: _form.email });
         initTimer();
     } catch (e) {
         errorHandler(e);

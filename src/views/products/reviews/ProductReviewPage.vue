@@ -105,7 +105,7 @@
                     class="my-1 bg-base-100 p-3 flex flex-center flex-auto"
                     v-else
                 >
-                    <ion-spinner class="w-50px h-50px"></ion-spinner>
+                    <ion-spinner color="medium"  class="w-50px h-50px"></ion-spinner>
                 </div>
             </div>
         </ion-content>

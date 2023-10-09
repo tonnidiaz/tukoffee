@@ -46,7 +46,7 @@
         </div>
     </div>
     <div v-else class="p-3 h-full flex flex-center">
-        <ion-spinner class="h-50px w-50px" />
+        <ion-spinner color="medium" class="h-50px w-50px" />
     </div>
 </template>
 <script setup lang="ts">

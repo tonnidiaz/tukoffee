@@ -48,7 +48,7 @@
         </div>
     </div>
     <div  v-else class="h-full bg-base-100 flex flex-center">
-     <ion-spinner class="w-50px h-50px"></ion-spinner>
+     <ion-spinner color="medium"  class="w-50px h-50px"></ion-spinner>
     </div>
 </template>
 

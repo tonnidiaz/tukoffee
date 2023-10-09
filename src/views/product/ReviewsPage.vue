@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div v-else class="bg-base-100 flex-auto flex flex-center">
-                    <ion-spinner class="w-55px h-55px "></ion-spinner>
+                    <ion-spinner color="medium" class="w-55px h-55px "></ion-spinner>
                 </div>
             </div>
 

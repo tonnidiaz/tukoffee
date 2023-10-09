@@ -65,7 +65,7 @@ const setupUser = async () => {
         if (authToken) {
             const res = await apiAxios.post(`/auth/login`);
             userStore.setUser(res.data.user);
-            setupCart(res.data.user["phone"], userStore);
+            setupCart(res.data.user["_id"], userStore);
         } else {
             userStore.setUser({});
             userStore.setCart({});
