@@ -207,8 +207,8 @@ router.get('/migrate', async (req, res)=>{
         //let ord = await Order.findOne({status: }).exec()
 //await Order.deleteMany({status: OrderStatus.cancelled}).exec()
         for (let store of stores){
-            store.open_time_weekend = store.open_time_weekends
-            store.close_time_weekend = store.close_time_weekends
+           /*  store.open_time_weekend = store.open_time_weekends
+            store.close_time_weekend = store.close_time_weekends */
             
             await store.save()
         }
