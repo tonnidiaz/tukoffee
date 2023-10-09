@@ -4,6 +4,7 @@ const { Schema, Mongoose, default: mongoose } = require("mongoose");
 const { auth, lightAuth } = require("../utils/middleware");
 const bcrypt = require("bcrypt");
 const { parser } = require("../utils/constants");
+const { randomInRange, tunedErr, sendMail } = require("../utils/functions");
 const router = express.Router();
 
 /* GET users listing. */
@@ -131,7 +132,7 @@ router.post("/delivery-address", parser, auth, async (req, res) => {
 router.post("/edit", auth, async (req, res) => {
     try {
         const { field } = req.query;
-        const { value, userId } = req.body;
+        const { value, userId, data } = req.body;
         console.log(userId)
         const _user = userId ? await User.findById(userId).exec() : req.user;
         if (!field) {
@@ -139,7 +140,22 @@ router.post("/edit", auth, async (req, res) => {
                 _user[key] = value[key];
             }
         } else {
-            _user[field] = value;
+            if (field == 'email'){
+
+                // Check password
+                if ( !bcrypt.compareSync(data.password, _user.password))
+                    return tunedErr(res, 401, 'Incorrect password')
+                _user.new_email = data.email;
+                _user.otp = randomInRange(1000,9999)
+               await sendMail("Tukoffee Verification Email",
+                `<h2 style="font-weight: 500">Here is your Email verification One-Time-PIN:</h2>
+                    <p style="font-size: 20px; font-weight: 600">${_user.otp}</p>
+                ` , _user.new_email
+               )
+            }else{
+                 _user[field] = value;
+            }
+           
         }
         await _user.save();
         res.json({ user: _user.toJSON() });

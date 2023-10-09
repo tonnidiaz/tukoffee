@@ -41,8 +41,10 @@ import TuButton from "@/components/TuButton.vue";
 import { IonInput, IonText } from "@ionic/vue";
 
 const authStore = useAuthStore();
-const TIMEOUT = 120;
+
 const { form, step } = storeToRefs(authStore);
+
+const TIMEOUT = 120;
 const timer = ref(TIMEOUT);
 
 const submitOTP = async (e: any) => {

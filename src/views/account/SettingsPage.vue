@@ -2,7 +2,17 @@
     <ion-page>
         <Appbar title="Account settings" :show-cart="false" />
         <ion-content :fullscreen="true">
-            <div class="h-full py-0">
+            <div v-if="user" class="h-full py-0 px-2">
+                <div class="px-3 py-1 my-1 bg-base-100">
+                    <div class="flex items-center justify-between">
+                        <h3 class="fs-18 fw-5">Email</h3>
+                        <ion-text color="secondary" id="change-email-btn">Change</ion-text>
+                    </div>
+                    <div class="mt-2">
+                        <ion-text>
+                            {{ user.email  }}</ion-text>
+                    </div>
+                </div>
                 <div class="px-3 py-1 my-1 bg-base-100">
                     <tu-btn id="change-pass-trigger" expand="block" color="dark" ionic>
                         Change password</tu-btn
@@ -68,17 +78,28 @@
                     </bottom-sheet>
                 </div>
             </div>
+            <!-- SHEETS -->
+            <div v-if="user">
+            <bottom-sheet   trigger="change-email-btn" no-swipe-dismiss>
+                <ChangeEmailView/>
+            </bottom-sheet>
+            </div>
         </ion-content>
     </ion-page>
 </template>
 <script setup lang="ts">
-import { IonPage, IonContent } from "@ionic/vue";
+import { IonPage, IonContent, IonText, IonRippleEffect } from "@ionic/vue";
 import Appbar from "@/components/Appbar.vue";
+import ChangeEmailView from "@/components/ChangeEmailView.vue";
 import { Obj } from "@/utils/classes";
 import { ref } from "vue";
 import { apiAxios } from "@/utils/constants";
 import { errorHandler, hideLoader, hideModal, showAlert, showLoading } from "@/utils/funcs";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/user";
 
+const userStore = useUserStore()
+const { user } =  storeToRefs(userStore)
 const form = ref<Obj>({})
 
 async function changePwd(){

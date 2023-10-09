@@ -21,7 +21,7 @@ router.post("/resend", async (req, res) => {
     }
 });
 router.post("/verify", async (req, res) => {
-    const { phone, email, otp } = req.body;
+    const { phone, email, otp, new_email } = req.body;
     let user;
     if (!otp) return res.status(400).send("tuned:Please provide OTP.");
     if (phone) {
@@ -43,6 +43,17 @@ router.post("/verify", async (req, res) => {
         if (user.otp != otp)
             return tunedErr(res, 400, "tuned:Incorrect OTP.");
         user.email_verified = true;
+        
+    }
+    else if (new_email){
+        user = await User.findOne({new_email}).exec()
+        if (!user)
+        return tunedErr(res, 400, `Incorrect credentials!`)
+        if (user.otp != otp)
+        return tunedErr(res, 400, "tuned:Incorrect OTP");
+        // Asign new email to email
+        user.email = new_email
+
     }
     await user.save();
     const token = genToken({ id: user._id });

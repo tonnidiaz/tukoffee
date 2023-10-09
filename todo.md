@@ -7,6 +7,9 @@
 
 ## FIXES
 - chekout flicker after add address
+- Reload app after updating user
+- Location and times badge
+-Product reviews font too large
 
 # FINALS
 
