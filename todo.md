@@ -2,6 +2,7 @@
 
 - Environment 
 - Product Weight
+- Disolay reject reason if review isZ
 ## TOUCH UPS
 
 

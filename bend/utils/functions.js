@@ -53,16 +53,7 @@ const genOTP = async (phone, email) => {
 };
 const parseProducts = async (products) => {
     let data = [];
-    console.log(products[0])
-  /*   products.forEach((it) => {
-        let r = 0;
-        it.ratings.forEach((i) => {
-            r += i.value;
-        });
-        r = r / it.ratings.length;
-        data.push({ ...it.toJSON(), rating: r });
-    });
- */
+
     for (let prod of products){
         let rating = 0
       for (let revId of prod.reviews){

@@ -55,7 +55,9 @@ export const uploadImage = async (path: any, storeName: string)=>{
 }
 
 export const onBack = (path: string, router: Router)=>{
-    if (path.startsWith('/~/')){
+     console.log(history.state)
+    if (path.startsWith('/~/') || history.state.back == '/order/checkout'){
+       
         if (path == '/~/home'){
             // Exit app
             App.minimizeApp()

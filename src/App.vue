@@ -40,8 +40,8 @@ import { useAppStore } from "./stores/app";
 import { Router, useRoute, useRouter } from "vue-router";
 import { useFormStore } from "./stores/form";
 import UpdatesView from "./components/UpdatesView.vue";
-import rrouter from '@/router/index';
-import {App} from '@capacitor/app';
+import { Network } from '@capacitor/network';
+
 const userStore = useUserStore();
 const storeStore = useStoreStore();
 
@@ -98,7 +98,8 @@ async function checkInternet(load: boolean = true){
     load && showLoading({
         msg: 'Checking connection...'
     })
-   isConnected.value = window.navigator.onLine
+    const status = await Network.getStatus();
+    isConnected.value = status.connected
    await sleep(500)
    load && hideLoader()
 }
