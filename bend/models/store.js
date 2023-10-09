@@ -16,7 +16,12 @@ const StoreSchema = new Schema({
         type: String,
         required: true
     },
-
+    open_time_weekends: {
+        type: String,
+    },
+    close_time_weekends: {
+        type: String,
+    },
     open_time_weekend: {
         type: String,
         required: true
