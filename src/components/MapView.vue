@@ -105,7 +105,7 @@ import axios from "axios";
 import { mapboxPublicToken } from "@/utils/constants";
 import { dummyFeatures } from "@/utils/dummies";
 import { Geolocation } from "@capacitor/geolocation";
-import { hideModal } from "@/utils/funcs";
+import { hideLoader, hideModal, showLoading } from "@/utils/funcs";
 
 const searchBarOpen = ref(false),
     mapRef = ref<any>();
@@ -147,11 +147,13 @@ async function _onOk() {
     }
 }
 async function goToCurrentLocation() {
+    showLoading({})
     const coordinates = await Geolocation.getCurrentPosition();
     const { latitude, longitude } = coordinates.coords;
     center.value = [latitude, longitude];
     goTo(center.value);
     reverseGeocode(longitude, latitude)
+    hideLoader()
 }
 const onSuggestionClick = (val: any) => {
     hideSearchbar();
@@ -182,7 +184,7 @@ async function searchAddress(query: string) {
                 "https://api.mapbox.com/geocoding/v5/mapbox.places/";
             const res = await axios.get(`${baseURL}/${query}.json`, {
                 params: {
-                    proximity: "28.0534776,-26.1974939", //`${jhbCenter[0]},${jhbCenter[1]}`,
+                    proximity: "28.0534776,-26.1974939", 
                     access_token: mapboxPublicToken,
                 },
             });
@@ -205,7 +207,7 @@ const reverseGeocode = async(lng: number, lat: number)=>{
             }
         })
         const ft = res.data.features[0]
-        address.value =   { name: ft.place_name, center: ft.center.reverse() }
+        address.value =   { name: ft.place_name, center: ft.center}
     }
     catch(e){
         console.log(e)
@@ -219,9 +221,10 @@ watch(address, _address=>{
 }, {deep: true})
 onMounted(() => {
     if (props.location) {
-        const _center = props.location.center;
-        center.value = [_center[1], _center[0]];
-        address.value = props.location as TypeAddr
+        const _center = [...props.location.center];
+      
+        center.value = _center.reverse()
+          address.value = props.location as TypeAddr
         
     }
 });

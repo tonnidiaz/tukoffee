@@ -121,7 +121,8 @@ const checkUpdates = async () => {
         });
 
         update.value = res.data;
-        updatesSheetOpen.value = true;
+        if (!res.data?.includes('up to date'))
+            updatesSheetOpen.value = true;
     } catch (e) {
         console.log(e);
     }
@@ -139,7 +140,7 @@ onMounted(() => {
 
             if (acu) {
                 const updatesChecked = sessionStorage.getItem('update_checked')
-                if (!updatesChecked){
+                if ("!updatesChecked"){
                     console.log('checking')
                        AppVersion.getVersionNumber()
                     .then((v) => {

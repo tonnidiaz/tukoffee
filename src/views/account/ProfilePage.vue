@@ -283,7 +283,7 @@ const editAddress = async (addr: Obj) => {
         account.value = res.data.user;
         hideLoader()
     } catch (error) {
-        hideLoader()
+        hideLoader() 
         errorHandler(error);
         
     }
@@ -299,6 +299,7 @@ onMounted(() => {
 
 watch(account, val=>{
     form.value.permissions = val?.permissions
+    console.log(val?.address?.location?.center, user.value?.address?.location?.center)
     if (val?._id == user.value?._id){
         setUser(val as any)
     }

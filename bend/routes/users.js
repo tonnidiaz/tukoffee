@@ -11,6 +11,7 @@ router.get('/', async function(req, res, next) {
     if (id){
         const user = await User.findById(id).exec()
         if (!user) return res.status(404).json({msg: "User not found"})
+        console.log(user.address)
         users.push(user)
     }
     else {
@@ -27,7 +28,7 @@ router.post('/delete', async (req, res)=>{
     try {
         const{ ids } = req.body;
         // Delete all users from the provided ids
-        for (let id of ids){
+        for (let id of ids){ 
             try{
                 console.log(`Deleting ${id}`);
                 
