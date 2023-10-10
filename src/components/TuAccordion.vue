@@ -1,6 +1,6 @@
 <template>
     <ion-accordion>
-        <ion-item slot="header" color="light">
+        <ion-item slot="header">
             <ion-label class="fs-18">{{ title }}</ion-label>
         </ion-item>
         <div class="ion-padding" slot="content">

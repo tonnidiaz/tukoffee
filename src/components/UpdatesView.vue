@@ -55,15 +55,7 @@
 </template>
 <script setup lang="ts">
 import {
-    IonPage,
-    IonContent,
-    IonItem,
-    IonItemGroup,
-    IonLabel,
-    IonNote,
-    IonLoading,
     IonProgressBar,
-    IonToggle,
 } from "@ionic/vue";
 import { Filesystem, Directory, ProgressStatus } from "@capacitor/filesystem";
 import { onMounted, ref } from "vue";
@@ -148,15 +140,19 @@ const onProgress = (e: ProgressStatus) => {
 };
 onMounted(() => {
     (async function () {
-        let acu : any = localStorage.getItem('auto_check_updates')
+        try{
+             let acu : any = localStorage.getItem('auto_check_updates')
         acu = acu ? acu == 'true' : true
         autoCheckUpdates.value =  acu
         const v = await AppVersion.getVersionNumber();
         appVersion.value = v;
         if (acu){
-            console.log('Checking updates...')
             checkUpdates()
         }
+        }
+       catch(e){
+        console.log(e)
+       }
     })();
 
     Filesystem.addListener("progress", onProgress);

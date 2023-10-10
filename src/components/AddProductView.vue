@@ -52,6 +52,7 @@
                         <tu-field
                             label="Weight (KG):"
                             type="number"
+                            
                             v-model="form.weight"
                         />
                     </div>

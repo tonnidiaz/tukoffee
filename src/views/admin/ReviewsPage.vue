@@ -25,8 +25,8 @@
         <ion-content :fullscreen="true">
             <Refresher :on-refresh="getReviews" />
             <div class="flex flex-col h-full">
-                <div class="flex-auto relative" v-if="reviews">
-                    <div v-if="reviews.length">
+                <div class="flex-auto relative" v-if="displayReviews">
+                    <div v-if="displayReviews.length">
                         <div id="search-bar" class="my-1 bg-base-100 p-2">
                             <div
                                 class="bg-base-200 rounded-md flex items-center px-4 h-45px gap-2"
@@ -55,7 +55,7 @@
                             </div>
                         </div>
                         <ion-list class="bg-base-100">
-                             <ReviewItem v-for="rev in reviews" :rev="rev" :set-reviews="(val : Obj[])=>reviews = val"/>
+                             <ReviewItem v-for="rev in displayReviews" :rev="rev" :set-reviews="(val : Obj[])=>reviews = val"/>
                         </ion-list>
                     </div>
                     <div class="bg-base-100 h-full flex flex-center" v-else>
@@ -83,7 +83,7 @@ import {
     IonPopover,
 } from "@ionic/vue";
 import Appbar from "@/components/Appbar.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { Obj } from "@/utils/classes";
 import { errorHandler, hideLoader, hidePopover, showAlert, showLoading } from "@/utils/funcs";
 import { apiAxios, reviewStatuses } from "@/utils/constants";
@@ -96,6 +96,7 @@ const appStore = useAppStore();
 const { selectedItems } = storeToRefs(appStore);
 
 const reviews = ref<Obj[] | null>();
+const displayReviews = ref<Obj[] | null>();
 
 const getReviews = async () => {
     reviews.value = null;
@@ -144,4 +145,8 @@ async function delReviews(revs: Obj[]) {
 onMounted(() => {
     getReviews();
 });
+
+watch(reviews, (v)=>{
+    displayReviews.value = v ? v.reverse() : v
+}, {deep: true, immediate: true})
 </script>

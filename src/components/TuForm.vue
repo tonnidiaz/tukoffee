@@ -11,7 +11,6 @@ const props = defineProps({
 
 const _onSubmit = async (e: any)=>{
     e.preventDefault()
-    console.log((e.currentTarget as HTMLFormElement).checkValidity())
     const btns = [...e.target.querySelectorAll('button[type=submit]')].concat([...e.target.querySelectorAll('ion-button')]).filter(it=> it.type == 'submit')
     btns.forEach((btn: any)=>{
         btn.disabled = true})

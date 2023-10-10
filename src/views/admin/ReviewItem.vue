@@ -66,8 +66,8 @@
         >
             <div class="">
                 <div class="bg-base-100 p-3">
-                    <ion-accordion-group expand="compact">
-                        <tu-accordion :title="rev.title">
+                    <ion-accordion-group  expand="compact">
+                        <tu-accordion  :title="rev.title">
                             <p>{{ rev.body }}</p>
                         </tu-accordion>
                     </ion-accordion-group>
@@ -208,12 +208,9 @@ const onLongPress = (e: PointerEvent) => {
     isHolding.value = false;
 };
 
-watch(editRevForm, (_form) => {
-    console.log(_form);
-});
+
 watchEffect(() => {
     const _rev = props.rev;
-    console.log("_rev");
     editRevForm.value = { status: _rev.status };
 });
 </script>

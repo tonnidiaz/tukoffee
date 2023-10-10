@@ -19,7 +19,7 @@
         :error-text="errorTxt"
         @ion-blur="onBlur"
         @ion-input="onInput"
-       
+        step="any"
     />
 </template>
 <script setup lang="ts">
