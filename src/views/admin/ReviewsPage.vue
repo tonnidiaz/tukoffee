@@ -26,7 +26,7 @@
             <Refresher :on-refresh="getReviews" />
             <div class="flex flex-col h-full">
                 <div class="flex-auto relative" v-if="displayReviews">
-                    <div v-if="displayReviews.length">
+                  <!--   <div v-if="displayReviews.length">
                         <div id="search-bar" class="my-1 bg-base-100 p-2">
                             <div
                                 class="bg-base-200 rounded-md flex items-center px-4 h-45px gap-2"
@@ -57,8 +57,8 @@
                         <ion-list class="bg-base-100">
                              <ReviewItem v-for="rev in displayReviews" :rev="rev" :set-reviews="(val : Obj[])=>reviews = val"/>
                         </ion-list>
-                    </div>
-                    <div class="bg-base-100 h-full flex flex-center" v-else>
+                    </div> -->
+                    <div class="bg-base-100 h-full flex flex-center" >
                         <h3 class="text-center fs-20 fw-5">
                             No product reviews yet
                         </h3>

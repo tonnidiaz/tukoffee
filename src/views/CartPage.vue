@@ -107,6 +107,8 @@ const _setupCart = async (user: Obj | null) => {
      if (user?._id){
         
        cart.value = await setupCart(user._id, userStore)
+    }else{
+        cart.value = {}
     }
  }
 

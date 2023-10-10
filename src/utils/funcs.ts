@@ -57,26 +57,32 @@ export const uploadImage = async (path: any, storeName: string)=>{
 
 export const onBack = async (path: string, router: Router)=>{
     console.log(path)
-    if (path.startsWith('/~/') || history.state.back == '/order/checkout'){
+    if (path.startsWith('/~/') ){
        
         if (path == '/~/home'){
             // Exit app
             App.minimizeApp()
-        }else{
+        }
+      
+        else{
             // Back to home
             console.log('Pushing to home')
-            await router.push('/~/')
-            router.go(0)
+            await router.push('/~/home')
+            //router.go(0)
            /*  const routes = router.getRoutes()
             console.log(routes.length)
             console.log(history.length) */
             //router.go(-(history.length - 1))
         }
-      }
+      }  else if(history.state.back == '/order/checkout'){
+            console.log('From checkout')
+            location.href = '/~/home'
+        }
       else if((path.startsWith('/admin'))){
         if (path == "/admin/dashboard"){
             // Back to home
-            router.replace('/')
+            console.log('to home from dash')
+            router.replace('/~/account')
             
         }else{
             // To dashboard home
@@ -84,10 +90,14 @@ export const onBack = async (path: string, router: Router)=>{
         }
       }
       else{
+        console.log('go(-1)')
         router.go(-1)
       }
 }
- 
+export function toHome(){
+    console.log('to home')
+    router.replace('/~/account')
+}
 export const saveProduct = async(product: Obj, mode = 'add')=>{
     try{
         const res = await apiAxios.post(`/products/${mode}`, product)
@@ -140,9 +150,7 @@ export function errorHandler(e: any, message = "Something went wrong", force = f
         showToast({msg: msg.replace('tuned:', ''), cssClass: 'ion-danger', duration: 2000}  );
 }
 
-export function toHome(){
-    router.replace('/~/account')
-}
+
 export const showLoading = async ({msg = 'Please wait...',  duration = undefined} : {msg?: string, duration? : number | undefined})=>{
     const loading = await loadingController.create({
         message: msg,
