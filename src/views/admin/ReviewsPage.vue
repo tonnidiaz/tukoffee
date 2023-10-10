@@ -55,7 +55,7 @@
                             </div>
                         </div>
                         <ion-list class="bg-base-100">
-                             <ReviewItem v-for="rev in reviews" :rev="rev" :set-reviews="(val : Obj[])=>reviews = val"/>
+                             <ReviewItem v-for="rev in reviews.reverse()" :rev="rev" :set-reviews="(val : Obj[])=>reviews = val"/>
                         </ion-list>
                     </div>
                     <div class="bg-base-100 h-full flex flex-center" v-else >

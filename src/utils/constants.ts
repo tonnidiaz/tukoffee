@@ -4,7 +4,19 @@ export const localhost = "http://172.16.10.204";
 export const nodeEnv = process.env.NODE_ENV
 export const __DEV__ = process.env.NODE_ENV  == 'development'
 export const apiURL = !__DEV__? "https://tukoffee.vercel.app":`${localhost}:8000`
-export const tbURL = __DEV__ ? `${localhost}:3000` : 'https://tbass.vercel.app'
+export const tbURL = async () =>{
+   
+    let url = ""
+    if (__DEV__){
+        url =  `${localhost}:3000`
+    }
+    else{
+        const res = await axios.get('https://raw.githubusercontent.com/tonnidiaz/tunedapps/main/meta.json')
+        url = res.data.baseURL
+    }
+    console.log(url)
+    return  url
+} 
 export const apiAxios = axios.create({baseURL: apiURL,headers:{
     Authorization: `Bearer ${localStorage.getItem('authToken')}`
 }})

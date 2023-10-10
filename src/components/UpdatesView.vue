@@ -113,7 +113,7 @@ const installUpdate = async () => {
 };
 const checkUpdates = async () => {
     try {
-        const res = await axios.get(`${tbURL}/api/app/updates/check`, {
+        const res = await axios.get(`${await tbURL()}/api/app/updates/check`, {
             params: {
                 uid: "com.tb.tukoffee",
                 v: appVersion.value,
