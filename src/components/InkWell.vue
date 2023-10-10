@@ -41,15 +41,7 @@ const clearGestureTimeout = () => {
 }
 
 onMounted(()=>{
-    const gesture = createGesture({
-  el: el.value,
-  threshold: 0,
-  onStart: () => { onStart(); },
-  onMove: (detail) => { onMove(detail); },
-  onEnd: () => { clearGestureTimeout(); }
-});
 
-gesture.enable(true);
 
 })
 </script>
