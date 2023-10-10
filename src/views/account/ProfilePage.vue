@@ -299,6 +299,9 @@ onMounted(() => {
 
 watch(account, val=>{
     form.value.permissions = val?.permissions
+    if (val?._id == user.value?._id){
+        setUser(val as any)
+    }
 }, {deep: true, immediate: true})
 </script>
 <style>

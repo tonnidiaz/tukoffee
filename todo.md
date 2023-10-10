@@ -8,7 +8,6 @@
 ## FIXES
 - chekout flicker after add address
 - reviews admin
-- redirct to login -> cart
 # FINALS
 
 - Use real search for address

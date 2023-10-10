@@ -29,7 +29,6 @@
                     <h3 class="fw-5 fs-16">{{ rev.title }}</h3>
                     <ion-note class="">
                         <span class="fw-6">{{ rev.name }}</span>
-                        &middot;
                     </ion-note>
                     <br />
                     <ion-badge

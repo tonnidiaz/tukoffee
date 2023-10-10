@@ -86,6 +86,7 @@ import {  ref, watch } from "vue";
 import DropdownBtn from "@/components/DropdownBtn.vue";
 import { apiAxios } from "@/utils/constants";
 import { Obj } from "@/utils/classes";
+import { useRoute, useRouter } from "vue-router";
 const userStore = useUserStore();
 const {user, cart} = storeToRefs(userStore)
 const {setCart} = userStore
@@ -101,14 +102,17 @@ const clearCart = async () => {
     }
 };
 
-
+const route = useRoute()
+const router = useRouter()
 const _setupCart = async (user: Obj | null) => {
     cart.value = null
      if (user?._id){
         
        cart.value = await setupCart(user._id, userStore)
     }else{
+        router.replace(`/auth/login?red=${route.path}`)
         cart.value = {}
+
     }
  }
 

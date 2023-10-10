@@ -49,7 +49,7 @@
                                 </h3>
                                 <ion-note>{{ acc.phone }}</ion-note>
                             </ion-label>
-                            <DropdownBtn
+                            <DropdownBtn v-if="user?.permissions == 2"
                                 :items="[
                                     {
                                         label: 'Delete',
@@ -112,7 +112,7 @@
                                 </h3>
                                 <ion-note>{{ acc.phone }}</ion-note>
                             </ion-label>
-                            <DropdownBtn
+                            <DropdownBtn v-if="user?.permissions == 2"
                                 :items="[
                                     {
                                         label: 'Delete',
@@ -174,7 +174,10 @@ import { onMounted, ref, watch } from "vue";
 import { Obj } from "@/utils/classes";
 import DropdownBtn from "@/components/DropdownBtn.vue";
 import { errorHandler, toHome } from "@/utils/funcs";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/user";
 
+const { user} = storeToRefs(useUserStore())
 const accounts = ref<Obj[]>(),
     sortedAccounts = ref<Obj[]>(),
     staff = ref<Obj[]>(),
