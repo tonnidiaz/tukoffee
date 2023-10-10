@@ -63,7 +63,7 @@
                     <h3 class="fs-15 fw-5 text-center">Accounts</h3>
                 </router-link>
                 <router-link
-                    to="/admin/reviews"
+                    to="/_admin/reviews"
                     class="bg-base-100 cursor-pointer border-1 shadow-sm ion-activatable relative rounded-lg product-card p-1"
                 >
                     <div class="my-2 flex flex-center">

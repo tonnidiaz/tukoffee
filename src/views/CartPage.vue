@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <Appbar title="Cart" :show-cart="false">
+        <Appbar title="Cart" :show-cart="false" :show-back="$route.path == '/cart'">
            <DropdownBtn :items="[{
             label: 'Clear cart',
             cmd: clearCart

@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <Appbar title="Shop" />
+        <Appbar title="Shop" :show-back="true"/>
         <ion-content :fullscreen="true">
             <Refresher :on-refresh="init" />
             <div class="h-full w-full flex flex-col">

@@ -17,7 +17,7 @@
                         <tbody>
                             <tr>
                                 <td class="fw-6 fs-16">Order ID</td>
-                                <td class=" fs-16 " style="text-align: end;">{{ order.oid }}</td>
+                                <td class=" fs-16 selectable " style="text-align: end;">{{ order.oid }}</td>
                             </tr>
                             <tr>
                                 <td class="fw-6 fs-16">Order status</td>

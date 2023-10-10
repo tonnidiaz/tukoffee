@@ -23,10 +23,7 @@
             <ion-router-outlet> </ion-router-outlet>
         </div>
 
-        <div v-else style="background-color: white;" class="w-full h-full flex flex-col items-center gap-3 justify-center">
-            <ion-img class="w-100px" src="/splash.png"></ion-img>
-            <h1 style="font-size: 2.5em;" class="fw-8" >TuKoffee</h1>
-        </div>
+        <tu-splash v-else/>
         </div>
        
     </ion-app>
@@ -45,6 +42,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useFormStore } from "./stores/form";
 import UpdatesView from "./components/UpdatesView.vue";
 import { Network } from '@capacitor/network';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 const userStore = useUserStore();
 const storeStore = useStoreStore();
@@ -109,7 +107,25 @@ async function checkInternet(load: boolean = true){
    load && hideLoader()
 }
 
+watch(isConnected, v=>{
+    if(v){
+        console.log('hiding')
+        
+    }
+    return
+    (async function(){
+        if (!v){
+    await SplashScreen.show({
+    autoHide:false
+   })
+}
+else{
+    console.log('Hiding splash')
+    await SplashScreen.hide()
+}
+    })()
 
+}, {deep: true, immediate: true})
 const initBackListener = ()=>{
         useBackButton(10, () => {
             const { path } = route
@@ -117,6 +133,7 @@ const initBackListener = ()=>{
     }); 
 }
 onMounted(() => {
+SplashScreen.hide()
     checkInternet(false)
    initBackListener()
  
@@ -246,6 +263,23 @@ tr td:nth-child(2) {
 th,
 th h3 {
     font-size: 18px;
+}
+
+ion-item{
+    &.tu{
+        --padding-start: .5rem;
+        --inner-padding-end: .5rem
+    }
+}
+
+@media screen and (min-width: 310px) {
+    ion-item{
+    &.tu{
+        --padding-start: .9rem;
+       // --inner-padding-end: .9rem
+    }
+}
+
 }
 .selectable{
     user-select: text;

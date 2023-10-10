@@ -32,6 +32,7 @@ import DropdownBtn from './components/DropdownBtn.vue';
 import AppbarVue from './components/Appbar.vue';
 import RefresherVue from './components/Refresher.vue';
 import IconBtn from './components/IconBtn.vue';
+import TuSplash from './components/TuSplash.vue';
 import TuField from './components/TuField.vue';
 import TuForm from './components/TuForm.vue';
 import TuAccordion from './components/TuAccordion.vue';
@@ -61,6 +62,7 @@ component('tu-field', TuField)
 .component('star-rating', StarRating)
 .component('dropdown-btn', DropdownBtn)
 .component('tu-accordion', TuAccordion)
+.component('tu-splash', TuSplash)
 
 router.isReady().then(() => {
   app.mount('#app');

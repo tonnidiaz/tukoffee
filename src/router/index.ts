@@ -62,12 +62,16 @@ const routes: Array<RouteRecordRaw> = [
                 path: "accounts",
                 component: () => import("@/views/admin/AccountsPage.vue"),
             },
-           
         ],
-    }, {
-                path: "/_admin/settings",
-                component: () => import("@/views/admin/settings/SettingsPage.vue"),
-            },
+    },
+    {
+        path: "/_admin/settings",
+        component: () => import("@/views/admin/settings/SettingsPage.vue"),
+    },
+    {
+        path: "/_admin/reviews",
+        component: () => import("@/views/admin/ReviewsPage.vue"),
+    },
     {
         path: "/_admin/settings/locations",
         component: () => import("@/views/admin/settings/LocationsPage.vue"),
@@ -86,7 +90,8 @@ const routes: Array<RouteRecordRaw> = [
     },
     {
         path: "/products/reviews/:id",
-        component: () => import("@/views/products/reviews/ProductReviewPage.vue"),
+        component: () =>
+            import("@/views/products/reviews/ProductReviewPage.vue"),
     },
     {
         path: "/products/reviews/:id/:ep",
@@ -100,7 +105,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "/product/:id/review",
         component: () => import("../views/product/ReviewPage.vue"),
     },
-  
+
     {
         path: "/product/:id/reviews",
         component: () => import("../views/product/ReviewsPage.vue"),
@@ -146,10 +151,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "/order/:id",
         component: () => import("@/views/order/OrderPage.vue"),
     },
-    {
-        path: "/admin/reviews",
-        component: () => import("@/views/admin/ReviewsPage.vue"),
-    },
+
     {
         path: "/order/checkout",
         component: () => import("@/views/order/CheckoutPage.vue"),
@@ -188,7 +190,5 @@ const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
 });
-
-
 
 export default router;

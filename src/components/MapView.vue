@@ -173,7 +173,7 @@ async function searchAddress(query: string) {
     if (isGeocoding.value || query.length < 3) return;
     setIsGeocoding(true);
     try {
-        if (true) {
+        if (false) {
             features.value = dummyFeatures;
             setIsGeocoding(false);
             return;

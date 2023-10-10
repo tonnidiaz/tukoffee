@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <Appbar title="Orders" :show-cart="route.path == '/orders'">
+        <Appbar title="Orders" :show-cart="route.path == '/orders'" :show-back="$route.path == '/orders'">
             <DropdownBtn
                 :items="[
                     orders && !selectedItems.length

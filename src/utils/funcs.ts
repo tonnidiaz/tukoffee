@@ -6,6 +6,7 @@ import { AlertButton, alertController, loadingController, modalController, popov
 import $ from 'jquery'
 import { Router } from "vue-router";
 import { App } from "@capacitor/app";
+import router from "@/router";
 export function randomIntFromInterval(min: number, max: number) {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -54,7 +55,8 @@ export const uploadImage = async (path: any, storeName: string)=>{
       return res
 }
 
-export const onBack = (path: string, router: Router)=>{
+export const onBack = async (path: string, router: Router)=>{
+    console.log(path)
     if (path.startsWith('/~/') || history.state.back == '/order/checkout'){
        
         if (path == '/~/home'){
@@ -62,7 +64,13 @@ export const onBack = (path: string, router: Router)=>{
             App.minimizeApp()
         }else{
             // Back to home
-            router.replace('/')
+            console.log('Pushing to home')
+            await router.push('/~/')
+            router.go(0)
+           /*  const routes = router.getRoutes()
+            console.log(routes.length)
+            console.log(history.length) */
+            //router.go(-(history.length - 1))
         }
       }
       else if((path.startsWith('/admin'))){
@@ -76,7 +84,7 @@ export const onBack = (path: string, router: Router)=>{
         }
       }
       else{
-        router.back()
+        router.go(-1)
       }
 }
  
@@ -133,7 +141,7 @@ export function errorHandler(e: any, message = "Something went wrong", force = f
 }
 
 export function toHome(){
-    location.href = '/~/home'
+    router.replace('/~/account')
 }
 export const showLoading = async ({msg = 'Please wait...',  duration = undefined} : {msg?: string, duration? : number | undefined})=>{
     const loading = await loadingController.create({

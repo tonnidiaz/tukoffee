@@ -2,11 +2,12 @@
     <ion-page>
         <appbar
             v-if="userStore.user?.phone"
+            :show-back="true"
             :title="
                 userStore.user?.first_name + ' ' + userStore.user?.last_name
             "
         />
-        <appbar  v-else title="Account" />
+        <appbar  v-else title="Account" :show-back="false"/>
         <ion-content :fullscreen="true">
             <div class="px-2">
                 <IonItemGroup class="my-1 bg-base-100 rounded-lg">

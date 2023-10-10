@@ -267,8 +267,9 @@ const onFormSubmit = async (e: any) => {
 };
 onMounted(() => {
     initialize();
-    const formImgs = formStore.form.images;
+    
     if (props.mode == "edit" && props.product) {
+        const formImgs = props.product.images;
         formStore.setTempImgs(formImgs);
         formStore.setForm(props.product)
     }

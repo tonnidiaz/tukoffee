@@ -82,7 +82,7 @@ import Appbar from '@/components/Appbar.vue';
 import { ref } from "vue";
 import { apiAxios } from "@/utils/constants";
 import { useUserStore } from "@/stores/user";
-import { errorHandler, setupCart, passValidator } from "@/utils/funcs";
+import { errorHandler, setupCart, passValidator, sleep } from "@/utils/funcs";
 import TuButton from "@/components/TuButton.vue";
 import { useRoute } from "vue-router";
 const form = ref<{ [key: string]: any }>({
@@ -122,6 +122,7 @@ async function onFormSubmit(e: any) {
         userStore.setUser(res.data.user);
         setupCart(res.data.user["_id"], userStore);
         location.href = red as string ??  '/'
+        await sleep(1000)
     } catch (e: any) {
         console.log(e);
         errorHandler(e)

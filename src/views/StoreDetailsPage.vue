@@ -2,13 +2,13 @@
     <ion-page>
         <Appbar title="Store info" :show-cart="false" />
         <ion-content :fullscreen="true">
-            <ion-accordion-group class="my-1 bg-base-100 p-2" expand="compact">
+            <ion-accordion-group class="my-1 bg-base-100 px-2 py-1" expand="compact">
                 <ion-accordion>
-                    <ion-item slot="header" color="light">
+                    <ion-item slot="header" >
                         <ion-label class="fs-18">Store details</ion-label>
                     </ion-item>
                     <div class="p-1" slot="content">
-                        <table class="table bg-base-200 br-0">
+                        <table class="table bg-base-100 br-0">
                             <th class="hidden"></th>
                             <tbody>
                                 <tr>
@@ -40,11 +40,11 @@
                     </div>
                 </ion-accordion>
                 <ion-accordion>
-                    <ion-item slot="header" color="light">
+                    <ion-item slot="header" >
                         <ion-label class="fs-18">Owner details</ion-label>
                     </ion-item>
                     <div class="p-1" slot="content">
-                        <table class="table bg-base-200 br-0">
+                        <table class="table bg-base-100 br-0">
                             <th class="hidden"></th>
                             <tbody>
                                 <tr>
@@ -76,11 +76,11 @@
                     </div>
                 </ion-accordion>
                 <ion-accordion>
-                    <ion-item slot="header" color="light">
+                    <ion-item slot="header" >
                         <ion-label class="fs-18">Developer details</ion-label>
                     </ion-item>
                     <div class="p-1" slot="content">
-                        <table class="table bg-base-200 br-0">
+                        <table class="table bg-base-100 br-0">
                             <th class="hidden"></th>
                             <tbody>
                                 <tr>
@@ -112,14 +112,14 @@
                     </div>
                 </ion-accordion>
             </ion-accordion-group>
-            <ion-accordion-group expand="compact" class="my-1 bg-base-100 p-2">
+            <ion-accordion-group expand="compact" class="my-1 bg-base-100 px-2 py-1">
                 <ion-accordion>
-                    <ion-item slot="header" color="light">
+                    <ion-item slot="header" >
                         <ion-label class="fs-18">Locations and times</ion-label>
                     </ion-item>
-                    <div class="p-1" slot="content">
+                    <div class="px-1" slot="content">
                         <ion-list>
-                            <ion-item v-for="el in stores" class="bg-base-10">
+                            <ion-item v-for="el in stores" class="bg-base-100">
                                 <span slot="start">
                                     <i class="fi fi-br-store-alt text-gray-600"></i>
                                 </span>

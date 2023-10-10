@@ -1,7 +1,7 @@
 <template>
      <refresher :on-refresh="getReviews"/>
     <div v-if="reviews" class="h-full">
-        <ion-list class="bg-base-100 p-3 my-1" v-if="reviews.length">
+        <ion-list class="bg-base-100 sm:p-3 mt-1" v-if="reviews.length">
             <ion-item
                 :router-link="`/products/reviews/${review._id}`"
                 v-for="review in reviews"
@@ -23,7 +23,7 @@
 
                 <ion-label>
                     <h3 class="fs-18 fw-5">{{ review.product.name }}</h3>
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-x-3 flex-wrap">
                         <star-rating
                             :show-rating="false"
                             :star-size="15"

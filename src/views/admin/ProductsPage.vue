@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <Appbar title="Products" :show-cart="false">
+        <Appbar title="Products" :show-cart="false" :show-back="false">
             <DropdownBtn
                 :items="[{ label: 'Back to home', cmd: () => toHome() }]"
             />

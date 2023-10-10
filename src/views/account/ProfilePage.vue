@@ -95,6 +95,7 @@
                             <i v-if="account?.address" class="fi fi-br-pencil fs-18"></i>
                             <i v-else class="fi fi-br-plus fs-18"></i>
                         </icon-btn>
+                        <!-- Address sheet -->
                         <bottom-sheet
                             no-swipe-dismiss
                             :is-open="addressSheetOpen"
@@ -123,6 +124,7 @@
                         <icon-btn v-if="user?.permissions > 0" @click="permissionsSheetOpen = true"
                             ><i class="fi fi-br-pencil fs-18"></i
                         ></icon-btn>
+                        <!-- Permissions sheet -->
                         <bottom-sheet
                             :is-open="permissionsSheetOpen"
                             @did-dismiss="permissionsSheetOpen = false"
@@ -294,6 +296,10 @@ onMounted(() => {
         account.value = user.value!;
     }
 });
+
+watch(account, val=>{
+    form.value.permissions = val?.permissions
+}, {deep: true, immediate: true})
 </script>
 <style>
 td:nth-child(2) {

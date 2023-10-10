@@ -1,101 +1,113 @@
 <template>
     <OnLongPress @trigger="onLongPress">
-        <ion-item :router-link="`/products/reviews/${rev._id}`"  @click="onItemClick" color="clear">
-        <ion-thumbnail class="h-45px shadow-lg card rounded-lg" slot="start">
-            <ion-img
-                v-if="rev.product.images?.length"
-                class="rounded-lg"
-                :src="rev.product.images[0].url"
-            ></ion-img>
-            <span v-else>
-                <i class="fi fi-rr-image-slash text-gray-600"></i>
-            </span>
-        </ion-thumbnail>
-        <ion-label>
-            <h3 class="fw-5 fs-16">{{ rev.title }}</h3>
-            <ion-note class="">
-                <span class="fw-6">{{ rev.name }}</span>
-                &middot;
+        <div>
+            <div class="flex justify-end pr-5 mt-2">
                 <span class="fs-12">
-                     {{ new Date(rev.last_modified).toLocaleDateString() }}
-                </span>
-               
-            </ion-note>
-            <br />
-            <ion-badge
-                mode="ios"
-                :color="
-                    rev.status == 0
-                        ? 'medium'
-                        : rev.status == 1
-                        ? 'success'
-                        : 'danger'
-                "
-                class="py-1"
+                {{ new Date(rev.last_modified).toLocaleDateString() }} </span
             >
-                {{ reviewStatuses[rev.status] }}
-            </ion-badge>
-        </ion-label>
-        <ion-checkbox
-                :checked="
-                    selectedItems.findIndex((el) => el._id == rev._id) != -1
-                "
-                v-if="selectedItems?.length"
-                slot="end"
-                mode="ios"
-            ></ion-checkbox>
-        <DropdownBtn
-        v-else
-            :has-slot="false"
-            :items="[
-                {
-                    label: 'Edit',
-                    cmd: () => (editSheetOpen = true),
-                },
-                {
-                    label: 'Delete',
-                    cmd: () => delReview(rev),
-                },
-            ]"
-        >
-        </DropdownBtn>
-        <!-- Edit sheet -->
-        <bottom-sheet
-            :is-open="editSheetOpen"
-            @did-dismiss="editSheetOpen = false"
-        >
-            <div class="">
-                <div class="bg-base-100 p-3">
-                    <ion-accordion-group  expand="compact">
-                        <tu-accordion  :title="rev.title">
-                            <p>{{ rev.body }}</p>
-                        </tu-accordion>
-                    </ion-accordion-group>
-                    <ion-item class="mt-2" lines="none">
-                        <ion-select
-                            label="Status"
-                            label-placement="floating"
-                            v-model="editRevForm.status"
-                            @ion-change="console.log($event.detail.value)"
-                        >
-                            <ion-select-option
-                                :value="i"
-                                v-for="(st, i) in reviewStatuses"
-                                >{{ st }}</ion-select-option
-                            >
-                        </ion-select>
-                    </ion-item>
-                    <div class="mt-3">
-                        <tu-btn :on-click="saveChanges" expand="block"
-                            >Save changes</tu-btn
-                        >
-                    </div>
-                </div>
             </div>
-        </bottom-sheet>
-    </ion-item>
+            <ion-item
+                class="tu"
+                :router-link="`/products/reviews/${rev._id}`"
+                @click="onItemClick"
+                color="clear"
+            >
+                <ion-thumbnail
+                    class="h-45px shadow-lg card rounded-lg"
+                    slot="start"
+                >
+                    <ion-img
+                        v-if="rev.product.images?.length"
+                        class="rounded-lg"
+                        :src="rev.product.images[0].url"
+                    ></ion-img>
+                    <span v-else>
+                        <i class="fi fi-rr-image-slash text-gray-600"></i>
+                    </span>
+                </ion-thumbnail>
+                <ion-label class="m-0">
+                    <h3 class="fw-5 fs-16">{{ rev.title }}</h3>
+                    <ion-note class="">
+                        <span class="fw-6">{{ rev.name }}</span>
+                        &middot;
+                    </ion-note>
+                    <br />
+                    <ion-badge
+                        mode="ios"
+                        :color="
+                            rev.status == 0
+                                ? 'medium'
+                                : rev.status == 1
+                                ? 'success'
+                                : 'danger'
+                        "
+                        class="py-1"
+                    >
+                        {{ reviewStatuses[rev.status] }}
+                    </ion-badge>
+                </ion-label>
+                <ion-checkbox
+                    :checked="
+                        selectedItems.findIndex((el) => el._id == rev._id) != -1
+                    "
+                    v-if="selectedItems?.length"
+                    slot="end"
+                    mode="ios"
+                ></ion-checkbox>
+                <DropdownBtn
+                    v-else
+                    :has-slot="false"
+                    :items="[
+                        {
+                            label: 'Edit',
+                            cmd: () => (editSheetOpen = true),
+                        },
+                        {
+                            label: 'Delete',
+                            cmd: () => delReview(rev),
+                        },
+                    ]"
+                >
+                </DropdownBtn>
+                <!-- Edit sheet -->
+                <bottom-sheet
+                    :is-open="editSheetOpen"
+                    @did-dismiss="editSheetOpen = false"
+                >
+                    <div class="">
+                        <div class="bg-base-100 p-3">
+                            <ion-accordion-group expand="compact">
+                                <tu-accordion :title="rev.title">
+                                    <p>{{ rev.body }}</p>
+                                </tu-accordion>
+                            </ion-accordion-group>
+                            <ion-item class="mt-2" lines="none">
+                                <ion-select
+                                    label="Status"
+                                    label-placement="floating"
+                                    v-model="editRevForm.status"
+                                    @ion-change="
+                                        console.log($event.detail.value)
+                                    "
+                                >
+                                    <ion-select-option
+                                        :value="i"
+                                        v-for="(st, i) in reviewStatuses"
+                                        >{{ st }}</ion-select-option
+                                    >
+                                </ion-select>
+                            </ion-item>
+                            <div class="mt-3">
+                                <tu-btn :on-click="saveChanges" expand="block"
+                                    >Save changes</tu-btn
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </bottom-sheet>
+            </ion-item>
+        </div>
     </OnLongPress>
-    
 </template>
 
 <script setup lang="ts">
@@ -125,7 +137,7 @@ import { ref, watch, watchEffect } from "vue";
 import DropdownBtn from "@/components/DropdownBtn.vue";
 import { useAppStore } from "@/stores/app";
 import { storeToRefs } from "pinia";
-const appStore = useAppStore()
+const appStore = useAppStore();
 const { selectedItems } = storeToRefs(appStore);
 
 const isHolding = ref(false);
@@ -207,7 +219,6 @@ const onLongPress = (e: PointerEvent) => {
     toggleSelected();
     isHolding.value = false;
 };
-
 
 watchEffect(() => {
     const _rev = props.rev;

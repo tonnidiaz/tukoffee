@@ -1,21 +1,8 @@
 <template>
     <ion-page>
-        <Appbar title="Research Facility" />
+        <Appbar v-if="false" title="Research Facility" />
         <ion-content :fullscreen="true">
-            <div class="p-4 bg-base-100">
-                    <tu-form :on-submit="submitForm">
-                        <div class="my-1">
-                            <tu-field :validator="(val: any)=> {if (val?.length < 3) return 'Name is required'}" autocomplete="name" label="Name:" required/>
-                        </div>
-                        <div class="my-1">
-                            <tu-field auto="email" label="Email:" required type="email"/>
-                        </div>
-                        <div class="mt-2">
-                            <tu-btn color="dark" type="submit" expand="block">Submit</tu-btn>
-                        </div>
-                    </tu-form>
-
-            </div>
+            <tu-splash/>
         </ion-content>
     </ion-page>
 </template>

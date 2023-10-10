@@ -7,6 +7,7 @@
 
 ## FIXES
 - chekout flicker after add address
+- reviews admin
 
 # FINALS
 

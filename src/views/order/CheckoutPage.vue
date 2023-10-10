@@ -313,6 +313,7 @@ import { onMounted, ref, watch } from "vue";
 import { apiAxios } from "@/utils/constants";
 import MapView from "@/components/MapView.vue";
 import { useAppStore } from "@/stores/app";
+import { useBrowserLocation } from "@vueuse/core";
 const checkoutStore = useCheckoutStore();
 const userStore = useUserStore();
 const storeStore = useStoreStore();
@@ -322,11 +323,10 @@ const { user, cart } = storeToRefs(userStore);
 const { orderMode } = storeToRefs(checkoutStore);
 
 const collectorSheetOpen = ref(false);
-const mapSheetOpen = ref(false);
 const btnPaystack = ref<any>();
 const form = ref<Obj>({
     collector: {},
-    mode: OrderMode.deliver,
+    mode: OrderMode.collect,
 });
 
 const addressForm = ref<Obj>({
@@ -384,6 +384,7 @@ async function createOrder() {
             _form
         );
         hideLoader()
+        cart.value = {...cart.value, products: []}
        router.push(`/order/${res.data.order.oid}`) 
     } catch (error) {
         console.log(error);
