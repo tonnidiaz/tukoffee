@@ -18,19 +18,22 @@ class TuProductCircle extends StatelessWidget {
       this.img,
       this.onTap});
 
+  final double _avatarW = 80;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(5),
       child: Container(
-        width: 85,
+        width: _avatarW + 10,
         margin: const EdgeInsets.only(right: 5, bottom: 5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-                width: 70,
-                height: 70,
+                width: _avatarW,
+                height: _avatarW,
                 decoration: BoxDecoration(
                     color: Colors.black26,
                     borderRadius: BorderRadius.circular(100)),
@@ -41,8 +44,8 @@ class TuProductCircle extends StatelessWidget {
                       ? null
                       : Image.network(
                           img!,
-                          width: 70,
-                          height: 70,
+                          width: _avatarW,
+                          height: _avatarW,
                           errorBuilder: (context, error, stackTrace) =>
                               const Icon(
                             Icons.coffee_maker,

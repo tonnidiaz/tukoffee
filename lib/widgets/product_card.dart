@@ -115,42 +115,44 @@ class ProductCard extends StatelessWidget {
                         ),
                 ),
                 Positioned(
-                  top: 2,
-                  right: 2,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: const Color.fromRGBO(30, 30, 30, .9),
-                        borderRadius: BorderRadius.circular(105)),
-                    child: Obx(() {
-                      bool inCart = storeCtrl.cart.isNotEmpty &&
-                          storeCtrl.cart["products"]
-                              .where((el) =>
-                                  el["product"]["_id"] == product["_id"])
-                              .isNotEmpty;
-                      return product['quantity'] <= 0
-                          ? none()
-                          : IconButton(
-                              padding: EdgeInsets.zero,
-                              icon: inCart
-                                  ? const Icon(
-                                      LineIcons.minus,
-                                      color: Colors.orange,
-                                      size: 30,
-                                    )
-                                  : const Icon(
-                                      LineIcons.addToShoppingCart,
-                                      color: Colors.white70,
-                                      size: 30,
-                                    ),
-                              onPressed: product['quantity'] <= 0
-                                  ? null
-                                  : () async {
-                                      addRemoveCart();
-                                    },
-                            );
-                    }),
-                  ),
-                )
+                  top: 0,
+                  right: 0,
+                  child: Obx(() {
+                    bool inCart = storeCtrl.cart.isNotEmpty &&
+                        storeCtrl.cart["products"]
+                            .where(
+                                (el) => el["product"]["_id"] == product["_id"])
+                            .isNotEmpty;
+                    return Material(
+                      elevation: 2,
+                      borderRadius: BorderRadius.circular(105),
+                      color: inCart ? TuColors.primary : appBGLight,
+                      child: Container(
+                        child: product['quantity'] <= 0
+                            ? none()
+                            : IconButton(
+                                padding: EdgeInsets.zero,
+                                icon: inCart
+                                    ? const Icon(
+                                        Icons.remove_shopping_cart_outlined,
+                                        color: Color.fromRGBO(20, 20, 20, 0.7),
+                                        size: 25,
+                                      )
+                                    : const Icon(
+                                        LineIcons.addToShoppingCart,
+                                        color: Colors.black87,
+                                        size: 30,
+                                      ),
+                                onPressed: product['quantity'] <= 0
+                                    ? null
+                                    : () async {
+                                        addRemoveCart();
+                                      },
+                              ),
+                      ),
+                    );
+                  }),
+                ),
               ],
             ),
           ),

@@ -41,7 +41,7 @@ class _MobileAppState extends State<MobileApp> {
       theme: tuTheme(_darkMode), //(Brightness.light),
       routes: routes,
       debugShowCheckedModeBanner: false,
-      initialRoute: "/cart",
+      initialRoute: "/",
       builder: (context, child) {
         return child!;
       },

@@ -69,8 +69,9 @@ class _HomeTabState extends State<HomeTab> {
   Widget build(BuildContext context) {
     filterModal() {
       return Padding(
-        padding: defaultPadding2,
+        padding: defaultPadding,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
