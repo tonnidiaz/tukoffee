@@ -230,8 +230,9 @@ class _ProfilePageState extends State<ProfilePage> {
         ? const Scaffold()
         : Scaffold(
             appBar: childAppbar(
-                title: "${_account!['first_name']} ${_account!['last_name']}"),
-            body: Container(
+                title: "${_account!['first_name']} ${_account!['last_name']}",
+                showCart: false),
+            body: SizedBox(
               height:
                   screenSize(context).height - appBarH - statusBarH(context),
               child: SingleChildScrollView(
@@ -306,83 +307,76 @@ class _ProfilePageState extends State<ProfilePage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Obx(
-                                          () => Column(
-                                            //id=contact-details
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Email:",
-                                                style:
-                                                    Styles.h4(isLight: false),
-                                              ),
-                                              mY(3),
-                                              SelectableText(
-                                                "${_account!['email']}",
-                                                maxLines: 1,
-                                                style: Styles.h4(isLight: true),
-                                              ),
-                                              Visibility(
-                                                  visible: !_account![
-                                                      'email_verified'],
-                                                  child: tuTableRow(
-                                                      const Text(''),
-                                                      InkWell(
-                                                        onTap: () async {
-                                                          try {
-                                                            formCtrl.setForm({
-                                                              'email':
-                                                                  _account![
-                                                                      'email']
-                                                            });
-                                                            // Generate OTP for email
-                                                            await apiDio().post(
-                                                                '/auth/verify-email',
-                                                                data: {
-                                                                  'email': formCtrl
-                                                                          .form[
-                                                                      'email'],
-                                                                });
-                                                            showModalBottomSheet(
-                                                                context:
-                                                                    context,
-                                                                builder: (c) =>
-                                                                    const VerifyEmailView());
-                                                          } catch (e) {
-                                                            errorHandler(
-                                                                e: e,
-                                                                context:
-                                                                    context,
-                                                                msg:
-                                                                    "Failed to make request");
-                                                          }
-                                                        },
-                                                        child: const Text(
-                                                          "Verify email",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.orange,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600),
-                                                        ),
+                                        Column(
+                                          //id=contact-details
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Email:",
+                                              style: Styles.h4(isLight: false),
+                                            ),
+                                            mY(3),
+                                            SelectableText(
+                                              "${_account!['email']}",
+                                              maxLines: 1,
+                                              style: Styles.h4(isLight: true),
+                                            ),
+                                            Visibility(
+                                                visible: !_account![
+                                                    'email_verified'],
+                                                child: tuTableRow(
+                                                    const Text(''),
+                                                    InkWell(
+                                                      onTap: () async {
+                                                        try {
+                                                          formCtrl.setForm({
+                                                            'email': _account![
+                                                                'email']
+                                                          });
+                                                          // Generate OTP for email
+                                                          await apiDio().post(
+                                                              '/auth/verify-email',
+                                                              data: {
+                                                                'email': formCtrl
+                                                                        .form[
+                                                                    'email'],
+                                                              });
+                                                          showModalBottomSheet(
+                                                              context: context,
+                                                              builder: (c) =>
+                                                                  const VerifyEmailView());
+                                                        } catch (e) {
+                                                          errorHandler(
+                                                              e: e,
+                                                              context: context,
+                                                              msg:
+                                                                  "Failed to make request");
+                                                        }
+                                                      },
+                                                      child: const Text(
+                                                        "Verify email",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.orange,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
                                                       ),
-                                                      my: 7)),
-                                              mY(7),
-                                              Text(
-                                                "Phone:",
-                                                style:
-                                                    Styles.h4(isLight: false),
-                                              ),
-                                              mY(3),
-                                              SelectableText(
-                                                "${_account!['phone']}",
-                                                style: Styles.h4(isLight: true),
-                                              ),
-                                            ],
-                                          ),
-                                        )
+                                                    ),
+                                                    my: 7)),
+                                            mY(7),
+                                            Text(
+                                              "Phone:",
+                                              style: Styles.h4(isLight: false),
+                                            ),
+                                            mY(3),
+                                            SelectableText(
+                                              "${_account!['phone']}",
+                                              style: Styles.h4(isLight: true),
+                                            ),
+                                          ],
+                                        ),
                                       ])),
                               tuTableRow(
                                   const Text(

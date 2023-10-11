@@ -34,12 +34,11 @@ class _TuDialogViewState extends State<TuDialogView> {
       backgroundColor: cardBGLight,
       contentPadding: const EdgeInsets.symmetric(horizontal: 15),
       titlePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      actionsPadding:
-          const EdgeInsets.only(left: 15, right: 15, bottom: 15, top: 5),
       insetPadding: const EdgeInsets.all(15),
+      elevation: .5,
       title: Text(
         widget.title,
-        style: tuTextTheme(context).titleLarge,
+        style: Styles.h4(),
       ),
       content: widget.isForm
           ? Form(
@@ -53,26 +52,33 @@ class _TuDialogViewState extends State<TuDialogView> {
               ))
           : widget.content,
       actions: [
-        TuButton(
-            text: widget.okTxt,
-            bgColor: Colors.black87,
-            // height: 35,
-            onPressed: () async {
-              if (widget.isForm) {
-                if (_formKey.currentState!.validate()) {
-                  // Validate form first
-                  if (widget.onOk != null) {
-                    await widget.onOk!();
-                  }
-
-                  await Future.delayed(const Duration(milliseconds: 50));
-                  // Navigator.pop(context);
+        TextButton(
+          child: Text(
+            widget.okTxt,
+            style: const TextStyle(color: Colors.black),
+          ),
+          //bgColor: Colors.black87,
+          // height: 35,
+          onPressed: () async {
+            if (widget.isForm) {
+              if (_formKey.currentState!.validate()) {
+                // Validate form first
+                if (widget.onOk != null) {
+                  await widget.onOk!();
                 }
-              } else {
-                Navigator.pop(context);
+
+                await Future.delayed(const Duration(milliseconds: 50));
+                // Navigator.pop(context);
               }
-            },
-            width: double.infinity)
+            } else {
+              if (widget.onOk != null) {
+                await widget.onOk!();
+              }
+              await Future.delayed(const Duration(milliseconds: 50));
+              Navigator.pop(context);
+            }
+          },
+        )
       ],
     );
   }

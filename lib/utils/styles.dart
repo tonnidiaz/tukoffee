@@ -29,7 +29,7 @@ class Styles {
 
   static TextStyle h4({Color? color, bool isLight = false}) {
     return GoogleFonts.inclusiveSans(
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: isLight ? FontWeight.w500 : FontWeight.w600,
         color: color);
   }

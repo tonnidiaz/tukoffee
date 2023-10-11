@@ -75,7 +75,7 @@ class TuDropdownButton extends StatelessWidget {
       this.bgColor,
       this.borderColor,
       this.labelFontSize,
-      this.elevation = 1.05,
+      this.elevation = .5,
       this.onChanged,
       this.disabled = false})
       : super(key: key);
@@ -87,17 +87,16 @@ class TuDropdownButton extends StatelessWidget {
       height: height,
       margin: const EdgeInsets.symmetric(vertical: 2.5),
       child: Material(
-        color: /* mFieldBG2, */ bgColor ?? mFieldBG,
+        color: /* mFieldBG2, */ bgColor ?? appBGLight,
         elevation: elevation,
         shadowColor: Colors.black87,
-        borderRadius: BorderRadius.circular(radius ?? 15),
+        borderRadius: BorderRadius.circular(radius ?? 0),
         child: ButtonTheme(
           alignedDropdown: true,
           child: DropdownButton(
               value: value, // ?? formats[0],
-              dropdownColor: bgColor ?? mFieldBG,
-              focusColor: bgColor ?? mFieldBG,
-              borderRadius: mFieldRadius,
+              dropdownColor: bgColor ?? appBGLight,
+              focusColor: bgColor ?? appBGLight,
               underline: Container(),
               isExpanded: true,
               icon: const Icon(
@@ -259,7 +258,9 @@ Widget TDrawerItem(
 }
 
 Widget none() {
-  return Container();
+  return Container(
+    width: 0,
+  );
 }
 
 class OptionsBtn extends PopupMenuButton {

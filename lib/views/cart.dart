@@ -116,7 +116,7 @@ class _CartPageState extends State<CartPage> {
         await _init();
       },
       child: Container(
-        padding: defaultPadding,
+        padding: EdgeInsets.all(4),
         height: screenSize(context).height -
             _bottomSheetH -
             appBarH -
@@ -124,7 +124,6 @@ class _CartPageState extends State<CartPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            mY(8),
             Obx(() => !_storeCtrl.cartFetched.value
                 ? Center(
                     child: Column(
@@ -156,7 +155,7 @@ class _CartPageState extends State<CartPage> {
                           child: ListView.builder(
                             itemBuilder: (context, index) {
                               return CartItem(
-                                  product: _storeCtrl.cart["products"]
+                                  item: _storeCtrl.cart["products"]
                                       .elementAt(index));
                             },
                             itemCount: _storeCtrl.cart["products"].length,

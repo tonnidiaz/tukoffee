@@ -259,7 +259,10 @@ class TuFuncs {
   }
 
   static showTDialog(BuildContext context, Widget widget) {
-    return showDialog(context: context, builder: (context) => widget);
+    return showDialog(
+        context: context,
+        barrierColor: const Color.fromRGBO(0, 0, 0, 0.03),
+        builder: (context) => widget);
   }
 }
 
