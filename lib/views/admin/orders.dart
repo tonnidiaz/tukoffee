@@ -293,7 +293,9 @@ class _OrdersPageState extends State<OrdersPage> {
     }
 
     return Scaffold(
-      appBar: routeName == '/orders' ? childAppbar(showCart: false) : null,
+      appBar: routeName == '/orders'
+          ? childAppbar(showCart: false, title: 'Orders', actions: [])
+          : null,
       body: RefreshIndicator(
         onRefresh: () async {
           await _getOrders();
@@ -305,32 +307,6 @@ class _OrdersPageState extends State<OrdersPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      routeName == '/orders' ? "My orders" : "Orders ",
-                      style: Styles.h1,
-                    ),
-                    Obx(
-                      () {
-                        return TuLabeledCheckbox(
-                            radius: 50,
-                            activeColor: orange,
-                            value: _appBarCtrl.selected.isNotEmpty &&
-                                _appBarCtrl.selected.length ==
-                                    _ctrl.sortedOrders.length,
-                            onChanged: (val) {
-                              if (val == true) {
-                                _appBarCtrl.setSelected(_ctrl.sortedOrders);
-                              } else {
-                                _appBarCtrl.setSelected([]);
-                              }
-                            });
-                      },
-                    ),
-                  ],
-                ),
                 Obx(
                   () => TuFormField(
                     hint: "Order ID",

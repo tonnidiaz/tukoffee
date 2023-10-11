@@ -140,12 +140,13 @@ setupUser() async {
     return;
   }
   var authToken = appBox!.get("authToken");
+  clog(authToken);
   if (authToken != null) {
     try {
       final res = await apiDio().post("/auth/login");
 
       appCtrl.setUser(res.data['user']);
-      setupCart(res.data['user']["phone"]);
+      setupCart(res.data['user']["_id"]);
     } catch (e) {
       clog(e);
       appCtrl.setUser({});
@@ -160,11 +161,11 @@ setupUser() async {
   clog("User setup");
 }
 
-void setupCart(String phone) async {
+void setupCart(String id) async {
   final StoreCtrl storeCtrl = getx.Get.find();
   final AppCtrl appCtrl = getx.Get.find();
   try {
-    final res = await dio.get("$apiURL/user/cart?user=$phone");
+    final res = await dio.get("$apiURL/user/cart?user=$id");
     storeCtrl.setcart(res.data["cart"]);
     appCtrl.setReady(true);
   } catch (e) {
@@ -173,7 +174,7 @@ void setupCart(String phone) async {
   }
 }
 
-void logout() async {
+logout() async {
   await appBox!.delete("authToken");
   setupUser();
 }

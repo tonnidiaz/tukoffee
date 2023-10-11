@@ -1,3 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:frust/utils/constants.dart';
+import 'package:frust/utils/functions.dart';
+import 'package:frust/widgets/common2.dart';
+import 'package:frust/widgets/dialog.dart';
+
 class FeedbackForm extends StatefulWidget {
   const FeedbackForm({super.key});
 

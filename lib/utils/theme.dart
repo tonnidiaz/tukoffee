@@ -23,8 +23,8 @@ ThemeData tuTheme(bool dark) {
           foregroundColor: dark ? Colors.white70 : Colors.black87),
       colorScheme: ColorScheme.fromSeed(
           seedColor: TuColors.primary, brightness: Brightness.light),
-      popupMenuTheme: PopupMenuThemeData(
-        color: appBGLight,
+      popupMenuTheme: const PopupMenuThemeData(
+        color: cardBGLight,
         //shape: RoundedRectangleBorder(borderRadius: mFieldRadius),
       ),
       textTheme: GoogleFonts.inclusiveSansTextTheme(

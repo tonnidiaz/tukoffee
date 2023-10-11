@@ -7,7 +7,7 @@ const cardBG = Color.fromRGBO(39, 39, 39, 1);
 const cardBG2 = Color.fromRGBO(32, 32, 32, 1);
 const grey = Color.fromRGBO(42, 42, 42, 1);
 const Color cardBGLight =
-    Color.fromRGBO(250, 247, 245, .9); //Color.fromRGBO(48, 48, 48, 1);
+    Color.fromRGBO(250, 247, 245, 1); //Color.fromRGBO(48, 48, 48, 1);
 const Color appBG = Color.fromRGBO(29, 29, 29, 1);
 const Color bg0 = Color.fromRGBO(46, 46, 46, 1);
 const Color bg1 = Color.fromRGBO(56, 56, 56, 1);
@@ -28,6 +28,7 @@ class TuColors {
   //static Color fieldBG = const Color.fromRGBO(255, 153, 0, .1);
   static Color fieldBG = const Color.fromRGBO(196, 196, 196, 0.2);
   static Color primary = const Color.fromRGBO(101, 195, 200, 1);
+  static Color secondary = const Color.fromRGBO(56, 128, 255, 1);
   static Color text = const Color.fromRGBO(5, 5, 5, 1);
   static Color text2 = const Color.fromRGBO(10, 10, 10, 0.7);
   static Color medium = const Color.fromRGBO(146, 148, 156, 1);

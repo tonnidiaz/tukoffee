@@ -52,7 +52,7 @@ class _HomeTabState extends State<HomeTab> {
       _storeCtrl.setStatus(ProductStatus.all);
       _storeCtrl.setSortOrder(SortOrder.ascending);
       if (_appCtrl.user.isNotEmpty) {
-        setupCart(_appCtrl.user['phone']);
+        setupCart(_appCtrl.user['_id']);
       }
 
       getProducts();

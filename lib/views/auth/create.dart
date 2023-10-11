@@ -49,8 +49,6 @@ class Step1 extends StatelessWidget {
             // User already exists and password is correct
             appBox!.put("authToken", res.data["token"]);
             setupUser();
-            // appCtrl.setUser(res.data['user']);
-            //setupCart(appCtrl.user['phone']);
             Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
           } else {
             // Proceed to next step

@@ -102,7 +102,7 @@ class TuLabeledCheckbox extends StatelessWidget {
   final FontWeight? fontWeight;
   const TuLabeledCheckbox(
       {super.key,
-      this.fontWeight,
+      this.fontWeight = FontWeight.w600,
       this.label,
       this.activeColor,
       this.value = false,
@@ -114,25 +114,24 @@ class TuLabeledCheckbox extends StatelessWidget {
   Widget build(BuildContext context) {
     final check = Container(
       margin: const EdgeInsets.symmetric(horizontal: 2),
-      child: SizedBox(
-        width: 25,
-        child: Checkbox(
-            value: value,
-            activeColor: activeColor ?? Colors.orange,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(radius)),
-            onChanged: onChanged),
-      ),
+      width: 25,
+      child: Checkbox(
+          value: value,
+          activeColor: activeColor ?? TuColors.primary,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(radius)),
+          onChanged: onChanged),
     );
     final lbl = label != null
         ? Text(
             label!,
-            style: GoogleFonts.karla(fontWeight: fontWeight),
+            style: TextStyle(fontWeight: fontWeight, color: TuColors.text2),
           )
         : none();
     return labelPos == Position.right
         ? Row(
             children: [check, lbl],
+            mainAxisSize: MainAxisSize.min,
           )
         : labelPos == Position.bottom
             ? Column(
@@ -158,7 +157,7 @@ PreferredSizeWidget childAppbar(
         elevation: .4,
         backgroundColor: cardBGLight,
         leadingWidth: appBarH - 5,
-        titleSpacing: 5,
+        //titleSpacing: 5,
         leading: appBarCtrl.selected.isNotEmpty
             ? IconButton(
                 padding: EdgeInsets.zero,
@@ -167,9 +166,7 @@ PreferredSizeWidget childAppbar(
                   appBarCtrl.setSelected([]);
                 },
                 icon: const Icon(Icons.close))
-            : Builder(builder: (context) {
-                return const TuBackButton();
-              }),
+            : null,
         title: appBarCtrl.selected.isNotEmpty
             ? Text(
                 "${appBarCtrl.selected.length} selected",
@@ -330,7 +327,7 @@ class TuFormField extends StatefulWidget {
   const TuFormField(
       {super.key,
       this.label,
-      this.my = 5,
+      this.my = 2.5,
       this.focusNode,
       this.suffixIcon,
       this.suffix,
@@ -341,7 +338,7 @@ class TuFormField extends StatefulWidget {
       this.onTap,
       this.hint = "",
       this.value,
-      this.radius = 5,
+      this.radius = 4,
       this.height = 10,
       this.maxLines = 1,
       this.maxLength,
@@ -387,7 +384,10 @@ class _TuFormFieldState extends State<TuFormField> {
       _updateVal();
     });
     final border = UnderlineInputBorder(
-        borderSide: BorderSide.none,
+        borderSide: const BorderSide(color: Colors.black12, width: 2),
+        borderRadius: BorderRadius.circular(widget.radius!));
+    final focusedBorder = UnderlineInputBorder(
+        borderSide: const BorderSide(color: Colors.black45, width: 3),
         borderRadius: BorderRadius.circular(widget.radius!));
     return Container(
       margin: EdgeInsets.symmetric(vertical: widget.my),
@@ -406,7 +406,7 @@ class _TuFormFieldState extends State<TuFormField> {
             autofocus: widget.autofocus,
             onTap: widget.onTap,
             onFieldSubmitted: widget.onSubmitted,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
+            // autovalidateMode: AutovalidateMode.onUserInteraction,
             focusNode: widget.focusNode,
             onChanged: widget.onChanged,
             obscureText: widget.isPass && !_showPass,
@@ -461,12 +461,13 @@ class _TuFormFieldState extends State<TuFormField> {
               labelText:
                   !widget.hasBorder || !widget.isLegacy ? widget.label : null,
               hintText: widget.hint,
+              hintStyle: TextStyle(fontSize: 12.5),
               floatingLabelAlignment: widget.labelAlignment,
               floatingLabelStyle:
                   GoogleFonts.karla(color: Colors.black87, fontSize: 18),
               enabledBorder: widget.radius != null ? border : null,
-              focusedBorder: widget.radius != null ? border : null,
-              focusedErrorBorder: widget.radius != null ? border : null,
+              focusedBorder: widget.radius != null ? focusedBorder : null,
+              focusedErrorBorder: widget.radius != null ? focusedBorder : null,
               errorBorder: widget.radius != null ? border : null,
               border: widget.radius != null ? border : null,
             ),

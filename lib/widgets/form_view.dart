@@ -64,13 +64,15 @@ class _FormViewState extends State<FormView> {
     final submitBtn = TuButton(
         text: widget.btnTxt,
         width: double.infinity,
+        bgColor: Colors.black87,
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
             widget.onSubmit();
           }
         });
     return PageWrapper(
-        appBar: childAppbar(showCart: false),
+        appBar:
+            childAppbar(showCart: false, title: widget.title ?? "Add address"),
         bottomSheet: widget.useBottomSheet
             ? Container(
                 padding: defaultPadding,
@@ -87,7 +89,6 @@ class _FormViewState extends State<FormView> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.title ?? "Add address", style: Styles.h1),
                     mY(10),
                     Column(
                       children: [

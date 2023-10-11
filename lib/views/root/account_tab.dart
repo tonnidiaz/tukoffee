@@ -1,60 +1,96 @@
 import 'package:flutter/material.dart';
 import 'package:frust/main.dart';
+import 'package:frust/utils/colors.dart';
+import 'package:frust/utils/constants.dart';
+import 'package:frust/utils/functions.dart';
+import 'package:frust/views/auth/logout.dart';
+import 'package:frust/views/order/index.dart';
+import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common2.dart';
+import 'package:frust/widgets/common3.dart';
+import 'package:frust/widgets/feedback_form.dart';
+import 'package:frust/widgets/tu/updates2.dart';
+import 'package:get/get.dart';
 
 class AccountTab extends StatelessWidget {
   const AccountTab({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final appCtrl = MainApp.appCtrl;
     return Scaffold(
-      appBar: childAppbar(title: "Settings", showCart: false),
+      appBar: childAppbar(title: "Settings", showCart: true),
       body: Container(
-          margin: const EdgeInsets.only(top: 10),
-          padding: defaultPadding2,
-          //color: cardBGLight,
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              InfoItem(
-                  onTap: () {
-                    pushNamed(context, '/admin/settings');
-                  },
-                  child: Obx(
-                      () => Text("About ${MainApp.appCtrl.store['name']}"))),
-              InfoItem(
-                  onTap: () {
-                    TuFuncs.showTDialog(context, const FeedbackForm());
-                  },
-                  child: const Text("Help/Feedback")),
-              InfoItem(
-                  child: tuTableRow(
-                      const Text("Version"),
-                      FutureBuilder<String>(
-                          future: getAppVersion(),
-                          builder: (context, snapshot) {
-                            return Text("${snapshot.data}");
-                          }))),
-              InfoItem(
-                onTap: () async {
-                  /*  TuFuncs.showBottomSheet(
-                      context: context,
-                      widget: const UpdatesView(),
-                      full: true); */
-                  TuFuncs.showTDialog(context, const UpdatesView2());
-                },
-                child: const Text("Check updates"),
+              Container(
+                color: cardBGLight,
+                margin: const EdgeInsets.symmetric(vertical: 2),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    InfoItem(
+                        onTap: () {
+                          pushNamed(context, '/account/profile');
+                        },
+                        child: const Text("Profile")),
+                    InfoItem(
+                        onTap: () {
+                          pushNamed(context, '/cart');
+                        },
+                        child: const Text("Cart")),
+                    InfoItem(
+                        onTap: () {
+                          pushNamed(context, '/orders');
+                        },
+                        child: const Text("Orders")),
+                    InfoItem(
+                        onTap: () {
+                          pushNamed(context, '/store/details');
+                        },
+                        child: const Text("Store details")),
+                  ],
+                ),
               ),
-              InfoItem(
-                child: const Text("Licences"),
-                onTap: () async {
-                  pushTo(
-                      context,
-                      LicensePage(
-                        applicationName: appCtrl.store['name'],
-                        applicationVersion: await getAppVersion(),
-                      ));
-                },
+              Container(
+                color: cardBGLight,
+                margin: const EdgeInsets.symmetric(vertical: 2),
+                child: Column(children: [
+                  InfoItem(
+                      onTap: () {
+                        pushNamed(context, '/settings');
+                      },
+                      child: const Text("Settings")),
+                  InfoItem(
+                      onTap: () {
+                        TuFuncs.showTDialog(context, const FeedbackForm());
+                      },
+                      child: const Text("Help/Feedback")),
+                ]),
+              ),
+              Container(
+                color: cardBGLight,
+                margin: const EdgeInsets.symmetric(vertical: 2),
+                padding: defaultPadding,
+                child: Obx(
+                  () {
+                    bool logged = appCtrl.user['_id'] != null;
+                    return TuButton(
+                      text: !logged ? "Login" : "Logout",
+                      bgColor: Colors.black87,
+                      width: double.infinity,
+                      onPressed: () {
+                        if (logged) {
+                          pushTo(context, const LogoutPage());
+                        } else {
+                          pushNamed(context, '/auth/login');
+                        }
+                      },
+                    );
+                  },
+                ),
               )
             ],
           )),

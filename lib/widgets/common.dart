@@ -181,7 +181,7 @@ class TuButton extends StatefulWidget {
       this.width,
       this.height = 40,
       this.vp = 5,
-      this.radius = 4,
+      this.radius = 3,
       this.hp = 10,
       this.onPressed,
       this.bgColor,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frust/utils/colors.dart';
 import 'package:frust/views/map.dart';
 import '../utils/constants.dart';
 import '../utils/functions.dart';
@@ -199,7 +200,6 @@ Widget tuRow({List<Widget> children = const [], bool min = false}) {
   );
 }
 
-
 class InfoItem extends StatelessWidget {
   final Function()? onTap;
   final Widget? child;
@@ -212,9 +212,12 @@ class InfoItem extends StatelessWidget {
       child: Container(
           width: double.infinity,
           height: 40,
-          padding: defaultPadding,
-          color: Colors.white,
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
           margin: const EdgeInsets.symmetric(vertical: .5),
+          decoration: const BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(
+                      color: Color.fromRGBO(10, 10, 10, 0.05), width: 1))),
           child: child),
     );
   }
