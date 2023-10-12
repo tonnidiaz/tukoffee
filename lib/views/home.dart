@@ -82,7 +82,8 @@ class _HomePageState extends State<HomePage> {
         titleSpacing: 14,
       ),
       child: SizedBox(
-        height: screenSize(context).height - statusBarH(context) - appBarH,
+        height:
+            screenSize(context).height - statusBarH(context: context) - appBarH,
         child: SingleChildScrollView(
           child: Container(
             padding: defaultPadding2,

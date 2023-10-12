@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frust/main.dart';
+import 'package:frust/utils/functions.dart';
 import 'package:frust/utils/theme.dart';
+import 'package:frust/views/account/reviews/index.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -33,16 +35,19 @@ class _MobileAppState extends State<MobileApp> {
 
   @override
   Widget build(BuildContext context) {
+    appCtx = context;
     Map<String, Widget Function(BuildContext)> routes = {};
     for (var page in pages) {
-      routes[page.name] = (context) => page.widget;
+      /* TODO: CHANGE THIS FOR NO HOME WIDGET */
+      if (page.name != '/nfn') routes[page.name] = (context) => page.widget;
     }
     return MaterialApp(
       theme: tuTheme(_darkMode), //(Brightness.light),
       scrollBehavior: MyCustomScrollBehavior(),
       routes: routes,
       debugShowCheckedModeBanner: false,
-      initialRoute: "/rf",
+      initialRoute: "/",
+      //home: MyReviewsPage(),
       builder: (context, child) {
         return child!;
       },

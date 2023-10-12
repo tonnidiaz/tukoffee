@@ -35,7 +35,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
         TuFormField(
           label: "Email:",
           hint: "Your email here... ",
-          isRequired: true,
+          required: true,
           onChanged: _setEmail,
           value: _email,
           keyboard: TextInputType.emailAddress,
@@ -44,7 +44,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
           label: "Message:",
           maxLines: 3,
           hint: "Your message here... ",
-          isRequired: true,
+          required: true,
           keyboard: TextInputType.multiline,
           onChanged: _setMsg,
           value: _msg,

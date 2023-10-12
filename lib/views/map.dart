@@ -130,7 +130,7 @@ class _MapPageState extends State<MapPage> {
         ),
         body: SafeArea(
           child: Container(
-              height: screenSize(context).height - statusBarH(context),
+              height: screenSize(context).height - statusBarH(context: context),
               color: Colors.green,
               child: Stack(
                 children: [

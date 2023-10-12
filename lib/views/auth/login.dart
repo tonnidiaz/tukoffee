@@ -44,7 +44,10 @@ class _LoginPageState extends State<LoginPage> {
       appBar: childAppbar(title: 'Login', showCart: false),
       child: Container(
         color: cardBGLight,
-        height: screenSize(context).height - appBarH - statusBarH(context) - 4,
+        height: screenSize(context).height -
+            appBarH -
+            statusBarH(context: context) -
+            4,
         margin: const EdgeInsets.only(top: 4),
         padding: defaultPadding,
         child: Form(
@@ -57,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                     label: "Email address:",
                     hint: "Enter your email...",
                     value: _formCtrl.form['email'],
-                    isRequired: true,
+                    required: true,
                     keyboard: TextInputType.emailAddress,
                     onChanged: (val) {
                       _formCtrl.setFormField('email', val);
@@ -67,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                     label: "Password:",
                     hint: "Enter your password...",
                     value: _formCtrl.form['password'],
-                    isRequired: true,
+                    required: true,
                     isPass: true,
                     onChanged: (val) {
                       _formCtrl.setFormField('password', val);

@@ -134,9 +134,10 @@ const double bottomSheetH = 150;
 const double bottomBarH = 46;
 const double footerH = 46;
 const double appBarH = 56;
-const double tabH = 46;
-double statusBarH(BuildContext context) {
-  return MediaQuery.of(context).viewPadding.top;
+const double tabH = 48;
+BuildContext? appCtx;
+double statusBarH({BuildContext? context}) {
+  return MediaQuery.of(context ?? appCtx!).padding.top;
 }
 
 const double sidebarW = 46;

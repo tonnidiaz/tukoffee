@@ -47,8 +47,8 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
         ],
       ),
       child: Container(
-        height:
-            screenSize(context).height - (appBarH + statusBarH(context) + tabH),
+        height: screenSize(context).height -
+            (appBarH + statusBarH(context: context) + tabH),
         color: appBGLight,
         child: TabBarView(controller: _tabController, children: const [
           HomeTab(),

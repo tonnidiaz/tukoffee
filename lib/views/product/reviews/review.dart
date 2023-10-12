@@ -7,6 +7,7 @@ import 'package:frust/views/order/index.dart';
 import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common3.dart';
 import 'package:frust/widgets/review_item.dart';
+import 'package:frust/widgets/views/add_review.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/bx.dart';
 
@@ -26,7 +27,7 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
     });
   }
 
-  void _getReview() async {
+  _getReview() async {
     try {
       _setReview(null);
       final res = await apiDio().get("/products/reviews?id=${widget.id}");
@@ -62,7 +63,14 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
           IconButton(
               splashRadius: 20,
               onPressed: () {
-                //TODO: SHOW EDIT SHEET
+                TuFuncs.showBottomSheet(
+                    context: context,
+                    widget: AddReviewView(
+                        product: _review!['product'],
+                        rev: _review!,
+                        onOk: () {
+                          _getReview();
+                        }));
               },
               icon: Iconify(
                 Bx.edit_alt,
@@ -86,72 +94,81 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
                 ],
               ),
             )
-          : Container(
-              child: Column(children: [
-                mY(6),
-                ReviewItem(
-                  item: _review!,
-                  hasStars: true,
-                  hasTap: false,
-                ),
-                mY(6),
-                Container(
-                  color: cardBGLight,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      tuColumn(children: [
-                        const Text(
-                          "Date added",
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        mY(6),
-                        Text(
-                          "${DateTime.parse(_review!['date_created']).toLocal()}"
-                              .split(' ')
-                              .first,
-                          style: const TextStyle(fontSize: 12.5),
-                        )
-                      ]),
-                      tuColumn(children: [
-                        const Text(
-                          "Last modified",
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        mY(6),
-                        Text(
-                          "${DateTime.parse(_review!['last_modified']).toLocal()}"
-                              .split(' ')
-                              .first,
-                          style: const TextStyle(fontSize: 12.5),
-                        )
-                      ]),
-                    ],
-                  ),
-                ),
-                mY(6),
-                Container(
-                  width: double.infinity,
-                  color: cardBGLight,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
-                  child: tuColumn(children: [
-                    Text(
-                      "${_review!['title']}",
-                      style: const TextStyle(fontWeight: FontWeight.w600),
+          : RefreshIndicator(
+              onRefresh: () async {
+                await _getReview();
+              },
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: fullHeight(context),
+                  child: Column(children: [
+                    mY(6),
+                    ReviewItem(
+                      item: _review!,
+                      hasStars: true,
+                      hasTap: false,
                     ),
                     mY(6),
-                    Text(
-                      "${_review!['name']}",
-                      style: TextStyle(color: TuColors.text2, fontSize: 14),
+                    Container(
+                      color: cardBGLight,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 14),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          tuColumn(children: [
+                            const Text(
+                              "Date added",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            mY(6),
+                            Text(
+                              "${DateTime.parse(_review!['date_created']).toLocal()}"
+                                  .split(' ')
+                                  .first,
+                              style: const TextStyle(fontSize: 12.5),
+                            )
+                          ]),
+                          tuColumn(children: [
+                            const Text(
+                              "Last modified",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            mY(6),
+                            Text(
+                              "${DateTime.parse(_review!['last_modified']).toLocal()}"
+                                  .split(' ')
+                                  .first,
+                              style: const TextStyle(fontSize: 12.5),
+                            )
+                          ]),
+                        ],
+                      ),
                     ),
-                    mY(10),
-                    Text(_review!['body'])
+                    mY(6),
+                    Container(
+                      width: double.infinity,
+                      color: cardBGLight,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 14),
+                      child: tuColumn(children: [
+                        Text(
+                          "${_review!['title']}",
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        mY(6),
+                        Text(
+                          "${_review!['name']}",
+                          style: TextStyle(color: TuColors.text2, fontSize: 14),
+                        ),
+                        mY(10),
+                        Text(_review!['body'])
+                      ]),
+                    )
                   ]),
-                )
-              ]),
+                ),
+              ),
             ),
     );
   }

@@ -217,7 +217,7 @@ class _TuButtonState extends State<TuButton> {
         style: ElevatedButton.styleFrom(
             alignment: Alignment.center,
             backgroundColor: widget.bgColor ??
-                TuColors.primary, //const Color.fromRGBO(26, 92, 255, 1),
+                Colors.black87, //const Color.fromRGBO(26, 92, 255, 1),
             shadowColor: TuColors
                 .coffee1Shadow, // const Color.fromRGBO(26, 92, 255, .5),
             elevation: 1.5,

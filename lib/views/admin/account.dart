@@ -119,7 +119,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                                               hint: "e.g. John",
                                                               radius: 5,
                                                               hasBorder: false,
-                                                              isRequired: true,
+                                                              required: true,
                                                               value: form[
                                                                   "first_name"],
                                                               onChanged: (val) {
@@ -135,7 +135,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                                               hint: "e.g. Doe",
                                                               radius: 5,
                                                               hasBorder: false,
-                                                              isRequired: true,
+                                                              required: true,
                                                               value: form[
                                                                   "last_name"],
                                                               onChanged: (val) {

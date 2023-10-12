@@ -5,14 +5,17 @@ import 'package:frust/utils/constants2.dart';
 import 'package:frust/utils/functions.dart';
 import 'package:frust/views/product/reviews/review.dart';
 import 'package:frust/widgets/common3.dart';
+import 'package:frust/widgets/views/add_review.dart';
 
-class ReviewItem extends StatelessWidget {
-  final Map<String, dynamic> item;
+class ReviewItem2 extends StatelessWidget {
+  final Map<String, dynamic> prod;
+  final Map<String, dynamic>? rev;
   final bool hasStars;
   final bool hasTap;
-  const ReviewItem(
+  const ReviewItem2(
       {super.key,
-      required this.item,
+      required this.prod,
+      required this.rev,
       this.hasStars = false,
       this.hasTap = true});
 
@@ -22,13 +25,13 @@ class ReviewItem extends StatelessWidget {
       return Chip(
         //largeSize: 18
 
-        backgroundColor: item['status'] == 0
+        backgroundColor: rev!['status'] == 0
             ? TuColors.medium
-            : item['status'] == 1
+            : rev!['status'] == 1
                 ? TuColors.success
                 : TuColors.danger,
         label: Text(
-          reviewStatuses[item['status']],
+          reviewStatuses[rev!['status']],
           style: const TextStyle(fontSize: 10, color: Colors.white),
         ),
       );
@@ -41,10 +44,10 @@ class ReviewItem extends StatelessWidget {
                 bottom: BorderSide(color: Color.fromRGBO(10, 10, 10, .05)))),
         //height: 110,
         child: ListTile(
-          onTap: !hasTap
+          onTap: rev == null
               ? null
               : () {
-                  pushTo(context, ProductReviewPage(id: item['_id']));
+                  pushTo(context, ProductReviewPage(id: rev!['_id']));
                 },
           //Checkbox, cover, content, deleteBtn
           tileColor: cardBGLight,
@@ -60,7 +63,7 @@ class ReviewItem extends StatelessWidget {
                 color: const Color.fromRGBO(0, 0, 0, 0.05),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: item['product']['images'].isEmpty
+              child: prod['images'].isEmpty
                   ? const Icon(
                       Icons.coffee_outlined,
                       size: 45,
@@ -68,27 +71,26 @@ class ReviewItem extends StatelessWidget {
                     )
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(5),
-                      child:
-                          Image.network(item['product']['images'][0]['url'])),
+                      child: Image.network(prod['images'][0]['url'])),
             ),
           ),
 
           title: Container(
             margin: const EdgeInsets.only(bottom: 5),
             child: Text(
-              hasTap ? "${item['title']}" : item['product']['name'],
+              prod['name'],
               softWrap: false,
               overflow: TextOverflow.fade,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
-          subtitle: hasStars
+          subtitle: rev != null
               ? Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   spacing: 10,
                   children: [
                     RatingBarIndicator(
-                      rating: item['rating'].toDouble(),
+                      rating: rev!['rating'].toDouble(),
                       itemBuilder: (context, _) => const Icon(
                         Icons.star,
                         color: Colors.amber,
@@ -98,25 +100,18 @@ class ReviewItem extends StatelessWidget {
                     revBadge()
                   ],
                 )
-              : tuColumn(
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      "R${item["name"]}",
-                      style: TextStyle(
-                          color: TuColors.text2,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    ),
-                    revBadge()
-                  ],
-                ),
-          trailing: hasStars
-              ? null
-              : PopupMenuButton(
-                  splashRadius: 24,
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(child: Text('Edit')),
-                    const PopupMenuItem(child: Text('Delete')),
+                    TextButton(
+                        onPressed: () {
+                          TuFuncs.showBottomSheet(
+                              context: context,
+                              widget: AddReviewView(
+                                product: prod,
+                              ));
+                        },
+                        child: const Text('WRITE REVIEW'))
                   ],
                 ),
         ));

@@ -11,6 +11,7 @@ var black12 = Colors.black12;
 ThemeData tuTheme(bool dark) {
   return ThemeData(
     useMaterial3: false,
+    platform: TargetPlatform.linux,
     scaffoldBackgroundColor: appBGLight,
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: TuColors.medium,
@@ -39,7 +40,6 @@ ThemeData tuTheme(bool dark) {
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
       labelPadding: EdgeInsets.only(top: -6, bottom: -4),
     ),
-    platform: TargetPlatform.android,
     textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
             padding: EdgeInsets.zero, foregroundColor: TuColors.secondary)),

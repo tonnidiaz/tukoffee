@@ -181,7 +181,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                 TuFormField(
                                                   label: "Store name:",
                                                   hint: "Enter store name...",
-                                                  isRequired: true,
+                                                  required: true,
                                                   hasBorder: false,
                                                   value: formCtrl.form['store']
                                                       ['name'],
@@ -201,7 +201,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                   hint:
                                                       "Enter store phone number...",
                                                   keyboard: TextInputType.phone,
-                                                  isRequired: true,
+                                                  required: true,
                                                   value: formCtrl.form['store']
                                                       ['phone'],
                                                   onChanged: (val) {
@@ -221,7 +221,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                       "Enter store email number...",
                                                   keyboard: TextInputType
                                                       .emailAddress,
-                                                  isRequired: true,
+                                                  required: true,
                                                   value: formCtrl.form['store']
                                                       ['email'],
                                                   onChanged: (val) {
@@ -241,7 +241,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                   hint:
                                                       "Enter store website...",
                                                   keyboard: TextInputType.url,
-                                                  isRequired: true,
+                                                  required: true,
                                                   value: formCtrl.form['store']
                                                       ['site'],
                                                   onChanged: (val) {
@@ -351,7 +351,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                   TuFormField(
                                                     label: "Owner name:",
                                                     hint: "Enter owner name...",
-                                                    isRequired: true,
+                                                    required: true,
                                                     hasBorder: false,
                                                     value: formCtrl
                                                         .form['owner']['name'],
@@ -372,7 +372,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                         "Enter owner phone number...",
                                                     keyboard:
                                                         TextInputType.phone,
-                                                    isRequired: true,
+                                                    required: true,
                                                     value: formCtrl
                                                         .form['owner']['phone'],
                                                     onChanged: (val) {
@@ -392,7 +392,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                         "Enter owner email number...",
                                                     keyboard: TextInputType
                                                         .emailAddress,
-                                                    isRequired: true,
+                                                    required: true,
                                                     value: formCtrl
                                                         .form['owner']['email'],
                                                     onChanged: (val) {
@@ -412,7 +412,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                     hint:
                                                         "Enter owner website...",
                                                     keyboard: TextInputType.url,
-                                                    isRequired: true,
+                                                    required: true,
                                                     value: formCtrl
                                                         .form['owner']['site'],
                                                     onChanged: (val) {
@@ -520,7 +520,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                     label: "Developer name:",
                                                     hint:
                                                         "Enter developer name...",
-                                                    isRequired: true,
+                                                    required: true,
                                                     hasBorder: false,
                                                     value: formCtrl
                                                             .form['developer']
@@ -542,7 +542,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                         "Enter developer phone number...",
                                                     keyboard:
                                                         TextInputType.phone,
-                                                    isRequired: true,
+                                                    required: true,
                                                     value: formCtrl
                                                             .form['developer']
                                                         ['phone'],
@@ -563,7 +563,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                         "Enter developer email number...",
                                                     keyboard: TextInputType
                                                         .emailAddress,
-                                                    isRequired: true,
+                                                    required: true,
                                                     value: formCtrl
                                                             .form['developer']
                                                         ['email'],
@@ -584,7 +584,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                     hint:
                                                         "Enter developer website...",
                                                     keyboard: TextInputType.url,
-                                                    isRequired: true,
+                                                    required: true,
                                                     value: formCtrl
                                                             .form['developer']
                                                         ['site'],
@@ -751,7 +751,7 @@ class AddStoreView extends StatelessWidget {
             prefixIcon: TuIcon(Icons.location_on),
             readOnly: true,
             value: location != null ? location['name'] : null,
-            isRequired: true,
+            required: true,
             onTap: () {
               pushTo(context, const MapPage());
             },
@@ -769,7 +769,7 @@ class AddStoreView extends StatelessWidget {
                     label: "Open time:",
                     hasBorder: true,
                     readOnly: true,
-                    isRequired: true,
+                    required: true,
                     width: (c.maxWidth / 2) - 5,
                     // formCtrl.form represents the store
                     value: formCtrl.form['open_time'],
@@ -786,7 +786,7 @@ class AddStoreView extends StatelessWidget {
                     label: "Close time:",
                     hasBorder: true,
                     readOnly: true,
-                    isRequired: true,
+                    required: true,
                     width: (c.maxWidth / 2) - 5,
                     // formCtrl.form represents the store
                     value: formCtrl.form['close_time'],
@@ -812,7 +812,7 @@ class AddStoreView extends StatelessWidget {
                     label: "Open time:",
                     hasBorder: true,
                     readOnly: true,
-                    isRequired: true,
+                    required: true,
                     width: (c.maxWidth / 2) - 5,
                     // formCtrl.form represents the store
                     value: formCtrl.form['open_time_weekends'],
@@ -829,7 +829,7 @@ class AddStoreView extends StatelessWidget {
                     label: "Close time:",
                     hasBorder: true,
                     readOnly: true,
-                    isRequired: true,
+                    required: true,
                     width: (c.maxWidth / 2) - 5,
                     // formCtrl.form represents the store
                     value: formCtrl.form['close_time_weekends'],

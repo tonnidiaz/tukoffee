@@ -55,7 +55,7 @@ class Step1 extends StatelessWidget {
               hint: "e.g. 0712345678",
               value: formCtrl.form['phone'],
               hasBorder: false,
-              isRequired: true,
+              required: true,
               isLegacy: true,
               radius: 5,
               validator: (val) {
@@ -149,7 +149,7 @@ class _Step2State extends State<Step2> {
               keyboard: TextInputType.number,
               hasBorder: false,
               maxLength: 4,
-              isRequired: true,
+              required: true,
               onChanged: (val) {
                 formCtrl.setFormField('otp', val);
               },
@@ -211,7 +211,7 @@ class Step3 extends StatelessWidget {
               isPass: true,
               showEye: false,
               value: formCtrl.form['password'],
-              isRequired: true,
+              required: true,
               validator: (val) {
                 if (val == null || val.isEmpty) {
                   return "Field is required.";
@@ -231,7 +231,7 @@ class Step3 extends StatelessWidget {
               hint: "Confirm your password...",
               isPass: true,
               value: formCtrl.form['cpassword'],
-              isRequired: true,
+              required: true,
               validator: (val) {
                 if (val == null || val.isEmpty) {
                   return "Field is required.";

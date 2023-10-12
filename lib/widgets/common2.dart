@@ -303,7 +303,7 @@ class TuFormField extends StatefulWidget {
   final Function(String)? onSubmitted;
   final Function(Function)? onShowHidePass;
   final String? Function(String?)? validator;
-  final bool isRequired;
+  final bool required;
   final bool isPass;
   final bool showEye;
   final bool hasBorder;
@@ -342,7 +342,7 @@ class TuFormField extends StatefulWidget {
       this.maxLength,
       this.onChanged,
       this.onShowHidePass,
-      this.isRequired = false,
+      this.required = false,
       this.isLegacy = false,
       this.autofocus = false,
       this.readOnly = false,
@@ -409,10 +409,11 @@ class _TuFormFieldState extends State<TuFormField> {
             onChanged: widget.onChanged,
             obscureText: widget.isPass && !_showPass,
             maxLines: widget.maxLines,
+
             validator: widget.validator ??
                 (val) {
                   String? msg;
-                  if ((widget.isRequired && val != null && val.isEmpty) ||
+                  if ((widget.required && val != null && val.isEmpty) ||
                       val == null) {
                     msg = "Field is required!";
                   }
@@ -420,7 +421,7 @@ class _TuFormFieldState extends State<TuFormField> {
                 },
             keyboardType: widget.keyboard,
             decoration: InputDecoration(
-              fillColor: widget.fill ?? TuColors.fieldBG,
+              fillColor: widget.fill ?? Color.fromARGB(51, 179, 155, 134),
               filled: true,
               isDense: true,
               contentPadding: EdgeInsets.symmetric(
@@ -459,7 +460,7 @@ class _TuFormFieldState extends State<TuFormField> {
               labelText:
                   !widget.hasBorder || !widget.isLegacy ? widget.label : null,
               hintText: widget.hint,
-              hintStyle: TextStyle(fontSize: 12.5),
+              hintStyle: const TextStyle(fontSize: 12.5),
               floatingLabelAlignment: widget.labelAlignment,
               floatingLabelStyle:
                   GoogleFonts.karla(color: Colors.black87, fontSize: 18),

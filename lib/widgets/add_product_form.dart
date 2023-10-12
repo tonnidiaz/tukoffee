@@ -156,7 +156,7 @@ class _AddProductFormState extends State<AddProductForm> {
             hint: "Enter product name...",
             value: _formCtrl.form["name"],
             //height: 30,
-            isRequired: true,
+            required: true,
             hasBorder: false,
             onChanged: (val) {
               _formCtrl.setFormField("name", val);
@@ -166,7 +166,7 @@ class _AddProductFormState extends State<AddProductForm> {
             label: "Product description:",
             hint: "Enter product description...",
             value: _formCtrl.form["description"],
-            isRequired: true,
+            required: true,
             hasBorder: false,
             onChanged: (val) {
               _formCtrl.setFormField("description", val);
@@ -177,7 +177,7 @@ class _AddProductFormState extends State<AddProductForm> {
             prefix: const Text("R "),
             hint: "Enter product price...",
             value: _formCtrl.form["price"],
-            isRequired: true,
+            required: true,
             hasBorder: false,
             validator: (val) {
               bool isNum = isNumeric(val);
@@ -196,7 +196,7 @@ class _AddProductFormState extends State<AddProductForm> {
             keyboard: TextInputType.number,
             hint: "How many are you adding?...",
             value: _formCtrl.form["quantity"],
-            isRequired: true,
+            required: true,
             hasBorder: false,
             validator: (val) {
               bool isNum = isNumeric(val);

@@ -207,7 +207,7 @@ class _DashboardPageState extends State<DashboardPage> {
         },
         child: SizedBox(
             height: screenSize(context).height -
-                (appBarH + statusBarH(context) + appBarH),
+                (appBarH + statusBarH(context: context) + appBarH),
             child: Obx(() => adminPages.elementAt(_ctrl.selectedTab.value))),
       ),
     );

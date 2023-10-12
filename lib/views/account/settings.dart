@@ -149,7 +149,7 @@ class ConfirmPassForm extends StatelessWidget {
               hasBorder: false,
               isLegacy: true,
               hint: "Enter your password...",
-              isRequired: true,
+              required: true,
               value: MainApp.formViewCtrl.form['password'],
               onChanged: (val) {
                 MainApp.formViewCtrl.setFormField('password', val);
@@ -200,7 +200,7 @@ class EditPassForm extends StatelessWidget {
               label: "Old password:",
               hint: "Enter old password...",
               isPass: true,
-              isRequired: true,
+              required: true,
               hasBorder: false,
               value: ctrl.form['old'],
               onChanged: (val) {
@@ -211,7 +211,7 @@ class EditPassForm extends StatelessWidget {
               label: "New password:",
               hint: "Enter your new password...",
               isPass: true,
-              isRequired: true,
+              required: true,
               hasBorder: false,
               value: ctrl.form['new'],
               onChanged: (val) {

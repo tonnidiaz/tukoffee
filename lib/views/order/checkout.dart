@@ -99,8 +99,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
             appBar: appBar,
             child: Container(
               padding: defaultPadding2,
-              height:
-                  screenSize(context).height - statusBarH(context) - appBarH,
+              height: screenSize(context).height -
+                  statusBarH(context: context) -
+                  appBarH,
               child: Center(
                 child: TuButton(
                   text: "Login",
@@ -163,7 +164,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 color: Colors.transparent,
                 height: screenSize(context).height -
                     100 -
-                    statusBarH(context) -
+                    statusBarH(context: context) -
                     appBarH,
                 width: double.infinity,
                 child: SingleChildScrollView(
@@ -601,7 +602,7 @@ class _EditAddressFormState extends State<EditAddressForm> {
         fields: [
           TuFormField(
             label: "Address:",
-            isRequired: true,
+            required: true,
             prefixIcon: TuIcon(Icons.location_on),
             readOnly: true,
             value: _deliveryAddress['location'] == null
@@ -622,7 +623,7 @@ class _EditAddressFormState extends State<EditAddressForm> {
             label: "Recipient name:",
             hint: "e.g. John Doe",
             value: _deliveryAddress['name'],
-            isRequired: true,
+            required: true,
             keyboard: TextInputType.name,
             onChanged: (val) {
               _setDeliveryAddressField('name', val);
@@ -632,7 +633,7 @@ class _EditAddressFormState extends State<EditAddressForm> {
             label: "Recipient phone:",
             hint: "e.g. 0712345678",
             value: _deliveryAddress['phone'],
-            isRequired: true,
+            required: true,
             keyboard: TextInputType.phone,
             onChanged: (val) {
               _setDeliveryAddressField('phone', val);
@@ -660,7 +661,7 @@ Widget editCollectorModal(BuildContext context) {
       Obx(() => TuFormField(
             label: "Collector Name:",
             hint: "e.g. John Doe",
-            isRequired: true,
+            required: true,
             value: ctrl.collector['name'],
             onChanged: (val) {
               ctrl.setCollector({...ctrl.collector, 'name': val});
@@ -669,7 +670,7 @@ Widget editCollectorModal(BuildContext context) {
       Obx(() => TuFormField(
             label: "Collector Phone:",
             hint: "e.g. 0712345678",
-            isRequired: true,
+            required: true,
             keyboard: TextInputType.phone,
             value: ctrl.collector['phone'],
             onChanged: (val) {

@@ -182,7 +182,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   hint: "e.g. John",
                   radius: 5,
                   hasBorder: false,
-                  isRequired: true,
+                  required: true,
                   value: form["first_name"],
                   onChanged: (val) {
                     formCtrl.setFormField("first_name", val);
@@ -193,7 +193,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   hint: "e.g. Doe",
                   radius: 5,
                   hasBorder: false,
-                  isRequired: true,
+                  required: true,
                   value: form["last_name"],
                   onChanged: (val) {
                     formCtrl.setFormField("last_name", val);
@@ -234,8 +234,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 title: "${_account!['first_name']} ${_account!['last_name']}",
                 showCart: false),
             body: SizedBox(
-              height:
-                  screenSize(context).height - appBarH - statusBarH(context),
+              height: screenSize(context).height -
+                  appBarH -
+                  statusBarH(context: context),
               child: SingleChildScrollView(
                 child: Container(
                   padding: defaultPadding,
@@ -266,7 +267,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     onEditDetailsBtnClick,
                                                 child: const Text('Edit')),
                                             my: 0),
-                                        mY(6),
+                                        mY(8),
                                         Text(
                                           "${_account!['first_name']} ${_account!['last_name']}",
                                           style: Styles.h5(
@@ -290,12 +291,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "Email:",
+                                              "Email",
                                               style: Styles.h4(
                                                   isLight: true,
                                                   color: TuColors.text),
                                             ),
-                                            mY(6),
+                                            mY(8),
                                             SelectableText(
                                               "${_account!['email']}",
                                               maxLines: 1,
@@ -344,14 +345,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       ),
                                                     ),
                                                     my: 7)),
-                                            mY(6),
+                                            mY(8),
                                             Text(
-                                              "Phone:",
+                                              "Phone",
                                               style: Styles.h4(
                                                   isLight: true,
                                                   color: TuColors.text),
                                             ),
-                                            mY(6),
+                                            mY(8),
                                             SelectableText(
                                               "${_account!['phone']}",
                                               style: Styles.h5(isLight: true),
@@ -385,7 +386,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 },
                                                 child: const Text('Edit')),
                                             my: 0),
-                                        mY(6),
+                                        mY(8),
                                         Builder(builder: (context) {
                                           final address = _account!["address"];
                                           return address == null
@@ -439,7 +440,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             onPressed: onEditPermissionsClick,
                                             child: const Text('Edit')),
                                         my: 0),
-                                    mY(6),
+                                    mY(8),
                                     Wrap(
                                       spacing: 10,
                                       children: [

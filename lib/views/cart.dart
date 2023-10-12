@@ -122,7 +122,7 @@ class _CartPageState extends State<CartPage> {
         height: screenSize(context).height -
             _bottomSheetH -
             appBarH -
-            statusBarH(context),
+            statusBarH(context: context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

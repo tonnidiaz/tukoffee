@@ -65,7 +65,7 @@ class Step1 extends StatelessWidget {
               label: "Mobile Number:",
               hint: "e.g. +2771245678",
               keyboard: TextInputType.phone,
-              isRequired: true,
+              required: true,
               hasBorder: false,
               value: ctrl.user["phone"],
               validator: (val) {
@@ -84,7 +84,7 @@ class Step1 extends StatelessWidget {
         Obx(() => TuFormField(
               label: "Password:",
               hint: "More than 6 characters...",
-              isRequired: true,
+              required: true,
               hasBorder: false,
               value: ctrl.user["password"],
               isPass: true,
@@ -187,7 +187,7 @@ class _Step2State extends State<Step2> {
               keyboard: TextInputType.number,
               hasBorder: false,
               maxLength: 4,
-              isRequired: true,
+              required: true,
               onChanged: (val) {
                 ctrl.setuser = {...ctrl.user, 'otp': val};
               },
@@ -244,7 +244,7 @@ class Step3 extends StatelessWidget {
               label: "First name:",
               hint: "e.g. John",
               keyboard: TextInputType.name,
-              isRequired: true,
+              required: true,
               value: ctrl.user['first_name'],
               hasBorder: false,
               onChanged: (val) {
@@ -255,7 +255,7 @@ class Step3 extends StatelessWidget {
               label: "Last name:",
               keyboard: TextInputType.name,
               hint: "e.g. Doe",
-              isRequired: true,
+              required: true,
               hasBorder: false,
               value: ctrl.user['last_name'],
               onChanged: (val) {
@@ -265,7 +265,7 @@ class Step3 extends StatelessWidget {
         TuFormField(
           label: "Email:",
           hint: "e.g. johndoe@gmail.com",
-          isRequired: true,
+          required: true,
           hasBorder: false,
           value: ctrl.user['email'],
           keyboard: TextInputType.emailAddress,
@@ -311,7 +311,8 @@ class _CreateAccountPageWrapperState extends State<CreateAccountPageWrapper> {
       appBar: childAppbar(title: "Login/Sign up", showCart: false),
       child: Container(
           padding: const EdgeInsets.all(14),
-          height: screenSize(context).height - (appBarH + statusBarH(context)),
+          height: screenSize(context).height -
+              (appBarH + statusBarH(context: context)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,

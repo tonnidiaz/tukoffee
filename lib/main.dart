@@ -183,7 +183,8 @@ class _PageWrapperState extends State<PageWrapper> {
         },
         child: SizedBox(
           width: double.infinity,
-          height: screenSize(context).height - (appBarH + statusBarH(context)),
+          height: screenSize(context).height -
+              (appBarH + statusBarH(context: context)),
           child: SingleChildScrollView(
             physics: widget.onRefresh != null
                 ? const AlwaysScrollableScrollPhysics()

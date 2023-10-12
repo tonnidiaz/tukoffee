@@ -41,7 +41,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                 keyboard: TextInputType.number,
                 hasBorder: false,
                 maxLength: 4,
-                isRequired: true,
+                required: true,
                 onChanged: (val) {
                   formCtrl.setFormField('otp', val);
                 },

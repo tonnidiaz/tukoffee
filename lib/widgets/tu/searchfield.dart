@@ -111,7 +111,7 @@ class _TuSearchFieldState extends State<TuSearchField> {
         prefixIcon: widget.prefix,
         focusNode: _focusNode,
         hint: widget.hint,
-        isRequired: true,
+        required: true,
         onSubmitted: (val) {
           _hideOverlay();
         },

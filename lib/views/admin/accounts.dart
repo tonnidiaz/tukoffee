@@ -144,7 +144,7 @@ class _AccountsState extends State<Accounts> {
             child: Container(
               padding: defaultPadding,
               height: screenSize(context).height -
-                  statusBarH(context) -
+                  statusBarH(context: context) -
                   (appBarH * 2),
               // constraints: BoxConstraints(minHeight: c.maxHeight),
               width: double.infinity,

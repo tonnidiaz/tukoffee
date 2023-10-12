@@ -323,3 +323,7 @@ Future<void> requestPermissions() async {
     // Either the permission was already granted before or the user just granted it.
   }
 }
+
+double fullHeight(BuildContext context) {
+  return screenSize(context).height - (statusBarH() + appBarH);
+}

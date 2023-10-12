@@ -172,6 +172,7 @@ class _ProductPageState extends State<ProductPage> {
                           ),
                         ],
                       ),
+                      mY(8),
                       Obx(() {
                         bool inCart = _storeCtrl.cart.isNotEmpty &&
                             _storeCtrl.cart["products"]

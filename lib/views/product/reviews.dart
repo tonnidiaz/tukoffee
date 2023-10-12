@@ -8,7 +8,7 @@ import 'package:frust/utils/colors.dart';
 import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/functions.dart';
 import 'package:frust/utils/styles.dart';
-import 'package:frust/views/account/reviews.dart';
+import 'package:frust/views/account/reviews/index.dart';
 import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common3.dart';
 
@@ -170,7 +170,7 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
                                 Text(
                                   "${DateTime.parse(review['date_created']).toLocal()}",
                                   style: TextStyle(
-                                      fontSize: 12, color: TuColors.text2),
+                                      fontSize: 14, color: TuColors.text2),
                                 ),
                                 mY(3),
                                 Text(

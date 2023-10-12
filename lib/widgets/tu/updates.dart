@@ -125,7 +125,10 @@ class _UpdatesViewState extends State<UpdatesView> {
       child: Container(
         padding: defaultPadding2,
         width: double.infinity,
-        height: screenSize(context).height - appBarH - statusBarH(context) - 70,
+        height: screenSize(context).height -
+            appBarH -
+            statusBarH(context: context) -
+            70,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

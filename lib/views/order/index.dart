@@ -82,7 +82,7 @@ class _OrderPageState extends State<OrderPage> {
             fields: [
               TuFormField(
                 hasBorder: false,
-                isRequired: true,
+                required: true,
                 label: "Name:",
                 hint: "e.g. John Doe",
                 value: form['name'],
@@ -92,7 +92,7 @@ class _OrderPageState extends State<OrderPage> {
               ),
               TuFormField(
                 hasBorder: false,
-                isRequired: true,
+                required: true,
                 label: "Phone:",
                 hint: "e.g. 0712345678",
                 value: form['phone'],

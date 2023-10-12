@@ -124,7 +124,9 @@ class _PaymentPageState extends State<PaymentPage> {
         child: const Icon(Icons.refresh),
       ),
       child: SizedBox(
-          height: screenSize(context).height - appBarH - statusBarH(context),
+          height: screenSize(context).height -
+              appBarH -
+              statusBarH(context: context),
           child: _args == null || _progress < 100
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
