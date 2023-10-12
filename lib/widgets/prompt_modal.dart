@@ -4,14 +4,14 @@ import 'package:frust/utils/styles.dart';
 import '../utils/colors.dart';
 import '../utils/constants.dart';
 
-class PromptModal extends StatelessWidget {
+class PromptDialog extends StatelessWidget {
   final void Function()? onOk;
   final Future<bool> Function()? onCancel;
   final String title;
   final String okTxt;
   final String cancelTxt;
   final String msg;
-  const PromptModal(
+  const PromptDialog(
       {super.key,
       this.title = "",
       this.msg = "",
@@ -23,40 +23,28 @@ class PromptModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-      backgroundColor: appBGLight,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+      backgroundColor: Colors.white,
       insetPadding: defaultPadding2,
       //actionsPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      titlePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      titlePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
       title: Text(
         title,
         style: Styles.h3(),
       ),
       content: Container(
-        color: appBGLight,
-        padding: defaultPadding,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               msg,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 14, color: Colors.black87),
+              style: TextStyle(color: TuColors.text2),
             ),
           ],
         ),
       ),
       actions: [
-        TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              await Future.delayed(const Duration(milliseconds: 10));
-              if (onOk != null) onOk!();
-            },
-            child: Text(okTxt,
-                style: const TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.w600))),
         TextButton(
             onPressed: () async {
               if (onCancel != null) {
@@ -67,9 +55,17 @@ class PromptModal extends StatelessWidget {
               }
             },
             child: Text(
-              cancelTxt,
-              style: const TextStyle(color: Colors.red),
+              cancelTxt.toUpperCase(),
+              style: TextStyle(color: TuColors.primary, fontSize: 14),
             )),
+        TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await Future.delayed(const Duration(milliseconds: 10));
+              if (onOk != null) onOk!();
+            },
+            child: Text(okTxt.toUpperCase(),
+                style: TextStyle(color: TuColors.primary, fontSize: 14))),
       ],
     );
   }

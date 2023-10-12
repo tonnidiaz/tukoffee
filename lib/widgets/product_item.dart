@@ -185,7 +185,7 @@ class ProductItem extends StatelessWidget {
                                       showDialog(
                                           context: context,
                                           builder: (context) {
-                                            return PromptModal(
+                                            return PromptDialog(
                                                 title: "Delete product",
                                                 msg:
                                                     "Are you sure you want to delete this product?",

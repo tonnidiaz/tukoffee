@@ -7,6 +7,7 @@ import 'package:frust/main.dart';
 import 'package:frust/utils/styles.dart';
 import 'package:frust/views/order/index.dart';
 import 'package:frust/widgets/common2.dart';
+import 'package:frust/widgets/dialogs/loading_dialog.dart';
 import 'package:get/get.dart';
 
 import '../utils/colors.dart';
@@ -41,33 +42,27 @@ class OrderItem extends StatelessWidget {
         context: context,
         builder: (context) {
           var act = del ? "delete" : "cancel";
-          return PromptModal(
-            title: "${act.toUpperCase()} order",
-            msg: "Are you sure you want to $act this order? ",
+          return PromptDialog(
+            title: "Cancel order",
+            msg: "Are you sure you want to cancel this order? ",
             okTxt: "Yes",
             onOk: () async {
               try {
+                showLoading(
+                    context, const LoadingDialog(msg: 'Canceling order..'));
                 final res =
                     await apiDio().post("/order/cancel?action=$act", data: {
                   'ids': [order['_id']],
                   "userId": isAdmin ? null : MainApp.appCtrl.user['_id']
                 });
-                showToast("Order ${del ? "deleted" : "cancelled"}!")
-                    .show(context);
+                pop(context);
                 _appBarCtrl.setSelected([]);
                 ctrl.setOrders(res.data['orders']);
               } catch (e) {
-                if (e.runtimeType == DioException) {
-                  e as DioException;
-                  handleDioException(
-                      context: context,
-                      exception: e,
-                      msg: "Failed to cancel order!");
-                } else {
-                  clog(e);
-                  showToast("Failed to cancel order!", isErr: true)
-                      .show(context);
-                }
+                pop(context);
+
+                errorHandler(
+                    context: context, e: e, msg: "Failed to cancel order!");
               }
             },
           );
@@ -76,104 +71,80 @@ class OrderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => TuCard(
-        my: 2.5,
-        onTap: () async {
-          if (_appBarCtrl.selected.isEmpty) {
-            Navigator.pushNamed(context, "/order",
-                arguments: OrderPageArgs(id: "${order['oid']}"));
-          } else {
+    return Obx(
+      () => Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+            color: _appBarCtrl.selected.isNotEmpty &&
+                    _appBarCtrl.selected.contains(order)
+                ? TuColors.primaryFade
+                : null,
+            border: const Border(
+                bottom: BorderSide(color: Color.fromRGBO(10, 10, 10, .05)))),
+        child: ListTile(
+          title: Text(
+            "#${order['oid']}",
+            softWrap: false,
+            overflow: TextOverflow.fade,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+          subtitle: Row(
+            children: [
+              Text(
+                "${DateTime.parse(order["date_created"]).toLocal()}"
+                    .split(' ')
+                    .first,
+                style: TextStyle(
+                    color: TuColors.note,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13),
+              ),
+              mX(10),
+              Chip(
+                  backgroundColor: order['status'] == 'pending'
+                      ? TuColors.medium
+                      : order['status'] == 'cancelled'
+                          ? TuColors.danger
+                          : TuColors.success,
+                  label: Text(
+                    '${order['status']}',
+                    style: const TextStyle(fontSize: 12, color: Colors.white),
+                  ))
+            ],
+          ),
+          trailing: PopupMenuButton(
+              icon: const Icon(
+                Icons.more_vert,
+                color: Colors.black,
+              ),
+              splashRadius: 24,
+              //  padding: EdgeInsets.zero,
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    onTap: () {
+                      _cancelOrder(context);
+                    },
+                    child: const Text(
+                      "Cancel",
+                    ),
+                  ),
+                ];
+              }),
+          onLongPress: () {
             _selectItem(order);
-          }
-        },
-        onLongPress: () {
-          _selectItem(order);
-        },
-        child: TuListTile(
-            leading: _appBarCtrl.selected.isNotEmpty
-                ? TuLabeledCheckbox(
-                    activeColor: orange,
-                    value: _appBarCtrl.selected.contains(order),
-                    onChanged: (val) {
-                      _selectItem(order);
-                    })
-                : none(),
-            title: Text(
-              "#${order['oid']}",
-              style: Styles.title(color: Colors.black87),
-            ),
-            subtitle: Builder(builder: (context) {
-              String status = order['status'];
-              Color? bgColor;
-              Color? color;
-
-              if (status == "pending") {
-                bgColor = const Color.fromRGBO(255, 153, 0, 0.3);
-                color = Colors.orange;
-              } else if (status == "delivered") {
-                bgColor = const Color.fromRGBO(76, 175, 80, .3);
-                color = Colors.green;
-              } else if (status == "cancelled") {
-                bgColor = const Color.fromRGBO(244, 67, 54, .3);
-                color = Colors.red;
-              }
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Builder(builder: (context) {
-                    var dateCreated =
-                        DateTime.parse(order['date_created']).toLocal();
-
-                    return Text(
-                      "$dateCreated",
-                      style: const TextStyle(fontSize: 12),
-                    );
-                  }),
-                  tuStatus(status, color: color, bgColor: bgColor),
-                ],
-              );
-            }),
-            trailing: Container(
-                width: 23,
-                alignment: Alignment.center,
-                child: dev
-                    ? PopupMenuButton(
-                        padding: EdgeInsets.zero,
-                        itemBuilder: (context) {
-                          return [
-                            PopupMenuItem(
-                              onTap: () {
-                                _cancelOrder(context);
-                              },
-                              child: iconText(
-                                "Cancel",
-                                Icons.cancel,
-                                alignment: MainAxisAlignment.start,
-                                fontSize: 15,
-                              ),
-                            ),
-                            PopupMenuItem(
-                              onTap: () {
-                                _cancelOrder(context, del: true);
-                              },
-                              child: iconText(
-                                "Delete",
-                                Icons.delete,
-                                iconColor: Colors.red,
-                                labelColor: Colors.red,
-                                alignment: MainAxisAlignment.start,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ];
-                        })
-                    : IconButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.add_shopping_cart_outlined,
-                          color: Colors.white70,
-                        ))))));
+          },
+          onTap: () async {
+            if (_appBarCtrl.selected.isEmpty) {
+              Navigator.pushNamed(context, "/order",
+                  arguments: OrderPageArgs(id: "${order['oid']}"));
+            } else {
+              _selectItem(order);
+            }
+          },
+        ),
+      ),
+    );
   }
 }
 

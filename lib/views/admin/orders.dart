@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:frust/widgets/tu/form_field.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,7 @@ import 'package:frust/utils/styles.dart';
 import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common2.dart';
 import 'package:frust/widgets/common3.dart';
+import 'package:frust/widgets/dialogs/loading_dialog.dart';
 import 'package:get/get.dart';
 import '../../main.dart';
 import '../../widgets/order_item.dart';
@@ -130,21 +132,8 @@ class _OrdersPageState extends State<OrdersPage> {
       ever(_ctrl.sortedOrders, (callback) {
         _appBarCtrl.setSelected([]);
       });
-      _appBarCtrl.setSelectedActions([
-        PopupMenuItem(
-            onTap: () {
-              _cancelOrders();
-            },
-            padding: EdgeInsets.zero,
-            child: iconText("Cancel", Icons.cancel)),
-        PopupMenuItem(
-            onTap: () {
-              _cancelOrders(del: true);
-            },
-            padding: EdgeInsets.zero,
-            child: iconText("Delete", Icons.delete,
-                iconColor: Colors.red, labelColor: Colors.red)),
-      ]);
+      /*   _appBarCtrl.setSelectedActions([
+        ); */
       _getOrders();
     });
   }
@@ -154,35 +143,28 @@ class _OrdersPageState extends State<OrdersPage> {
         context: context,
         builder: (context) {
           var act = del ? "delete" : "cancel";
-          return PromptModal(
-            title: "${act.toUpperCase()} orders",
-            msg: "Are you sure you want to $act the selected orders? ",
+          return PromptDialog(
+            title: "Cancel orders",
+            msg: "Do you want to cancel the selected orders? ",
             okTxt: "Yes",
             onOk: () async {
               try {
+                showLoading(
+                    context, const LoadingDialog(msg: 'Canceling orders..'));
                 // Deselect all
                 final List<dynamic> ids =
                     _appBarCtrl.selected.map((it) => it['_id']).toList();
                 _appBarCtrl.setSelected([]);
-
                 final res = await apiDio().post(
                     "/order/cancel?action=${act.toLowerCase()}",
                     data: {'ids': ids, "userId": MainApp.appCtrl.user['_id']});
-                showToast("Orders ${del ? "deleted" : "cancelled"}!")
-                    .show(context);
+                Navigator.pop(_scaffoldKey.currentContext!);
                 _ctrl.setOrders(res.data['orders']);
               } catch (e) {
-                if (e.runtimeType == DioException) {
-                  e as DioException;
-                  handleDioException(
-                      context: context,
-                      exception: e,
-                      msg: "Failed to cancel orders!");
-                } else {
-                  clog(e);
-                  showToast("Failed to cancel orders!", isErr: true)
-                      .show(context);
-                }
+                Navigator.pop(context);
+                clog(e);
+                errorHandler(
+                    context: context, e: e, msg: "Failed to cancel orders!");
               }
             },
           );
@@ -207,6 +189,7 @@ class _OrdersPageState extends State<OrdersPage> {
     }
   }
 
+  final GlobalKey _scaffoldKey = GlobalKey();
   @override
   void dispose() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -293,9 +276,29 @@ class _OrdersPageState extends State<OrdersPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Orders"),
-      ),
+      key: _scaffoldKey,
+      appBar: childAppbar(title: "Orders", actions: [
+        PopupMenuButton(
+            itemBuilder: (context) => [
+                  _appBarCtrl.selected.length == _ctrl.sortedOrders.length
+                      ? PopupMenuItem(
+                          onTap: () {
+                            _appBarCtrl.setSelected([]);
+                          },
+                          child: const Text("Deselect all"))
+                      : PopupMenuItem(
+                          onTap: () {
+                            _appBarCtrl.setSelected(_ctrl.sortedOrders);
+                          },
+                          child: const Text("Select all")),
+                  PopupMenuItem(
+                      enabled: _appBarCtrl.selected.isNotEmpty,
+                      onTap: () {
+                        _cancelOrders();
+                      },
+                      child: const Text("Cancel orders")),
+                ])
+      ]),
       body: RefreshIndicator(
         onRefresh: () async {
           await _getOrders();
@@ -303,33 +306,39 @@ class _OrdersPageState extends State<OrdersPage> {
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Container(
-            padding: defaultPadding2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                mY(6),
                 Obx(
-                  () => TuFormField(
-                    hint: "Order ID",
-                    prefixIcon: TuIcon(Icons.search),
-                    radius: 5,
-                    value: _ctrl.orderId.value,
-                    suffixIcon: IconButton(
-                        splashRadius: 20,
-                        padding: EdgeInsets.zero,
-                        onPressed: () {
-                          // show filters
-                          TuFuncs.showBottomSheet(
-                              full: false,
-                              context: context,
-                              widget: filterModal());
-                        },
-                        icon: TuIcon(Icons.tune)),
-                    onChanged: (val) {
-                      _ctrl.setOrderId(val);
-                      _ctrl.setsortedOrders(_ctrl.orders
-                          .where((p0) => "${p0['oid']}".contains(val))
-                          .toList());
-                    },
+                  () => Container(
+                    width: double.infinity,
+                    color: cardBGLight,
+                    padding: defaultPadding,
+                    child: TuFormField(
+                      hasBorder: false,
+                      hint: "Order ID",
+                      prefixIcon: TuIcon(Icons.search),
+                      radius: 5,
+                      value: _ctrl.orderId.value,
+                      suffixIcon: IconButton(
+                          splashRadius: 20,
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            // show filters
+                            TuFuncs.showBottomSheet(
+                                full: false,
+                                context: context,
+                                widget: filterModal());
+                          },
+                          icon: TuIcon(Icons.tune)),
+                      onChanged: (val) {
+                        _ctrl.setOrderId(val);
+                        _ctrl.setsortedOrders(_ctrl.orders
+                            .where((p0) => "${p0['oid']}".contains(val))
+                            .toList());
+                      },
+                    ),
                   ),
                 ),
                 mY(5),
@@ -360,14 +369,18 @@ class _OrdersPageState extends State<OrdersPage> {
                               ],
                             ),
                           )
-                        : Column(
-                            children: _ctrl.sortedOrders.map((e) {
-                              return OrderItem(
-                                ctrl: _ctrl,
-                                order: e,
-                                isAdmin: true,
-                              );
-                            }).toList(),
+                        : Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                            color: cardBGLight,
+                            child: Column(
+                              children: _ctrl.sortedOrders.map((e) {
+                                return OrderItem(
+                                  ctrl: _ctrl,
+                                  order: e,
+                                  isAdmin: true,
+                                );
+                              }).toList(),
+                            ),
                           ))
               ],
             ),

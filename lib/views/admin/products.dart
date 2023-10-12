@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:frust/widgets/tu/form_field.dart';
 
 import 'package:cloudinary/cloudinary.dart';
 import 'package:dio/dio.dart';
@@ -41,7 +42,7 @@ class _ProductsState extends State<Products> {
             showDialog(
                 context: context,
                 builder: (context) {
-                  return PromptModal(
+                  return PromptDialog(
                       title: "Delete products",
                       msg:
                           "Are you sure you want to delete the selected producta?",

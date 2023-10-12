@@ -5,6 +5,7 @@ import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/constants2.dart';
 import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common2.dart';
+import 'package:frust/widgets/tu/form_field.dart';
 
 class TuSearchField extends StatefulWidget {
   final List<TuSuggestion> suggestions;

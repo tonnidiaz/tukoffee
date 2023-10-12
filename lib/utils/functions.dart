@@ -327,3 +327,11 @@ Future<void> requestPermissions() async {
 double fullHeight(BuildContext context) {
   return screenSize(context).height - (statusBarH() + appBarH);
 }
+
+void pop(BuildContext context) {
+  return Navigator.pop(context);
+}
+
+sleep(int ms) async {
+  return await Future.delayed(Duration(milliseconds: ms));
+}

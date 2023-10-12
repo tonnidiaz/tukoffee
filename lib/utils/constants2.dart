@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:cloudinary/cloudinary.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -49,7 +50,7 @@ final cloudinary = Cloudinary.unsignedConfig(
 
 const cloudinaryURL =
     "https://api.cloudinary.com/v1_1/$cloudinaryCloudName/image/upload";
-const dev = true;
+const dev = kDebugMode;
 
 String getCloudinaryFolder(
     {required String storeName, String folder = "products"}) {

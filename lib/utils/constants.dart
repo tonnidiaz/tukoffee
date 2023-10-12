@@ -2,8 +2,10 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frust/utils/constants2.dart';
 import 'package:frust/utils/functions.dart';
 import 'package:frust/views/about.dart';
 import 'package:frust/views/account/index.dart';
@@ -148,12 +150,14 @@ Box<dynamic>? appBox;
 const bool isMobile = true;
 final dio = Dio();
 const localhost = "http://172.16.10.204";
-const String apiURL = false ? "https://tukoffee.vercel.app" : "$localhost:8000";
+const String apiURL = !dev ? "https://tukoffee.vercel.app" : "$localhost:8000";
 const defaultPadding = EdgeInsets.all(6);
 const defaultPadding2 = EdgeInsets.all(14);
 Size screenSize(BuildContext context) {
   return MediaQuery.of(context).size;
 }
+
+const DEV = kDebugMode;
 
 Size screenPercent(BuildContext context, double p) {
   final h = MediaQuery.of(context).size.height;

@@ -13,6 +13,7 @@ import 'package:frust/widgets/common3.dart';
 import 'package:frust/widgets/order_item.dart';
 import 'package:frust/widgets/prompt_modal.dart';
 import 'package:get/get.dart';
+import 'package:frust/widgets/tu/form_field.dart';
 
 import '../../controllers/app_ctrl.dart';
 import '../../controllers/appbar.dart';
@@ -61,7 +62,7 @@ class _AccountsState extends State<Accounts> {
     showDialog(
         context: context,
         builder: (context) {
-          return PromptModal(
+          return PromptDialog(
             title: "Delete accounts",
             okTxt: "Yes",
             msg: "You sure you want to delete the selected accounts?",
@@ -327,7 +328,7 @@ class AccountCard extends StatelessWidget {
                                 showDialog(
                                     context: context,
                                     builder: (context) {
-                                      return PromptModal(
+                                      return PromptDialog(
                                         title: "Delete account",
                                         okTxt: "Yes",
                                         msg:

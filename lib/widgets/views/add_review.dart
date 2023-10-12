@@ -1,3 +1,5 @@
+import 'package:frust/widgets/tu/form_field.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:frust/main.dart';
@@ -89,7 +91,7 @@ class _AddReviewViewState extends State<AddReviewView> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'New review',
+                widget.rev == null ? 'New review' : "Edit review",
                 style: Styles.h3(),
               ),
               mY(8),

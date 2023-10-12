@@ -28,10 +28,12 @@ class TuColors {
   //static Color fieldBG = const Color.fromRGBO(255, 153, 0, .1);
   static Color fieldBG = const Color.fromRGBO(196, 196, 196, 0.2);
   static Color primary = const Color.fromRGBO(101, 195, 200, 1);
+  static Color primaryFade = const Color.fromRGBO(101, 195, 200, .5);
   static Color secondary = const Color.fromRGBO(56, 128, 255, 1);
   static Color text0 = const Color.fromRGBO(50, 50, 50, 1);
   static Color text = const Color.fromRGBO(0, 0, 0, 1);
   static Color text2 = const Color.fromRGBO(15, 15, 15, 0.8);
+  static Color note = const Color.fromRGBO(102, 102, 102, 1);
   static Color medium = const Color.fromRGBO(146, 148, 156, 1);
   static Color danger = const Color.fromRGBO(248, 114, 114, 1);
   static Color success = const Color.fromRGBO(45, 211, 111, 1);
