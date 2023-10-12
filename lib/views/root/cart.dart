@@ -5,13 +5,11 @@ import 'package:frust/main.dart';
 import 'package:frust/utils/colors.dart';
 import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/constants2.dart';
+import 'package:frust/utils/functions.dart';
 import 'package:frust/utils/styles.dart';
 import 'package:frust/widgets/cart_item.dart';
 import 'package:frust/widgets/common.dart';
 import 'package:get/get.dart';
-
-import '../utils/functions.dart';
-import '../widgets/common2.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});

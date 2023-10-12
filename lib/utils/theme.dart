@@ -26,10 +26,10 @@ ThemeData tuTheme(bool dark) {
           titleTextStyle: GoogleFonts.inclusiveSans(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: dark ? Colors.white70 : TuColors.text2),
+              color: dark ? Colors.white70 : TuColors.text),
           backgroundColor: cardBGLight,
           elevation: 0,
-          foregroundColor: dark ? Colors.white70 : Colors.black87),
+          foregroundColor: dark ? Colors.white70 : TuColors.text2),
       colorScheme: ColorScheme.fromSeed(
           seedColor: TuColors.primary, brightness: Brightness.light),
       popupMenuTheme: const PopupMenuThemeData(

@@ -56,14 +56,15 @@ class ReviewItem extends StatelessWidget {
             child: Container(
               width: 60,
               height: 40,
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: const Color.fromRGBO(0, 0, 0, 0.05),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: item['product']['images'].isEmpty
-                  ? const Icon(
-                      Icons.coffee_outlined,
-                      size: 45,
+                  ? svgIcon(
+                      name: "br-image-slash",
+                      size: 26,
                       color: Colors.black54,
                     )
                   : ClipRRect(

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/functions.dart';
 import 'package:frust/views/admin/index.dart';
 import 'package:frust/views/admin/reviews.dart';
+import 'package:frust/widgets/common3.dart';
 
 import 'package:get/get.dart';
 
@@ -60,10 +60,10 @@ class _DashboardState extends State<Dashboard> {
                       onTap: () {
                         _ctrl.selectedTab.value = 1;
                       },
-                      icon: Icon(
-                        FontAwesomeIcons.boxOpen,
-                        color: TuColors.coffee2,
-                      ),
+                      icon: svgIcon(
+                          name: "br-box-open-full",
+                          color: TuColors.coffee2,
+                          size: 24),
                       subtitle: "${_ctrl.data.value!['products'].length}",
                     ),
                     ItemCard(
@@ -71,8 +71,9 @@ class _DashboardState extends State<Dashboard> {
                       onTap: () {
                         _ctrl.selectedTab.value = 2;
                       },
-                      icon: const Icon(
-                        FontAwesomeIcons.truckRampBox,
+                      icon: svgIcon(
+                        name: 'br-person-dolly',
+                        size: 24,
                         color: Colors.orangeAccent,
                       ),
                       subtitle: "${_ctrl.data.value!['orders'].length}",
@@ -82,9 +83,10 @@ class _DashboardState extends State<Dashboard> {
                       onTap: () {
                         _ctrl.selectedTab.value = 3;
                       },
-                      icon: const Icon(
-                        FontAwesomeIcons.users,
-                        color: Colors.black54,
+                      icon: svgIcon(
+                        name: 'br-users',
+                        size: 24,
+                        color: TuColors.text2,
                       ),
                       subtitle: "${_ctrl.data.value!['customers'].length}",
                     ),
@@ -93,9 +95,10 @@ class _DashboardState extends State<Dashboard> {
                       onTap: () {
                         pushTo(context, const ProductsReviews());
                       },
-                      icon: const Icon(
-                        FontAwesomeIcons.squarePollVertical,
-                        color: Colors.green,
+                      icon: svgIcon(
+                        name: 'br-comment-user',
+                        size: 24,
+                        color: TuColors.success,
                       ),
                       subtitle: "${_ctrl.data.value!['reviews'].length}",
                     ),
@@ -105,7 +108,7 @@ class _DashboardState extends State<Dashboard> {
                         Navigator.pushNamed(context, '/admin/settings');
                       },
                       icon: Icon(
-                        FontAwesomeIcons.gear,
+                        Icons.settings_outlined,
                         color: TuColors.text2,
                       ),
                     ),

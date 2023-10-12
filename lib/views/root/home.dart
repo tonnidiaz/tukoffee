@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:frust/utils/functions.dart';
+import 'package:frust/widgets/common3.dart';
 import 'package:frust/widgets/tu/form_field.dart';
 
 import 'package:flutter/material.dart';
@@ -10,8 +12,7 @@ import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common2.dart';
 import 'package:frust/widgets/tu/product_circle.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../utils/functions.dart';
-import '../widgets/common3.dart';
+
 import 'package:get/get.dart';
 
 class HomeCtrl extends GetxController {
@@ -107,8 +108,11 @@ class _HomePageState extends State<HomePage> {
                 TuFormField(
                   hint: "Search",
                   prefixIcon: TuIcon(Icons.search),
-                  radius: 50,
+                  radius: 500,
+                  elevation: 1,
+                  hasBorder: true,
                   onTap: () {
+                    return;
                     TuFuncs.showBottomSheet(
                         context: context, widget: const SearchPage());
                   },

@@ -15,7 +15,7 @@ import 'package:frust/views/admin/orders.dart';
 import 'package:frust/views/auth/create.dart';
 import 'package:frust/views/auth/login.dart';
 import 'package:frust/views/auth/reset_pass.dart';
-import 'package:frust/views/cart.dart';
+import 'package:frust/views/root/cart.dart';
 import 'package:frust/views/root/index.dart';
 import 'package:frust/views/map.dart';
 import 'package:frust/views/order/index.dart';
@@ -29,9 +29,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../views/admin/index.dart';
 import '../views/admin/settings.dart';
 import '../views/app/settings.dart';
-import '../views/home.dart';
 import '../views/rf2.dart';
-import '../views/shop/index.dart';
+import '../views/root/shop/index.dart';
 
 enum SortBy { name, price, dateCreated, lastModified }
 
@@ -44,6 +43,7 @@ class TuPage {
   bool inList;
   bool isAction;
   String name;
+  String? svg;
   IconData? icon;
   Widget? ic;
   String label;
@@ -52,6 +52,7 @@ class TuPage {
       this.inList = true,
       this.isAction = false,
       this.label = '',
+      this.svg,
       this.ic});
 }
 

@@ -10,9 +10,9 @@ import 'package:frust/views/search.dart';
 import 'package:frust/widgets/common2.dart';
 import 'package:frust/widgets/common3.dart';
 import 'package:get/get.dart';
-import '../../utils/constants2.dart';
-import '../../widgets/common.dart';
-import '../../widgets/product_card.dart';
+import '../../../utils/constants2.dart';
+import '../../../widgets/common.dart';
+import '../../../widgets/product_card.dart';
 import '/utils/constants.dart';
 
 class HomeTab extends StatefulWidget {
@@ -151,7 +151,7 @@ class _HomeTabState extends State<HomeTab> {
       },
       child: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.only(top: 4),
+          margin: const EdgeInsets.only(top: 6),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

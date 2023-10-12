@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frust/utils/colors.dart';
 import 'package:frust/views/order/index.dart';
+import 'package:frust/widgets/common3.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -102,9 +103,9 @@ class ProductCard extends StatelessWidget {
                             },
                           ),
                         ) //"https://loremflickr.com/g/320/240/tea?random=${Random().nextInt(100)}")
-                      : const Icon(
-                          Icons.coffee_outlined,
-                          size: 50,
+                      : svgIcon(
+                          name: 'br-image-slash',
+                          size: 40,
                           color: Colors.black54,
                         ),
                 ),
@@ -127,15 +128,15 @@ class ProductCard extends StatelessWidget {
                             : IconButton(
                                 padding: EdgeInsets.zero,
                                 icon: inCart
-                                    ? const Icon(
-                                        Icons.remove_shopping_cart_outlined,
+                                    ? svgIcon(
+                                        name: 'rr-cart-minus',
                                         color: Color.fromRGBO(20, 20, 20, 0.7),
-                                        size: 25,
+                                        size: 20,
                                       )
-                                    : const Icon(
-                                        Icons.add_shopping_cart_outlined,
+                                    : svgIcon(
+                                        name: 'rr-cart-add',
                                         color: Colors.black87,
-                                        size: 30,
+                                        size: 20,
                                       ),
                                 onPressed: product['quantity'] <= 0
                                     ? null

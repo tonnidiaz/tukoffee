@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frust/controllers/app_ctrl.dart';
 import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/constants2.dart';
@@ -86,7 +85,7 @@ class _TDrawerState extends State<TDrawer> {
                 onTap: () {
                   Navigator.pushNamed(context, "/cart");
                 }),
-            Obx(
+            /*     Obx(
               () => Visibility(
                 visible: _appCtrl.user.isNotEmpty,
                 child: TDrawerItem(
@@ -101,7 +100,7 @@ class _TDrawerState extends State<TDrawer> {
                       Navigator.pushNamed(context, "/orders");
                     }),
               ),
-            ),
+            ), */
             Visibility(
               visible: dev,
               child: TDrawerItem(

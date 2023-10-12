@@ -228,5 +228,11 @@ class InfoItem extends StatelessWidget {
 }
 
 Widget devider() => Container(height: 1, color: Colors.black12);
-Widget svgIcon({required String name, Color? color}) =>
-    SvgPicture.asset(name, color: color, semanticsLabel: 'icon');
+Widget svgIcon({required String name, Color? color, double size = 20}) =>
+    SvgPicture.asset(
+      "assets/icons/$name.svg",
+      color: color,
+      semanticsLabel: 'icon',
+      width: size,
+      height: size,
+    );

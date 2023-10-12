@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frust/utils/colors.dart';
 import 'package:frust/utils/functions.dart';
 import 'package:frust/views/admin/accounts.dart';
@@ -9,10 +7,6 @@ import 'package:frust/views/admin/orders.dart';
 import 'package:frust/views/admin/products.dart';
 import 'package:frust/widgets/common3.dart';
 import 'package:get/get.dart';
-
-import 'package:flutter/cupertino.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/ic.dart';
 
 class DashCtrl extends GetxController {
   RxInt selectedTab = 0.obs;
@@ -71,10 +65,10 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = <Tab>[
-      const Tab(label: 'Dashboard', icon: 'br-apps.svg'),
-      const Tab(label: 'Products', icon: 'br-box-open-full.svg'),
-      const Tab(label: 'Orders', icon: 'br-person-dolly.svg'),
-      const Tab(label: 'Accounts', icon: 'br-users.svg'),
+      const Tab(label: 'Dashboard', icon: 'br-apps'),
+      const Tab(label: 'Products', icon: 'br-box-open-full'),
+      const Tab(label: 'Orders', icon: 'br-person-dolly'),
+      const Tab(label: 'Accounts', icon: 'br-users'),
     ];
     return Scaffold(
       bottomNavigationBar: Obx(() {
@@ -89,7 +83,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   (e) => BottomNavigationBarItem(
                     icon: e.value.icon.runtimeType == String
                         ? svgIcon(
-                            name: "assets/icons/${e.value.icon}",
+                            name: e.value.icon,
                             color: index != e.key
                                 ? TuColors.note
                                 : TuColors.primary,

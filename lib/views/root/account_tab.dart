@@ -22,7 +22,7 @@ class AccountTab extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Settings"),
         titleSpacing: 14,
-        actions: [const CartBtn()],
+        actions: const [CartBtn()],
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -111,23 +111,6 @@ class AccountTab extends StatelessWidget {
                     },
                   ),
                 ),
-                RichText(
-                  text: const TextSpan(
-                    text: 'This item costs ',
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: '\$8.99',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          decoration: TextDecoration.lineThrough,
-                        ),
-                      ),
-                      TextSpan(
-                        text: ' \$3.99',
-                      ),
-                    ],
-                  ),
-                )
               ],
             )),
       ),

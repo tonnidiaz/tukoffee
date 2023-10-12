@@ -1,12 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frust/utils/colors.dart';
 import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/functions.dart';
 import 'package:frust/utils/styles.dart';
-import 'package:frust/views/home.dart';
 import 'package:frust/widgets/common.dart';
-import 'package:frust/widgets/common2.dart';
 import 'package:frust/widgets/common3.dart';
 import 'package:frust/widgets/product_card.dart';
 import 'package:frust/widgets/tu/form_field.dart';

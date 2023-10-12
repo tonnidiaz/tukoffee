@@ -8,8 +8,6 @@ import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common3.dart';
 import 'package:frust/widgets/review_item.dart';
 import 'package:frust/widgets/views/add_review.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/bx.dart';
 
 class ProductReviewPage extends StatefulWidget {
   final String id;
@@ -72,8 +70,8 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
                           _getReview();
                         }));
               },
-              icon: Iconify(
-                Bx.edit_alt,
+              icon: svgIcon(
+                name: 'br-pencil',
                 color: TuColors.text2,
               ) // widget
 

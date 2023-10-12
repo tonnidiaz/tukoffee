@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frust/utils/colors.dart';
 import 'package:frust/utils/constants.dart';
-import 'package:frust/views/shop/tab.dart';
+import 'package:frust/views/root/shop/tab.dart';
 import 'package:frust/widgets/common2.dart';
-import '../../main.dart';
+import '../../../main.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({Key? key}) : super(key: key);
@@ -47,8 +47,7 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
         ],
       ),
       child: Container(
-        height: screenSize(context).height -
-            (appBarH + statusBarH(context: context) + tabH),
+        height: screenSize(context).height - ((appBarH * 2) + statusBarH()),
         color: appBGLight,
         child: TabBarView(controller: _tabController, children: const [
           HomeTab(),

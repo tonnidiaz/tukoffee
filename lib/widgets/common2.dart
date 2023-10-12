@@ -13,8 +13,6 @@ import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common3.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/fa_solid.dart';
 
 import '../utils/constants2.dart';
 import '../utils/styles.dart';
@@ -26,22 +24,20 @@ class CartBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final storeCtrl = Get.find<StoreCtrl>();
-    return Container(
-      child: IconButton(
-        splashRadius: 23,
-        onPressed: () {
-          pushNamed(context, '/cart');
-        },
-        icon: Obx(
-          () => Badge.count(
-            count:
-                storeCtrl.cart.isEmpty ? 0 : storeCtrl.cart['products'].length,
-            textColor: Colors.black87,
-            backgroundColor: TuColors.primary,
-            child: Iconify(
-              FaSolid.shopping_basket,
-              color: TuColors.text2,
-            ),
+    return IconButton(
+      splashRadius: 23,
+      onPressed: () {
+        pushNamed(context, '/cart');
+      },
+      icon: Obx(
+        () => Badge.count(
+          count: storeCtrl.cart.isEmpty ? 0 : storeCtrl.cart['products'].length,
+          textColor: Colors.black87,
+          backgroundColor: TuColors.primary,
+          child: svgIcon(
+            name: 'rr-shopping-basket',
+            color: TuColors.text2,
+            size: 24,
           ),
         ),
       ),

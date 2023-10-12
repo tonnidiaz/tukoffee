@@ -1,8 +1,5 @@
 import 'dart:io';
 
-import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
-import 'package:awesome_bottom_bar/tab_item.dart';
-import 'package:awesome_bottom_bar/widgets/inspired/inspired.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -96,43 +93,8 @@ class MBottomBar extends StatefulWidget {
 
 class _MBottomBarState extends State<MBottomBar> {
   int _tab = 0;
-  final List<TabItem> items = [
-    const TabItem(
-      icon: Icons.home,
-      // title: 'Home',
-    ),
-    const TabItem(
-      icon: Icons.search_sharp,
-      title: 'Shop',
-    ),
-    const TabItem(
-      icon: Icons.favorite_border,
-      title: 'Wishlist',
-    ),
-    const TabItem(
-      icon: Icons.shopping_cart_outlined,
-      title: 'Cart',
-    ),
-    const TabItem(
-      icon: Icons.account_box,
-      title: 'profile',
-    ),
-  ];
   @override
   Widget build(BuildContext context) {
-    return BottomBarInspiredInside(
-      items: items,
-      backgroundColor: cardBGLight,
-      color: Colors.black54,
-      colorSelected: Colors.black87,
-      indexSelected: _tab,
-      onTap: (int index) => setState(() {
-        _tab = index;
-      }),
-      animated: true,
-      chipStyle:
-          const ChipStyle(convexBridge: true, background: Colors.black12),
-      itemStyle: ItemStyle.circle,
-    );
+    return Container();
   }
 }

@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:frust/utils/colors.dart';
 import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/functions.dart';
-import 'package:frust/views/cart.dart';
-import 'package:frust/views/home.dart';
 import 'package:frust/views/root/account_tab.dart';
-import 'package:frust/views/shop/index.dart';
+import 'package:frust/views/root/cart.dart';
+import 'package:frust/views/root/home.dart';
+import 'package:frust/views/root/shop/index.dart';
+import 'package:frust/widgets/common3.dart';
 import 'package:get/get.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/bx.dart';
-import 'package:iconify_flutter/icons/iconoir.dart';
-import 'package:iconify_flutter/icons/material_symbols.dart';
 
 class IndexCtrl extends GetxController {
   RxInt tab = 0.obs;
@@ -36,14 +33,12 @@ class _IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     List<TuPage> indexTabs = [
-      TuPage('/~/home', const HomePage(),
-          label: 'Home', ic: const Icon(Icons.home_outlined)),
-      TuPage('/~/shop', const ShopPage(),
-          label: 'Shop', ic: const Icon(Icons.store_outlined)),
+      TuPage('/~/home', const HomePage(), label: 'Home', svg: 'br-home'),
+      TuPage('/~/shop', const ShopPage(), label: 'Shop', svg: 'br-shop'),
       TuPage('/~/cart', const CartPage(),
-          label: 'Cart', ic: const Icon(Icons.shopping_cart_outlined)),
+          label: 'Cart', svg: 'br-shopping-cart'),
       TuPage('/~/account', const AccountTab(),
-          label: 'Account', ic: const Icon(Icons.person_outline)),
+          label: 'Account', svg: 'br-user'),
     ];
     return WillPopScope(
       onWillPop: () async {
@@ -57,8 +52,15 @@ class _IndexPageState extends State<IndexPage> {
               currentIndex: IndexPage.ctrl.tab.value,
               onTap: _onTabTap,
               items: indexTabs
-                  .map((e) =>
-                      BottomNavigationBarItem(icon: e.ic!, label: e.label))
+                  .asMap()
+                  .entries
+                  .map((e) => BottomNavigationBarItem(
+                      icon: svgIcon(
+                          color: IndexPage.ctrl.tab.value != e.key
+                              ? TuColors.surface600
+                              : TuColors.primary,
+                          name: e.value.svg!),
+                      label: e.value.label))
                   .toList()),
         ),
       ),
