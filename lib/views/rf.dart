@@ -5,6 +5,8 @@ import 'package:awesome_bottom_bar/tab_item.dart';
 import 'package:awesome_bottom_bar/widgets/inspired/inspired.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:frust/main.dart';
 import 'package:frust/utils/colors.dart';
 import 'package:frust/utils/constants.dart';
@@ -26,6 +28,10 @@ class _RFPageState extends State<RFPage> {
 
   @override
   Widget build(BuildContext context) {
+    final String assetName = 'assets/icons/box-open-full.svg';
+    final Widget svgIcon = SvgPicture.asset(assetName,
+        color: Colors.red, semanticsLabel: 'A red up arrow');
+
     final border = OutlineInputBorder(
         borderRadius: mFieldRadius,
         borderSide: BorderSide(color: TuColors.fieldBG, width: .2));
@@ -48,7 +54,9 @@ class _RFPageState extends State<RFPage> {
                     "My chip",
                   ),
                   backgroundColor: Colors.blue,
-                )
+                ),
+                mY(20),
+                svgIcon
               ],
             )),
         bottomNavigationBar: MBottomBar());

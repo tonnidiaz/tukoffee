@@ -15,7 +15,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/fa_solid.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../utils/constants2.dart';
 import '../utils/styles.dart';

@@ -13,7 +13,7 @@ import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/constants2.dart';
 import 'package:frust/utils/functions.dart';
 import 'package:frust/utils/styles.dart';
-import 'package:frust/views/admin/dashboard.dart';
+import 'package:frust/views/admin/index.dart';
 import 'package:frust/views/search.dart';
 import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common3.dart';

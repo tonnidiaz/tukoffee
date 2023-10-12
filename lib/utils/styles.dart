@@ -30,7 +30,7 @@ class Styles {
   static TextStyle h4({Color? color, bool isLight = false}) {
     return GoogleFonts.poppins(
         fontSize: 16,
-        fontWeight: isLight ? FontWeight.w500 : FontWeight.w700,
+        fontWeight: isLight ? FontWeight.w500 : FontWeight.w600,
         color: color ?? TuColors.text0);
   }
 

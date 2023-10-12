@@ -158,7 +158,7 @@ class _AddProductFormState extends State<AddProductForm> {
             value: _formCtrl.form["name"],
             //height: 30,
             required: true,
-            hasBorder: false,
+
             onChanged: (val) {
               _formCtrl.setFormField("name", val);
             },
@@ -168,7 +168,6 @@ class _AddProductFormState extends State<AddProductForm> {
             hint: "Enter product description...",
             value: _formCtrl.form["description"],
             required: true,
-            hasBorder: false,
             onChanged: (val) {
               _formCtrl.setFormField("description", val);
             },
@@ -179,7 +178,6 @@ class _AddProductFormState extends State<AddProductForm> {
             hint: "Enter product price...",
             value: _formCtrl.form["price"],
             required: true,
-            hasBorder: false,
             validator: (val) {
               bool isNum = isNumeric(val);
               if (!isNum || (isNum && double.parse(val!) < 0)) {
@@ -198,7 +196,6 @@ class _AddProductFormState extends State<AddProductForm> {
             hint: "How many are you adding?...",
             value: _formCtrl.form["quantity"],
             required: true,
-            hasBorder: false,
             validator: (val) {
               bool isNum = isNumeric(val);
               if (!isNum || (isNum && double.parse(val!) < 0)) {

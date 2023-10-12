@@ -82,28 +82,28 @@ class _FormViewState extends State<FormView> {
               )
             : null,
         child: SingleChildScrollView(
-          child: Container(
-              //color: Colors.amber,
-              padding: const EdgeInsets.only(
-                  bottom: 55, top: 14, left: 14, right: 14),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            mY(6),
+            Container(
+              color: cardBGLight,
+              padding: defaultPadding2,
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    mY(10),
-                    Column(
-                      children: [
-                        Form(
-                            key: _formKey,
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ...widget.fields,
-                                  mY(5),
-                                  widget.useBottomSheet ? none() : submitBtn
-                                ]))
-                      ],
-                    )
-                  ])),
+                children: [
+                  Form(
+                      key: _formKey,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ...widget.fields,
+                            mY(5),
+                            widget.useBottomSheet ? none() : submitBtn
+                          ]))
+                ],
+              ),
+            ),
+            mY(55)
+          ]),
         ));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:frust/utils/colors.dart';
 import 'package:frust/views/map.dart';
 import '../utils/constants.dart';
@@ -227,3 +228,5 @@ class InfoItem extends StatelessWidget {
 }
 
 Widget devider() => Container(height: 1, color: Colors.black12);
+Widget svgIcon({required String name, Color? color}) =>
+    SvgPicture.asset(name, color: color, semanticsLabel: 'icon');

@@ -26,7 +26,7 @@ import 'package:frust/views/rf.dart';
 import 'package:frust/views/search.dart';
 import 'package:geocode/geocode.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../views/admin/dashboard.dart';
+import '../views/admin/index.dart';
 import '../views/admin/settings.dart';
 import '../views/app/settings.dart';
 import '../views/home.dart';

@@ -7,7 +7,6 @@ import 'package:frust/utils/colors.dart';
 import 'package:frust/views/order/index.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../controllers/app_ctrl.dart';
 import '../controllers/store_ctrl.dart';
@@ -134,7 +133,7 @@ class ProductCard extends StatelessWidget {
                                         size: 25,
                                       )
                                     : const Icon(
-                                        LineIcons.addToShoppingCart,
+                                        Icons.add_shopping_cart_outlined,
                                         color: Colors.black87,
                                         size: 30,
                                       ),

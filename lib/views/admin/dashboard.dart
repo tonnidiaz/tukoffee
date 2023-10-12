@@ -1,124 +1,16 @@
-import 'package:bootstrap_icons/bootstrap_icons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:frust/utils/functions.dart';
-import 'package:frust/utils/styles.dart';
-import 'package:frust/views/admin/accounts.dart';
-import 'package:frust/views/admin/orders.dart';
-import 'package:frust/views/admin/reviews.dart';
-import 'package:frust/views/order/index.dart';
-import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
-import '../../main.dart';
-import '../../utils/colors.dart';
-import '../../utils/constants2.dart';
-import '../../widgets/common2.dart';
-import '/utils/constants.dart';
-import '/widgets/common.dart';
-import 'products.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frust/utils/constants.dart';
+import 'package:frust/utils/functions.dart';
+import 'package:frust/views/admin/index.dart';
+import 'package:frust/views/admin/reviews.dart';
 
-class DashCtrl extends GetxController {
-  RxInt selectedTab = 0.obs;
-  RxList<dynamic> orders = [].obs;
-  RxList<dynamic> customers = [].obs;
-  RxDouble revenue = 0.0.obs;
+import 'package:get/get.dart';
 
-  final RxList<dynamic> selectedProducts = [].obs;
-  void setSelectedProducts(List<dynamic> val) {
-    selectedProducts.value = val;
-  }
+import '../../utils/colors.dart';
 
-  final RxBool productsFetched = false.obs;
-  void setProductsFetched(bool val) {
-    productsFetched.value = val;
-  }
-
-  Rx<Map<String, dynamic>?> data = (null as Map<String, dynamic>?).obs;
-  setData(Map<String, dynamic>? val) {
-    data.value = val;
-  }
-}
-
-class DashboardPageArgs {
-  final int tab;
-  const DashboardPageArgs({this.tab = 0});
-}
-
-class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key}) : super(key: key);
-
-  @override
-  State<DashboardPage> createState() => _DashboardPageState();
-}
-
-class _DashboardPageState extends State<DashboardPage> {
-  final _ctrl = Get.put(DashCtrl());
-
-  DashboardPageArgs? _args;
-
-  void _onBottonNavitemTap(int val) {
-    _ctrl.selectedTab.value = val;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var args = ModalRoute.of(context)!.settings.arguments;
-      _args =
-          args != null ? args as DashboardPageArgs : const DashboardPageArgs();
-      _ctrl.selectedTab.value = _args!.tab;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: Obx(
-        () => BottomNavigationBar(
-          currentIndex: _ctrl.selectedTab.value,
-          onTap: _onBottonNavitemTap,
-          items: const [
-            /*  BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "Home",
-            ), */
-
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.gaugeSimpleHigh),
-              label: "Dashboard",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.boxOpen),
-              label: "Products",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.truckRampBox),
-              label: "Orders",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.users),
-              label: "Accounts",
-            ),
-          ],
-        ),
-      ),
-      body: WillPopScope(
-        onWillPop: () async {
-          clog("On will pop");
-          if (_ctrl.selectedTab.value != 0) {
-            _ctrl.selectedTab.value = 0;
-            return false;
-          }
-          return true;
-        },
-        child: Obx(() => adminPages.elementAt(_ctrl.selectedTab.value)),
-      ),
-    );
-  }
-}
+import '/widgets/common.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -132,7 +24,7 @@ class _DashboardState extends State<Dashboard> {
   void _setupDash() async {
     try {
       _ctrl.setData(null);
-      var res = await dio.get("$apiURL/admin/dash");
+      var res = await apiDio().get("/admin/dash");
       final data = res.data;
       _ctrl.setData(data);
     } catch (e) {
@@ -224,13 +116,6 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 }
-
-final List<Widget> adminPages = [
-  const Dashboard(),
-  const Products(),
-  const OrdersPage(),
-  const Accounts(),
-];
 
 class ItemCard extends StatelessWidget {
   final Function()? onTap;
