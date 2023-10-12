@@ -136,85 +136,79 @@ class _ProductPageState extends State<ProductPage> {
       onRefresh: () async {
         await _setupProduct();
       },
-      bottomSheet: Container(
-        color: appBGLight,
-        child: Material(
-          elevation: 8,
-          borderRadius: sheetRadius,
-          color: Colors.white,
-          shadowColor: Colors.black,
-          child: Container(
-            width: screenSize(context).width,
-            padding: defaultPadding2,
-            child: _product == null
-                ? none()
-                : Builder(builder: (context) {
-                    var ratings = _product!["ratings"] as List<dynamic>;
-                    var rating = ratings.firstWhereOrNull(
-                        (it) => it["customer"] == _appCtrl.user['_id']);
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Badge(
-                          largeSize: 24,
-                          backgroundColor: TuColors.medium,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 0),
-                          label: Text(
-                            _product!['quantity'] > 0
-                                ? "${_product!['quantity']} In stock"
-                                : "out of stock",
-                            style: const TextStyle(
-                                fontSize: 14, color: Colors.white),
+      bottomSheet: Material(
+        elevation: 8,
+        color: Colors.white,
+        shadowColor: Colors.black,
+        child: Container(
+          width: screenSize(context).width,
+          padding: defaultPadding,
+          child: _product == null
+              ? none()
+              : Builder(builder: (context) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Chip(
+                            backgroundColor: TuColors.medium,
+                            labelPadding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: -2),
+                            label: Text(
+                              _product!['quantity'] > 0
+                                  ? "${_product!['quantity']} In stock"
+                                  : "out of stock",
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.white),
+                            ),
                           ),
-                        ),
-                        mY(5),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "R${roundDouble(_product!["price"].toDouble(), 2)}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              TuButton(
-                                  height: 35,
-                                  onPressed: _product!['quantity'] < 1
-                                      ? null
-                                      : addRemoveCart,
-                                  bgColor: TuColors.danger,
-                                  radius: 100,
-                                  child: Obx(() {
-                                    bool inCart = _storeCtrl.cart.isNotEmpty &&
-                                        _storeCtrl.cart["products"]
-                                            .where((el) =>
-                                                el["product"]["_id"] ==
-                                                _product!["_id"])
-                                            .isNotEmpty;
-                                    return Row(
-                                      children: [
-                                        Icon(
-                                          inCart
-                                              ? Icons.remove_shopping_cart
-                                              : Icons.add_shopping_cart,
-                                          size: 18,
-                                          color: Colors.black,
-                                        ),
-                                        mX(2),
-                                        Text(inCart ? 'REMOVE' : 'ADD',
-                                            style: const TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold))
-                                      ],
-                                    );
-                                  }))
-                            ]),
-                      ],
-                    );
-                  }),
-          ),
+                          Text(
+                            "R${roundDouble(_product!["price"].toDouble(), 2)}",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      Obx(() {
+                        bool inCart = _storeCtrl.cart.isNotEmpty &&
+                            _storeCtrl.cart["products"]
+                                .where((el) =>
+                                    el["product"]["_id"] == _product!["_id"])
+                                .isNotEmpty;
+
+                        return TuButton(
+                            width: double.infinity,
+                            onPressed: _product!['quantity'] < 1
+                                ? null
+                                : addRemoveCart,
+                            bgColor:
+                                inCart ? TuColors.danger : TuColors.success,
+                            // radius: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  inCart
+                                      ? Icons.remove_shopping_cart
+                                      : Icons.add_shopping_cart,
+                                  size: 18,
+                                  color: Colors.black,
+                                ),
+                                mX(2),
+                                Text(
+                                    inCart ? 'REMOVE FROM CART' : 'ADD TO CART',
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold))
+                              ],
+                            ));
+                      }),
+                    ],
+                  );
+                }),
         ),
       ),
       child: SizedBox(
@@ -262,7 +256,7 @@ class _ProductPageState extends State<ProductPage> {
                                       children: [
                                         Container(
                                           //id=img-wrap
-                                          color: cardBGLight,
+                                          color: appBGLight,
                                           width: constraints.maxWidth,
                                           margin: EdgeInsets.only(top: 6),
                                           height:
@@ -370,7 +364,7 @@ class _ProductPageState extends State<ProductPage> {
                                                       .amber //Color.fromARGB(108, 255, 255, 0),
                                                   ),
                                               Text(
-                                                " ${double.tryParse(_product!['rating'])?.roundToDouble() ?? 0}",
+                                                " ${_product!['rating'] ?? 0}",
                                                 style: const TextStyle(
                                                     fontSize: 14,
                                                     color: Colors.black87,
@@ -486,9 +480,6 @@ class _ProductPageState extends State<ProductPage> {
           data: {"user": _appCtrl.user["email"], "product": _product!["_id"]});
       _storeCtrl.setcart(res.data["cart"]);
       // t.dismiss();
-      showToast(
-              !inCart ? "Product added to cart!" : "Product removed from cart!")
-          .show(context);
     } catch (e) {
       clog(e);
       if (e.runtimeType == DioException) {

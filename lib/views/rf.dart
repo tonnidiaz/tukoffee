@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:awesome_bottom_bar/tab_item.dart';
 import 'package:awesome_bottom_bar/widgets/inspired/inspired.dart';
@@ -36,90 +38,16 @@ class _RFPageState extends State<RFPage> {
               children: [
                 const Text("Small text"),
                 mY(5),
-                Text(
-                  "Medium text",
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
+                const Text("Small text"),
                 mY(5),
-                const Text(
-                  "Large text",
-                  style: TextStyle(fontSize: 23),
-                ),
-                mY(5),
-                OutlinedButton(onPressed: () {}, child: const Text("Submit")),
-                mY(5),
-                Container(
-                  padding: defaultPadding,
-                  color: Colors.white,
-                  child: tuColumn(
-                    children: [
-                      TextFormField(
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 13,
-                            horizontal: 10,
-                          ),
-                          hintText: "Placeholder",
-                          labelText: "Label:",
-                          hintStyle: const TextStyle(color: Colors.black38),
-                          floatingLabelStyle: const TextStyle(
-                            color: Color.fromRGBO(0, 0, 0, 0.877),
-                            fontSize: 20,
-                          ),
-                          fillColor: const Color.fromRGBO(244, 247, 248, 1),
-                          isDense: true,
-                          filled: true,
-                          border: border,
-                          enabledBorder: border,
-                          focusedBorder: border,
-                        ),
-                      ),
-                      mY(5),
-                      TuDropdownButton(
-                        onChanged: (val) {},
-                        label: "Tu label:",
-                        items: List.generate(
-                                5, (index) => SelectItem("Item $index", index))
-                            .toList(),
-                      ),
-                      const MButton(),
-                      mY(10),
-                      Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                            color: mFieldBG2, borderRadius: mFieldRadius),
-                        child: DropdownButton(
-                          dropdownColor: mFieldBG2,
-                          focusColor: Colors.red,
-                          borderRadius: mFieldRadius,
-                          elevation: 12,
-                          icon: const Icon(
-                            Icons.expand_more_outlined,
-                            color: Colors.black54,
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 0),
-                          hint: const Text("Label"),
-                          underline: none(),
-                          onChanged: (val) => {},
-                          items: const [
-                            DropdownMenuItem(
-                              value: 1,
-                              child: Text("Item 1"),
-                            ),
-                            DropdownMenuItem(
-                              value: 2,
-                              child: Text("Item 2"),
-                            ),
-                            DropdownMenuItem(
-                              value: 3,
-                              child: Text("Item 3"),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+                const Text("Small text"),
+                Chip(
+                  visualDensity: VisualDensity.defaultDensityForPlatform(
+                      TargetPlatform.android),
+                  label: Text(
+                    "My chip",
                   ),
+                  backgroundColor: Colors.blue,
                 )
               ],
             )),

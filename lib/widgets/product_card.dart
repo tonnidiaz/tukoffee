@@ -170,6 +170,7 @@ class ProductCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Chip(
+                      visualDensity: VisualDensity.compact,
                       backgroundColor: TuColors.primary,
                       label: Text(
                         product['quantity'] > 0 ? "In stock" : "out of stock",
