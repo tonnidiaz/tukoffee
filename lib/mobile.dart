@@ -39,6 +39,7 @@ class _MobileAppState extends State<MobileApp> {
     }
     return MaterialApp(
       theme: tuTheme(_darkMode), //(Brightness.light),
+      scrollBehavior: MyCustomScrollBehavior(),
       routes: routes,
       debugShowCheckedModeBanner: false,
       initialRoute: "/rf",
