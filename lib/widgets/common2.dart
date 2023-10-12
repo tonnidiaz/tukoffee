@@ -73,7 +73,7 @@ class TuListTile extends StatelessWidget {
                   color: Colors.transparent,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [title ?? none(), subtitle ?? none()],
+                    children: [title ?? none(), mY(6), subtitle ?? none()],
                   ),
                 ),
               ),

@@ -2,8 +2,10 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:frust/controllers/products_ctrl.dart';
 import 'package:frust/main.dart';
 import 'package:frust/views/admin/dashboard.dart';
+import 'package:frust/views/admin/products.dart';
 import 'package:get/get.dart';
 
 import '../controllers/appbar.dart';
@@ -20,8 +22,8 @@ class ProductItem extends StatelessWidget {
   final Map<String, dynamic> product;
   final bool dev;
   ProductItem({super.key, required this.product, this.dev = true});
-  final DashCtrl _dashCtrl = Get.find();
   final AppBarCtrl _appBarCtrl = Get.find();
+  final ProductsCtrl _ctrl = Get.find();
   final _formViewCtrl = MainApp.formViewCtrl;
   void _selectItem(Map<String, dynamic> product) {
     !_appBarCtrl.selected.contains(product)
@@ -32,10 +34,12 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
         width: double.infinity,
-        height: 110,
-        child: InkWell(
+        decoration: const BoxDecoration(
+            border: Border(
+                bottom: BorderSide(color: Color.fromRGBO(10, 10, 10, .05)))),
+        child: ListTile(
             onTap: () async {
               if (_appBarCtrl.selected.isEmpty) {
                 Navigator.pushNamed(context, "/product",
@@ -47,7 +51,6 @@ class ProductItem extends StatelessWidget {
             onLongPress: () {
               _selectItem(product);
             },
-            borderRadius: BorderRadius.circular(8),
             child: Padding(
               padding: const EdgeInsets.all(2.5),
               child: Row(
@@ -211,12 +214,12 @@ class ProductItem extends StatelessWidget {
                                                       }
                                                     }
 
-                                                    _dashCtrl.setProducts(
-                                                        _dashCtrl.products
-                                                            .where((it) =>
-                                                                it["pid"] !=
-                                                                product["pid"])
-                                                            .toList());
+                                                    _ctrl.setProducts(_ctrl
+                                                        .products.value!
+                                                        .where((it) =>
+                                                            it["pid"] !=
+                                                            product["pid"])
+                                                        .toList());
 
                                                     _appBarCtrl.setSelected([]);
                                                   } catch (e) {

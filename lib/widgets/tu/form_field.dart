@@ -22,7 +22,7 @@ class TuFormField extends StatefulWidget {
   final bool showEye;
   final bool hasBorder;
   final TextInputType keyboard;
-  final double? radius;
+  final double radius;
   final double height;
   final double my;
   final bool isLegacy;
@@ -62,7 +62,7 @@ class TuFormField extends StatefulWidget {
       this.readOnly = false,
       this.isPass = false,
       this.showEye = true,
-      this.hasBorder = false,
+      this.hasBorder = true,
       this.validator,
       this.fill,
       this.textAlign = TextAlign.start,
@@ -96,14 +96,22 @@ class _TuFormFieldState extends State<TuFormField> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _updateVal();
     });
-    final border = UnderlineInputBorder(
-        borderSide:
-            BorderSide(color: Colors.black12, width: widget.hasBorder ? 2 : 0),
-        borderRadius: BorderRadius.circular(widget.radius!));
-    final focusedBorder = UnderlineInputBorder(
-        borderSide:
-            BorderSide(color: Colors.black45, width: widget.hasBorder ? 3 : 0),
-        borderRadius: BorderRadius.circular(widget.radius!));
+    final border = widget.hasBorder
+        ? UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black12, width: 2),
+            borderRadius: BorderRadius.circular(widget.radius),
+          )
+        : OutlineInputBorder(
+            borderRadius: BorderRadius.circular(widget.radius),
+            borderSide: BorderSide(color: Colors.transparent));
+    final focusedBorder = !widget.hasBorder
+        ? OutlineInputBorder(
+            borderRadius: BorderRadius.circular(widget.radius),
+            borderSide: BorderSide(color: Colors.transparent))
+        : UnderlineInputBorder(
+            borderSide: const BorderSide(color: Colors.black45, width: 3),
+            borderRadius: BorderRadius.circular(widget.radius),
+          );
     return Container(
       margin: EdgeInsets.symmetric(vertical: widget.my),
       width: widget.width,
@@ -145,9 +153,11 @@ class _TuFormFieldState extends State<TuFormField> {
               fillColor: widget.fill ?? Color.fromARGB(51, 179, 155, 134),
               filled: true,
               isDense: true,
-              contentPadding: EdgeInsets.symmetric(
-                vertical: widget.height,
-                horizontal: 10,
+              contentPadding: EdgeInsets.only(
+                top: widget.height,
+                bottom: widget.height,
+                left: 10,
+                right: 10,
               ),
               prefixIcon: widget.prefixIcon,
               prefix: widget.prefix,
@@ -178,6 +188,7 @@ class _TuFormFieldState extends State<TuFormField> {
                           ? CupertinoIcons.eye
                           : CupertinoIcons.eye_slash))
                   : widget.suffixIcon,
+
               labelText:
                   !widget.hasBorder || !widget.isLegacy ? widget.label : null,
               hintText: widget.hint,

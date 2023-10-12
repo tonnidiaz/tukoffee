@@ -22,14 +22,13 @@ class CartItem extends StatelessWidget {
     required this.item,
   });
   final ProductsCtrl _productsCtrl = Get.find();
+  final _appBarCtrl = MainApp.appBarCtrl;
 
   void _selectItem(Map<String, dynamic> product) {
-    !_productsCtrl.selectedProducts.contains(product)
-        ? _productsCtrl
-            .set_selectedProducts([..._productsCtrl.selectedProducts, product])
-        : _productsCtrl.set_selectedProducts(_productsCtrl.selectedProducts
-            .where((el) => el != product)
-            .toList());
+    !_appBarCtrl.selected.contains(product)
+        ? _appBarCtrl.setSelected([..._appBarCtrl.selected, product])
+        : _appBarCtrl.setSelected(
+            _appBarCtrl.selected.where((el) => el != product).toList());
   }
 
   @override
@@ -174,12 +173,12 @@ class CartItem extends StatelessWidget {
             ],
           ),
           trailing: Obx(
-            () => _productsCtrl.selectedProducts.isNotEmpty
+            () => _appBarCtrl.selected.isNotEmpty
                 ? SizedBox(
                     width: 30,
                     child: Checkbox(
                         activeColor: orange,
-                        value: _productsCtrl.selectedProducts.contains(item),
+                        value: _appBarCtrl.selected.contains(item),
                         onChanged: (val) {
                           _selectItem(item);
                         }),

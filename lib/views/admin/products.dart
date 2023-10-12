@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:frust/controllers/products_ctrl.dart';
+import 'package:frust/views/order/index.dart';
 import 'package:frust/widgets/tu/form_field.dart';
 
 import 'package:cloudinary/cloudinary.dart';
@@ -31,10 +33,12 @@ class Products extends StatefulWidget {
 
 class _ProductsState extends State<Products> {
   final DashCtrl _dashCtrl = Get.find();
+  final ProductsCtrl _ctrl = Get.find();
   final AppBarCtrl _appBarCtrl = Get.find();
   @override
   void initState() {
     super.initState();
+    _getProducts();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _appBarCtrl.setSelectedActions([
         PopupMenuItem(
@@ -69,7 +73,7 @@ class _ProductsState extends State<Products> {
                             }
                           }
 
-                          _dashCtrl.setProducts(_dashCtrl.products
+                          _ctrl.setProducts(_ctrl.products.value!
                               .where((it) => !pids.contains(it["pid"]))
                               .toList());
                           _appBarCtrl.setSelected([]);
@@ -101,6 +105,20 @@ class _ProductsState extends State<Products> {
     });
   }
 
+  _getProducts() async {
+    try {
+      _ctrl.setProducts(null);
+      clog('Getting...');
+
+      final res = await apiDio().get("/products");
+      clog(res.data);
+      _ctrl.setProducts(res.data['data']);
+    } catch (e) {
+      clog(e);
+      _ctrl.setProducts([]);
+    }
+  }
+
   @override
   void dispose() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -128,11 +146,11 @@ class _ProductsState extends State<Products> {
                     splashRadius: 15,
                     padding: EdgeInsets.zero,
                     onPressed: () {
-                      _dashCtrl.sortOrder.value == SortOrder.descending
-                          ? _dashCtrl.setSortOrder(SortOrder.ascending)
-                          : _dashCtrl.setSortOrder(SortOrder.descending);
+                      _ctrl.sortOrder.value == SortOrder.descending
+                          ? _ctrl.setSortOrder(SortOrder.ascending)
+                          : _ctrl.setSortOrder(SortOrder.descending);
                     },
-                    icon: Icon(_dashCtrl.sortOrder.value == SortOrder.descending
+                    icon: Icon(_ctrl.sortOrder.value == SortOrder.descending
                         ? CupertinoIcons.sort_down
                         : CupertinoIcons.sort_up),
                     color: Colors.black87,
@@ -147,7 +165,7 @@ class _ProductsState extends State<Products> {
                       label: "Sort by",
                       labelFontSize: 14,
                       width: (c.maxWidth / 2) - 2.5,
-                      value: _dashCtrl.sortBy.value,
+                      value: _ctrl.sortBy.value,
                       radius: 2,
                       items: [
                         SelectItem("name", SortBy.name),
@@ -155,7 +173,7 @@ class _ProductsState extends State<Products> {
                         SelectItem("date", SortBy.dateCreated),
                       ],
                       onChanged: (p0) {
-                        _dashCtrl.setSortBy(p0);
+                        _ctrl.setSortBy(p0);
                       },
                     )),
                 Obx(() => TuDropdownButton(
@@ -163,7 +181,7 @@ class _ProductsState extends State<Products> {
                       labelFontSize: 14,
                       width: (c.maxWidth / 2) - 2.5,
                       radius: 2,
-                      value: _dashCtrl.status.value,
+                      value: _ctrl.status.value,
                       items: [
                         SelectItem("All", ProductStatus.all),
                         SelectItem("Top selling", ProductStatus.topSelling),
@@ -173,7 +191,7 @@ class _ProductsState extends State<Products> {
                         SelectItem("out of stock", ProductStatus.out),
                       ],
                       onChanged: (p0) {
-                        _dashCtrl.setStatus(p0);
+                        _ctrl.setStatus(p0);
                       },
                     )),
               ],
@@ -188,7 +206,7 @@ class _ProductsState extends State<Products> {
         title: const Text("Products"),
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.orange,
+          backgroundColor: Colors.black87,
           child: const Icon(
             Icons.add_outlined,
             color: Colors.white,
@@ -198,63 +216,71 @@ class _ProductsState extends State<Products> {
             //  pushTo(context, AddNewProductModal());
             pushTo(context, const AddProductForm());
           }),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TuFormField(
-                hint: "Search",
-                prefixIcon: TuIcon(Icons.search),
-                radius: 5,
-                suffixIcon: IconButton(
-                    splashRadius: 20,
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      // show filters
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await _getProducts();
+        },
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                mY(6),
+                TuCard(
+                  child: TuFormField(
+                    hasBorder: false,
+                    hint: "Search",
+                    prefixIcon: TuIcon(Icons.search),
+                    radius: 5,
+                    suffixIcon: IconButton(
+                        splashRadius: 20,
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          // show filters
+                          TuFuncs.showBottomSheet(
+                              full: false,
+                              context: context,
+                              widget: filterModal());
+                        },
+                        icon: TuIcon(Icons.tune)),
+                    onTap: () {
                       TuFuncs.showBottomSheet(
-                          full: false, context: context, widget: filterModal());
+                          context: context, widget: const SearchPage());
                     },
-                    icon: TuIcon(Icons.tune)),
-                onTap: () {
-                  TuFuncs.showBottomSheet(
-                      context: context, widget: const SearchPage());
-                },
-              ),
-              mY(5),
-              Obx(() => !_dashCtrl.productsFetched.value
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          mY(30),
-                          h3("Please wait..."),
-                        ],
-                      ),
-                    )
-                  : _dashCtrl.sortedProducts.isEmpty
-                      ? Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              mY(30),
-                              h3("Nothing to show"),
-                              IconButton(
-                                  icon: const Icon(Icons.refresh),
-                                  onPressed: () async {
-                                    /* final res = await _getProducts();
-                                    _dashCtrl.set_products(res); */
-                                  })
-                            ],
-                          ),
-                        )
-                      : Column(
-                          children: _dashCtrl.sortedProducts.map((e) {
-                            return ProductItem(product: e);
-                          }).toList(),
-                        ))
-            ],
+                  ),
+                ),
+                mY(5),
+                Obx(() => _ctrl.products.value == null
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [mY(30), CircularProgressIndicator()],
+                        ),
+                      )
+                    : _ctrl.sortedProducts.value!.isEmpty
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                mY(30),
+                                h3("Nothing to show"),
+                                IconButton(
+                                    icon: const Icon(Icons.refresh),
+                                    onPressed: () async {
+                                      /* final res = await _getProducts();
+                                      _ctrl.set_products(res); */
+                                    })
+                              ],
+                            ),
+                          )
+                        : Column(
+                            children: _ctrl.sortedProducts.value!.map((e) {
+                              return ProductItem(product: e);
+                            }).toList(),
+                          ))
+              ],
+            ),
           ),
         ),
       ),

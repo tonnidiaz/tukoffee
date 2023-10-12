@@ -123,7 +123,7 @@ class _SearchPageState extends State<SearchPage> {
                         children: [
                           Text(
                             "Search results for:  ",
-                            style: Styles.title(isLight: true),
+                            // style: Styles.title(isLight: true),
                           ),
                           Text(
                             _query,

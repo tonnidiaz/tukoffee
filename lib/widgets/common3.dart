@@ -225,3 +225,5 @@ class InfoItem extends StatelessWidget {
     );
   }
 }
+
+Widget devider() => Container(height: 1, color: Colors.black12);

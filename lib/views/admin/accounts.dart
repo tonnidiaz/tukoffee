@@ -2,9 +2,11 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:frust/utils/colors.dart';
 import 'package:frust/utils/constants.dart';
 import 'package:frust/utils/functions.dart';
 import 'package:frust/utils/styles.dart';
+import 'package:frust/views/account/profile.dart';
 import 'package:frust/views/admin/account.dart';
 import 'package:frust/views/order/index.dart';
 import 'package:frust/widgets/common.dart';
@@ -143,7 +145,6 @@ class _AccountsState extends State<Accounts> {
           },
           child: SingleChildScrollView(
             child: Container(
-              padding: defaultPadding,
               height: screenSize(context).height -
                   statusBarH(context: context) -
                   (appBarH * 2),
@@ -152,28 +153,33 @@ class _AccountsState extends State<Accounts> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  mY(6),
                   Obx(
-                    () => TuFormField(
-                      hint: "Name or email",
-                      prefixIcon: TuIcon(Icons.search),
-                      value: _ctrl.query.value,
-                      onChanged: (val) {
-                        _ctrl.setQuery(val);
+                    () => Container(
+                      color: cardBGLight,
+                      padding: defaultPadding,
+                      child: TuFormField(
+                        hint: "Name or email",
+                        prefixIcon: TuIcon(Icons.search),
+                        value: _ctrl.query.value,
+                        onChanged: (val) {
+                          _ctrl.setQuery(val);
 
-                        _ctrl.setFilteredAccounts(
-                            _ctrl.accounts.value!.where((p0) {
-                          var firstLastName =
-                              "${p0['first_name']} ${p0['last_name']}";
+                          _ctrl.setFilteredAccounts(
+                              _ctrl.accounts.value!.where((p0) {
+                            var firstLastName =
+                                "${p0['first_name']} ${p0['last_name']}";
 
-                          var filter = "${p0['email']}".contains(
-                                  RegExp(val, caseSensitive: false)) ||
-                              firstLastName.contains(
-                                  RegExp(val, caseSensitive: false)) ||
-                              "${p0['first_name']}"
-                                  .contains(RegExp(val, caseSensitive: false));
-                          return filter;
-                        }).toList());
-                      },
+                            var filter = "${p0['email']}".contains(
+                                    RegExp(val, caseSensitive: false)) ||
+                                firstLastName.contains(
+                                    RegExp(val, caseSensitive: false)) ||
+                                "${p0['first_name']}".contains(
+                                    RegExp(val, caseSensitive: false));
+                            return filter;
+                          }).toList());
+                        },
+                      ),
                     ),
                   ),
                   Obx(() {
@@ -185,6 +191,7 @@ class _AccountsState extends State<Accounts> {
                           )
                         : Column(
                             children: [
+                              mY(6),
                               AccountsSection(
                                   ctrl: _ctrl,
                                   title: "Staff",
@@ -254,7 +261,7 @@ class AccountCard extends StatelessWidget {
       my: 2.5,
       onTap: () {
         if (_appBarCtrl.selected.isEmpty) {
-          pushTo(context, DashAccountPage(id: "${account['_id']}"));
+          pushTo(context, ProfilePage(id: "${account['_id']}"));
         } else {
           _selectItem(account);
         }
@@ -262,117 +269,121 @@ class AccountCard extends StatelessWidget {
       onLongPress: () {
         _selectItem(account);
       },
-      child: TuListTile(
-        leading: Row(
-          children: [
-            Obx(
-              () {
-                var selected = _appBarCtrl.selected
-                    .where((it) => it['_id'] == account['_id'])
-                    .isNotEmpty;
-                return _appBarCtrl.selected.isNotEmpty
-                    ? SizedBox(
-                        //color: Colors.purple,
-                        width: 33,
-                        child: TuLabeledCheckbox(
-                            activeColor: Colors.orange,
-                            value: selected,
-                            onChanged: (val) {
-                              _selectItem(account);
-                            }),
-                      )
-                    : none();
-              },
+      child: Column(
+        children: [
+          TuListTile(
+            leading: Row(
+              children: [
+                Obx(
+                  () {
+                    var selected = _appBarCtrl.selected
+                        .where((it) => it['_id'] == account['_id'])
+                        .isNotEmpty;
+                    return _appBarCtrl.selected.isNotEmpty
+                        ? SizedBox(
+                            //color: Colors.purple,
+                            width: 33,
+                            child: TuLabeledCheckbox(
+                                activeColor: Colors.orange,
+                                value: selected,
+                                onChanged: (val) {
+                                  _selectItem(account);
+                                }),
+                          )
+                        : none();
+                  },
+                ),
+                CircleAvatar(
+                  backgroundColor: Colors.black12,
+                  foregroundColor: TuColors.note,
+                  child: Icon(Icons.person),
+                ),
+              ],
             ),
-            const CircleAvatar(
-              backgroundColor: Colors.black26,
-              foregroundColor: Colors.black,
-              child: Icon(Icons.person),
+            title: Text(
+              "${account['first_name']} ${account['last_name']}",
+              softWrap: false,
+              overflow: TextOverflow.ellipsis,
+              style: Styles.title(),
             ),
-          ],
-        ),
-        title: Text(
-          "${account['first_name']} ${account['last_name']}",
-          softWrap: false,
-          overflow: TextOverflow.ellipsis,
-          style: Styles.title(),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Builder(builder: (context) {
-              final permissions = account['permissions'];
-              var perms = permissions == 0
-                  ? "read only"
-                  : permissions == 1
-                      ? "read/write"
-                      : "read/write/delete";
-              return tuStatus(perms, fontSize: 12);
-            }),
-          ],
-        ),
-        trailing: SizedBox(
-          width: 20,
-          child: Obx(() {
-            int perms = _appCtrl.user['permissions'];
-            bool isAdmin = perms == 2;
-            return PopupMenuButton(
-                splashRadius: 23,
-                padding: EdgeInsets.zero,
-                itemBuilder: (context) {
-                  return !isAdmin
-                      ? []
-                      : [
-                          PopupMenuItem(
-                              onTap: () async {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return PromptDialog(
-                                        title: "Delete account",
-                                        okTxt: "Yes",
-                                        msg:
-                                            "You sure you want to delete the account?",
-                                        onOk: () async {
-                                          try {
-                                            final res = await apiDio()
-                                                .post("/users/delete", data: {
-                                              'ids': [account['_id']]
-                                            });
-                                            var accs = ctrl.accounts.value!;
-                                            ctrl.setAccounts(accs
-                                                .where((it) =>
-                                                    it['_id'] != account['_id'])
-                                                .toList());
-                                            clog(res.data);
-                                            showToast(
-                                                    "Account deleted successfully!")
-                                                .show(context);
-                                          } catch (e) {
-                                            clog(e);
-                                            if (e.runtimeType == DioException) {
-                                              e as DioException;
-                                              handleDioException(
-                                                  context: context,
-                                                  exception: e,
-                                                  msg:
-                                                      'Error deleting account!');
-                                            } else {
-                                              showToast(
-                                                      'Error deleting account!',
-                                                      isErr: true)
-                                                  .show(context);
-                                            }
-                                          }
-                                        },
-                                      );
-                                    });
-                              },
-                              child: iconText("Delete", Icons.delete))
-                        ];
-                });
-          }),
-        ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${account['email']}",
+                  style: TextStyle(fontSize: 14),
+                )
+              ],
+            ),
+            trailing: SizedBox(
+              width: 20,
+              child: Obx(() {
+                int perms = _appCtrl.user['permissions'];
+                bool isAdmin = perms == 2;
+                return PopupMenuButton(
+                    splashRadius: 23,
+                    padding: EdgeInsets.zero,
+                    itemBuilder: (context) {
+                      return !isAdmin
+                          ? []
+                          : [
+                              PopupMenuItem(
+                                  onTap: () async {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return PromptDialog(
+                                            title: "Delete account",
+                                            okTxt: "Yes",
+                                            msg:
+                                                "You sure you want to delete the account?",
+                                            onOk: () async {
+                                              try {
+                                                final res = await apiDio().post(
+                                                    "/users/delete",
+                                                    data: {
+                                                      'ids': [account['_id']]
+                                                    });
+                                                var accs = ctrl.accounts.value!;
+                                                ctrl.setAccounts(accs
+                                                    .where((it) =>
+                                                        it['_id'] !=
+                                                        account['_id'])
+                                                    .toList());
+                                                clog(res.data);
+                                                showToast(
+                                                        "Account deleted successfully!")
+                                                    .show(context);
+                                              } catch (e) {
+                                                clog(e);
+                                                if (e.runtimeType ==
+                                                    DioException) {
+                                                  e as DioException;
+                                                  handleDioException(
+                                                      context: context,
+                                                      exception: e,
+                                                      msg:
+                                                          'Error deleting account!');
+                                                } else {
+                                                  showToast(
+                                                          'Error deleting account!',
+                                                          isErr: true)
+                                                      .show(context);
+                                                }
+                                              }
+                                            },
+                                          );
+                                        });
+                                  },
+                                  child: iconText("Delete", Icons.delete))
+                            ];
+                    });
+              }),
+            ),
+          ),
+          mY(6),
+          devider()
+        ],
       ),
     );
   }
@@ -397,57 +408,38 @@ class _AccountsSectionState extends State<AccountsSection> {
   final AppBarCtrl _appBarCtrl = Get.find();
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(widget.title, style: Styles.h2()),
-          Obx(() => TuLabeledCheckbox(
-              // top-cehckbox
-              activeColor: Colors.orange,
-              radius: 50,
-              value: _appBarCtrl.selected.isNotEmpty &&
-                  _appBarCtrl.selected
-                          .where((p0) => widget.accounts.contains(p0))
-                          .length ==
-                      widget.accounts.length,
-              onChanged: (val) {
-                if (val == true) {
-                  // add the accounts to the already existing ones
-                  _appBarCtrl.setSelected(
-                      [..._appBarCtrl.selected, ...widget.accounts]);
-                } else {
-                  // All except for the once in the widget.account
-                  _appBarCtrl.setSelected(_appBarCtrl.selected
-                      .where((it) => !widget.accounts.contains(it))
-                      .toList());
-                }
-              })),
-        ],
-      ),
+    return TuCard(
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(widget.title, style: Styles.h3()),
+          ],
+        ),
 
-      mY(5),
+        mY(10),
 
-      //id=accounts
-      widget.accounts.isEmpty
-          ? SizedBox(
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Nothing to show",
-                    style: Styles.h3(),
-                  ),
-                ],
-              ),
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: widget.accounts.map((it) {
-                return AccountCard(account: it, ctrl: widget.ctrl);
-              }).toList(),
-            )
-    ]);
+        //id=accounts
+        widget.accounts.isEmpty
+            ? SizedBox(
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Nothing to show",
+                      style: Styles.h3(),
+                    ),
+                  ],
+                ),
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: widget.accounts.map((it) {
+                  return AccountCard(account: it, ctrl: widget.ctrl);
+                }).toList(),
+              )
+      ]),
+    );
   }
 }

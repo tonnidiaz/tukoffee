@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:frust/widgets/common3.dart';
 import 'package:frust/widgets/tu/form_field.dart';
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:frust/views/map.dart';
 import 'package:frust/widgets/common.dart';
 import 'package:frust/widgets/common2.dart';
 import 'package:frust/widgets/form_view.dart';
+import 'package:frust/widgets/tu/select.dart';
 import 'package:get/get.dart';
 
 import '../../utils/functions.dart';
@@ -82,7 +84,6 @@ class _OrderPageState extends State<OrderPage> {
             useBottomSheet: true,
             fields: [
               TuFormField(
-                hasBorder: false,
                 required: true,
                 label: "Name:",
                 hint: "e.g. John Doe",
@@ -92,7 +93,6 @@ class _OrderPageState extends State<OrderPage> {
                 },
               ),
               TuFormField(
-                hasBorder: false,
                 required: true,
                 label: "Phone:",
                 hint: "e.g. 0712345678",
@@ -152,7 +152,7 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: childAppbar(),
+      appBar: childAppbar(title: "Order #${_args?.id}"),
       body: RefreshIndicator(
         onRefresh: () async {
           await _init();
@@ -168,363 +168,284 @@ class _OrderPageState extends State<OrderPage> {
                 ))
               : SingleChildScrollView(
                   child: Container(
-                    padding: defaultPadding2,
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Order #${_args?.id}",
-                            style: Styles.h1,
-                          ),
-                          _order!['status'] == "cancelled"
-                              ? TuButton(
-                                  text: "Delete order",
-                                  width: double.infinity,
-                                  bgColor: Colors.red,
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (c) {
-                                          return ConfirmPassForm(
-                                            onOk: () async {
-                                              try {
-                                                await apiDio().post(
-                                                    '/order/cancel?action=delete',
-                                                    data: {
-                                                      "ids": [_order!['_id']]
-                                                    });
-                                                Navigator
-                                                    .pushNamedAndRemoveUntil(
-                                                        context,
-                                                        '/',
-                                                        (route) => false);
-                                              } catch (e) {
-                                                errorHandler(
-                                                    e: e, context: context);
-                                              }
-                                            },
-                                          );
-                                        });
-                                  })
-                              : Obx(
-                                  () => _appCtrl.user['permissions'] < 1
-                                      ? none()
-                                      : TuLabeledCheckbox(
-                                          activeColor: Colors.orange,
-                                          onChanged: (val) {
-                                            showDialog(
-                                                context: context,
-                                                builder: (c) {
-                                                  return ConfirmPassForm(
-                                                    onOk: () async {
-                                                      var status = val == true
-                                                          ? "delivered"
-                                                          : "pending";
-                                                      try {
-                                                        final res =
-                                                            await apiDio().post(
-                                                                '/order/edit?id=${_order!['_id']}',
-                                                                data: {
-                                                              "status": status
-                                                            });
-                                                        _reload(res);
-                                                      } catch (e) {
-                                                        errorHandler(
-                                                            e: e,
-                                                            context: context,
-                                                            msg:
-                                                                "Error modifying order status!");
-                                                      }
-                                                    },
-                                                  );
-                                                });
-                                          },
-                                          value:
-                                              _order!['status'] == "delivered",
-                                          label: "Mark as delivered",
-                                          fontWeight: FontWeight.w600),
-                                ),
-                          mY(5),
+                          mY(6),
                           TuCard(
                               width: double.infinity,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Details",
-                                    style: Styles.h2(),
-                                  ),
-                                  mY(10),
-                                  Column(
-                                    //id=order-details
-                                    children: [
-                                      tuTableRow(
-                                        Text(
-                                          "Order ID:",
-                                          style: Styles.h3(),
-                                        ),
-                                        Text(
-                                          _args!.id,
-                                          style: Styles.h3(isLight: true),
-                                        ),
-                                      ),
-                                      tuTableRow(
-                                        Text(
-                                          "Order status:",
-                                          style: Styles.h3(),
-                                        ),
-                                        Text(
-                                          "${_order!['status']}",
-                                          style: Styles.h3(isLight: true),
-                                        ),
-                                      ),
-                                      tuTableRow(
-                                        Text(
-                                          "Date created:",
-                                          style: Styles.h3(),
-                                        ),
-                                        Text(
-                                          DateTime.parse(
-                                                  "${_order!["date_created"]}")
-                                              .toLocal()
-                                              .toString()
-                                              .split(" ")
-                                              .first,
-                                          style: Styles.h3(isLight: true),
-                                        ),
-                                      ),
-                                      tuTableRow(
-                                        Text(
-                                          "Last modified:",
-                                          style: Styles.h3(),
-                                        ),
-                                        Text(
-                                          DateTime.parse(
-                                                  "${_order!["last_modified"]}")
-                                              .toLocal()
-                                              .toString()
-                                              .split(" ")
-                                              .first,
-                                          style: Styles.h3(isLight: true),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  mY(10),
-                                  TuCard(
-                                      width: double.infinity,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Customer",
-                                            style: Styles.h2(),
-                                          ),
-                                          Column(
-                                            //id=customer-details
-                                            children: [
-                                              tuTableRow(
-                                                Text(
-                                                  "Name:",
-                                                  style: Styles.h3(),
-                                                ),
-                                                Text(
-                                                  "${_order!["customer"]["first_name"]} ${_order!["customer"]["last_name"]}",
-                                                  style:
-                                                      Styles.h3(isLight: true),
-                                                ),
-                                              ),
-                                              tuTableRow(
-                                                Text(
-                                                  "Phone:",
-                                                  style: Styles.h3(),
-                                                ),
-                                                Text(
-                                                  "${_order!["customer"]["phone"]}",
-                                                  style:
-                                                      Styles.h3(isLight: true),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      )),
-                                  mY(10),
-                                  TuCard(
-                                      width: double.infinity,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          tuTableRow(
-                                              Text(
-                                                "Recipient",
-                                                style: Styles.h2(),
-                                              ),
-                                              IconButton(
-                                                  padding: EdgeInsets.zero,
-                                                  onPressed:
-                                                      _onEditRecipientBtnPress,
-                                                  icon: const Icon(
-                                                    Icons.edit,
-                                                    size: 20,
-                                                  )),
-                                              my: 0),
-                                          Column(
-                                            //id=customer-details
-                                            children: [
-                                              tuTableRow(
-                                                Text(
-                                                  "Name:",
-                                                  style: Styles.h3(),
-                                                ),
-                                                Text(
-                                                  "${_order!["delivery_address"]["name"] ?? _order!["collector"]["name"]}",
-                                                  style:
-                                                      Styles.h3(isLight: true),
-                                                ),
-                                              ),
-                                              tuTableRow(
-                                                Text(
-                                                  "Phone:",
-                                                  style: Styles.h3(),
-                                                ),
-                                                Text(
-                                                  "${_order!["delivery_address"]["phone"] ?? _order!["collector"]["phone"]}",
-                                                  style:
-                                                      Styles.h3(isLight: true),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      )),
-                                  mY(10),
-                                  _order!['mode'] == 1
-                                      ? TuCard(
-                                          child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Store",
-                                              style: Styles.h2(),
-                                            ),
-                                            Obx(
-                                              () => _storeCtrl.stores.value ==
-                                                      null
-                                                  ? none()
-                                                  : TuDropdownButton(
-                                                      label: "Store:",
-                                                      value: _order!['store']
-                                                          ['_id'],
-                                                      items: _storeCtrl
-                                                          .stores.value!
-                                                          .map((e) {
-                                                        return SelectItem(
-                                                            e['location']
-                                                                ['name'],
-                                                            e['_id']);
-                                                      }).toList(),
-                                                      onChanged: (val) async {
-                                                        var store = _storeCtrl
-                                                            .stores.value!
-                                                            .where((element) =>
-                                                                element[
-                                                                    '_id'] ==
-                                                                val)
-                                                            .first;
-                                                        clog(store);
-                                                        //_ctrl.setStore(store);
-                                                        final res =
-                                                            await apiDio().post(
-                                                                '/order/edit?id=${_order!['_id']}',
-                                                                data: {
-                                                              'store': store
-                                                            });
-                                                        _reload(res);
-                                                      },
-                                                    ),
-                                            )
-                                          ],
-                                        ))
-                                      : TuCard(
-                                          width: double.infinity,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              tuTableRow(
-                                                  Text(
-                                                    "Delivery address",
-                                                    style: Styles.h2(),
-                                                  ),
-                                                  IconButton(
-                                                      padding: EdgeInsets.zero,
-                                                      onPressed:
-                                                          _onEditAddressPress,
-                                                      icon: const Icon(
-                                                        Icons.edit,
-                                                        size: 20,
-                                                      )),
-                                                  my: 0),
-                                              Builder(builder: (context) {
-                                                final addr =
-                                                    _order!["delivery_address"];
-                                                return addr['location'] == null
-                                                    ? const Text("No address")
-                                                    : Text(
-                                                        addr['location']
-                                                            ['name'],
-                                                        style: const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                      );
-                                              }),
-                                            ],
-                                          )),
-                                ],
-                              )),
-                          mY(10),
-                          TuCard(
-                              width: double.infinity,
-                              child: Column(
+                              child: TuCard(
+                                color: appBGLight,
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Items",
-                                      style: Styles.h2(),
+                                      "Details",
+                                      style: Styles.h3(),
                                     ),
-                                    mY(10),
-                                    Builder(builder: (context) {
-                                      final items =
-                                          _order!["products"] as List<dynamic>;
-                                      return Column(
-                                        children: items
-                                            .map((it) => TuListTile(
-                                                leading: const CircleAvatar(
-                                                  foregroundColor: Colors.black,
-                                                  backgroundColor:
-                                                      Colors.black12,
-                                                  child: Icon(
-                                                      Icons.coffee_outlined),
-                                                ),
-                                                title: Text(
-                                                  "${it['product']['name']}",
-                                                  style: Styles.title(),
-                                                ),
-                                                subtitle: Text(
-                                                  "R${it['product']['price']}",
-                                                  style: Styles.subtitle,
-                                                ),
-                                                trailing:
-                                                    Text("x${it['quantity']}")))
-                                            .toList(),
-                                      );
-                                    })
-                                  ]))
+                                    Container(
+                                      height: 1,
+                                      color: Colors.black12,
+                                    ),
+                                    mY(6),
+                                    Column(
+                                      //id=order-details
+                                      children: [
+                                        tuTableRow(
+                                            const Text(
+                                              "Order ID:",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            Text(
+                                              _args!.id,
+                                            ),
+                                            my: 10),
+                                        tuTableRow(
+                                            const Text(
+                                              "Order status:",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            Text(
+                                              "${_order!['status']}",
+                                            ),
+                                            my: 10),
+                                        tuTableRow(
+                                            const Text(
+                                              "Date created:",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            Text(
+                                              DateTime.parse(
+                                                      "${_order!["date_created"]}")
+                                                  .toLocal()
+                                                  .toString()
+                                                  .split(" ")
+                                                  .first,
+                                            ),
+                                            my: 10),
+                                        tuTableRow(
+                                            const Text(
+                                              "Last modified:",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            Text(
+                                              DateTime.parse(
+                                                      "${_order!["last_modified"]}")
+                                                  .toLocal()
+                                                  .toString()
+                                                  .split(" ")
+                                                  .first,
+                                            ),
+                                            my: 10),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )),
+                          mY(6),
+                          TuCard(
+                              width: double.infinity,
+                              child: TuCard(
+                                color: appBGLight,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Customer",
+                                      style: Styles.h3(),
+                                    ),
+                                    devider(),
+                                    Column(
+                                      //id=customer-details
+                                      children: [
+                                        tuTableRow(
+                                            const Text("Name:",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                            Text(
+                                              "${_order!["customer"]["first_name"]} ${_order!["customer"]["last_name"]}",
+                                            ),
+                                            my: 10),
+                                        tuTableRow(
+                                            const Text("Phone:",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                            Text(
+                                              "${_order!["customer"]["phone"]}",
+                                            ),
+                                            my: 10),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )),
+                          mY(6),
+                          TuCard(
+                              width: double.infinity,
+                              child: TuCard(
+                                color: appBGLight,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    tuTableRow(
+                                        Text("Recipient", style: Styles.h3()),
+                                        IconButton(
+                                            padding: EdgeInsets.zero,
+                                            onPressed: _onEditRecipientBtnPress,
+                                            icon: const Icon(
+                                              Icons.edit,
+                                              size: 20,
+                                            )),
+                                        my: 0),
+                                    devider(),
+                                    Column(
+                                      //id=customer-details
+                                      children: [
+                                        tuTableRow(
+                                            const Text("Name:",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                            Text(
+                                              true
+                                                  ? "PH"
+                                                  : "${_order!["delivery_address"]["name"] ?? _order!["collector"]["name"]}",
+                                            ),
+                                            my: 10),
+                                        tuTableRow(
+                                            const Text("Phone:",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                            Text(
+                                              true
+                                                  ? "PH"
+                                                  : "${_order!["delivery_address"]["phone"] ?? _order!["collector"]["phone"]}",
+                                            ),
+                                            my: 10),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )),
+                          mY(6),
+                          _order!['mode'] == 1
+                              ? TuCard(
+                                  child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Obx(
+                                      () => _storeCtrl.stores.value == null
+                                          ? none()
+                                          : TuSelect(
+                                              label: "Store:",
+                                              value: _order!['store']['_id'],
+                                              items: _storeCtrl.stores.value!
+                                                  .map((e) {
+                                                return SelectItem(
+                                                    e['location']['name'],
+                                                    e['_id']);
+                                              }).toList(),
+                                              onChanged: (val) async {
+                                                var store = _storeCtrl
+                                                    .stores.value!
+                                                    .where((element) =>
+                                                        element['_id'] == val)
+                                                    .first;
+                                                clog(store);
+                                                //_ctrl.setStore(store);
+                                                final res = await apiDio().post(
+                                                    '/order/edit?id=${_order!['_id']}',
+                                                    data: {'store': store});
+                                                _reload(res);
+                                              },
+                                            ),
+                                    )
+                                  ],
+                                ))
+                              : TuCard(
+                                  width: double.infinity,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      tuTableRow(
+                                          Text(
+                                            "Delivery address",
+                                            style: Styles.h2(),
+                                          ),
+                                          IconButton(
+                                              padding: EdgeInsets.zero,
+                                              onPressed: _onEditAddressPress,
+                                              icon: const Icon(
+                                                Icons.edit,
+                                                size: 20,
+                                              )),
+                                          my: 0),
+                                      Builder(builder: (context) {
+                                        final addr =
+                                            _order!["delivery_address"];
+                                        return addr['location'] == null
+                                            ? const Text("No address")
+                                            : Text(
+                                                addr['location']['name'],
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              );
+                                      }),
+                                    ],
+                                  )),
+                          mY(6),
+                          TuCard(
+                              width: double.infinity,
+                              child: TuCard(
+                                color: appBGLight,
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Items",
+                                        style: Styles.h3(),
+                                      ),
+                                      devider(),
+                                      mY(10),
+                                      Builder(builder: (context) {
+                                        final items = _order!["products"]
+                                            as List<dynamic>;
+                                        return Column(
+                                          children: items
+                                              .map((it) => Column(
+                                                    children: [
+                                                      TuListTile(
+                                                          title: Text(
+                                                              "${it['product']['name']}",
+                                                              style: const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600)),
+                                                          subtitle: Text(
+                                                            "R${it['product']['price']}",
+                                                            style:
+                                                                Styles.subtitle,
+                                                          ),
+                                                          trailing: Text(
+                                                              "x${it['quantity']}")),
+                                                      devider()
+                                                    ],
+                                                  ))
+                                              .toList(),
+                                        );
+                                      })
+                                    ]),
+                              ))
                         ]),
                   ),
                 ),
@@ -559,9 +480,10 @@ class TuCard extends StatelessWidget {
   final Function()? onLongPress;
   final double width;
   final double? height;
+  final Color? color;
   const TuCard(
       {super.key,
-      this.radius = 7,
+      this.radius = 0,
       this.padding = 8,
       this.my = 0,
       this.mx = 0,
@@ -570,6 +492,7 @@ class TuCard extends StatelessWidget {
       this.onTap,
       this.onLongPress,
       this.height,
+      this.color,
       this.width = double.infinity});
   @override
   Widget build(BuildContext context) {
@@ -584,12 +507,9 @@ class TuCard extends StatelessWidget {
         width: width,
         padding: EdgeInsets.all(padding),
         decoration: BoxDecoration(
-            color: cardBGLight,
-            borderRadius: BorderRadius.circular(radius),
-            border: Border.all(
-              width: borderSize,
-              color: const Color.fromRGBO(0, 0, 0, 0.1),
-            )),
+          color: color ?? cardBGLight,
+          borderRadius: BorderRadius.circular(radius),
+        ),
         child: child,
       ),
     );

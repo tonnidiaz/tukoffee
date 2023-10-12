@@ -203,8 +203,9 @@ class _OrdersPageState extends State<OrdersPage> {
     var routeName = ModalRoute.of(context)?.settings.name;
     filterModal() {
       return Padding(
-        padding: defaultPadding2,
+        padding: defaultPadding,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

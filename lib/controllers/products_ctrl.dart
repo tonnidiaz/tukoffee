@@ -1,32 +1,20 @@
+import 'package:frust/utils/constants2.dart';
 import 'package:get/get.dart';
 
 import '../utils/constants.dart';
 
 class ProductsCtrl extends GetxController {
-  final RxList<dynamic> selectedProducts = [].obs;
-  void set_selectedProducts(List<dynamic> val) {
-    selectedProducts.value = val;
-  }
-
-  final RxBool productsFetched = false.obs;
-  void setProductsFetched(bool val) {
-    productsFetched.value = val;
-  }
-
-  RxList<dynamic> products = [].obs;
-  void set_products(List<dynamic> val) {
+  Rxn<List> products = Rxn();
+  void setProducts(List? val) {
     products.value = val;
+    setSortedProducts(val);
+    if (val == null) return;
     _sortProducts();
   }
 
-  RxList<dynamic> sortedProducts = [].obs;
-  void setSortedProducts(List<dynamic> val) {
+  Rxn<List> sortedProducts = Rxn();
+  void setSortedProducts(List? val) {
     sortedProducts.value = val;
-  }
-
-  RxMap<String, dynamic> newProduct = <String, dynamic>{"quantity": 1}.obs;
-  void set_newProduct(Map<String, dynamic> val) {
-    newProduct.value = val;
   }
 
   Rx<SortBy> sortBy = SortBy.name.obs;
@@ -38,6 +26,38 @@ class ProductsCtrl extends GetxController {
   Rx<SortOrder> sortOrder = SortOrder.ascending.obs;
   void setSortOrder(SortOrder val) {
     sortOrder.value = val;
+    _sortProducts();
+  }
+
+  Rx<ProductStatus> status = ProductStatus.all.obs;
+  void setStatus(ProductStatus val) {
+    status.value = val;
+    // Filter the  products and sort them
+    var prods = products.value;
+    switch (val) {
+      case ProductStatus.all:
+        setSortedProducts(prods);
+        break;
+      case ProductStatus.instock:
+        setSortedProducts(prods!.where((it) => it['quantity'] > 0).toList());
+        break;
+      case ProductStatus.topSelling:
+        setSortedProducts(
+            prods!.where((it) => it['top_selling'] == true).toList());
+        break;
+      case ProductStatus.special:
+        setSortedProducts(
+            prods!.where((it) => it['on_special'] == true).toList());
+        break;
+      case ProductStatus.sale:
+        setSortedProducts(prods!.where((it) => it['on_sale'] == true).toList());
+        break;
+      case ProductStatus.out:
+        setSortedProducts(prods!.where((it) => it['quantity'] == 0).toList());
+        break;
+      default:
+        break;
+    }
     _sortProducts();
   }
 
@@ -73,7 +93,6 @@ class ProductsCtrl extends GetxController {
       return s;
     }
 
-    sortedProducts.value = products;
-    sortedProducts.sort(sorter);
+    sortedProducts.value!.sort(sorter);
   }
 }
