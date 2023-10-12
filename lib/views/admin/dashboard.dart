@@ -6,6 +6,7 @@ import 'package:frust/utils/functions.dart';
 import 'package:frust/utils/styles.dart';
 import 'package:frust/views/admin/accounts.dart';
 import 'package:frust/views/admin/orders.dart';
+import 'package:frust/views/admin/reviews.dart';
 import 'package:frust/views/order/index.dart';
 import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
@@ -16,6 +17,7 @@ import '../../widgets/common2.dart';
 import '/utils/constants.dart';
 import '/widgets/common.dart';
 import 'products.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class DashCtrl extends GetxController {
   RxInt selectedTab = 0.obs;
@@ -123,6 +125,11 @@ class DashCtrl extends GetxController {
 
     sortedProducts.sort(sorter);
   }
+
+  Rx<Map<String, dynamic>?> data = (null as Map<String, dynamic>?).obs;
+  setData(Map<String, dynamic>? val) {
+    data.value = val;
+  }
 }
 
 class DashboardPageArgs {
@@ -146,20 +153,6 @@ class _DashboardPageState extends State<DashboardPage> {
     _ctrl.selectedTab.value = val;
   }
 
-  void _setupDash() async {
-    try {
-      _ctrl.setProductsFetched(false);
-      var res = await dio.get("$apiURL/admin/dash");
-      final data = res.data;
-      _ctrl.setProducts(data["products"]);
-      _ctrl.orders.value = data["orders"];
-      _ctrl.customers.value = data["customers"];
-    } catch (e) {
-      clog(e);
-    }
-    _ctrl.setProductsFetched(true);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -169,20 +162,14 @@ class _DashboardPageState extends State<DashboardPage> {
           args != null ? args as DashboardPageArgs : const DashboardPageArgs();
       _ctrl.selectedTab.value = _args!.tab;
     });
-    _setupDash();
   }
 
   @override
   Widget build(BuildContext context) {
-    return PageWrapper(
-      appBar: childAppbar(showCart: false),
-      bottomNavBar: Obx(
+    return Scaffold(
+      bottomNavigationBar: Obx(
         () => BottomNavigationBar(
           currentIndex: _ctrl.selectedTab.value,
-          selectedItemColor: orange,
-          unselectedItemColor: Colors.black45,
-          showUnselectedLabels: true,
-          unselectedFontSize: 10,
           onTap: _onBottonNavitemTap,
           items: const [
             /*  BottomNavigationBarItem(
@@ -195,7 +182,7 @@ class _DashboardPageState extends State<DashboardPage> {
               label: "Dashboard",
             ),
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.boxesStacked),
+              icon: Icon(FontAwesomeIcons.boxOpen),
               label: "Products",
             ),
             BottomNavigationBarItem(
@@ -209,7 +196,7 @@ class _DashboardPageState extends State<DashboardPage> {
           ],
         ),
       ),
-      child: WillPopScope(
+      body: WillPopScope(
         onWillPop: () async {
           clog("On will pop");
           if (_ctrl.selectedTab.value != 0) {
@@ -227,82 +214,105 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 }
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
   @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  final DashCtrl _ctrl = Get.find();
+  void _setupDash() async {
+    try {
+      _ctrl.setData(null);
+      var res = await dio.get("$apiURL/admin/dash");
+      final data = res.data;
+      _ctrl.setData(data);
+    } catch (e) {
+      clog(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _setupDash();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final DashCtrl ctrl = Get.find();
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.black87,
-          child: const Icon(Icons.settings),
-          onPressed: () {
-            Navigator.pushNamed(context, '/admin/settings');
-          }),
+      appBar: AppBar(
+        title: const Text("Dashboard"),
+      ),
       body: Container(
-        padding: defaultPadding2,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              mY(5),
-              Text(
-                "Dashboard",
-                style: Styles.h1,
-              ),
-              mY(10),
-              Obx(
-                () => Column(
+        padding: EdgeInsets.all(6),
+        width: double.infinity,
+        child: Obx(
+          () => _ctrl.data.value == null
+              ? none()
+              : StaggeredGrid.count(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 6,
+                  mainAxisSpacing: 6,
                   children: [
-                    ItemCard(
-                      title: "Revenue",
-                      avatarTxt: "\$",
-                      subtitle: "\$${ctrl.revenue.roundToDouble()}",
-                      avatarBG: const Color.fromRGBO(76, 175, 79, 0.3),
-                      avatarFG: Colors.green,
-                    ),
                     ItemCard(
                       title: "Products",
                       onTap: () {
-                        ctrl.selectedTab.value = 1;
+                        _ctrl.selectedTab.value = 1;
                       },
-                      avatarTxt: const Icon(
-                        FontAwesomeIcons.boxesStacked,
-                        color: Colors.orange,
+                      icon: Icon(
+                        FontAwesomeIcons.boxOpen,
+                        color: TuColors.coffee2,
                       ),
-                      subtitle: "${ctrl.products.length}",
-                      avatarBG: const Color.fromRGBO(255, 153, 0, 0.3),
+                      subtitle: "${_ctrl.data.value!['products'].length}",
                     ),
                     ItemCard(
                       title: "Orders",
                       onTap: () {
-                        ctrl.selectedTab.value = 2;
+                        _ctrl.selectedTab.value = 2;
                       },
-                      avatarTxt: const Icon(
+                      icon: const Icon(
                         FontAwesomeIcons.truckRampBox,
-                        color: Color.fromRGBO(255, 193, 7, 1),
+                        color: Colors.orangeAccent,
                       ),
-                      subtitle: "${ctrl.orders.length}",
-                      avatarBG: const Color.fromRGBO(255, 193, 7, 0.3),
+                      subtitle: "${_ctrl.data.value!['orders'].length}",
                     ),
                     ItemCard(
                       title: "Accounts",
                       onTap: () {
-                        ctrl.selectedTab.value = 3;
+                        _ctrl.selectedTab.value = 3;
                       },
-                      avatarTxt: const Icon(
+                      icon: const Icon(
                         FontAwesomeIcons.users,
                         color: Colors.black54,
                       ),
-                      subtitle: "${ctrl.customers.length}",
-                      avatarBG: const Color.fromRGBO(0, 0, 0, 0.3),
+                      subtitle: "${_ctrl.data.value!['customers'].length}",
+                    ),
+                    ItemCard(
+                      title: "Product reviews",
+                      onTap: () {
+                        pushTo(context, const ProductsReviews());
+                      },
+                      icon: const Icon(
+                        FontAwesomeIcons.squarePollVertical,
+                        color: Colors.green,
+                      ),
+                      subtitle: "${_ctrl.data.value!['reviews'].length}",
+                    ),
+                    ItemCard(
+                      title: "Settings",
+                      onTap: () {
+                        Navigator.pushNamed(context, '/admin/settings');
+                      },
+                      icon: Icon(
+                        FontAwesomeIcons.gear,
+                        color: TuColors.text2,
+                      ),
                     ),
                   ],
                 ),
-              )
-            ],
-          ),
         ),
       ),
     );
@@ -320,51 +330,58 @@ class ItemCard extends StatelessWidget {
   final Function()? onTap;
   final Color? avatarBG;
   final Color? avatarFG;
-  final dynamic avatarTxt;
+  final dynamic icon;
   final String title;
-  final String subtitle;
+  final String? subtitle;
   const ItemCard(
       {super.key,
       this.onTap,
       this.avatarBG,
       this.avatarFG,
-      this.avatarTxt = "A",
+      this.icon = "A",
       this.title = "",
-      this.subtitle = ""});
+      this.subtitle});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-        onTap: onTap,
-        /*   my: 0,
-        borderSize: 0, */
-        //radius: 0,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TuListTile(
-            leading: Container(
-              width: 50,
-              height: 50,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: avatarBG ?? Colors.blue,
-                  borderRadius: BorderRadius.circular(100)),
-              child: avatarTxt.runtimeType == String
-                  ? Text(
-                      avatarTxt,
-                      style: Styles.title(color: avatarFG),
-                    )
-                  : avatarTxt,
-            ),
-            title: Text(
-              title,
-              style: tuTextTheme(context).titleMedium,
-            ),
-            subtitle: Text(
-              subtitle,
-              style: Styles.subtitle,
-            ),
-          ),
-        ));
+    final bRad = BorderRadius.circular(5);
+    return Material(
+      color: cardBGLight,
+      borderRadius: bRad,
+      child: InkWell(
+          onTap: onTap,
+          borderRadius: bRad,
+          /*   my: 0,
+          borderSize: 0, */
+          //radius: 0,
+          hoverColor: const Color.fromRGBO(236, 236, 236, 0.5),
+          child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundColor: appBGLight,
+                      child: icon,
+                    ),
+                    mY(6),
+                    subtitle == null
+                        ? none()
+                        : Text(
+                            subtitle!,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                color: TuColors.text2),
+                          ),
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500, color: TuColors.text),
+                    ),
+                  ]))),
+    );
   }
 }

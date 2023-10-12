@@ -183,6 +183,9 @@ class _ProductsState extends State<Products> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Products"),
+      ),
       floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.orange,
           child: const Icon(
@@ -200,32 +203,6 @@ class _ProductsState extends State<Products> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Products ",
-                    style: Styles.h1,
-                  ),
-                  Obx(
-                    () {
-                      return TuLabeledCheckbox(
-                          radius: 40,
-                          activeColor: orange,
-                          value: _appBarCtrl.selected.isNotEmpty &&
-                              _appBarCtrl.selected.length ==
-                                  _dashCtrl.products.length,
-                          onChanged: (val) {
-                            if (val == true) {
-                              _appBarCtrl.setSelected(_dashCtrl.products);
-                            } else {
-                              _appBarCtrl.setSelected([]);
-                            }
-                          });
-                    },
-                  ),
-                ],
-              ),
               TuFormField(
                 hint: "Search",
                 prefixIcon: TuIcon(Icons.search),

@@ -183,11 +183,13 @@ Widget placeholderText(
   );
 }
 
-Widget tuColumn({List<Widget> children = const [], bool min = false}) {
+Widget tuColumn(
+    {List<Widget> children = const [], bool min = false, bool center = true}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisSize: min ? MainAxisSize.min : MainAxisSize.max,
-    mainAxisAlignment: MainAxisAlignment.center,
+    mainAxisAlignment:
+        center ? MainAxisAlignment.center : MainAxisAlignment.start,
     children: children,
   );
 }
@@ -211,7 +213,8 @@ class InfoItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
           width: double.infinity,
-          height: 40,
+          height: 50,
+          alignment: Alignment.centerLeft,
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
           margin: const EdgeInsets.symmetric(vertical: .5),
           decoration: const BoxDecoration(

@@ -116,9 +116,8 @@ class CartItem extends StatelessWidget {
         //height: 110,
         child: ListTile(
           onTap: () {
-            // Navigate  to product
-            /* Navigator.pushNamed(context, "/product",
-                arguments: {"pid": prod["pid"]}); */
+            Navigator.pushNamed(context, "/product",
+                arguments: {"pid": prod["pid"]});
           },
           //Checkbox, cover, content, deleteBtn
           tileColor: cardBGLight,

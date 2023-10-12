@@ -9,29 +9,36 @@ class Styles {
     return GoogleFonts.poppins(
         fontSize: 24,
         fontWeight: isLight ? FontWeight.w500 : FontWeight.w800,
-        color: color);
+        color: color ?? TuColors.text0);
   }
 
   static TextStyle h3({Color? color, bool isLight = false}) {
     return GoogleFonts.poppins(
-        fontSize: 20,
-        fontWeight: isLight ? FontWeight.w500 : FontWeight.w600,
-        color: color ?? TuColors.text);
+        fontSize: 18,
+        fontWeight: isLight ? FontWeight.w500 : FontWeight.w700,
+        color: color ?? TuColors.text0);
   }
 
   static TextStyle label(
       {Color? color, bool isLight = false, bool isBold = false}) {
     return GoogleFonts.inclusiveSans(
         fontSize: 16,
-        fontWeight: isLight ? FontWeight.w500 : FontWeight.w600,
+        fontWeight: isLight ? FontWeight.w500 : FontWeight.w700,
         color: color);
   }
 
   static TextStyle h4({Color? color, bool isLight = false}) {
-    return GoogleFonts.inclusiveSans(
-        fontSize: 18,
+    return GoogleFonts.poppins(
+        fontSize: 16,
+        fontWeight: isLight ? FontWeight.w500 : FontWeight.w700,
+        color: color ?? TuColors.text0);
+  }
+
+  static TextStyle h5({Color? color, bool isLight = false}) {
+    return GoogleFonts.poppins(
+        fontSize: 14,
         fontWeight: isLight ? FontWeight.w500 : FontWeight.w600,
-        color: color);
+        color: color ?? TuColors.text0);
   }
 
   static TextStyle subtitle =

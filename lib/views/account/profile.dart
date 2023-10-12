@@ -9,6 +9,7 @@ import 'package:frust/utils/functions.dart';
 import 'package:frust/views/auth/verify_email.dart';
 import 'package:frust/views/map.dart';
 import 'package:frust/widgets/common2.dart';
+import 'package:frust/widgets/common3.dart';
 import 'package:get/get.dart';
 
 import '../../utils/constants.dart';
@@ -241,18 +242,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        mY(5),
                         Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              tuTableRow(
-                                  const Text(
-                                    "Personal details",
-                                  ),
-                                  TextButton(
-                                      onPressed: onEditDetailsBtnClick,
-                                      child: const Text('Edit')),
-                                  my: 0),
                               Container(
                                   color: cardBGLight,
                                   width: double.infinity,
@@ -262,42 +254,27 @@ class _ProfilePageState extends State<ProfilePage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Column(
-                                          //id=personal-details
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
+                                        tuTableRow(
                                             Text(
-                                              "First name:",
+                                              "Full name",
                                               style: Styles.h4(
-                                                  isLight: false,
+                                                  isLight: true,
                                                   color: TuColors.text),
                                             ),
-                                            mY(3),
-                                            Text(
-                                              "${_account!['first_name']}",
-                                              style: Styles.h4(
-                                                isLight: true,
-                                              ),
-                                            ),
-                                            mY(7),
-                                            Text(
-                                              "Last name:",
-                                              style: Styles.h4(isLight: false),
-                                            ),
-                                            mY(3),
-                                            Text(
-                                              "${_account!['last_name']}",
-                                              style: Styles.h4(isLight: true),
-                                            ),
-                                          ],
+                                            TextButton(
+                                                onPressed:
+                                                    onEditDetailsBtnClick,
+                                                child: const Text('Edit')),
+                                            my: 0),
+                                        mY(6),
+                                        Text(
+                                          "${_account!['first_name']} ${_account!['last_name']}",
+                                          style: Styles.h5(
+                                              isLight: true,
+                                              color: TuColors.text2),
                                         ),
                                       ])),
-                              mY(10),
-                              const Text(
-                                "Contact details",
-                              ),
-                              mY(10),
+                              mY(2.5),
                               Container(
                                   color: cardBGLight,
                                   width: double.infinity,
@@ -314,13 +291,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                           children: [
                                             Text(
                                               "Email:",
-                                              style: Styles.h4(isLight: false),
+                                              style: Styles.h4(
+                                                  isLight: true,
+                                                  color: TuColors.text),
                                             ),
-                                            mY(3),
+                                            mY(6),
                                             SelectableText(
                                               "${_account!['email']}",
                                               maxLines: 1,
-                                              style: Styles.h4(isLight: true),
+                                              style: Styles.h5(isLight: true),
                                             ),
                                             Visibility(
                                                 visible: !_account![
@@ -365,30 +344,22 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       ),
                                                     ),
                                                     my: 7)),
-                                            mY(7),
+                                            mY(6),
                                             Text(
                                               "Phone:",
-                                              style: Styles.h4(isLight: false),
+                                              style: Styles.h4(
+                                                  isLight: true,
+                                                  color: TuColors.text),
                                             ),
-                                            mY(3),
+                                            mY(6),
                                             SelectableText(
                                               "${_account!['phone']}",
-                                              style: Styles.h4(isLight: true),
+                                              style: Styles.h5(isLight: true),
                                             ),
                                           ],
                                         ),
                                       ])),
-                              tuTableRow(
-                                  const Text(
-                                    "Residential Address",
-                                  ),
-                                  TextButton(
-                                      onPressed: () {
-                                        formCtrl.setForm(_account!['address']);
-                                        addEditAddress(title: "Edit address");
-                                      },
-                                      child: const Text('Edit')),
-                                  my: 10),
+                              mY(2.5),
                               Container(
                                   color: cardBGLight,
                                   width: double.infinity,
@@ -398,6 +369,23 @@ class _ProfilePageState extends State<ProfilePage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
+                                        tuTableRow(
+                                            Text(
+                                              "Residential Address",
+                                              style: Styles.h4(
+                                                  isLight: true,
+                                                  color: TuColors.text),
+                                            ),
+                                            TextButton(
+                                                onPressed: () {
+                                                  formCtrl.setForm(
+                                                      _account!['address']);
+                                                  addEditAddress(
+                                                      title: "Edit address");
+                                                },
+                                                child: const Text('Edit')),
+                                            my: 0),
+                                        mY(6),
                                         Builder(builder: (context) {
                                           final address = _account!["address"];
                                           return address == null
@@ -432,41 +420,48 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 );
                                         })
                                       ])),
-                              mY(10),
-                              tuTableRow(
-                                  const Text(
-                                    "Permissions",
-                                  ),
-                                  TextButton(
-                                      onPressed: onEditPermissionsClick,
-                                      child: const Text('Edit')),
-                                  my: 0),
-                              mY(10),
+                              mY(2.5),
                               Container(
                                 color: cardBGLight,
                                 width: double.infinity,
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 14, vertical: 8),
-                                child: Wrap(
-                                  spacing: 10,
+                                child: tuColumn(
                                   children: [
-                                    TuLabeledCheckbox(
-                                      onChanged: (val) {},
-                                      label: 'READ',
-                                      value: _account!['permissions'] >= 0,
-                                      radius: 100,
-                                    ),
-                                    TuLabeledCheckbox(
-                                      onChanged: (val) {},
-                                      label: 'WRITE',
-                                      value: _account!['permissions'] >= 1,
-                                      radius: 100,
-                                    ),
-                                    TuLabeledCheckbox(
-                                      onChanged: (val) {},
-                                      label: 'DELETE',
-                                      value: _account!['permissions'] >= 2,
-                                      radius: 100,
+                                    tuTableRow(
+                                        Text(
+                                          "Permissions",
+                                          style: Styles.h4(
+                                              isLight: true,
+                                              color: TuColors.text),
+                                        ),
+                                        TextButton(
+                                            onPressed: onEditPermissionsClick,
+                                            child: const Text('Edit')),
+                                        my: 0),
+                                    mY(6),
+                                    Wrap(
+                                      spacing: 10,
+                                      children: [
+                                        TuLabeledCheckbox(
+                                          onChanged: (val) {},
+                                          label: 'READ',
+                                          value: _account!['permissions'] >= 0,
+                                          radius: 100,
+                                        ),
+                                        TuLabeledCheckbox(
+                                          onChanged: (val) {},
+                                          label: 'WRITE',
+                                          value: _account!['permissions'] >= 1,
+                                          radius: 100,
+                                        ),
+                                        TuLabeledCheckbox(
+                                          onChanged: (val) {},
+                                          label: 'DELETE',
+                                          value: _account!['permissions'] >= 2,
+                                          radius: 100,
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

@@ -293,9 +293,9 @@ class _OrdersPageState extends State<OrdersPage> {
     }
 
     return Scaffold(
-      appBar: routeName == '/orders'
-          ? childAppbar(showCart: false, title: 'Orders', actions: [])
-          : null,
+      appBar: AppBar(
+        title: const Text("Orders"),
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
           await _getOrders();

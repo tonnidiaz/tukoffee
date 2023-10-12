@@ -148,7 +148,7 @@ const bool isMobile = true;
 final dio = Dio();
 const localhost = "http://172.16.10.204";
 const String apiURL = false ? "https://tukoffee.vercel.app" : "$localhost:8000";
-const defaultPadding = EdgeInsets.all(8);
+const defaultPadding = EdgeInsets.all(6);
 const defaultPadding2 = EdgeInsets.all(14);
 Size screenSize(BuildContext context) {
   return MediaQuery.of(context).size;

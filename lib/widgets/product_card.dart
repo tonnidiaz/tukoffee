@@ -42,11 +42,6 @@ class ProductCard extends StatelessWidget {
         final res = await apiDio().post("/user/cart?action=$act",
             data: {"user": appCtrl.user["email"], "product": product["_id"]});
         storeCtrl.setcart(res.data["cart"]);
-        // t.dismiss();
-        showToast(!inCart
-                ? "Product added to cart!"
-                : "Product removed from cart!")
-            .show(context);
       } catch (e) {
         clog(e);
         if (e.runtimeType == DioException) {
@@ -174,7 +169,7 @@ class ProductCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Badge(
+                    Chip(
                       backgroundColor: TuColors.primary,
                       label: Text(
                         product['quantity'] > 0 ? "In stock" : "out of stock",
@@ -183,21 +178,34 @@ class ProductCard extends StatelessWidget {
                       ),
                     ),
                     iconText("${product['rating'] ?? 0}", Icons.star,
-                        iconSize: 12,
-                        fontSize: 12,
+                        iconSize: 14,
+                        fontSize: 14,
                         iconColor: Colors.amber,
                         fw: FontWeight.w600),
                   ],
                 ),
                 mY(2.5),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("R${product['price']}",
                         style: GoogleFonts.poppins(
-                            color: Colors.black87,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700)),
+                            color: product['on_sale']
+                                ? TuColors.text2
+                                : Colors.black87,
+                            fontSize: product['on_sale'] ? 12 : 14,
+                            decoration: product['on_sale']
+                                ? TextDecoration.lineThrough
+                                : null,
+                            fontWeight: FontWeight.w600)),
+                    Visibility(
+                      visible: product['on_sale'],
+                      child: Text("R${product['sale_price']}",
+                          style: GoogleFonts.poppins(
+                              color: Colors.black87,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    )
                   ],
                 )
               ],

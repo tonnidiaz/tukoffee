@@ -126,3 +126,8 @@ final mFieldRadius = BorderRadius.circular(15);
 TextTheme tuTextTheme(BuildContext context) {
   return Theme.of(context).textTheme;
 }
+
+List<String> reviewStatuses = ['pending', 'approved', 'rejected'];
+
+const sheetRadius = BorderRadius.only(
+    topLeft: Radius.circular(10), topRight: Radius.circular(10));

@@ -29,7 +29,11 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      appBar: childAppbar(title: "Shop"),
+      appBar: AppBar(
+        actions: const [CartBtn()],
+        title: const Text('Shop'),
+        titleSpacing: 14,
+      ),
       bottom: TabBar(
         controller: _tabController,
         indicatorColor: Colors.brown,

@@ -178,7 +178,7 @@ class TuButton extends StatefulWidget {
       {super.key,
       this.text = "",
       this.width,
-      this.height = 40,
+      this.height = 45,
       this.vp = 5,
       this.radius = 3,
       this.hp = 10,

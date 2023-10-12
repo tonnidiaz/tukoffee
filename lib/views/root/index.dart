@@ -55,9 +55,6 @@ class _IndexPageState extends State<IndexPage> {
         bottomNavigationBar: Obx(
           () => BottomNavigationBar(
               currentIndex: IndexPage.ctrl.tab.value,
-              selectedItemColor: TuColors.primary,
-              showUnselectedLabels: true,
-              unselectedItemColor: TuColors.text2,
               onTap: _onTabTap,
               items: indexTabs
                   .map((e) =>

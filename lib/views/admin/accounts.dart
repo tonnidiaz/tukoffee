@@ -132,85 +132,84 @@ class _AccountsState extends State<Accounts> {
             ), */
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-        onRefresh: () async {
-          await _init();
-        },
-        child: SingleChildScrollView(
-          child: Container(
-            padding: defaultPadding,
-            height: screenSize(context).height -
-                statusBarH(context) -
-                (appBarH * 2),
-            // constraints: BoxConstraints(minHeight: c.maxHeight),
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                mY(10),
-                Text(
-                  "Accounts",
-                  style: Styles.h1,
-                ),
-                Obx(
-                  () => TuFormField(
-                    hint: "Name or email",
-                    prefixIcon: TuIcon(Icons.search),
-                    radius: 100,
-                    value: _ctrl.query.value,
-                    onChanged: (val) {
-                      _ctrl.setQuery(val);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Accounts"),
+      ),
+      body: RefreshIndicator(
+          onRefresh: () async {
+            await _init();
+          },
+          child: SingleChildScrollView(
+            child: Container(
+              padding: defaultPadding,
+              height: screenSize(context).height -
+                  statusBarH(context) -
+                  (appBarH * 2),
+              // constraints: BoxConstraints(minHeight: c.maxHeight),
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Obx(
+                    () => TuFormField(
+                      hint: "Name or email",
+                      prefixIcon: TuIcon(Icons.search),
+                      value: _ctrl.query.value,
+                      onChanged: (val) {
+                        _ctrl.setQuery(val);
 
-                      _ctrl.setFilteredAccounts(
-                          _ctrl.accounts.value!.where((p0) {
-                        var firstLastName =
-                            "${p0['first_name']} ${p0['last_name']}";
+                        _ctrl.setFilteredAccounts(
+                            _ctrl.accounts.value!.where((p0) {
+                          var firstLastName =
+                              "${p0['first_name']} ${p0['last_name']}";
 
-                        var filter = "${p0['email']}"
-                                .contains(RegExp(val, caseSensitive: false)) ||
-                            firstLastName
-                                .contains(RegExp(val, caseSensitive: false)) ||
-                            "${p0['first_name']}"
-                                .contains(RegExp(val, caseSensitive: false));
-                        return filter;
-                      }).toList());
-                    },
+                          var filter = "${p0['email']}".contains(
+                                  RegExp(val, caseSensitive: false)) ||
+                              firstLastName.contains(
+                                  RegExp(val, caseSensitive: false)) ||
+                              "${p0['first_name']}"
+                                  .contains(RegExp(val, caseSensitive: false));
+                          return filter;
+                        }).toList());
+                      },
+                    ),
                   ),
-                ),
-                Obx(() {
-                  return _ctrl.accounts.value == null
-                      ? Expanded(
-                          child: Center(
-                            child: Text("Loading...", style: Styles.h3()),
-                          ),
-                        )
-                      : Column(
-                          children: [
-                            AccountsSection(
-                                ctrl: _ctrl,
-                                title: "Staff",
-                                accounts: [
-                                  ..._ctrl.filteredAccounts
-                                      .where((it) =>
-                                          it['permissions'] == 1 ||
-                                          it['permissions'] == 2)
-                                      .toList(),
-                                ]),
-                            mY(5),
-                            AccountsSection(
-                              ctrl: _ctrl,
-                              title: "Customers",
-                              accounts: _ctrl.filteredAccounts
-                                  .where((it) => it['permissions'] == 0)
-                                  .toList(),
+                  Obx(() {
+                    return _ctrl.accounts.value == null
+                        ? Expanded(
+                            child: Center(
+                              child: Text("Loading...", style: Styles.h3()),
                             ),
-                          ],
-                        );
-                })
-              ],
+                          )
+                        : Column(
+                            children: [
+                              AccountsSection(
+                                  ctrl: _ctrl,
+                                  title: "Staff",
+                                  accounts: [
+                                    ..._ctrl.filteredAccounts
+                                        .where((it) =>
+                                            it['permissions'] == 1 ||
+                                            it['permissions'] == 2)
+                                        .toList(),
+                                  ]),
+                              mY(5),
+                              AccountsSection(
+                                ctrl: _ctrl,
+                                title: "Customers",
+                                accounts: _ctrl.filteredAccounts
+                                    .where((it) => it['permissions'] == 0)
+                                    .toList(),
+                              ),
+                            ],
+                          );
+                  })
+                ],
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 
   _getAccounts() async {

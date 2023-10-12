@@ -173,11 +173,7 @@ class _PageWrapperState extends State<PageWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.appBar ??
-          mobileTitleBar(
-              context: context, bottom: widget.bottom, actions: widget.actions),
-      // drawer: const TDrawer(),
-      endDrawer: const TDrawer(),
+      appBar: widget.appBar,
       body: RefreshIndicator(
         onRefresh: () async {
           clog("Refreshing...");

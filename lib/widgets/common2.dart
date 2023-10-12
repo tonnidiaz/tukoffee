@@ -28,15 +28,12 @@ class CartBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     final storeCtrl = Get.find<StoreCtrl>();
     return Container(
-      width: 35,
-      height: 35,
-      alignment: Alignment.center,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(15),
-        onTap: () {
+      child: IconButton(
+        splashRadius: 23,
+        onPressed: () {
           pushNamed(context, '/cart');
         },
-        child: Obx(
+        icon: Obx(
           () => Badge.count(
             count:
                 storeCtrl.cart.isEmpty ? 0 : storeCtrl.cart['products'].length,
@@ -125,7 +122,8 @@ class TuLabeledCheckbox extends StatelessWidget {
     final lbl = label != null
         ? Text(
             label!,
-            style: TextStyle(fontWeight: fontWeight, color: TuColors.text2),
+            style: TextStyle(
+                fontSize: 14, fontWeight: fontWeight, color: TuColors.text2),
           )
         : none();
     return labelPos == Position.right

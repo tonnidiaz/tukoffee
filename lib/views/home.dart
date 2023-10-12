@@ -75,6 +75,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
+      appBar: AppBar(
+        leading: CartBtn(),
+        title: Text("Tukoffee"),
+        centerTitle: true,
+        titleSpacing: 14,
+      ),
       child: SizedBox(
         height: screenSize(context).height - statusBarH(context) - appBarH,
         child: SingleChildScrollView(

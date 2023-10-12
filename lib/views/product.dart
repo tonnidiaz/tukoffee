@@ -5,11 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:frust/controllers/store_ctrl.dart';
 import 'package:frust/main.dart';
+import 'package:frust/utils/constants2.dart';
 import 'package:frust/utils/functions.dart';
 import 'package:frust/utils/styles.dart';
+import 'package:frust/views/order/index.dart';
+import 'package:frust/views/product/reviews.dart';
 import 'package:frust/widgets/add_product_form.dart';
 import 'package:frust/widgets/common2.dart';
+import 'package:frust/widgets/common3.dart';
 import 'package:frust/widgets/form_view.dart';
+import 'package:frust/widgets/product_card.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../controllers/app_ctrl.dart';
@@ -29,6 +34,13 @@ class _ProductPageState extends State<ProductPage> {
   final FormViewCtrl _formViewCtrl = Get.find();
   final StoreCtrl _storeCtrl = Get.find();
   Map<String, dynamic>? _product;
+  List? _related = [];
+  _setRelated(List? val) {
+    setState(() {
+      _related = val;
+    });
+  }
+
   late Map<dynamic, dynamic> _args;
   int _currImgIndex = 0;
   _setCurrImgIndex(int val) {
@@ -54,13 +66,15 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   void _init() async {
-    _setupProduct();
+    await _setupProduct();
+    await _getRelated();
   }
 
   _setupProduct() async {
     setState(() {
       _product = null;
     });
+
     var product =
         await _getProduct("${_args["pid"]}"); //storeStore.currProduct;
     setState(() {
@@ -78,103 +92,134 @@ class _ProductPageState extends State<ProductPage> {
       final List<dynamic> data = res.data['data'];
       return data.isNotEmpty ? data[0] : null;
     } catch (e) {
-      if (e.runtimeType == DioException) {
-        e as DioException;
-        clog(e.response);
-      }
-      clog(e);
+      errorHandler(e: e, context: context, msg: "Failed to fetch product");
       return null;
+    }
+  }
+
+  _getRelated() async {
+    if (_product == null) return;
+    try {
+      _setRelated(null);
+      final res =
+          await apiDio().get("/products?q=related&pid=${_product!['pid']}");
+      _setRelated(res.data['data']);
+    } catch (error) {
+      clog(error);
+      _setRelated([]);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      appBar: childAppbar(
-        title: _product == null ? "" : "${_product!["name"]}",
+      appBar: AppBar(
+        title: _product == null ? null : Text("${_product!["name"]}"),
+        actions: [
+          CartBtn(),
+          Obx(() => !_appCtrl.isAdmin.value
+              ? none()
+              : PopupMenuButton(
+                  splashRadius: 20,
+                  padding: EdgeInsets.zero,
+                  itemBuilder: (context) {
+                    return [
+                      PopupMenuItem(
+                        onTap: _onPopupEditTap,
+                        child: const Text("Edit"),
+                      ),
+                      const PopupMenuItem(child: Text("Delete")),
+                    ];
+                  }))
+        ],
       ),
       onRefresh: () async {
         await _setupProduct();
       },
-      bottomSheet: Material(
-        elevation: 5,
-        child: Container(
-          color: cardBGLight,
-          width: screenSize(context).width,
-          padding: defaultPadding2,
-          child: _product == null
-              ? none()
-              : Builder(builder: (context) {
-                  var ratings = _product!["ratings"] as List<dynamic>;
-                  var rating = ratings.firstWhereOrNull(
-                      (it) => it["customer"] == _appCtrl.user['_id']);
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Badge(
-                        largeSize: 24,
-                        backgroundColor: TuColors.medium,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 0),
-                        label: Text(
-                          _product!['quantity'] > 0
-                              ? "${_product!['quantity']} In stock"
-                              : "out of stock",
-                          style: const TextStyle(
-                              fontSize: 14, color: Colors.white),
+      bottomSheet: Container(
+        color: appBGLight,
+        child: Material(
+          elevation: 8,
+          borderRadius: sheetRadius,
+          color: Colors.white,
+          shadowColor: Colors.black,
+          child: Container(
+            width: screenSize(context).width,
+            padding: defaultPadding2,
+            child: _product == null
+                ? none()
+                : Builder(builder: (context) {
+                    var ratings = _product!["ratings"] as List<dynamic>;
+                    var rating = ratings.firstWhereOrNull(
+                        (it) => it["customer"] == _appCtrl.user['_id']);
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Badge(
+                          largeSize: 24,
+                          backgroundColor: TuColors.medium,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 0),
+                          label: Text(
+                            _product!['quantity'] > 0
+                                ? "${_product!['quantity']} In stock"
+                                : "out of stock",
+                            style: const TextStyle(
+                                fontSize: 14, color: Colors.white),
+                          ),
                         ),
-                      ),
-                      mY(5),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "R${roundDouble(_product!["price"].toDouble(), 2)}",
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            TuButton(
-                                height: 35,
-                                onPressed: _product!['quantity'] < 1
-                                    ? null
-                                    : addRemoveCart,
-                                bgColor: TuColors.danger,
-                                radius: 100,
-                                child: Obx(() {
-                                  bool inCart = _storeCtrl.cart.isNotEmpty &&
-                                      _storeCtrl.cart["products"]
-                                          .where((el) =>
-                                              el["product"]["_id"] ==
-                                              _product!["_id"])
-                                          .isNotEmpty;
-                                  return Row(
-                                    children: [
-                                      Icon(
-                                        inCart
-                                            ? Icons.remove_shopping_cart
-                                            : Icons.add_shopping_cart,
-                                        size: 18,
-                                        color: Colors.black,
-                                      ),
-                                      mX(2),
-                                      Text(inCart ? 'REMOVE' : 'ADD',
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold))
-                                    ],
-                                  );
-                                }))
-                          ]),
-                    ],
-                  );
-                }),
+                        mY(5),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "R${roundDouble(_product!["price"].toDouble(), 2)}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              TuButton(
+                                  height: 35,
+                                  onPressed: _product!['quantity'] < 1
+                                      ? null
+                                      : addRemoveCart,
+                                  bgColor: TuColors.danger,
+                                  radius: 100,
+                                  child: Obx(() {
+                                    bool inCart = _storeCtrl.cart.isNotEmpty &&
+                                        _storeCtrl.cart["products"]
+                                            .where((el) =>
+                                                el["product"]["_id"] ==
+                                                _product!["_id"])
+                                            .isNotEmpty;
+                                    return Row(
+                                      children: [
+                                        Icon(
+                                          inCart
+                                              ? Icons.remove_shopping_cart
+                                              : Icons.add_shopping_cart,
+                                          size: 18,
+                                          color: Colors.black,
+                                        ),
+                                        mX(2),
+                                        Text(inCart ? 'REMOVE' : 'ADD',
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold))
+                                      ],
+                                    );
+                                  }))
+                            ]),
+                      ],
+                    );
+                  }),
+          ),
         ),
       ),
       child: SizedBox(
         width: double.infinity,
-        height: screenSize(context).height,
+        height: screenSize(context).height - appBarH,
         child: _product == null
             ? Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -206,172 +251,193 @@ class _ProductPageState extends State<ProductPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          mY(20),
                           SizedBox(
-                            width: screenSize(context).width,
+                            width: double.infinity,
                             child:
                                 LayoutBuilder(builder: (context, constraints) {
-                              return Container(
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            //id=img-wrap
-                                            width: constraints.maxWidth,
-                                            height:
-                                                constraints.maxWidth - 20 - 40,
-                                            margin: const EdgeInsets.only(
-                                                left: 5, right: 5, top: 5),
+                              return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        Container(
+                                          //id=img-wrap
+                                          color: cardBGLight,
+                                          width: constraints.maxWidth,
+                                          margin: EdgeInsets.only(top: 6),
+                                          height:
+                                              constraints.maxWidth - 20 - 40,
+                                          padding: const EdgeInsets.only(
+                                              left: 5, right: 5, top: 5),
 
-                                            child: _product!['images']
-                                                    .isNotEmpty
-                                                ? Image.network(_product![
-                                                        'images'][_currImgIndex]
-                                                    [
-                                                    'url']) //"https://loremflickr.com/g/320/240/tea?random=${Random().nextInt(100)}")
-                                                : const Icon(
-                                                    Icons.coffee_outlined,
-                                                    size: 50,
-                                                    color: Colors.black54,
-                                                  ),
-                                          ),
-                                          Visibility(
-                                            visible:
-                                                _product!['images'].isNotEmpty,
-                                            child: Positioned(
-                                                bottom: 0,
-                                                left: 0,
-                                                width: constraints.maxWidth,
-                                                child: Container(
-                                                  height: 60,
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 5,
-                                                      vertical: 2),
+                                          child: _product!['images'].isNotEmpty
+                                              ? Image.network(_product![
+                                                      'images'][_currImgIndex][
+                                                  'url']) //"https://loremflickr.com/g/320/240/tea?random=${Random().nextInt(100)}")
+                                              : const Icon(
+                                                  Icons.coffee_outlined,
+                                                  size: 50,
                                                   color: Colors.black54,
-                                                  child: Row(
-                                                      children:
-                                                          (_product!['images']
-                                                                  as List)
-                                                              .asMap()
-                                                              .entries
-                                                              .map((e) {
-                                                    return imgCard(
-                                                      onTap: () {
-                                                        _setCurrImgIndex(e.key);
-                                                      },
-                                                      mode: 'add',
-                                                      context: context,
-                                                      canRemove: false,
-                                                      index: e.key,
-                                                      child: Image.network(
-                                                          e.value['url']),
-                                                    );
-                                                  }).toList()),
-                                                )),
-                                          )
+                                                ),
+                                        ),
+                                        Visibility(
+                                          visible:
+                                              _product!['images'].isNotEmpty,
+                                          child: Positioned(
+                                              bottom: 0,
+                                              left: 0,
+                                              width: constraints.maxWidth,
+                                              child: Container(
+                                                height: 60,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 5,
+                                                        vertical: 2),
+                                                color: Colors.black54,
+                                                child: Row(
+                                                    children:
+                                                        (_product!['images']
+                                                                as List)
+                                                            .asMap()
+                                                            .entries
+                                                            .map((e) {
+                                                  return imgCard(
+                                                    onTap: () {
+                                                      _setCurrImgIndex(e.key);
+                                                    },
+                                                    mode: 'add',
+                                                    context: context,
+                                                    canRemove: false,
+                                                    index: e.key,
+                                                    child: Image.network(
+                                                        e.value['url']),
+                                                  );
+                                                }).toList()),
+                                              )),
+                                        )
+                                      ],
+                                    ),
+                                    Container(
+                                      color: cardBGLight,
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "${_product!['name']}",
+                                                  style: Styles.h3(),
+                                                ),
+                                                mY(5),
+                                                Container(
+                                                  color: Colors.transparent,
+                                                  width: double.infinity,
+                                                  child: Text(
+                                                    "${_product!['description']}",
+                                                    softWrap: true,
+
+                                                    //style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ],
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "${_product!['name']}",
-                                                    style: GoogleFonts.poppins(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w800),
+                                    ),
+                                    mY(6),
+                                    Container(
+                                      color: cardBGLight,
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              const Icon(Icons.star,
+                                                  size: 20,
+                                                  color: Colors
+                                                      .amber //Color.fromARGB(108, 255, 255, 0),
                                                   ),
-                                                  mY(5),
-                                                  Container(
-                                                    color: Colors.transparent,
-                                                    width: double.infinity,
-                                                    child: Text(
-                                                      "${_product!['description']}",
-                                                      softWrap: true,
-
-                                                      //style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                                                    ),
-                                                  ),
-                                                  mY(10),
-                                                  const Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      Icon(Icons.star,
-                                                          size: 20,
-                                                          color: Colors
-                                                              .amber //Color.fromARGB(108, 255, 255, 0),
-                                                          ),
-                                                      /*   Text(
-                                                        " ${isNumeric(_product!['rating']) ? _product!['rating'].roundToDouble() : 0}",
-                                                        style: const TextStyle(
-                                                            fontSize: 14,
-                                                            color:
-                                                                Colors.black87,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w900),
-                                                      ) */
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Obx(() => !_appCtrl.isAdmin.value
-                                                ? none()
-                                                : SizedBox(
-                                                    width: 20,
-                                                    height: 20,
-                                                    child: PopupMenuButton(
-                                                        padding:
-                                                            EdgeInsets.zero,
-                                                        itemBuilder: (context) {
-                                                          return [
-                                                            PopupMenuItem(
-                                                              onTap:
-                                                                  _onPopupEditTap,
-                                                              child: const Text(
-                                                                  "Edit"),
-                                                            ),
-                                                            const PopupMenuItem(
-                                                                child: Text(
-                                                                    "Delete")),
-                                                          ];
-                                                        }),
-                                                  ))
-                                          ],
-                                        ),
+                                              Text(
+                                                " ${double.tryParse(_product!['rating'])?.roundToDouble() ?? 0}",
+                                                style: const TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.black87,
+                                                    fontWeight:
+                                                        FontWeight.w900),
+                                              )
+                                            ],
+                                          ),
+                                          TextButton(
+                                              onPressed: () {
+                                                pushTo(
+                                                    context,
+                                                    ProductReviewsPage(
+                                                        id: "${_product!['pid']}"));
+                                              },
+                                              child: Text(
+                                                '${_product!['reviews'].length} REVIEW(S)',
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ))
+                                        ],
                                       ),
-                                    ]),
-                              );
+                                    ),
+                                    mY(6),
+                                    Container(
+                                      color: cardBGLight,
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: tuColumn(children: [
+                                        Text(
+                                          'EXTRA INFORMATION',
+                                          style: Styles.h4(),
+                                        ),
+                                        mY(10),
+                                        tuTableRow(
+                                            const Text(
+                                              'Weight',
+                                            ),
+                                            Text('${_product!['weight']} KG'))
+                                      ]),
+                                    ),
+                                    mY(6),
+                                    Container(
+                                        color: cardBGLight,
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: tuColumn(children: [
+                                          Text(
+                                            'You may also like',
+                                            style: Styles.h4(),
+                                          ),
+                                          mY(10),
+                                          SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: _related == null
+                                                ? none()
+                                                : Row(
+                                                    children: _related!
+                                                        .map((e) => ProductCard(
+                                                            product: e))
+                                                        .toList()),
+                                          )
+                                        ]))
+                                  ]);
                             }),
                           ),
-                          mY(8),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                                child: TuButton(
-                                    text: "Back to store",
-                                    onPressed: () {
-                                      Navigator.pushNamedAndRemoveUntil(
-                                          context, '/', (route) => false);
-                                    })),
-                          )
                         ],
                       ),
                     ),

@@ -57,7 +57,7 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      appBar: childAppbar(showCart: false, title: "Cart", actions: [
+      appBar: AppBar(titleSpacing: 14, title: Text('Cart'), actions: [
         PopupMenuButton(
             itemBuilder: (context) => [
                   const PopupMenuItem(
@@ -70,47 +70,49 @@ class _CartPageState extends State<CartPage> {
             color: cardBGLight,
             border: Border(top: BorderSide(color: appBGLight, width: 1.5))),
         padding: defaultPadding,
-        height: _bottomSheetH,
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "TOTAL:",
-                style: Styles.h4(),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "TOTAL:",
+                    style: Styles.h4(),
+                  ),
+                  Obx(() {
+                    double total = 0;
+                    if (_storeCtrl.cart.isNotEmpty) {
+                      for (var it in _storeCtrl.cart["products"]) {
+                        total += (it["product"]["price"] * it["quantity"])
+                            .toDouble();
+                      }
+                    }
+                    total += _storeCtrl.deliveryFee.value;
+                    return Text(
+                      "R${roundDouble(total, 2)}",
+                      style: Styles.h4(),
+                    );
+                  })
+                ],
               ),
-              Obx(() {
-                double total = 0;
-                if (_storeCtrl.cart.isNotEmpty) {
-                  for (var it in _storeCtrl.cart["products"]) {
-                    total +=
-                        (it["product"]["price"] * it["quantity"]).toDouble();
-                  }
-                }
-                total += _storeCtrl.deliveryFee.value;
-                return Text(
-                  "R${roundDouble(total, 2)}",
-                  style: Styles.h4(),
-                );
-              })
-            ],
-          ),
-          mY(5),
-          Obx(
-            () => TuButton(
-              width: double.infinity,
-              bgColor: Colors.black87,
-              text: "Proceed to checkout",
-              onPressed:
-                  _storeCtrl.cart.isEmpty || _storeCtrl.cart["products"].isEmpty
+              mY(5),
+              Obx(
+                () => TuButton(
+                  width: double.infinity,
+                  bgColor: Colors.black87,
+                  text: "Proceed to checkout",
+                  onPressed: _storeCtrl.cart.isEmpty ||
+                          _storeCtrl.cart["products"].isEmpty
                       ? null
                       : () {
                           Navigator.pushNamed(context, "/order/checkout");
                         },
-            ),
-          )
-        ]),
+                ),
+              )
+            ]),
       ),
       onRefresh: () async {
         await _init();
