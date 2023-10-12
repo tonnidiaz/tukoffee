@@ -20,7 +20,9 @@ class AccountTab extends StatelessWidget {
     final appCtrl = MainApp.appCtrl;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Settings"),
+        title: Text(
+          "Account",
+        ),
         titleSpacing: 14,
         actions: const [CartBtn()],
       ),

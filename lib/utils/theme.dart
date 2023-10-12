@@ -22,11 +22,11 @@ ThemeData tuTheme(bool dark) {
           centerTitle: false,
           toolbarHeight: appBarH,
           //  iconTheme: IconThemeData(color: ),
-          titleSpacing: 0,
+          //titleSpacing: 3,
           titleTextStyle: GoogleFonts.inclusiveSans(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: dark ? Colors.white70 : TuColors.text),
+              color: dark ? Colors.white70 : TuColors.text2),
           backgroundColor: cardBGLight,
           elevation: 0,
           foregroundColor: dark ? Colors.white70 : TuColors.text2),
@@ -50,10 +50,10 @@ ThemeData tuTheme(bool dark) {
         ),
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        selectedItemColor: TuColors.primary,
-        showUnselectedLabels: true,
-        unselectedItemColor: TuColors.text2,
-      ),
+          selectedItemColor: TuColors.primary,
+          showUnselectedLabels: true,
+          unselectedItemColor: TuColors.text2,
+          unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600)),
       listTileTheme: ListTileThemeData(
         contentPadding: const EdgeInsets.only(right: 0, left: 14),
       ));

@@ -24,20 +24,25 @@ class CartBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final storeCtrl = Get.find<StoreCtrl>();
-    return IconButton(
-      splashRadius: 23,
-      onPressed: () {
-        pushNamed(context, '/cart');
-      },
-      icon: Obx(
-        () => Badge.count(
-          count: storeCtrl.cart.isEmpty ? 0 : storeCtrl.cart['products'].length,
-          textColor: Colors.black87,
-          backgroundColor: TuColors.primary,
-          child: svgIcon(
-            name: 'rr-shopping-basket',
-            color: TuColors.text2,
-            size: 24,
+    return SizedBox(
+      width: 50,
+      child: IconButton(
+        splashRadius: 23,
+        onPressed: () {
+          pushNamed(context, '/cart');
+        },
+        icon: Obx(
+          () => Badge.count(
+            count:
+                storeCtrl.cart.isEmpty ? 0 : storeCtrl.cart['products'].length,
+            textColor: Colors.black,
+            textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 10),
+            backgroundColor: TuColors.primary,
+            child: svgIcon(
+              name: 'rr-shopping-basket',
+              color: TuColors.text2,
+              size: 24,
+            ),
           ),
         ),
       ),

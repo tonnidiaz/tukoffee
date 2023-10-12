@@ -51,6 +51,4 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/
-    - assets/html/map.html
     - assets/css/
-    - assets/css/colors.css

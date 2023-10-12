@@ -120,21 +120,22 @@ class CartItem extends StatelessWidget {
           },
           //Checkbox, cover, content, deleteBtn
           tileColor: cardBGLight,
-          contentPadding: EdgeInsets.symmetric(horizontal: 7),
+          contentPadding: EdgeInsets.symmetric(horizontal: 10),
           leading: Material(
             elevation: 2,
             borderRadius: BorderRadius.circular(4),
             child: Container(
               width: 70,
               height: 45,
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: const Color.fromRGBO(0, 0, 0, 0.05),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: item['product']['images'].isEmpty
-                  ? const Icon(
-                      Icons.coffee_outlined,
-                      size: 45,
+                  ? svgIcon(
+                      name: 'br-image-slash',
+                      size: 25,
                       color: Colors.black54,
                     )
                   : ClipRRect(

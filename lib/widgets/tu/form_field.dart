@@ -150,6 +150,7 @@ class _TuFormFieldState extends State<TuFormField> {
                     return msg;
                   },
               keyboardType: widget.keyboard,
+              style: TextStyle(fontSize: 18),
               decoration: InputDecoration(
                 prefixIconColor:
                     _focusNode.hasFocus ? TuColors.note : Colors.black45,

@@ -49,7 +49,7 @@ class ReviewItem extends StatelessWidget {
           //Checkbox, cover, content, deleteBtn
           tileColor: cardBGLight,
           isThreeLine: !hasStars,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 7),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 10),
           leading: Material(
             elevation: 2,
             borderRadius: BorderRadius.circular(4),

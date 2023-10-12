@@ -78,14 +78,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return PageWrapper(
       appBar: AppBar(
-        leading: CartBtn(),
-        title: Text("Tukoffee"),
+        leading: const CartBtn(),
+        title: const Text("LebzCafe"),
         centerTitle: true,
         titleSpacing: 14,
       ),
       child: SizedBox(
-        height:
-            screenSize(context).height - statusBarH(context: context) - appBarH,
+        height: screenSize(context).height - statusBarH() - (appBarH * 2),
         child: SingleChildScrollView(
           child: Container(
             padding: defaultPadding2,
@@ -110,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                   prefixIcon: TuIcon(Icons.search),
                   radius: 500,
                   elevation: 1,
-                  hasBorder: true,
+                  hasBorder: false,
                   onTap: () {
                     return;
                     TuFuncs.showBottomSheet(
