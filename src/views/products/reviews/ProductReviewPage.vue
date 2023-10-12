@@ -9,7 +9,7 @@
                 ><i class="fi fi-br-pencil fs-18"></i
             ></icon-btn>
         </Appbar>
-        <ion-content :fullscreen="true">
+        <ion-content :fullscreen="true"> 
             <Refresher :on-refresh="getReview" />
             <div class="h-full flex flex-col">
                 <div v-if="review">

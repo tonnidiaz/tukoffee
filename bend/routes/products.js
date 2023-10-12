@@ -108,6 +108,7 @@ router.post("/review", auth, async (req, res) => {
         const { pid, id, review, ids } = req.body;
 
         if (act == "add") {
+           
             const prod =
                 (await Product.findOne({ pid }).exec()) ??
                 (await Product.findById(id).exec());
@@ -116,11 +117,12 @@ router.post("/review", auth, async (req, res) => {
             for (let key of Object.keys(review)) {
                 _review.set(key, review[key]);
             }
+            _review.product = prod;
             _review.user = req.user._id;
             await _review.save();
             prod.reviews.push(_review);
             await prod.save();
-           return res.json({ reviews: prod.reviews });
+           return res.json({ reviews: prod.reviews.map(e=> e.toJSON()) });
         } else if (act == "edit") {
             const rev = await Review.findById(id).exec();
             for (let key of Object.keys(review)) {
