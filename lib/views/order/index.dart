@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:lebzcafe/utils/constants2.dart';
+import 'package:lebzcafe/views/order/checkout.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
@@ -313,9 +315,9 @@ class _OrderPageState extends State<OrderPage> {
                                                     fontWeight:
                                                         FontWeight.w600)),
                                             Text(
-                                              true
-                                                  ? "PH"
-                                                  : "${_order!["delivery_address"]["name"] ?? _order!["collector"]["name"]}",
+                                              _order!['mode'] == 0
+                                                  ? "${_order!['delivery_address']['name']}"
+                                                  : "${_order!["collector"]["name"]}",
                                             ),
                                             my: 10),
                                         tuTableRow(
@@ -324,9 +326,9 @@ class _OrderPageState extends State<OrderPage> {
                                                     fontWeight:
                                                         FontWeight.w600)),
                                             Text(
-                                              true
-                                                  ? "PH"
-                                                  : "${_order!["delivery_address"]["phone"] ?? _order!["collector"]["phone"]}",
+                                              _order!['mode'] == 0
+                                                  ? "${_order!['delivery_address']['phone']}"
+                                                  : "${_order!["collector"]["phone"]}",
                                             ),
                                             my: 10),
                                       ],
@@ -371,36 +373,38 @@ class _OrderPageState extends State<OrderPage> {
                                 ))
                               : TuCard(
                                   width: double.infinity,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      tuTableRow(
-                                          Text(
-                                            "Delivery address",
-                                            style: Styles.h2(),
-                                          ),
-                                          IconButton(
-                                              padding: EdgeInsets.zero,
-                                              onPressed: _onEditAddressPress,
-                                              icon: const Icon(
-                                                Icons.edit,
-                                                size: 20,
-                                              )),
-                                          my: 0),
-                                      Builder(builder: (context) {
-                                        final addr =
-                                            _order!["delivery_address"];
-                                        return addr['location'] == null
-                                            ? const Text("No address")
-                                            : Text(
-                                                addr['location']['name'],
-                                                style: const TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              );
-                                      }),
-                                    ],
+                                  child: TuCard(
+                                    color: appBGLight,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        tuTableRow(
+                                            Text(
+                                              "Delivery address",
+                                              style: Styles.h3(),
+                                            ),
+                                            IconButton(
+                                                padding: EdgeInsets.zero,
+                                                onPressed: _onEditAddressPress,
+                                                icon: const Icon(
+                                                  Icons.edit,
+                                                  size: 20,
+                                                )),
+                                            my: 0),
+                                        devider(),
+                                        mY(10),
+                                        Builder(builder: (context) {
+                                          final addr =
+                                              _order!["delivery_address"];
+                                          return addr['location'] == null
+                                              ? const Text("No address")
+                                              : Text(
+                                                  addr['location']['name'],
+                                                );
+                                        }),
+                                      ],
+                                    ),
                                   )),
                           mY(6),
                           TuCard(
@@ -475,7 +479,7 @@ class TuCard extends StatelessWidget {
   final double my;
   final double borderSize;
   final double mx;
-  final Widget child;
+  final Widget? child;
   final Function()? onTap;
   final Function()? onLongPress;
   final double width;
@@ -488,7 +492,7 @@ class TuCard extends StatelessWidget {
       this.my = 0,
       this.mx = 0,
       this.borderSize = 1.6,
-      required this.child,
+      this.child,
       this.onTap,
       this.onLongPress,
       this.height,

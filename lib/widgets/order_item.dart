@@ -21,8 +21,10 @@ class OrderItem extends StatelessWidget {
   final bool isAdmin;
   final bool dev;
   final dynamic ctrl;
+  final BuildContext tcontext;
   OrderItem(
       {super.key,
+      required this.tcontext,
       required this.order,
       this.dev = true,
       required this.ctrl,
@@ -55,12 +57,12 @@ class OrderItem extends StatelessWidget {
                   'ids': [order['_id']],
                   "userId": isAdmin ? null : MainApp.appCtrl.user['_id']
                 });
-                pop(context);
+                await sleep(1500);
+                pop(tcontext);
                 _appBarCtrl.setSelected([]);
                 ctrl.setOrders(res.data['orders']);
               } catch (e) {
-                pop(context);
-
+                pop(tcontext);
                 errorHandler(
                     context: context, e: e, msg: "Failed to cancel order!");
               }
@@ -69,16 +71,18 @@ class OrderItem extends StatelessWidget {
         });
   }
 
+  final _key = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => Container(
+        key: _key,
         width: double.infinity,
         decoration: BoxDecoration(
             color: _appBarCtrl.selected.isNotEmpty &&
                     _appBarCtrl.selected.contains(order)
-                ? Color.fromARGB(37, 0, 89, 255)
-                : null,
+                ? const Color.fromARGB(37, 0, 89, 255)
+                : cardBGLight,
             border: const Border(
                 bottom: BorderSide(color: Color.fromRGBO(10, 10, 10, .05)))),
         child: ListTile(

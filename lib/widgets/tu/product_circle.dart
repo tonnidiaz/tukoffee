@@ -42,16 +42,14 @@ class TuProductCircle extends StatelessWidget {
                   backgroundColor: Colors.black12,
                   backgroundImage: dummy || img == null
                       ? null
-                      : Image.network(
-                          img!,
+                      : Image.network(img!,
                           width: _avatarW,
                           height: _avatarW,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Icon(
-                            Icons.coffee_maker,
-                            color: Colors.black54,
-                          ),
-                        ).image,
+                          errorBuilder: (context, error, stackTrace) => svgIcon(
+                                name: "br-image-slash",
+                                size: 26,
+                                color: Colors.black54,
+                              )).image,
                 )),
             mY(10),
             dummy

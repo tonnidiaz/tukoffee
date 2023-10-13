@@ -174,10 +174,10 @@ class _OrdersPageState extends State<OrdersPage> {
 
   _getOrders() async {
     try {
-      clog("Getting orders");
       if (_appCtrl.user.isEmpty) {
         return;
       }
+      clog("Getting orders");
       _ctrl.setOrdersFetched(false);
       final res = ModalRoute.of(context)?.settings.name == "/orders"
           ? await dio.get("$apiURL/orders?user=${_appCtrl.user['_id']}")
@@ -278,118 +278,97 @@ class _OrdersPageState extends State<OrdersPage> {
     }
 
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: childAppbar(title: "Orders", actions: [
-        PopupMenuButton(
-            itemBuilder: (context) => [
-                  (_appBarCtrl.selected.length == _ctrl.sortedOrders.length &&
-                          _ctrl.sortedOrders.isNotEmpty)
-                      ? PopupMenuItem(
-                          onTap: () {
-                            _appBarCtrl.setSelected([]);
-                          },
-                          child: const Text("Deselect all"))
-                      : PopupMenuItem(
-                          onTap: () {
-                            _appBarCtrl.setSelected(_ctrl.sortedOrders);
-                          },
-                          child: const Text("Select all")),
-                  PopupMenuItem(
-                      enabled: _appBarCtrl.selected.isNotEmpty,
-                      onTap: () {
-                        _cancelOrders();
-                      },
-                      child: const Text("Cancel orders")),
-                ])
-      ]),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await _getOrders();
-        },
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                mY(topMargin),
-                Obx(
-                  () => Container(
-                    width: double.infinity,
-                    color: cardBGLight,
-                    padding: defaultPadding,
-                    child: TuFormField(
-                      hasBorder: false,
-                      hint: "Order ID",
-                      prefixIcon: TuIcon(Icons.search),
-                      radius: 5,
-                      value: _ctrl.orderId.value,
-                      suffixIcon: IconButton(
-                          splashRadius: 20,
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            // show filters
-                            TuFuncs.showBottomSheet(
-                                full: false,
-                                context: context,
-                                widget: filterModal());
-                          },
-                          icon: TuIcon(Icons.tune)),
-                      onChanged: (val) {
-                        _ctrl.setOrderId(val);
-                        _ctrl.setsortedOrders(_ctrl.orders
-                            .where((p0) => "${p0['oid']}".contains(val))
-                            .toList());
-                      },
+        key: _scaffoldKey,
+        appBar: childAppbar(title: "Orders", actions: [
+          PopupMenuButton(
+              itemBuilder: (context) => [
+                    (_appBarCtrl.selected.length == _ctrl.sortedOrders.length &&
+                            _ctrl.sortedOrders.isNotEmpty)
+                        ? PopupMenuItem(
+                            onTap: () {
+                              _appBarCtrl.setSelected([]);
+                            },
+                            child: const Text("Deselect all"))
+                        : PopupMenuItem(
+                            onTap: () {
+                              _appBarCtrl.setSelected(_ctrl.sortedOrders);
+                            },
+                            child: const Text("Select all")),
+                    PopupMenuItem(
+                        enabled: _appBarCtrl.selected.isNotEmpty,
+                        onTap: () {
+                          _cancelOrders();
+                        },
+                        child: const Text("Cancel orders")),
+                  ])
+        ]),
+        body: RefreshIndicator(
+            onRefresh: () async {
+              await _getOrders();
+            },
+            child: Obx(
+              () => CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(vertical: topMargin),
+                    sliver: SliverToBoxAdapter(
+                      child: Obx(
+                        () => Container(
+                          width: double.infinity,
+                          color: cardBGLight,
+                          padding: defaultPadding,
+                          child: TuFormField(
+                            hasBorder: false,
+                            hint: "Order ID",
+                            prefixIcon: TuIcon(Icons.search),
+                            radius: 5,
+                            value: _ctrl.orderId.value,
+                            suffixIcon: IconButton(
+                                splashRadius: 20,
+                                padding: EdgeInsets.zero,
+                                onPressed: () {
+                                  // show filters
+                                  TuFuncs.showBottomSheet(
+                                      full: false,
+                                      context: context,
+                                      widget: filterModal());
+                                },
+                                icon: TuIcon(Icons.tune)),
+                            onChanged: (val) {
+                              _ctrl.setOrderId(val);
+                              _ctrl.setsortedOrders(_ctrl.orders
+                                  .where((p0) => "${p0['oid']}".contains(val))
+                                  .toList());
+                            },
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                mY(5),
-                Obx(() => !_ctrl.ordersFetched.value
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            mY(30),
-                            h3("Please wait..."),
-                          ],
-                        ),
-                      )
-                    : _ctrl.sortedOrders.isEmpty
-                        ? Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                mY(30),
-                                h3("Nothing to show"),
-                                IconButton(
-                                    icon: const Icon(Icons.refresh),
-                                    onPressed: () async {
-                                      _getOrders();
-                                      /* final res = await _getOrders();
-                                        _ctrl.set_orders(res); */
-                                    })
-                              ],
-                            ),
-                          )
-                        : Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                            color: cardBGLight,
-                            child: Column(
-                              children: _ctrl.sortedOrders.map((e) {
-                                return OrderItem(
+                  !_ctrl.ordersFetched.value
+                      ? const SliverFillRemaining(
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      : _ctrl.sortedOrders.isEmpty
+                          ? SliverFillRemaining(
+                              child: Center(child: h3('Nothing to show')),
+                            )
+                          : SliverPadding(
+                              padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),
+                              sliver: SliverList.builder(
+                                itemBuilder: (c, i) => OrderItem(
+                                  tcontext: _scaffoldKey.currentState!.context,
                                   ctrl: _ctrl,
-                                  order: e,
+                                  order: _ctrl.sortedOrders[i],
                                   isAdmin: true,
-                                );
-                              }).toList(),
+                                ),
+                                itemCount: _ctrl.sortedOrders.length,
+                              ),
                             ),
-                          ))
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+                ],
+              ),
+            )));
   }
 }

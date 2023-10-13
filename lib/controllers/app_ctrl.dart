@@ -12,6 +12,8 @@ class AppCtrl extends GetxController {
     serverDown.value = val;
   }
 
+  Rxn<String> appVersion = Rxn();
+
   RxMap<String, dynamic> location = <String, dynamic>{}.obs;
   setLocation(Map<String, dynamic> val) {
     location.value = val;
@@ -36,56 +38,6 @@ class AppCtrl extends GetxController {
   void setTitle(String val) {
     title.value = val;
   }
-
-/*   RxString developerLink = "https://thabiso.vercel.app".obs;
-  void setDeveloperLink(String val) {
-    developerLink.value = val;
-  }
-
-  RxString storeLink = "".obs;
-  void setStoreLink(String val) {
-    storeLink.value = val;
-  }
-  RxString ownerName = "".obs;
-  void setownerName(String val) {
-    ownerName.value = val;
-  }
-
-  RxString storeName = "".obs;
-  void setstoreName(String val) {
-    storeName.value = val;
-  }
-
-  RxString storeSite = "".obs;
-  void setstoreSite(String val) {
-    storeSite.value = val;
-  }
-
-  RxString developerSite = "".obs;
-  void setdeveloperSite(String val) {
-    developerSite.value = val;
-  }
-
-  RxString ownerPhone = "".obs;
-  void setownerPhone(String val) {
-    ownerPhone.value = val;
-  }
-
-  RxString storePhone = "".obs;
-  void setStorePhone(String val) {
-    storePhone.value = val;
-  }
-
-  RxMap<String, dynamic> storeAddress = <String, dynamic>{}.obs;
-  setStoreAddress(Map<String, dynamic> val) {
-    storeAddress.value = val;
-  }
-
-  RxMap<String, dynamic> storeImage = <String, dynamic>{}.obs;
-  setStoreImage(Map<String, dynamic> val) {
-    storeImage.value = val;
-  }
- */
 
   RxMap store = {}.obs;
   setStore(Map val) {

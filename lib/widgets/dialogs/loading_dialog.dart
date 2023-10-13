@@ -11,6 +11,7 @@ class LoadingDialog extends StatelessWidget {
     BuildContext context,
   ) {
     return AlertDialog(
+      insetPadding: EdgeInsets.symmetric(horizontal: 20),
       backgroundColor: appBGLight,
       content: Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
         SizedBox(
@@ -22,7 +23,7 @@ class LoadingDialog extends StatelessWidget {
         Text(
           msg ?? "Loading...",
           style: TextStyle(
-              fontWeight: FontWeight.w600, color: TuColors.note, fontSize: 12),
+              fontWeight: FontWeight.w600, color: TuColors.note, fontSize: 14),
         )
       ]),
     );

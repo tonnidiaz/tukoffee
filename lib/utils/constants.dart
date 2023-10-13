@@ -26,6 +26,7 @@ import 'package:lebzcafe/views/rf.dart';
 import 'package:lebzcafe/views/search.dart';
 import 'package:geocode/geocode.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:lebzcafe/views/setting.dart';
 import '../views/admin/index.dart';
 import '../views/admin/settings.dart';
 import '../views/app/settings.dart';
@@ -102,7 +103,9 @@ final List<TuPage> pages = [
     const DashboardPage(),
     icon: CupertinoIcons.home,
   ),
-  TuPage("/app/settings", const SettingsPage(),
+  TuPage("/app/settings", const OldSettingsPage(),
+      icon: CupertinoIcons.info_circle, inList: false),
+  TuPage("/settings", const SettingsPage(),
       icon: CupertinoIcons.info_circle, inList: false),
   TuPage("/auth/login", LoginPage(), icon: CupertinoIcons.home, inList: false),
   TuPage("/auth/resetPass", const ResetPassPage(),
@@ -150,7 +153,7 @@ const testUser = {"email": "tonni@gmail.com", "password": "Baseline@072"};
 Box<dynamic>? appBox;
 const bool isMobile = true;
 final dio = Dio();
-const localhost = "http://172.16.10.204";
+const localhost = false ? "http://192.168.43.231" : "http://172.16.10.204";
 const String apiURL = !dev ? "https://tukoffee.vercel.app" : "$localhost:8000";
 const defaultPadding = EdgeInsets.all(8);
 const defaultPadding2 = EdgeInsets.all(12);

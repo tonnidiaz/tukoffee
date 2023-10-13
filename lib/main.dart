@@ -9,7 +9,7 @@ import 'package:lebzcafe/controllers/store_ctrl.dart';
 import 'package:lebzcafe/views/admin/orders.dart';
 import 'package:lebzcafe/views/auth/create.dart';
 import 'package:lebzcafe/widgets/form_view.dart';
-import 'package:lebzcafe/widgets/loader.dart';
+import 'package:lebzcafe/widgets/splash.dart';
 import 'package:get/get.dart';
 import 'controllers/app_ctrl.dart';
 import 'mobile.dart';
@@ -95,6 +95,9 @@ class _MainAppState extends State<MainApp> {
     Get.put(AppBarCtrl());
     Get.put(ProductsCtrl());
     Get.put(SignupCtrl());
+
+    /* SETUP APP VERSION */
+    MainApp.appCtrl.appVersion.value = await getAppVersion();
   }
 
   @override
@@ -130,11 +133,11 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => !MainApp.appCtrl.ready.value ||
-            MainApp.appCtrl.store['name'] == null ||
-            MainApp.appCtrl.store['name'].isEmpty
-        ? const TuLoader()
-        : const MobileApp());
+    return Obx(() => MainApp.appCtrl.ready.value &&
+            MainApp.appCtrl.store['name'] != null &&
+            MainApp.appCtrl.store['name'].isNotEmpty
+        ? const MobileApp()
+        : const TuSplash());
   }
 }
 

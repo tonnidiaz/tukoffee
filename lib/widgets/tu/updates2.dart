@@ -105,7 +105,7 @@ class _UpdatesView2State extends State<UpdatesView2> {
   @override
   void initState() {
     super.initState();
-    _initFlutterDownloader();
+    if (Platform.isAndroid || Platform.isIOS) _initFlutterDownloader();
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       if (widget.update == null) {
         _checkUpdate();

@@ -12,8 +12,8 @@ import 'package:lebzcafe/widgets/feedback_form.dart';
 import 'package:lebzcafe/widgets/tu/updates2.dart';
 import 'package:get/get.dart';
 
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+class OldSettingsPage extends StatelessWidget {
+  const OldSettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -116,7 +116,7 @@ class _ProductPageState extends State<ProductPage> {
       appBar: AppBar(
         title: _product == null ? null : Text("${_product!["name"]}"),
         actions: [
-          CartBtn(),
+          const CartBtn(),
           Obx(() => !_appCtrl.isAdmin.value
               ? none()
               : PopupMenuButton(

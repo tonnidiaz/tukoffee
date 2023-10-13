@@ -58,11 +58,14 @@ class AccountTab extends StatelessWidget {
                             pushNamed(context, '/store/details');
                           },
                           child: const Text("Store details")),
-                      InfoItem(
-                          onTap: () {
-                            pushNamed(context, '/rf');
-                          },
-                          child: const Text("RF")),
+                      Visibility(
+                        visible: DEV,
+                        child: InfoItem(
+                            onTap: () {
+                              pushNamed(context, '/rf');
+                            },
+                            child: const Text("RF")),
+                      ),
                     ],
                   ),
                 ),
@@ -91,7 +94,8 @@ class AccountTab extends StatelessWidget {
                         child: const Text("Settings")),
                     InfoItem(
                         onTap: () {
-                          TuFuncs.showTDialog(context, const FeedbackForm());
+                          TuFuncs.showBottomSheet(
+                              context: context, widget: const FeedbackForm());
                         },
                         child: const Text("Help/Feedback")),
                   ]),

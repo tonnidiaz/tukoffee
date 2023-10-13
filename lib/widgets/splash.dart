@@ -9,14 +9,14 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import '../utils/functions.dart';
 
-class TuLoader extends StatefulWidget {
-  const TuLoader({super.key});
+class TuSplash extends StatefulWidget {
+  const TuSplash({super.key});
 
   @override
-  State<TuLoader> createState() => _TuLoaderState();
+  State<TuSplash> createState() => _TuSplashState();
 }
 
-class _TuLoaderState extends State<TuLoader> {
+class _TuSplashState extends State<TuSplash> {
   final _appCtrl = MainApp.appCtrl;
   bool _connected = true;
   _setConnected(bool val) {
@@ -37,17 +37,19 @@ class _TuLoaderState extends State<TuLoader> {
 
   void _init() async {
     // Check for internet connection
+    clog('Initi splash...');
     if (_appCtrl.store['name'] != null) return;
     _setConnected(true);
     bool result = await InternetConnectionChecker().hasConnection;
     await Future.delayed(const Duration(milliseconds: 100));
     clog("Connected: $result");
     _setConnected(result);
-    if (result) {
+    if (result || DEV) {
+      clog("await seupStoreDetails...");
       await setupStoreDetails();
       // If server is still down
       clog("Server down: ${_appCtrl.serverDown.value}");
-      if (!_appCtrl.serverDown.value) {
+      if (!_appCtrl.serverDown.value || DEV) {
         setupUser();
         setupStoreDetails();
       }
@@ -82,9 +84,8 @@ class _TuLoaderState extends State<TuLoader> {
           color: TuColors.coffee1,
           child: _connected
               ? Obx(() => !_appCtrl.serverDown.value
-                  ? Text(
-                      "${_appCtrl.store['name'] ?? 'LOADING'}",
-                      style: Styles.h1,
+                  ? CircularProgressIndicator(
+                      color: TuColors.medium,
                     )
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.center,

@@ -4,7 +4,9 @@ import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/utils/functions.dart';
 import 'package:lebzcafe/utils/styles.dart';
+import 'package:lebzcafe/views/order/index.dart';
 import 'package:lebzcafe/views/product/reviews/review.dart';
+import 'package:lebzcafe/widgets/common.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/review_item.dart';
 
@@ -23,7 +25,7 @@ class _ProductsReviewsState extends State<ProductsReviews> {
     });
   }
 
-  void _getReviews() async {
+  _getReviews() async {
     _setReviews(null);
     try {
       final res = await apiDio().get("/products/reviews");
@@ -43,31 +45,42 @@ class _ProductsReviewsState extends State<ProductsReviews> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Product reviews")),
-      body: Container(
-          child: _reviews == null
-              ? Center(
-                  child: Text(
-                    "No reviews yet",
-                    style: Styles.h3(),
+        appBar: AppBar(title: const Text("Product reviews")),
+        body: RefreshIndicator(
+            onRefresh: () async {
+              await _getReviews();
+            },
+            child: CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(vertical: topMargin),
+                  sliver: const SliverToBoxAdapter(
+                    child: TuCard(
+                        /* SEARCHBAR */
+
+                        ),
                   ),
-                )
-              : Column(
-                  children: [
-                    Container(
-                      padding: defaultPadding,
-                      color: cardBGLight,
-                      margin: const EdgeInsets.symmetric(vertical: 6),
-                    ),
-                    Column(
-                      children: _reviews!
-                          .map((e) => ReviewItem(
-                                item: e,
-                              ))
-                          .toList(),
-                    ),
-                  ],
-                )),
-    );
+                ),
+                _reviews == null
+                    ? const SliverFillRemaining(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : _reviews!.isEmpty
+                        ? SliverFillRemaining(
+                            child: Center(child: h3('No reviews yet!')),
+                          )
+                        : SliverPadding(
+                            padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),
+                            sliver: SliverList.builder(
+                              itemBuilder: (c, i) => ReviewItem(
+                                item: _reviews![i],
+                              ),
+                              itemCount: _reviews!.length,
+                            ),
+                          ),
+              ],
+            )));
   }
 }

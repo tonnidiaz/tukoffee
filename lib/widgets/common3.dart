@@ -219,6 +219,7 @@ class InfoItem extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
           margin: const EdgeInsets.symmetric(vertical: .5),
           decoration: const BoxDecoration(
+              color: cardBGLight,
               border: Border(
                   bottom: BorderSide(
                       color: Color.fromRGBO(10, 10, 10, 0.05), width: 1))),

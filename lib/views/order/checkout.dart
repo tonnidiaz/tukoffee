@@ -27,7 +27,7 @@ import '../../widgets/common.dart';
 enum OrderMode { deliver, collect }
 
 class CheckoutCtrl extends GetxController {
-  Rx<OrderMode> mode = OrderMode.deliver.obs;
+  Rx<OrderMode> mode = OrderMode.collect.obs;
   setOrderMode(OrderMode val) {
     mode.value = val;
   }
@@ -148,7 +148,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             total += _storeCtrl.deliveryFee.value;
                             return Text(
                               "R${roundDouble(total, 2)}",
-                              style: Styles.h4(color: Colors.green),
+                              style: Styles.h4(),
                             );
                           },
                         )
@@ -359,7 +359,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       () => TuListTile(
                                         leading: CircleAvatar(
                                           backgroundColor: Colors.black12,
-                                          child: svgIcon(name: 'br-user', color: TuColors.text2),
+                                          child: svgIcon(
+                                              name: 'br-user',
+                                              color: TuColors.text2),
                                         ),
                                         title: Text(
                                           _ctrl.collector['name'] ?? "",
@@ -378,22 +380,28 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           : Column(
                               //id=delivery-address-section
                               children: [
-                                tuTableRow(
-                                    Text("Delivery address",
-                                        style: Styles.h2()),
-                                    SizedBox(
-                                      width: 25,
-                                      child: IconButton(
-                                          onPressed: () {
-                                            TuFuncs.showBottomSheet(
-                                                context: context,
-                                                widget:
-                                                    const EditAddressForm());
-                                          },
-                                          splashRadius: 24,
-                                          padding: EdgeInsets.zero,
-                                          icon: const Icon(Icons.add_outlined)),
-                                    )),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 14.0),
+                                  child: tuTableRow(
+                                      h3(
+                                        "Delivery address",
+                                      ),
+                                      SizedBox(
+                                        width: 25,
+                                        child: IconButton(
+                                            onPressed: () {
+                                              TuFuncs.showBottomSheet(
+                                                  context: context,
+                                                  widget:
+                                                      const EditAddressForm());
+                                            },
+                                            splashRadius: 24,
+                                            padding: EdgeInsets.zero,
+                                            icon:
+                                                const Icon(Icons.add_outlined)),
+                                      )),
+                                ),
                                 mY(5),
                                 Obx(
                                   () => _appCtrl
@@ -444,7 +452,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
             'store': _ctrl.store['_id'],
             'collector': _ctrl.collector
           });
-
       var oid = res.data["order"]["oid"];
       clog(oid);
       Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
@@ -484,16 +491,19 @@ class _CheckoutPageState extends State<CheckoutPage> {
         "redirect_url": "$apiURL/payment"
       };
       clog(body);
-      final res = await paystackDio.post("/page", data: body);
-      final resData = res.data["data"];
-      final checkoutUrl = "$paystackPayUrl/${resData['slug']}";
+      if (!DEV) {
+        final res = await paystackDio.post("/page", data: body);
+        final resData = res.data["data"];
+        final checkoutUrl = "$paystackPayUrl/${resData['slug']}";
+        // Navigate to payment page and pass checkoutUrl as arg to be used in webview
+        Navigator.pushNamed(context, "/order/checkout/payment",
+            arguments: PaymentScreenArgs(checkoutUrl));
+      }
+
       if (Platform.isLinux || Platform.isWindows) {
         _createOrder();
         return;
       }
-      // Navigate to payment page and pass checkoutUrl as arg to be used in webview
-      Navigator.pushNamed(context, "/order/checkout/payment",
-          arguments: PaymentScreenArgs(checkoutUrl));
     } catch (e) {
       clog(e);
       if (e.runtimeType == DioException) {
@@ -528,7 +538,7 @@ Widget addressCard(
             }),
         title: Text(
           address['name'] ?? "",
-          style: Styles.h3(),
+          style: Styles.h4(),
         ),
         subtitle:
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -539,8 +549,7 @@ Widget addressCard(
           mY(4),
           Text(
             address['phone'] ?? "",
-            style: const TextStyle(
-                fontSize: 13, color: Color.fromARGB(255, 33, 149, 243)),
+            style: TextStyle(fontSize: 13, color: TuColors.primary),
           ),
         ]),
         trailing: Row(
@@ -566,9 +575,9 @@ Widget addressCard(
                           msg: "Failed to remove addresss");
                     }
                   },
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.delete,
-                    color: Colors.red,
+                    color: TuColors.text2,
                   )),
             )
           ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/theme.dart';
 import 'package:get/get.dart';
+import 'package:lebzcafe/views/getx/home.dart';
 
 import '/utils/constants.dart';
 
@@ -20,6 +21,8 @@ class _MobileAppState extends State<MobileApp> {
     });
   }
 
+  final getxPages = [TuPage('/', GetxHomePage())];
+
   @override
   void initState() {
     super.initState();
@@ -37,12 +40,12 @@ class _MobileAppState extends State<MobileApp> {
       /* TODO: CHANGE THIS FOR NO HOME WIDGET */
       if (page.name != '/nfn') routes[page.name] = (context) => page.widget;
     }
-    return MaterialApp(
+    return GetMaterialApp(
       theme: tuTheme(_darkMode), //(Brightness.light),
       scrollBehavior: MyCustomScrollBehavior(),
       routes: routes,
       debugShowCheckedModeBanner: false,
-      initialRoute: "/rf",
+      initialRoute: "/",
       //home: MyReviewsPage(),
       builder: (context, child) {
         return child!;

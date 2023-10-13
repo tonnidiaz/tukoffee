@@ -5,6 +5,7 @@ import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/utils/functions.dart';
 import 'package:lebzcafe/views/product/reviews/review.dart';
 import 'package:lebzcafe/widgets/common3.dart';
+import 'package:lebzcafe/widgets/views/add_review.dart';
 
 class ReviewItem extends StatelessWidget {
   final Map<String, dynamic> item;
@@ -69,8 +70,17 @@ class ReviewItem extends StatelessWidget {
                     )
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(5),
-                      child:
-                          Image.network(item['product']['images'][0]['url'])),
+                      child: Image.network(
+                        item['product']['images'][0]['url'],
+                        errorBuilder: ((context, error, stackTrace) {
+                          clog(error);
+                          return svgIcon(
+                            name: "br-image-slash",
+                            size: 26,
+                            color: Colors.black54,
+                          );
+                        }),
+                      )),
             ),
           ),
 
@@ -79,7 +89,7 @@ class ReviewItem extends StatelessWidget {
             child: Text(
               hasTap ? "${item['title']}" : item['product']['name'],
               softWrap: false,
-              overflow: TextOverflow.fade,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
@@ -113,12 +123,32 @@ class ReviewItem extends StatelessWidget {
                 ),
           trailing: hasStars
               ? null
-              : PopupMenuButton(
-                  splashRadius: 24,
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(child: Text('Edit')),
-                    const PopupMenuItem(child: Text('Delete')),
-                  ],
+              : SizedBox(
+                  width: 24,
+                  child: PopupMenuButton(
+                    padding: EdgeInsets.zero,
+                    splashRadius: 24,
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: Text('Edit'),
+                        onTap: () {
+                          TuFuncs.showBottomSheet(
+                              context: context,
+                              widget: AddReviewView(
+                                  product: item['product'],
+                                  rev: item,
+                                  onOk: () {
+                                    // _getReviews();
+                                    //TODO: RELOAD
+                                  }));
+                        },
+                      ),
+                      const PopupMenuItem(
+                        child: Text('Delete'),
+                        enabled: false,
+                      ),
+                    ],
+                  ),
                 ),
         ));
   }

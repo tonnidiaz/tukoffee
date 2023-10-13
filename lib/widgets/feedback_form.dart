@@ -1,3 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:lebzcafe/main.dart';
+import 'package:lebzcafe/utils/styles.dart';
+import 'package:lebzcafe/widgets/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
 import 'package:flutter/material.dart';
@@ -28,41 +33,92 @@ class _FeedbackFormState extends State<FeedbackForm> {
     });
   }
 
+  Map<String, dynamic> _form = {};
+  _setFormKey(String key, dynamic val) {
+    setState(() {
+      _form[key] = val;
+    });
+  }
+
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    return TuDialogView(
-      title: "Help/Feedback",
-      isForm: true,
-      fields: [
-        TuFormField(
-          label: "Email:",
-          hint: "Your email here... ",
-          required: true,
-          onChanged: _setEmail,
-          value: _email,
-          keyboard: TextInputType.emailAddress,
-        ),
-        TuFormField(
-          label: "Message:",
-          maxLines: 3,
-          hint: "Your message here... ",
-          required: true,
-          keyboard: TextInputType.multiline,
-          onChanged: _setMsg,
-          value: _msg,
-        ),
-      ],
-      onOk: () async {
-        try {
-          await apiDio().post('/message/send',
-              data: {'from': _email, 'to': 'staff', 'msg': _msg});
-          showToast("Feedback sent!")
-              .show(context)
-              .then((value) => Navigator.pop(context));
-        } catch (e) {
-          errorHandler(e: e, context: context, msg: "Failed to  send feedback");
-        }
-      },
+    return Container(
+      padding: defaultPadding,
+      margin: EdgeInsets.only(bottom: keyboardPadding(context)),
+      child: SingleChildScrollView(
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Help / Feedback",
+                style: Styles.h3(),
+              ),
+              mY(10),
+              Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TuFormField(
+                        label: "Full name:",
+                        hint: "e.g. John Doe ",
+                        required: true,
+                        onChanged: (val) {
+                          _setFormKey('name', val);
+                        },
+                        value: _form['name'],
+                        keyboard: TextInputType.name,
+                      ),
+                      TuFormField(
+                        label: "Email:",
+                        hint: "Your email here... ",
+                        required: true,
+                        onChanged: (val) {
+                          _setFormKey('email', val);
+                        },
+                        value: _form['email'],
+                        keyboard: TextInputType.emailAddress,
+                      ),
+                      TuFormField(
+                        label: "Message:",
+                        maxLines: 3,
+                        hint: "Your message here... ",
+                        required: true,
+                        keyboard: TextInputType.multiline,
+                        onChanged: (val) {
+                          _setFormKey('msg', val);
+                        },
+                        value: _form['msg'],
+                      ),
+                      mY(6),
+                      TuButton(
+                        text: "SUBMIT FEEDBACK",
+                        width: double.infinity,
+                        onPressed: () async {
+                          try {
+                            if (_formKey.currentState!.validate()) {
+                              await apiDio().post('/message/send', data: {
+                                "app": MainApp.appCtrl.store['name'],
+                                ..._form
+                              });
+                            }
+                            showToast("Feedback sent!")
+                                .show(context)
+                                .then((value) => pop(context));
+                          } catch (e) {
+                            errorHandler(
+                                e: e,
+                                context: context,
+                                msg: "Failed to  send feedback");
+                          }
+                        },
+                      )
+                    ],
+                  ))
+            ]),
+      ),
     );
   }
 }

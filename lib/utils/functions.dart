@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -88,11 +89,14 @@ setupStoreDetails({Map<String, dynamic>? data}) async {
   try {
     appCtrl.setserverDown(false);
     Map<String, dynamic> details;
+
     if (data != null) {
       details = data;
     } else {
+      clog('details');
       final res = await dio.get("$apiURL/store");
       details = res.data;
+      clog(details);
       appCtrl.setserverDown(false);
     }
 
@@ -334,4 +338,12 @@ void pop(BuildContext context) {
 
 sleep(int ms) async {
   return await Future.delayed(Duration(milliseconds: ms));
+}
+
+Future<String> tbURL() async {
+  if (DEV) return "$localhost:3000";
+  final res = await dio.get(
+    'https://raw.githubusercontent.com/tonnidiaz/tunedapps/main/meta.json',
+  );
+  return jsonDecode(res.data)['baseURL'];
 }
