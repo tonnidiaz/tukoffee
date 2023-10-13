@@ -2,7 +2,7 @@
     <ion-page>
         <Appbar v-if="false" title="Research Facility" />
         <ion-content :fullscreen="true">
-            <tu-splash/>
+           <ion-loading is-open message="Loading"/>
         </ion-content>
     </ion-page>
 </template>
@@ -16,7 +16,7 @@ import {
     IonContent,
     IonItemSliding,
     IonItemOptions,
-    IonItemOption,
+    IonLoading,
     IonModal,
     IonInfiniteScrollContent,
     IonAvatar,
