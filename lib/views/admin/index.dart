@@ -9,7 +9,7 @@ import 'package:lebzcafe/widgets/common3.dart';
 import 'package:get/get.dart';
 
 class DashCtrl extends GetxController {
-  RxInt selectedTab = 0.obs;
+  RxInt tab = 0.obs;
   RxList<dynamic> orders = [].obs;
   RxList<dynamic> customers = [].obs;
   RxDouble revenue = 0.0.obs;
@@ -53,7 +53,7 @@ class _DashboardPageState extends State<DashboardPage> {
   DashboardPageArgs? _args;
 
   void _onBottonNavitemTap(int val) {
-    _ctrl.selectedTab.value = val;
+    _ctrl.tab.value = val;
   }
 
   @override
@@ -63,7 +63,7 @@ class _DashboardPageState extends State<DashboardPage> {
       var args = ModalRoute.of(context)!.settings.arguments;
       _args =
           args != null ? args as DashboardPageArgs : const DashboardPageArgs();
-      _ctrl.selectedTab.value = _args!.tab;
+      _ctrl.tab.value = _args!.tab;
     });
   }
 
@@ -77,7 +77,7 @@ class _DashboardPageState extends State<DashboardPage> {
     ];
     return Scaffold(
       bottomNavigationBar: Obx(() {
-        var index = _ctrl.selectedTab.value;
+        var index = _ctrl.tab.value;
         return BottomNavigationBar(
             currentIndex: index,
             onTap: _onBottonNavitemTap,
@@ -106,14 +106,13 @@ class _DashboardPageState extends State<DashboardPage> {
       }),
       body: WillPopScope(
         onWillPop: () async {
-          clog("On will pop");
-          if (_ctrl.selectedTab.value != 0) {
-            _ctrl.selectedTab.value = 0;
+          if (_ctrl.tab.value != 0) {
+            _ctrl.tab.value = 0;
             return false;
           }
           return true;
         },
-        child: Obx(() => adminPages.elementAt(_ctrl.selectedTab.value)),
+        child: Obx(() => adminPages.elementAt(_ctrl.tab.value)),
       ),
     );
   }

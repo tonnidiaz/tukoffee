@@ -237,7 +237,7 @@ class _ProfilePageState extends State<ProfilePage> {
             body: SizedBox(
               height: screenSize(context).height -
                   appBarH -
-                  statusBarH(context: context),
+                  statusBarH(),
               child: SingleChildScrollView(
                 child: Container(
                   padding: defaultPadding,

@@ -59,15 +59,15 @@ class ProductCard extends StatelessWidget {
       //elevation: 0,
       radius: rad,
       height: 180,
-      width: cardW,
+      //width: cardW,
       padding: 0,
       onTap: () async {
         storeCtrl.setCurrProduct(product);
         await Navigator.pushNamed(context, "/product",
             arguments: {"pid": product["pid"]});
       },
-      mx: 2.5,
-      my: 2.5,
+      mx: 0,
+      my: 0,
       child: Container(
         padding: EdgeInsets.zero,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

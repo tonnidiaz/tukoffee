@@ -18,6 +18,7 @@ import 'package:lebzcafe/widgets/common2.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/form_view.dart';
 import 'package:get/get.dart';
+import 'package:lebzcafe/widgets/tu/select.dart';
 import '../../controllers/app_ctrl.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
@@ -116,7 +117,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           )
         : PageWrapper(
             appBar: appBar,
-            bottomSheet: Container(
+            bottomNavBar: Container(
               decoration: const BoxDecoration(
                   color: cardBGLight,
                   border:
@@ -155,6 +156,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ),
                     mY(4),
                     TuButton(
+                      width: double.infinity,
                       onPressed: _onCheckoutBtnPress,
                       bgColor: Colors.green,
                       text: "Pay now",
@@ -163,144 +165,147 @@ class _CheckoutPageState extends State<CheckoutPage> {
             ),
             child: Container(
                 color: Colors.transparent,
-                height: screenSize(context).height -
-                    100 -
-                    statusBarH(context: context) -
-                    appBarH,
+                height: screenSize(context).height - statusBarH() - appBarH,
                 width: double.infinity,
                 child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Order review",
-                          style: Styles.h1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      mY(topMargin),
+                      TuCard(
+                        child: Obx(
+                          () => TuSelect(
+                            label: 'Method:',
+                            value: _ctrl.mode.value,
+                            items: [
+                              SelectItem('Collect', OrderMode.collect),
+                              SelectItem('Deliver', OrderMode.deliver),
+                            ],
+                            onChanged: (v) {
+                              clog(v);
+                              _ctrl.setOrderMode(v);
+                            },
+                          ),
                         ),
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                Obx(() => TuLabeledCheckbox(
-                                      radius: 50,
-                                      value:
-                                          _ctrl.mode.value == OrderMode.deliver,
-                                      onChanged: (val) {
-                                        if (val == true) {
-                                          _ctrl.setOrderMode(OrderMode.deliver);
-                                        }
-                                      },
-                                      label: "Deliver",
-                                    )),
-                                Obx(() => TuLabeledCheckbox(
-                                      radius: 50,
-                                      value:
-                                          _ctrl.mode.value == OrderMode.collect,
-                                      onChanged: (val) {
-                                        if (val == true) {
-                                          _ctrl.setOrderMode(OrderMode.collect);
-                                        }
-                                      },
-                                      label: "Collect",
-                                    )),
-                              ],
-                            )
-                          ],
-                        ),
-                        mY(5),
-                        Column(
-                          //id=ordersummarysec
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
+                      ),
+                      mY(topMargin),
+                      Column(
+                        //id=ordersummarysec
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 14.0),
+                            child: Text(
                               "Order summary",
-                              style: Styles.h2(),
+                              style: Styles.h3(),
                             ),
-                            mY(5),
-                            Table(
-                              border: TableBorder.all(
-                                  width: 2,
-                                  color: const Color.fromRGBO(0, 0, 0, 0.116),
-                                  borderRadius: BorderRadius.circular(0)),
-                              children: [
-                                TableRow(children: [
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text("Items"),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
+                          ),
+                          mY(topMargin),
+                          TuCard(
+                            padding: 14,
+                            child: true
+                                ? Column(
+                                    children: [
+                                      tuTableRow(
+                                        Text("Items"),
                                         Obx(
                                           () => Text(
                                               "${_storeCtrl.cart['products']?.length ?? 0}"),
                                         ),
-                                        SizedBox(
-                                          child: IconButton(
-                                              padding: EdgeInsets.zero,
-                                              splashRadius: 20,
-                                              onPressed: () {
-                                                Navigator.pushNamed(
-                                                    context, "/cart");
-                                              },
-                                              icon: const Icon(
-                                                Icons.visibility,
-                                                color: Colors.black54,
-                                              )),
-                                        )
-                                      ],
-                                    ),
+                                        my: 10,
+                                      ),
+                                      devider(),
+                                      tuTableRow(
+                                        Text("Subtotal"),
+                                        Obx(
+                                          () {
+                                            double total = 0;
+                                            if (_storeCtrl.cart["products"] !=
+                                                null) {
+                                              for (var it in _storeCtrl
+                                                  .cart["products"]) {
+                                                total += (it["product"]
+                                                            ["price"] *
+                                                        it["quantity"])
+                                                    .toDouble();
+                                              }
+                                            }
+                                            return Text(
+                                                "R${roundDouble(total, 2)}");
+                                          },
+                                        ),
+                                        my: 10,
+                                      ),
+                                      devider(),
+                                      tuTableRow(
+                                        Text("Delivery fee"),
+                                        Obx(
+                                          () =>
+                                              Text("${_storeCtrl.deliveryFee}"),
+                                        ),
+                                        my: 10,
+                                      ),
+                                      devider(),
+                                    ],
                                   )
-                                ]),
-                                TableRow(children: [
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text("Subtotal"),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Obx(() {
-                                      double total = 0;
-                                      if (_storeCtrl.cart["products"] != null) {
-                                        for (var it
-                                            in _storeCtrl.cart["products"]) {
-                                          total += (it["product"]["price"] *
-                                                  it["quantity"])
-                                              .toDouble();
-                                        }
-                                      }
+                                : Table(
+                                    border: TableBorder.all(
+                                        width: 1,
+                                        color:
+                                            const Color.fromRGBO(0, 0, 0, 0.15),
+                                        borderRadius: BorderRadius.circular(0)),
+                                    children: [
+                                      TableRow(children: [
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text("Subtotal"),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Obx(() {
+                                            double total = 0;
+                                            if (_storeCtrl.cart["products"] !=
+                                                null) {
+                                              for (var it in _storeCtrl
+                                                  .cart["products"]) {
+                                                total += (it["product"]
+                                                            ["price"] *
+                                                        it["quantity"])
+                                                    .toDouble();
+                                              }
+                                            }
 
-                                      return Text("R${roundDouble(total, 2)}");
-                                    }),
-                                  )
-                                ]),
-                                TableRow(children: [
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text("Delivery fee"),
+                                            return Text(
+                                                "R${roundDouble(total, 2)}");
+                                          }),
+                                        )
+                                      ]),
+                                      TableRow(children: [
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text("Delivery fee"),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Obx(() => Text(
+                                              "R${_storeCtrl.deliveryFee}")),
+                                        )
+                                      ]),
+                                    ],
                                   ),
+                          )
+                        ],
+                      ),
+                      Obx(() => _ctrl.mode.value == OrderMode.collect
+                          ? Container(
+                              color: appBGLight,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Obx(() =>
-                                        Text("R${_storeCtrl.deliveryFee}")),
-                                  )
-                                ]),
-                              ],
-                            )
-                          ],
-                        ),
-                        mY(5),
-                        Obx(() => _ctrl.mode.value == OrderMode.collect
-                            ? TuCard(
-                                radius: 0,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    tuTableRow(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 14.0),
+                                    child: tuTableRow(
                                       Text(
                                         "Collection info",
                                         style: Styles.h3(),
@@ -322,11 +327,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                         ),
                                       ),
                                     ),
-                                    mY(5),
-                                    Obx(() {
+                                  ),
+                                  mY(topMargin),
+                                  TuCard(
+                                    child: Obx(() {
                                       return _storeCtrl.stores.value == null
                                           ? none()
-                                          : TuDropdownButton(
+                                          : TuSelect(
                                               label: "Store:",
                                               value: _ctrl.store['_id'],
                                               items: _storeCtrl.stores.value!
@@ -345,13 +352,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                               },
                                             );
                                     }),
-                                    mY(10),
-                                    Obx(
+                                  ),
+                                  mY(topMargin),
+                                  TuCard(
+                                    child: Obx(
                                       () => TuListTile(
-                                        leading: const Icon(
-                                          Icons.person,
-                                          color:
-                                              Color.fromRGBO(255, 152, 0, .7),
+                                        leading: CircleAvatar(
+                                          backgroundColor: Colors.black12,
+                                          child: svgIcon(name: 'br-user', color: TuColors.text2),
                                         ),
                                         title: Text(
                                           _ctrl.collector['name'] ?? "",
@@ -364,65 +372,63 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ))
-                            : Column(
-                                //id=delivery-address-section
-                                children: [
-                                  tuTableRow(
-                                      Text("Delivery address",
-                                          style: Styles.h2()),
-                                      SizedBox(
-                                        width: 25,
-                                        child: IconButton(
-                                            onPressed: () {
+                                  ),
+                                ],
+                              ))
+                          : Column(
+                              //id=delivery-address-section
+                              children: [
+                                tuTableRow(
+                                    Text("Delivery address",
+                                        style: Styles.h2()),
+                                    SizedBox(
+                                      width: 25,
+                                      child: IconButton(
+                                          onPressed: () {
+                                            TuFuncs.showBottomSheet(
+                                                context: context,
+                                                widget:
+                                                    const EditAddressForm());
+                                          },
+                                          splashRadius: 24,
+                                          padding: EdgeInsets.zero,
+                                          icon: const Icon(Icons.add_outlined)),
+                                    )),
+                                mY(5),
+                                Obx(
+                                  () => _appCtrl
+                                          .user['delivery_addresses'].isNotEmpty
+                                      ? Column(
+                                          children: (_appCtrl.user[
+                                                  'delivery_addresses'] as List)
+                                              .map((e) {
+                                          return addressCard(
+                                              context: context, address: e);
+                                        }).toList())
+                                      : Center(
+                                          child: SizedBox(
+                                          width: double.infinity,
+                                          height: 70,
+                                          child: InkWell(
+                                            onTap: () {
                                               TuFuncs.showBottomSheet(
                                                   context: context,
                                                   widget:
                                                       const EditAddressForm());
                                             },
-                                            splashRadius: 24,
-                                            padding: EdgeInsets.zero,
-                                            icon:
-                                                const Icon(Icons.add_outlined)),
-                                      )),
-                                  mY(5),
-                                  Obx(
-                                    () => _appCtrl.user['delivery_addresses']
-                                            .isNotEmpty
-                                        ? Column(
-                                            children: (_appCtrl.user[
-                                                        'delivery_addresses']
-                                                    as List)
-                                                .map((e) {
-                                            return addressCard(
-                                                context: context, address: e);
-                                          }).toList())
-                                        : Center(
-                                            child: SizedBox(
-                                            width: double.infinity,
-                                            height: 70,
-                                            child: InkWell(
-                                              onTap: () {
-                                                TuFuncs.showBottomSheet(
-                                                    context: context,
-                                                    widget:
-                                                        const EditAddressForm());
-                                              },
-                                              child: const Card(
-                                                  elevation: .5,
-                                                  child: Icon(
-                                                    Icons.add,
-                                                    color: Colors.black87,
-                                                    // size: 50,
-                                                  )),
-                                            ),
-                                          )),
-                                  ),
-                                ],
-                              )),
-                      ],
-                    ),
+                                            child: const Card(
+                                                elevation: .5,
+                                                child: Icon(
+                                                  Icons.add,
+                                                  color: Colors.black87,
+                                                  // size: 50,
+                                                )),
+                                          ),
+                                        )),
+                                ),
+                              ],
+                            )),
+                    ],
                   ),
                 )));
   }

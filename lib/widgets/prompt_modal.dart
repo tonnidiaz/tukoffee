@@ -28,9 +28,10 @@ class PromptDialog extends StatelessWidget {
       insetPadding: defaultPadding2,
       //actionsPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       titlePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+      shape: const RoundedRectangleBorder(),
       title: Text(
         title,
-        style: Styles.h3(),
+        style: Styles.h3(isLight: true),
       ),
       content: Container(
         child: Column(
@@ -56,7 +57,7 @@ class PromptDialog extends StatelessWidget {
             },
             child: Text(
               cancelTxt.toUpperCase(),
-              style: TextStyle(color: TuColors.primary, fontSize: 14),
+              style: const TextStyle(color: Colors.black87, fontSize: 14),
             )),
         TextButton(
             onPressed: () async {
@@ -65,7 +66,7 @@ class PromptDialog extends StatelessWidget {
               if (onOk != null) onOk!();
             },
             child: Text(okTxt.toUpperCase(),
-                style: TextStyle(color: TuColors.primary, fontSize: 14))),
+                style: const TextStyle(color: Colors.black, fontSize: 14))),
       ],
     );
   }

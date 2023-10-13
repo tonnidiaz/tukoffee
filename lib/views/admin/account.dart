@@ -72,6 +72,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                     ),
                   )
                 : SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
                     child: Container(
                       padding: defaultPadding,
                       constraints:

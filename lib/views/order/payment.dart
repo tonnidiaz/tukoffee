@@ -129,13 +129,9 @@ class _PaymentPageState extends State<PaymentPage> {
               statusBarH(context: context),
           child: _args == null || _progress < 100
               ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("$_progress%"),
-                    Text(
-                      "Loading...",
-                      style: Styles.h3(),
-                    ),
+                    LinearProgressIndicator(value: _progress / 100,),
+                
                   ],
                 )
               : Column(

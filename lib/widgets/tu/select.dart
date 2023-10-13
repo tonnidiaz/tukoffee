@@ -75,7 +75,7 @@ class TuSelect extends StatelessWidget {
                   ),
                 );
               }).toList(),
-              onChanged: (val) {} //disabled ? null : onChanged,
+              onChanged: disabled ? null : onChanged,
 
               ),
         ),

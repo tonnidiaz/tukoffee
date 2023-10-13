@@ -83,7 +83,7 @@ class _TuLoaderState extends State<TuLoader> {
           child: _connected
               ? Obx(() => !_appCtrl.serverDown.value
                   ? Text(
-                      "Tukoffee",
+                      "${_appCtrl.store['name'] ?? 'LOADING'}",
                       style: Styles.h1,
                     )
                   : Column(

@@ -136,7 +136,7 @@ class _ProductPageState extends State<ProductPage> {
       onRefresh: () async {
         await _setupProduct();
       },
-      bottomSheet: Material(
+      bottomNavBar: Material(
         elevation: 8,
         color: Colors.white,
         shadowColor: Colors.black,
@@ -214,7 +214,7 @@ class _ProductPageState extends State<ProductPage> {
       ),
       child: SizedBox(
         width: double.infinity,
-        height: screenSize(context).height - appBarH,
+        height: screenSize(context).height ,
         child: _product == null
             ? Padding(
                 padding: const EdgeInsets.all(8.0),

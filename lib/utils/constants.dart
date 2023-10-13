@@ -134,9 +134,9 @@ final List<TuPage> pages = [
 const String tag = "Tunedbass";
 const String package = "com.tb.tmeta";
 const double bottomSheetH = 150;
-const double bottomBarH = 46;
+const double bottomBarH = kBottomNavigationBarHeight; //46;
 const double footerH = 46;
-const double appBarH = 56;
+const double appBarH = kToolbarHeight; //56;
 const double tabH = 48;
 BuildContext? appCtx;
 double statusBarH({BuildContext? context}) {

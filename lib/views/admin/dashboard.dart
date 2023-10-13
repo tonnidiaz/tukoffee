@@ -47,70 +47,70 @@ class _DashboardState extends State<Dashboard> {
         padding: EdgeInsets.all(6),
         width: double.infinity,
         child: Obx(
-          () =>  StaggeredGrid.count(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 6,
-                  mainAxisSpacing: 6,
-                  children: [
-                    ItemCard(
-                      title: "Products",
-                      onTap: () {
-                        _ctrl.selectedTab.value = 1;
-                      },
-                      icon: svgIcon(
-                          name: "br-box-open-full",
-                          color: TuColors.coffee2,
-                          size: 24),
-                      subtitle: "${_ctrl.data.value['products'].length}",
-                    ),
-                    ItemCard(
-                      title: "Orders",
-                      onTap: () {
-                        _ctrl.selectedTab.value = 2;
-                      },
-                      icon: svgIcon(
-                        name: 'br-person-dolly',
-                        size: 24,
-                        color: Colors.orangeAccent,
-                      ),
-                      subtitle: "${_ctrl.data.value['orders'].length}",
-                    ),
-                    ItemCard(
-                      title: "Accounts",
-                      onTap: () {
-                        _ctrl.selectedTab.value = 3;
-                      },
-                      icon: svgIcon(
-                        name: 'br-users',
-                        size: 24,
-                        color: TuColors.text2,
-                      ),
-                      subtitle: "${_ctrl.data.value['customers'].length}",
-                    ),
-                    ItemCard(
-                      title: "Product reviews",
-                      onTap: () {
-                        pushTo(context, const ProductsReviews());
-                      },
-                      icon: svgIcon(
-                        name: 'br-comment-user',
-                        size: 24,
-                        color: TuColors.success,
-                      ),
-                      subtitle: "${_ctrl.data.value['reviews'].length}",
-                    ),
-                    ItemCard(
-                      title: "Settings",
-                      onTap: () {
-                        Navigator.pushNamed(context, '/admin/settings');
-                      },
-                      icon: Icon(
-                        Icons.settings_outlined,
-                        color: TuColors.text2,
-                      ),
-                    ),
-                  ],
+          () => StaggeredGrid.count(
+            crossAxisCount: 3,
+            crossAxisSpacing: 6,
+            mainAxisSpacing: 6,
+            children: [
+              ItemCard(
+                title: "Products",
+                onTap: () {
+                  _ctrl.tab.value = 1;
+                },
+                icon: svgIcon(
+                    name: "br-box-open-full",
+                    color: TuColors.coffee2,
+                    size: 24),
+                subtitle: "${_ctrl.data.value['products'].length}",
+              ),
+              ItemCard(
+                title: "Orders",
+                onTap: () {
+                  _ctrl.tab.value = 2;
+                },
+                icon: svgIcon(
+                  name: 'br-person-dolly',
+                  size: 24,
+                  color: Colors.orangeAccent,
                 ),
+                subtitle: "${_ctrl.data.value['orders'].length}",
+              ),
+              ItemCard(
+                title: "Accounts",
+                onTap: () {
+                  _ctrl.tab.value = 3;
+                },
+                icon: svgIcon(
+                  name: 'br-users',
+                  size: 24,
+                  color: TuColors.text2,
+                ),
+                subtitle: "${_ctrl.data.value['customers'].length}",
+              ),
+              ItemCard(
+                title: "Product reviews",
+                onTap: () {
+                  pushTo(context, const ProductsReviews());
+                },
+                icon: svgIcon(
+                  name: 'br-comment-user',
+                  size: 24,
+                  color: TuColors.success,
+                ),
+                subtitle: "${_ctrl.data.value['reviews'].length}",
+              ),
+              ItemCard(
+                title: "Settings",
+                onTap: () {
+                  Navigator.pushNamed(context, '/admin/settings');
+                },
+                icon: Icon(
+                  Icons.settings_outlined,
+                  color: TuColors.text2,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -42,8 +42,11 @@ class _IndexPageState extends State<IndexPage> {
     ];
     return WillPopScope(
       onWillPop: () async {
-        clog('Willpop');
-        return false;
+        if (ctrl.tab.value != 0) {
+          ctrl.tab.value = 0;
+          return false;
+        }
+        return true;
       },
       child: Scaffold(
         body: Obx(() => indexTabs[ctrl.tab.value].widget),

@@ -145,7 +145,8 @@ class _HomeTabState extends State<HomeTab> {
       );
     }
 
-    return RefreshIndicator(
+    return 
+    RefreshIndicator(
       onRefresh: () async {
         await getProducts();
       },

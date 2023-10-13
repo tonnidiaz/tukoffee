@@ -21,6 +21,7 @@ ThemeData tuTheme(bool dark) {
       appBarTheme: AppBarTheme(
           centerTitle: false,
           toolbarHeight: appBarH,
+
           //  iconTheme: IconThemeData(color: ),
           //titleSpacing: 3,
           titleTextStyle: GoogleFonts.inclusiveSans(
@@ -28,7 +29,7 @@ ThemeData tuTheme(bool dark) {
               fontWeight: FontWeight.w600,
               color: dark ? Colors.white70 : TuColors.text2),
           backgroundColor: cardBGLight,
-          elevation: 0,
+          elevation: 0.5,
           foregroundColor: dark ? Colors.white70 : TuColors.text2),
       colorScheme: ColorScheme.fromSeed(
           seedColor: TuColors.primary, brightness: Brightness.light),

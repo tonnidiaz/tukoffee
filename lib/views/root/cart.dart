@@ -54,8 +54,8 @@ class _CartPageState extends State<CartPage> {
   final double _bottomSheetH = 90;
   @override
   Widget build(BuildContext context) {
-    return PageWrapper(
-      appBar: AppBar(titleSpacing: 14, title: Text('Cart'), actions: [
+    return Scaffold(
+      appBar: AppBar(titleSpacing: 14, title: const Text('Cart'), actions: [
         PopupMenuButton(
             itemBuilder: (context) => [
                   const PopupMenuItem(
@@ -63,7 +63,7 @@ class _CartPageState extends State<CartPage> {
                       child: Text('Clear cart'))
                 ])
       ]),
-      bottomSheet: Container(
+      bottomNavigationBar: Container(
         decoration: const BoxDecoration(
             color: cardBGLight,
             border: Border(top: BorderSide(color: appBGLight, width: 1.5))),
@@ -112,46 +112,26 @@ class _CartPageState extends State<CartPage> {
               )
             ]),
       ),
-      onRefresh: () async {
-        await _init();
-      },
-      child: Container(
-        padding: EdgeInsets.all(4),
-        height: screenSize(context).height -
-            _bottomSheetH -
-            appBarH -
-            statusBarH(context: context),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Obx(() => !_storeCtrl.cartFetched.value
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await _init();
+        },
+        child: Obx(() => !_storeCtrl.cartFetched.value
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : _storeCtrl.cart.isEmpty || _storeCtrl.cart["products"].isEmpty
                 ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        h3("Please wait..."),
-                      ],
+                    child: Text(
+                      "Cart empty",
+                      style: Styles.h3(isLight: true, color: TuColors.text2),
                     ),
                   )
-                : _storeCtrl.cart.isEmpty || _storeCtrl.cart["products"].isEmpty
-                    ? Expanded(
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Cart empty",
-                                style: Styles.h3(
-                                    isLight: true, color: TuColors.text2),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    : Flexible(
-                        child: Container(
+                : Container(
+                    child: Column(
+                      children: [
+                        mY(topMargin),
+                        Expanded(
                           child: ListView.builder(
                             itemBuilder: (context, index) {
                               return CartItem(
@@ -161,9 +141,9 @@ class _CartPageState extends State<CartPage> {
                             itemCount: _storeCtrl.cart["products"].length,
                           ),
                         ),
-                      )),
-          ],
-        ),
+                      ],
+                    ),
+                  )),
       ),
     );
   }

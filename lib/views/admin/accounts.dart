@@ -145,7 +145,8 @@ class _AccountsState extends State<Accounts> {
             await _init();
           },
           child: SingleChildScrollView(
-            child: Container(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: SizedBox(
               height: screenSize(context).height -
                   statusBarH(context: context) -
                   (appBarH * 2),
@@ -293,10 +294,9 @@ class AccountCard extends StatelessWidget {
                   },
                 ),
                 CircleAvatar(
-                  backgroundColor: Colors.black12,
-                  foregroundColor: TuColors.note,
-                  child: const Icon(Icons.person),
-                ),
+                                          backgroundColor: Colors.black12,
+                                          child: svgIcon(name: 'br-user', color: TuColors.text2),
+                                        ),
               ],
             ),
             title: Text(
@@ -336,7 +336,7 @@ class AccountCard extends StatelessWidget {
                                             title: "Delete account",
                                             okTxt: "Yes",
                                             msg:
-                                                "You sure you want to delete the account?",
+                                                "Do you want to permenently delete this account?",
                                             onOk: () async {
                                               try {
                                                 final res = await apiDio().post(
@@ -375,7 +375,7 @@ class AccountCard extends StatelessWidget {
                                           );
                                         });
                                   },
-                                  child: iconText("Delete", Icons.delete))
+                                  child: Text("Delete"))
                             ];
                     });
               }),

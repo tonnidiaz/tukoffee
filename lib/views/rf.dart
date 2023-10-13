@@ -8,6 +8,8 @@ import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/constants2.dart';
+import 'package:lebzcafe/utils/functions.dart';
+import 'package:lebzcafe/utils/styles.dart';
 import 'package:lebzcafe/widgets/common.dart';
 import 'package:lebzcafe/widgets/common2.dart';
 import 'package:lebzcafe/widgets/common3.dart';
@@ -25,37 +27,11 @@ class _RFPageState extends State<RFPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String assetName = 'assets/icons/box-open-full.svg';
-    final Widget svgIcon = SvgPicture.asset(assetName,
-        color: Colors.red, semanticsLabel: 'A red up arrow');
-
-    final border = OutlineInputBorder(
-        borderRadius: mFieldRadius,
-        borderSide: BorderSide(color: TuColors.fieldBG, width: .2));
     return Scaffold(
         appBar: childAppbar(showCart: false),
         body: Container(
-            padding: defaultPadding,
-            child: tuColumn(
-              min: true,
-              children: [
-                const Text("Small text"),
-                mY(5),
-                const Text("Small text"),
-                mY(5),
-                const Text("Small text"),
-                Chip(
-                  visualDensity: VisualDensity.defaultDensityForPlatform(
-                      TargetPlatform.android),
-                  label: Text(
-                    "My chip",
-                  ),
-                  backgroundColor: Colors.blue,
-                ),
-                mY(20),
-                svgIcon
-              ],
-            )),
+        
+        ),
         bottomNavigationBar: MBottomBar());
   }
 }
