@@ -1,0 +1,134 @@
+import 'package:flutter/material.dart';
+import 'package:lebzcafe/utils/colors.dart';
+import 'package:lebzcafe/utils/functions.dart';
+import 'package:lebzcafe/views/admin/accounts.dart';
+import 'package:lebzcafe/views/admin/dashboard.dart';
+import 'package:lebzcafe/views/admin/orders.dart';
+import 'package:lebzcafe/views/admin/products.dart';
+import 'package:lebzcafe/widgets/common3.dart';
+import 'package:get/get.dart';
+
+class DashCtrl extends GetxController {
+  RxInt selectedTab = 0.obs;
+  RxList<dynamic> orders = [].obs;
+  RxList<dynamic> customers = [].obs;
+  RxDouble revenue = 0.0.obs;
+
+  final RxList<dynamic> selectedProducts = [].obs;
+  void setSelectedProducts(List<dynamic> val) {
+    selectedProducts.value = val;
+  }
+
+  final RxBool productsFetched = false.obs;
+  void setProductsFetched(bool val) {
+    productsFetched.value = val;
+  }
+
+  RxMap<String, dynamic> data = <String, dynamic>{
+    "products": [],
+    "orders": [],
+    "customers": [],
+    "reviews": [],
+  }.obs;
+  setData(Map<String, dynamic> val) {
+    data.value = val;
+  }
+}
+
+class DashboardPageArgs {
+  final int tab;
+  const DashboardPageArgs({this.tab = 0});
+}
+
+class DashboardPage extends StatefulWidget {
+  const DashboardPage({Key? key}) : super(key: key);
+
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  final _ctrl = Get.put(DashCtrl());
+
+  DashboardPageArgs? _args;
+
+  void _onBottonNavitemTap(int val) {
+    _ctrl.selectedTab.value = val;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      var args = ModalRoute.of(context)!.settings.arguments;
+      _args =
+          args != null ? args as DashboardPageArgs : const DashboardPageArgs();
+      _ctrl.selectedTab.value = _args!.tab;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tabs = <Tab>[
+      const Tab(label: 'Dashboard', icon: 'br-apps'),
+      const Tab(label: 'Products', icon: 'br-box-open-full'),
+      const Tab(label: 'Orders', icon: 'br-person-dolly'),
+      const Tab(label: 'Accounts', icon: 'br-users'),
+    ];
+    return Scaffold(
+      bottomNavigationBar: Obx(() {
+        var index = _ctrl.selectedTab.value;
+        return BottomNavigationBar(
+            currentIndex: index,
+            onTap: _onBottonNavitemTap,
+            items: tabs
+                .asMap()
+                .entries
+                .map(
+                  (e) => BottomNavigationBarItem(
+                    icon: e.value.icon.runtimeType == String
+                        ? svgIcon(
+                            name: e.value.icon,
+                            color: index != e.key
+                                ? TuColors.note
+                                : TuColors.primary,
+                          )
+                        : Icon(
+                            e.value.icon,
+                            color: index != e.key
+                                ? TuColors.text2
+                                : TuColors.primary,
+                          ),
+                    label: e.value.label,
+                  ),
+                )
+                .toList());
+      }),
+      body: WillPopScope(
+        onWillPop: () async {
+          clog("On will pop");
+          if (_ctrl.selectedTab.value != 0) {
+            _ctrl.selectedTab.value = 0;
+            return false;
+          }
+          return true;
+        },
+        child: Obx(() => adminPages.elementAt(_ctrl.selectedTab.value)),
+      ),
+    );
+  }
+}
+
+class Tab {
+  final String label;
+  final String? route;
+  final dynamic icon;
+  const Tab({required this.label, this.route, required this.icon});
+}
+
+final List<Widget> adminPages = [
+  const Dashboard(),
+  const Products(),
+  const OrdersPage(),
+  const Accounts(),
+];
