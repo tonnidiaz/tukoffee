@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lebzcafe/main.dart';
+import 'package:lebzcafe/templates/page_with_search_and_list.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/constants2.dart';
@@ -28,45 +29,7 @@ class _RFPageState extends State<RFPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: childAppbar(showCart: false),
-      bottomNavigationBar: Container(
-        height: 50,
-        color: cardBGLight,
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await sleep(1500);
-        },
-        child: Container(
-          color: Colors.red,
-          child: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: cont(color: Colors.green),
-              ),
-              true
-                  ? SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: Center(
-                        child: Text("Loading..."),
-                      ),
-                    )
-                  : SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          mainAxisSpacing: 5,
-                          crossAxisSpacing: 5),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, i) => cont(text: "ITEM $i"),
-                        childCount: 50,
-                      ),
-                    ),
-            ],
-          ),
-        ),
-      ),
-    );
+    return PageWithSearchAndList();
   }
 }
 
