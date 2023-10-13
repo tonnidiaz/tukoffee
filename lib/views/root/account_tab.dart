@@ -58,6 +58,11 @@ class AccountTab extends StatelessWidget {
                             pushNamed(context, '/store/details');
                           },
                           child: const Text("Store details")),
+                      InfoItem(
+                          onTap: () {
+                            pushNamed(context, '/rf');
+                          },
+                          child: const Text("RF")),
                     ],
                   ),
                 ),

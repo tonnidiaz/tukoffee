@@ -3,12 +3,14 @@ import 'package:lebzcafe/controllers/store_ctrl.dart';
 import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/functions.dart';
+import 'package:lebzcafe/views/rf.dart';
 import 'package:lebzcafe/views/search.dart';
 import 'package:flutter/material.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/widgets/common2.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:get/get.dart';
+import 'package:lebzcafe/widgets/common4.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 import '../../../utils/constants2.dart';
 import '../../../widgets/common.dart';
@@ -149,44 +151,17 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
           title: const Text('Shop'),
           titleSpacing: 14,
         ),
-        body: false
-            ? Column(
-                children: [
-                  Expanded(
-                    child: Container(
-                      /*   width: 200,
-                      height: 200, */
-                      padding: defaultPadding,
-                      color: Colors.red,
-                      child: GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 5.0,
-                            mainAxisSpacing: 5.0,
-                          ),
-                          itemCount: 30,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, i) => Container(
-                                color: TuColors.primary,
-                                child: Text('ITEM $i'),
-                              )),
-                    ),
-                  )
-                ],
-              )
-            : RefreshIndicator(
-                onRefresh: () async {
-                  await getProducts();
-                },
-                child: SingleChildScrollView(
-                  child: Container(
-                    margin: EdgeInsets.only(top: topMargin),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
+        body: RefreshIndicator(
+            onRefresh: () async {
+              await getProducts();
+            },
+            child: Obx(() => CustomScrollView(
+                  slivers: [
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(vertical: topMargin),
+                      sliver: SliverToBoxAdapter(
+                        child: Container(
+                          //SEARCHBAR
                           color: cardBGLight,
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: TuFormField(
@@ -210,84 +185,33 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
                             },
                           ),
                         ),
-                        mY(topMargin),
-                        Obx(() => !_storeCtrl.productsFetched.value
-                            ? Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    h3("Please wait..."),
-                                  ],
-                                ),
-                              )
-                            : _storeCtrl.products.isEmpty
-                                ? Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        mY(30),
-                                        h3("Nothing to show"),
-                                        IconButton(
-                                            icon: const Icon(Icons.refresh),
-                                            onPressed: () async {
-                                              await getProducts();
-
-                                              //setupUser();
-                                            })
-                                      ],
-                                    ),
-                                  )
-                                : Container(
-                                    height:
-                                        screenSize(context).height - appBarH - statusBarH(),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    //height: screenSize(context).height,
-                                    alignment: Alignment.center,
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            child: GridView.builder(
-                                                itemCount: _storeCtrl
-                                                    .sortedProducts.length,
-                                                gridDelegate:
-                                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                                  crossAxisCount:
-                                                      (screenSize(context)
-                                                                  .width /
-                                                              144)
-                                                          .floor(),
-                                                  crossAxisSpacing: 5.0,
-                                                  mainAxisSpacing: 5.0,
-                                                ),
-                                                shrinkWrap: true,
-                                                itemBuilder: (context, i) {
-                                                  return ProductCard(
-                                                    product: _storeCtrl
-                                                        .sortedProducts[i],
-                                                  );
-                                                }),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    /* child: Builder(builder: (context) {
-                            return Obx(() => Wrap(
-                                    children: ([
-                                  ..._storeCtrl.sortedProducts,
-                                ]).map((it) {
-                                  return ProductCard(
-                                    product: it,
-                                  );
-                                }).toList()));
-                          }), */
-                                  ))
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ));
+                    !_storeCtrl.productsFetched.value
+                        ? const SliverFillRemaining(
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                        : _storeCtrl.products.isEmpty
+                            ? SliverFillRemaining(
+                                child: h3("Nothing to show"),
+                              )
+                            : SliverPadding(
+                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                                sliver: SliverGrid.builder(
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 5.0,
+                                      mainAxisSpacing: 5.0,
+                                    ),
+                                    itemCount: _storeCtrl.sortedProducts.length,
+                                    itemBuilder: (context, i) => ProductCard(
+                                          product: _storeCtrl.sortedProducts[i],
+                                        )),
+                              )
+                  ],
+                ))));
   }
 }

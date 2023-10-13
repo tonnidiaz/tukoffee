@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:lebzcafe/utils/styles.dart';
 import '../utils/colors.dart';
 import '../utils/constants.dart';
 import '../utils/constants2.dart';
@@ -12,10 +13,10 @@ Widget mX(double w) {
   return SizedBox(width: w);
 }
 
-Widget h3(String txt, {Color? color}) {
+Widget h3(String txt, {Color? color, bool isLight = false}) {
   return Text(
     txt,
-    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: color),
+    style: Styles.h3(color: color, isLight: isLight),
   );
 }
 

@@ -10,7 +10,7 @@ import 'constants.dart';
 
 const hivePath = "Tunedbass/db/hive_db/tukoffee";
 String randomImg() {
-  return "https://loremflickr.com/g/320/240/tea?random=${Random().nextInt(100)}";
+  return "https://picsum.photos/80/80?random==${Random().nextInt(100)}";
 }
 
 ThemeData buildTheme(brightness) {

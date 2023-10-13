@@ -13,6 +13,7 @@ import 'package:lebzcafe/utils/styles.dart';
 import 'package:lebzcafe/widgets/common.dart';
 import 'package:lebzcafe/widgets/common2.dart';
 import 'package:lebzcafe/widgets/common3.dart';
+import 'package:lebzcafe/widgets/common4.dart';
 
 class RFPage extends StatefulWidget {
   const RFPage({super.key});
@@ -28,13 +29,54 @@ class _RFPageState extends State<RFPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: childAppbar(showCart: false),
-        body: Container(
-        
+      appBar: childAppbar(showCart: false),
+      bottomNavigationBar: Container(
+        height: 50,
+        color: cardBGLight,
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await sleep(1500);
+        },
+        child: Container(
+          color: Colors.red,
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: cont(color: Colors.green),
+              ),
+              true
+                  ? SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: Text("Loading..."),
+                      ),
+                    )
+                  : SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 5,
+                          crossAxisSpacing: 5),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, i) => cont(text: "ITEM $i"),
+                        childCount: 50,
+                      ),
+                    ),
+            ],
+          ),
         ),
-        bottomNavigationBar: MBottomBar());
+      ),
+    );
   }
 }
+
+Widget cont({Color? color, String text = "", Widget? child}) => Container(
+      height: 100,
+      width: 100,
+      color: color ?? Colors.red,
+      margin: defaultPadding,
+      child: Center(child: child ?? Text(text)),
+    );
 
 class MButton extends StatelessWidget {
   const MButton({super.key});
