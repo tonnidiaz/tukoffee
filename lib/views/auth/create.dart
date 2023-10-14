@@ -184,7 +184,7 @@ class _Step2State extends State<Step2> {
               textAlign: TextAlign.center,
               labelAlignment: FloatingLabelAlignment.center,
               hint: "* * * * ",
-              height: 14,
+              height: borderlessInpHeight,
 
               ///label: "OTP:",
               value: ctrl.user['otp'],

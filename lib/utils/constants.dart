@@ -390,3 +390,5 @@ Map<String, dynamic> dummyGeocodeRes = {
 };
 
 final geocode = GeoCode(apiKey: "238584900778579231059x68104");
+
+double borderlessInpHeight = 16;

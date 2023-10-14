@@ -3,7 +3,7 @@ const { Cart, User } = require("../models");
 const { Schema, Mongoose, default: mongoose } = require("mongoose");
 const { auth, lightAuth } = require("../utils/middleware");
 const bcrypt = require("bcrypt");
-const { parser } = require("../utils/constants");
+const { parser, DEV } = require("../utils/constants");
 const { randomInRange, tunedErr, sendMail } = require("../utils/functions");
 const router = express.Router();
 
@@ -146,7 +146,10 @@ router.post("/edit", auth, async (req, res) => {
                 if ( !bcrypt.compareSync(data.password, _user.password))
                     return tunedErr(res, 401, 'Incorrect password')
                 _user.new_email = data.email;
-                _user.otp = randomInRange(1000,9999)
+
+                const otp =  randomInRange(1000,9999)
+                _user.otp = otp
+                if (DEV) console.log(otp);
                await sendMail("Tukoffee Verification Email",
                 `<h2 style="font-weight: 500">Here is your Email verification One-Time-PIN:</h2>
                     <p style="font-size: 20px; font-weight: 600">${_user.otp}</p>

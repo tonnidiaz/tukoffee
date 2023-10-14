@@ -37,6 +37,24 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
   }
 
   final _formCtrl = MainApp.formViewCtrl;
+  Future<void> _verifyOTP() async {
+    final form = _formCtrl.form;
+    try {
+      showProgressSheet();
+      final res = await apiDio().post("/auth/otp/verify", data: {
+        'otp': form['otp'],
+        'new_email': form['email'],
+      });
+
+      appBox!.put('authToken', res.data['token']);
+      setupUser(full: false);
+      gpop();
+      gpop(); //HIDE MAIN SHEET
+    } catch (e) {
+      gpop();
+      errorHandler(e: e, context: context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +118,7 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
                                 try {
                                   await apiDio().post('/user/edit?field=email',
                                       data: {'data': _formCtrl.form});
+                                  gpop();
                                   _setStep(1);
                                 } catch (e) {
                                   Get.back();
@@ -135,7 +154,7 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
                                 textAlign: TextAlign.center,
                                 labelAlignment: FloatingLabelAlignment.center,
                                 hint: "* * * * ",
-                                height: 14,
+                                height: borderlessInpHeight,
 
                                 ///label: "OTP:",
                                 value: _formCtrl.form['otp'],
@@ -149,9 +168,10 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
                               ),
                             ),
                             mY(4),
-                            const TuButton(
-                              text: "Next",
+                            TuButton(
+                              text: "VERIFY",
                               width: double.infinity,
+                              onPressed: _verifyOTP,
                             )
                           ],
                         ))
@@ -198,7 +218,7 @@ class AccountSettingsPage extends StatelessWidget {
                                 onPressed: onChangeEmailClick,
                                 child: const Text('Change'))),
                         mY(4),
-                        Text("${appCtrl.user['email']}"),
+                        Obx(() => Text("${appCtrl.user['email']}")),
                       ])),
               TuCard(
                 my: topMargin / 2,

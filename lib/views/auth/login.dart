@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
 import 'package:flutter/material.dart';
@@ -27,14 +28,16 @@ class _LoginPageState extends State<LoginPage> {
   _login() async {
     try {
       if (_formKey.currentState!.validate()) {
-        clog('Loging on...');
+        showProgressSheet();
         final res = await apiDio().post('/auth/login', data: _formCtrl.form);
         // User already exists and password is correct
         appBox!.put("authToken", res.data["token"]);
-        setupUser();
+        setupUser(full: false);
+        //gpop();
         Get.offAllNamed('/');
       }
     } catch (e) {
+      gpop();
       errorHandler(e: e, context: context);
     }
   }
