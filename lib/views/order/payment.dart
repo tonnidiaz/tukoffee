@@ -8,6 +8,7 @@ import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/styles.dart';
 import 'package:lebzcafe/views/order/checkout.dart';
 import 'package:get/get.dart';
+import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../utils/functions.dart';
@@ -56,7 +57,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
   _createOrder() async {
     //create the order
-    showToast("Creating order...").show(context);
+    showProgressSheet(msg: "Creating order...");
     try {
       final res = await apiDio().post(
           "/order/create?cartId=${_storeCtrl.cart["_id"]}",
@@ -65,6 +66,7 @@ class _PaymentPageState extends State<PaymentPage> {
       pushNamed("/order",
           arguments: OrderPageArgs(id: "${res.data["order"]["oid"]}"));
     } catch (e) {
+      Get.back(); //HIDE LOADER
       errorHandler(
           e: e,
           context: context,

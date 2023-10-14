@@ -11,17 +11,17 @@ class LoadingDialog extends StatelessWidget {
     BuildContext context,
   ) {
     return AlertDialog(
-      insetPadding: EdgeInsets.symmetric(horizontal: 20),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 20),
       backgroundColor: appBGLight,
       content: Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
-        SizedBox(
+        const SizedBox(
           width: 24,
           height: 24,
           child: CircularProgressIndicator(),
         ),
         mX(10),
         Text(
-          msg ?? "Loading...",
+          msg ?? "Hang on...",
           style: TextStyle(
               fontWeight: FontWeight.w600, color: TuColors.note, fontSize: 14),
         )
@@ -30,10 +30,13 @@ class LoadingDialog extends StatelessWidget {
   }
 }
 
-showLoading(BuildContext context, Widget widget) {
+showLoading(
+  BuildContext context, {
+  Widget? widget,
+}) {
   return showDialog(
       // barrierDismissible: false,
       context: context,
       barrierColor: const Color.fromRGBO(0, 0, 0, 0.5),
-      builder: (context) => widget);
+      builder: (context) => widget ?? const LoadingDialog());
 }

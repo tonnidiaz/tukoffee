@@ -129,7 +129,8 @@ class ProductCard extends StatelessWidget {
                                 icon: inCart
                                     ? svgIcon(
                                         name: 'rr-cart-minus',
-                                        color: Color.fromRGBO(20, 20, 20, 0.7),
+                                        color: const Color.fromRGBO(
+                                            20, 20, 20, 0.7),
                                         size: 20,
                                       )
                                     : svgIcon(
@@ -176,11 +177,20 @@ class ProductCard extends StatelessWidget {
                             const TextStyle(fontSize: 10, color: Colors.white),
                       ),
                     ),
-                    iconText("${product['rating'] ?? 0}", Icons.star,
-                        iconSize: 14,
-                        fontSize: 14,
-                        iconColor: Colors.amber,
-                        fw: FontWeight.w600),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                          size: 14,
+                        ),
+                        Text(
+                          "${product['rating'] ?? 0}",
+                          style: const TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w600),
+                        )
+                      ],
+                    )
                   ],
                 ),
                 mY(2.5),

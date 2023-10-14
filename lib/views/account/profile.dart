@@ -247,11 +247,21 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     return Scaffold(
-        appBar: childAppbar(
-            title: _account == null
-                ? "Profile"
-                : "${_account!['first_name']} ${_account!['last_name']}",
-            showCart: false),
+        appBar: AppBar(
+          title: Text(_account == null
+              ? "Profile"
+              : "${_account!['first_name']} ${_account!['last_name']}"),
+          actions: [
+            IconButton(
+              splashRadius: 20,
+              icon: Icon(Icons.settings_outlined),
+              onPressed: () {
+                pushNamed('/account/settings');
+              },
+            ),
+            mX(7)
+          ],
+        ),
         body: _account == null
             ? const Center(
                 child: CircularProgressIndicator(),

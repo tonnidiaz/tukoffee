@@ -109,7 +109,7 @@ final List<TuPage> pages = [
       icon: CupertinoIcons.info_circle, inList: false),
   TuPage("/auth/login", const LoginPage(),
       icon: CupertinoIcons.home, inList: false),
-  TuPage("/auth/resetPass", const ResetPassPage(),
+  TuPage("/auth/forgot", const ResetPassPage(),
       icon: CupertinoIcons.home, inList: false),
   TuPage("/admin/settings", const AdminSettingsPage(),
       icon: CupertinoIcons.home, inList: false),
@@ -127,7 +127,6 @@ final List<TuPage> pages = [
       icon: CupertinoIcons.home, inList: false),
   TuPage("/about", const AboutPage(),
       icon: CupertinoIcons.info_circle, isAction: true),
-
   TuPage("/account/profile", const ProfilePage(),
       icon: CupertinoIcons.info_circle, isAction: true),
   TuPage("/account/settings", const AccountSettingsPage(),

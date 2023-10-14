@@ -130,7 +130,7 @@ class _OrdersPageState extends State<OrdersPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        if (_appCtrl.user.isEmpty) {
+      if (_appCtrl.user.isEmpty) {
         Get.offNamed('/auth/login');
         return;
       }
@@ -154,8 +154,8 @@ class _OrdersPageState extends State<OrdersPage> {
             okTxt: "Yes",
             onOk: () async {
               try {
-                showLoading(
-                    context, const LoadingDialog(msg: 'Canceling orders..'));
+                showLoading(context,
+                    widget: const LoadingDialog(msg: 'Canceling orders..'));
                 // Deselect all
                 final List<dynamic> ids =
                     _appBarCtrl.selected.map((it) => it['_id']).toList();
@@ -322,6 +322,7 @@ class _OrdersPageState extends State<OrdersPage> {
                           color: cardBGLight,
                           padding: defaultPadding,
                           child: TuFormField(
+                            fill: appBGLight,
                             hasBorder: false,
                             hint: "Order ID",
                             prefixIcon: TuIcon(Icons.search),

@@ -229,6 +229,7 @@ class _ProductsState extends State<Products> {
                 TuCard(
                   child: TuFormField(
                     hasBorder: false,
+                    fill: appBGLight,
                     hint: "Search",
                     prefixIcon: TuIcon(Icons.search),
                     radius: 5,

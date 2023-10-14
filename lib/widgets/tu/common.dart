@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lebzcafe/utils/colors.dart';
+import 'package:lebzcafe/utils/constants.dart';
 
 Widget progressSheet({Color? color, String? msg}) => Visibility(
     child: Container(
         height: 45,
-        color: color ?? appBGLight,
+        color: color ?? cardBGLight,
+        padding: EdgeInsets.symmetric(horizontal: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { User } = require("../../models");
+const { DEV } = require("../../utils/constants");
 const { tunedErr, randomInRange, genToken, sendMail } = require("../../utils/functions");
 router.post("/resend", async (req, res) => {
     try {
@@ -12,7 +13,8 @@ router.post("/resend", async (req, res) => {
             const otp = randomInRange(1000, 9999)
             
             user.otp = otp
-            console.log(otp)
+            if (DEV)
+                console.log(otp)
             await sendMail("Tukoffee Verification Email",
                 `<h2 style="font-weight: 500">Here is your Email verification One-Time-PIN:</h2>
                     <p style="font-size: 20px; font-weight: 600">${otp}</p>

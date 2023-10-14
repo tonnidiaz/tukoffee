@@ -34,9 +34,8 @@ class SettingsPage extends StatelessWidget {
           InfoItem(
             onTap: () async {
               try {
-                showLoading(
-                    context,
-                    const LoadingDialog(
+                showLoading(context,
+                    widget: const LoadingDialog(
                       msg: 'Checking updates...',
                     ));
                 await sleep(1500);
@@ -111,9 +110,8 @@ class UpdatesView extends StatelessWidget {
             width: double.infinity,
             text: "UPDATE NOW",
             onPressed: () async {
-              showLoading(
-                  context,
-                  const LoadingDialog(
+              showLoading(context,
+                  widget: const LoadingDialog(
                     msg: "Downloading updates...",
                   ));
 

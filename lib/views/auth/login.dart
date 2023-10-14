@@ -75,7 +75,9 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        pushNamed('/auth/forgot');
+                      },
                       child: const Text(
                         "Forgot password?",
                         style: TextStyle(color: Colors.blue),

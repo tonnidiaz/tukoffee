@@ -142,6 +142,7 @@ Widget iconText(String text, IconData icon,
   final child = Row(
     crossAxisAlignment: CrossAxisAlignment.center,
     mainAxisAlignment: alignment,
+    mainAxisSize: MainAxisSize.min,
     children: [
       Icon(
         icon,

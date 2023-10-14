@@ -53,7 +53,7 @@ class TuFormField extends StatefulWidget {
       this.value,
       this.radius = 4,
       this.elevation = 0,
-      this.height = 10,
+      this.height = 12,
       this.maxLines = 1,
       this.maxLength,
       this.onChanged,
@@ -134,7 +134,7 @@ class _TuFormFieldState extends State<TuFormField> {
               autofocus: widget.autofocus,
               onTap: widget.onTap,
               onFieldSubmitted: widget.onSubmitted,
-              
+
               // autovalidateMode: AutovalidateMode.onUserInteraction,
               focusNode: widget.focusNode ?? _focusNode,
               onChanged: widget.onChanged,
@@ -167,8 +167,8 @@ class _TuFormFieldState extends State<TuFormField> {
                 contentPadding: EdgeInsets.only(
                   top: widget.height,
                   bottom: widget.height,
-                  left: 10,
-                  right: 10,
+                  left: 15,
+                  right: 15,
                 ),
 
                 prefixIcon: widget.prefixIcon,

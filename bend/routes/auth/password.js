@@ -26,6 +26,9 @@ router.post("/reset", async (req, res) => {
             return res.status(400).send("tuned:Incorrect OTP");}
         } else if (act == "gen-otp") {
             const _otp = randomInRange(1000, 9999);
+            if (process.env.NODE_ENV == 'development'){
+                console.log(otp)
+            }
             user.otp = _otp;
             await sendMail("Tukoffee Verification Email",
             `<h2 style="font-weight: 500">Here is your Email verification One-Time-PIN:</h2>

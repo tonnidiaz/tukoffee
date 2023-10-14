@@ -338,6 +338,10 @@ void pop(BuildContext context) {
   return Navigator.pop(context);
 }
 
+void gpop() {
+  getx.Get.back();
+}
+
 sleep(int ms) async {
   return await Future.delayed(Duration(milliseconds: ms));
 }

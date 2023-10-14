@@ -70,8 +70,7 @@ class Step1 extends StatelessWidget {
               validator: (val) {
                 if (val == null || val.isEmpty) {
                   return 'Email is required';
-                } else if (!val.contains(RegExp(
-                    r"^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-]+)(\.[a-zA-Z]{2,5}){1,2}$"))) {
+                } else if (!val.isEmail) {
                   return "Enter a valid email address";
                 }
                 return null;

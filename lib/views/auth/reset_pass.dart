@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
+import 'package:lebzcafe/utils/colors.dart';
+import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
 import 'package:flutter/material.dart';
@@ -33,44 +35,40 @@ class Step1 extends StatelessWidget {
     return FormView(
       title: "Reset Password",
       useBottomSheet: true,
+      btnTxt: "Next",
       onSubmit: () async {
         try {
-          final phone = formCtrl.form['phone'];
+          final email = formCtrl.form['email'];
+          showProgressSheet();
           await apiDio()
-              .post('/auth/password/reset?act=gen-otp', data: {'phone': phone});
-
+              .post('/auth/password/reset?act=gen-otp', data: {'email': email});
+          Get.back();
           pushTo(const Step2());
-          formCtrl.setFormField('phone', phone);
+          formCtrl.setFormField('email', email);
         } catch (e) {
+          Get.back();
           errorHandler(e: e, context: context);
         }
       },
       fields: [
-        const Text(
-          "Enter the mobile number you used to register your account.",
-          textAlign: TextAlign.center,
-        ),
-        mY(5),
         Obx(() => TuFormField(
-              label: "Mobile Number:",
-              hint: "e.g. 0712345678",
-              value: formCtrl.form['phone'],
-              hasBorder: false,
+              label: "Email:",
+              hint: "Enter your email address..",
+              value: formCtrl.form['email'],
               required: true,
-              isLegacy: true,
               radius: 5,
               validator: (val) {
                 if (val == null || val.isEmpty) {
-                  return "Mobile Number is required";
-                } else if (val.length != 12 && val.length != 10) {
-                  return "Enter a valid mobile number";
+                  return "Field is required";
+                } else if (!val.isEmail) {
+                  return "Enter a valid email address";
                 }
 
                 return null;
               },
-              keyboard: TextInputType.phone,
+              keyboard: TextInputType.emailAddress,
               onChanged: (val) {
-                formCtrl.setFormField('phone', val);
+                formCtrl.setFormField('email', val);
               },
             ))
       ],
@@ -125,46 +123,62 @@ class _Step2State extends State<Step2> {
     return FormView(
       title: "Reset Password",
       useBottomSheet: true,
+      btnTxt: "VERIFY",
       onSubmit: () async {
         try {
           final form = formCtrl.form;
-          clog(form);
+          showProgressSheet();
           await apiDio()
               .post('/auth/password/reset?act=verify-otp', data: formCtrl.form);
+
+          gpop();
           pushTo(const Step3());
         } catch (e) {
+          gpop();
           errorHandler(e: e, context: context);
         }
       },
       fields: [
-        Obx(() => Text(
-              "Enter the 4 digit pin sent to ${formCtrl.form['phone']}",
-              textAlign: TextAlign.center,
-            )),
+        SizedBox(
+          width: screenSize(context).width,
+          child: Column(
+            children: [
+              const Text("Enter the 4 digit code sent to:"),
+              Obx(() => Text(
+                    " ${formCtrl.form['email']}",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: TuColors.primary),
+                  )),
+            ],
+          ),
+        ),
+        mY(10),
         Obx(() => TuFormField(
               textAlign: TextAlign.center,
               labelAlignment: FloatingLabelAlignment.center,
               hint: "* * * * ",
-              height: 14,
+              height: 16,
               value: formCtrl.form['otp'],
               keyboard: TextInputType.number,
-              hasBorder: false,
               maxLength: 4,
               required: true,
               onChanged: (val) {
                 formCtrl.setFormField('otp', val);
               },
             )),
-        TuInkwell(
+        InkWell(
           onTap: _secs > 0
               ? null
               : () async {
                   try {
-                    await apiDio().post('/auth/password/reset?act=gen-otp',
-                        data: {'phone': formCtrl.form['phone']});
+                    showProgressSheet();
+                    await apiDio().post('/auth/otp/resend',
+                        data: {'email': formCtrl.form['email']});
                     _setSecs(60);
                     _initTimer();
+                    gpop();
                   } catch (e) {
+                    gpop();
                     errorHandler(
                         e: e, context: context, msg: 'Failed to request OTP');
                     _setSecs(0);
@@ -172,7 +186,8 @@ class _Step2State extends State<Step2> {
                 },
           child: Text(
             _secs > 0 ? "Resend PIN in: $_secs" : "Resend PIN",
-            style: TextStyle(color: _secs > 0 ? Colors.black45 : Colors.orange),
+            style:
+                TextStyle(color: _secs > 0 ? Colors.black45 : TuColors.primary),
           ),
         )
       ],
@@ -192,18 +207,25 @@ class Step3 extends StatelessWidget {
       useBottomSheet: true,
       onSubmit: () async {
         try {
+          showProgressSheet();
           await apiDio()
               .post('/auth/password/reset?act=reset', data: {...formCtrl.form});
+          gpop();
           Get.offAllNamed("/");
           pushNamed('/auth/login');
         } catch (e) {
+          gpop();
           errorHandler(e: e, context: context);
         }
       },
       fields: [
-        const Text(
-          "Create new password",
-          textAlign: TextAlign.center,
+        SizedBox(
+          width: screenSize(context).width,
+          child: Text(
+            "Create new password",
+            textAlign: TextAlign.center,
+            style: Styles.h4(isLight: true),
+          ),
         ),
         mY(5),
         Obx(() => TuFormField(

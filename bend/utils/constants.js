@@ -25,4 +25,6 @@ const AddressSchema = {
 }
 
 const parser = multer().none()
-module.exports = {OrderStatus, UserPermissions,parser,  AddressSchema, OrderMode}
+
+const DEV = process.env.NODE_ENV != 'production'
+module.exports = {OrderStatus, UserPermissions,DEV, parser,  AddressSchema, OrderMode}

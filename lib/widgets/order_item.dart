@@ -50,8 +50,8 @@ class OrderItem extends StatelessWidget {
             okTxt: "Yes",
             onOk: () async {
               try {
-                showLoading(
-                    context, const LoadingDialog(msg: 'Canceling order..'));
+                showLoading(context,
+                    widget: const LoadingDialog(msg: 'Canceling order..'));
                 final res =
                     await apiDio().post("/order/cancel?action=$act", data: {
                   'ids': [order['_id']],

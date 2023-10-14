@@ -166,6 +166,8 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: TuFormField(
                             hint: "Search",
+                            fill: appBGLight,
+                            hasBorder: false,
                             prefixIcon: TuIcon(Icons.search),
                             radius: 5,
                             suffixIcon: IconButton(
