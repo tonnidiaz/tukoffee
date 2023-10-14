@@ -149,9 +149,16 @@ Widget iconText(String text, IconData icon,
         color: iconColor,
       ),
       mX(spacing),
-      Text(
-        text,
-        style: TextStyle(fontSize: fontSize, color: labelColor, fontWeight: fw),
+      Expanded(
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: fontSize,
+            color: labelColor,
+            fontWeight: fw,
+          ),
+          softWrap: true,
+        ),
       )
     ],
   );

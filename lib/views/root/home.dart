@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/functions.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
@@ -109,7 +110,9 @@ class _HomePageState extends State<HomePage> {
                   prefixIcon: TuIcon(Icons.search),
                   radius: 500,
                   elevation: 1,
+                  fill: cardBGLight,
                   hasBorder: false,
+                  readOnly: true,
                   onTap: () {
                     return;
                     TuFuncs.showBottomSheet(
@@ -148,8 +151,7 @@ class _HomePageState extends State<HomePage> {
                                                   ? it['images'][0]['url']
                                                   : null,
                                               onTap: () {
-                                                Navigator.pushNamed(
-                                                    context, '/product',
+                                                pushNamed('/product',
                                                     arguments: {
                                                       "pid": it["pid"]
                                                     });
@@ -192,8 +194,7 @@ class _HomePageState extends State<HomePage> {
                                                   ? it['images'][0]['url']
                                                   : null,
                                               onTap: () {
-                                                Navigator.pushNamed(
-                                                    context, '/product',
+                                                pushNamed('/product',
                                                     arguments: {
                                                       "pid": it["pid"]
                                                     });

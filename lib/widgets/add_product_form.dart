@@ -295,12 +295,8 @@ class _AddProductFormState extends State<AddProductForm> {
             if (res != null) {
               /*   showToast('Successs!').show(context);
               return; */
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                '/',
-                (route) => false,
-              );
-              Navigator.pushNamed(context, '/product', arguments: {"pid": res});
+              Get.offAllNamed('/');
+              pushNamed('/product', arguments: {"pid": res});
             }
           }
         });

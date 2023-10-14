@@ -39,7 +39,7 @@ class Step1 extends StatelessWidget {
           await apiDio()
               .post('/auth/password/reset?act=gen-otp', data: {'phone': phone});
 
-          pushTo(context, const Step2());
+          pushTo(const Step2());
           formCtrl.setFormField('phone', phone);
         } catch (e) {
           errorHandler(e: e, context: context);
@@ -131,7 +131,7 @@ class _Step2State extends State<Step2> {
           clog(form);
           await apiDio()
               .post('/auth/password/reset?act=verify-otp', data: formCtrl.form);
-          pushTo(context, const Step3());
+          pushTo(const Step3());
         } catch (e) {
           errorHandler(e: e, context: context);
         }
@@ -194,8 +194,8 @@ class Step3 extends StatelessWidget {
         try {
           await apiDio()
               .post('/auth/password/reset?act=reset', data: {...formCtrl.form});
-          Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-          pushNamed(context, '/auth/login');
+          Get.offAllNamed("/");
+          pushNamed('/auth/login');
         } catch (e) {
           errorHandler(e: e, context: context);
         }

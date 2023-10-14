@@ -27,7 +27,7 @@ class AccountPage extends StatelessWidget {
                     radius: 0,
                     borderSize: 0,
                     onTap: () {
-                      pushTo(context, const ProfilePage());
+                      pushTo(const ProfilePage());
                     },
                     child: const TuListTile(
                         title: Text(
@@ -42,7 +42,7 @@ class AccountPage extends StatelessWidget {
                     radius: 0,
                     borderSize: 0,
                     onTap: () {
-                      Navigator.pushNamed(context, '/orders');
+                      pushNamed('/orders');
                     },
                     child: const TuListTile(
                         title: Text(
@@ -58,7 +58,7 @@ class AccountPage extends StatelessWidget {
                     borderSize: 0,
                     onTap: () {
                       clog("To settings");
-                      pushNamed(context, '/account/settings');
+                      pushNamed('/account/settings');
                     },
                     child: const TuListTile(
                         title: Text(

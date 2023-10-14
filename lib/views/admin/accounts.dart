@@ -261,7 +261,7 @@ class AccountCard extends StatelessWidget {
       my: 2.5,
       onTap: () {
         if (_appBarCtrl.selected.isEmpty) {
-          pushTo(context, ProfilePage(id: "${account['_id']}"));
+          pushTo(ProfilePage(id: "${account['_id']}"));
         } else {
           _selectItem(account);
         }
@@ -294,9 +294,9 @@ class AccountCard extends StatelessWidget {
                   },
                 ),
                 CircleAvatar(
-                                          backgroundColor: Colors.black12,
-                                          child: svgIcon(name: 'br-user', color: TuColors.text2),
-                                        ),
+                  backgroundColor: Colors.black12,
+                  child: svgIcon(name: 'br-user', color: TuColors.text2),
+                ),
               ],
             ),
             title: Text(

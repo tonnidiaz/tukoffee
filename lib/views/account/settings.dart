@@ -94,7 +94,7 @@ class AccountSettingsPage extends StatelessWidget {
                                           onOk: () async {
                                             // logout
                                             logout();
-                                            pushNamed(context, '/');
+                                            pushNamed('/');
                                           },
                                         );
                                       });

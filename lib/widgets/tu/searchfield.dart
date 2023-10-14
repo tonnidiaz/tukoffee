@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/constants2.dart';
+import 'package:lebzcafe/utils/functions.dart';
 import 'package:lebzcafe/widgets/common.dart';
 import 'package:lebzcafe/widgets/common2.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
@@ -75,12 +76,13 @@ class _TuSearchFieldState extends State<TuSearchField> {
     overlay.insert(_entry!);
   }
 
-  _onFocusChanged() {
+  _onFocusChanged() async {
     if (_focusNode.hasFocus) {
       _showOverlay();
     } else {
       //clog("Unfocused");
-      if (Platform.isAndroid || Platform.isIOS) {
+      if (Platform.isAndroid || Platform.isIOS || true) {
+        await sleep(100);
         _hideOverlay();
       }
     }
@@ -96,6 +98,8 @@ class _TuSearchFieldState extends State<TuSearchField> {
   void dispose() {
     _controller.dispose();
     _focusNode.dispose();
+    _hideOverlay();
+
     _entry?.dispose();
     super.dispose();
   }
@@ -113,6 +117,7 @@ class _TuSearchFieldState extends State<TuSearchField> {
         focusNode: _focusNode,
         hint: widget.hint,
         required: true,
+        hasBorder: false,
         onSubmitted: (val) {
           _hideOverlay();
         },

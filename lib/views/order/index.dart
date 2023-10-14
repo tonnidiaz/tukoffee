@@ -146,9 +146,8 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   _reload(res) async {
-    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-    Navigator.pushNamed(context, '/order',
-        arguments: OrderPageArgs(id: "${res.data['id']}"));
+    Get.offAllNamed("/");
+    pushNamed('/order', arguments: OrderPageArgs(id: "${res.data['id']}"));
   }
 
   @override

@@ -754,7 +754,7 @@ class AddStoreView extends StatelessWidget {
             value: location != null ? location['name'] : null,
             required: true,
             onTap: () {
-              pushTo(context, const MapPage());
+              pushTo(const MapPage());
             },
           );
         }),

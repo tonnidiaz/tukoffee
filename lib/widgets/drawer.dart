@@ -55,7 +55,7 @@ class _TDrawerState extends State<TDrawer> {
                 leading: const Icon(Icons.home),
                 selected: currPage == "/",
                 onTap: () {
-                  Navigator.pushNamed(context, "/");
+                  pushNamed("/");
                 }),
             TDrawerItem(
                 title: "Shop",
@@ -63,7 +63,7 @@ class _TDrawerState extends State<TDrawer> {
                 leading: const Icon(Icons.storefront),
                 selected: currPage == "/shop",
                 onTap: () {
-                  Navigator.pushNamed(context, "/shop");
+                  pushNamed("/shop");
                 }),
             Obx(() {
               return !_appCtrl.isAdmin.value
@@ -74,7 +74,7 @@ class _TDrawerState extends State<TDrawer> {
                       leading: const Icon(Icons.space_dashboard),
                       selected: currPage == "/admin/dashboard",
                       onTap: () {
-                        Navigator.pushNamed(context, "/admin/dashboard");
+                        pushNamed("/admin/dashboard");
                       });
             }),
             TDrawerItem(
@@ -83,7 +83,7 @@ class _TDrawerState extends State<TDrawer> {
                 leading: const Icon(Icons.shopping_cart),
                 selected: currPage == "/cart",
                 onTap: () {
-                  Navigator.pushNamed(context, "/cart");
+                  pushNamed("/cart");
                 }),
             /*     Obx(
               () => Visibility(
@@ -97,7 +97,7 @@ class _TDrawerState extends State<TDrawer> {
                     ),
                     selected: currPage == "/orders",
                     onTap: () {
-                      Navigator.pushNamed(context, "/orders");
+                      pushNamed( "/orders");
                     }),
               ),
             ), */
@@ -109,7 +109,7 @@ class _TDrawerState extends State<TDrawer> {
                   leading: const Icon(Icons.science),
                   selected: currPage == "/rf",
                   onTap: () {
-                    Navigator.pushNamed(context, "/rf");
+                    pushNamed("/rf");
                   }),
             ),
           ],
@@ -127,7 +127,7 @@ class _TDrawerState extends State<TDrawer> {
                         fontSize: 18,
                         fw: FontWeight.w400,
                         iconSize: 18, onClick: () {
-                        Navigator.pushNamed(context, "/auth/login");
+                        pushNamed("/auth/login");
                       })
                     : PopupMenuButton(
                         padding: EdgeInsets.zero,
@@ -135,7 +135,7 @@ class _TDrawerState extends State<TDrawer> {
                           return [
                             PopupMenuItem(
                                 onTap: () {
-                                  Navigator.pushNamed(context, "/account");
+                                  pushNamed("/account");
                                 },
                                 child: iconText(
                                     "Account", Icons.person_2_rounded)),
@@ -143,8 +143,6 @@ class _TDrawerState extends State<TDrawer> {
                                 onTap: () async {
                                   try {
                                     logout();
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context, "/", (route) => false);
                                   } catch (e) {
                                     clog(e);
                                   }
@@ -201,7 +199,7 @@ class _TDrawerState extends State<TDrawer> {
                   IconButton(
                       padding: const EdgeInsets.only(left: 10),
                       onPressed: () {
-                        pushNamed(context, '/app/settings');
+                        pushNamed('/app/settings');
                       },
                       splashRadius: 24,
                       icon: const Icon(

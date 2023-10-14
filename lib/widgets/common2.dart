@@ -33,7 +33,7 @@ class CartBtn extends StatelessWidget {
         child: IconButton(
             splashRadius: 23,
             onPressed: () {
-              pushNamed(context, '/cart');
+              pushNamed('/cart');
             },
             icon: Badge(
               label: Text(c < 100 ? "$c" : "99+"),

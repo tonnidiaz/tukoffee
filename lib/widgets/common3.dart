@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lebzcafe/utils/colors.dart';
+import 'package:lebzcafe/utils/vars.dart';
 import 'package:lebzcafe/views/map.dart';
 import '../utils/constants.dart';
 import '../utils/functions.dart';
@@ -142,8 +143,8 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
       onTap: () {
         //TODO://Open map with location coordinates
         final center = store['location']['center'];
-        pushNamed(context, '/map',
-            args: MapPageArgs(center: [center[1], center[0]]));
+        pushNamed('/map',
+            arguments: MapPageArgs(center: [center[1], center[0]]));
       },
       child: TuListTile(
           leading: const Icon(
@@ -151,7 +152,7 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
             size: 30,
           ),
           title: Text(
-            "Tukoffee ${store['location']['name']}",
+            "$STORE_NAME ${store['location']['name']}",
             softWrap: false,
             style: const TextStyle(fontWeight: FontWeight.w600),
           ),

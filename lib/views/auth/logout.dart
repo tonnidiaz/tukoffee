@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/functions.dart';
 import 'package:lebzcafe/utils/styles.dart';
@@ -13,7 +14,7 @@ class LogoutPage extends StatefulWidget {
 class _LogoutPageState extends State<LogoutPage> {
   _logout() async {
     await logout();
-    Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
+    Get.offAllNamed("/");
   }
 
   @override

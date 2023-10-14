@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:lebzcafe/controllers/store_ctrl.dart';
 import 'package:lebzcafe/main.dart';
+import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/styles.dart';
 import 'package:lebzcafe/views/order/checkout.dart';
@@ -60,8 +61,8 @@ class _PaymentPageState extends State<PaymentPage> {
       final res = await apiDio().post(
           "/order/create?cartId=${_storeCtrl.cart["_id"]}",
           data: {"address": checkoutCtrl.selectedAddr});
-      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-      Navigator.pushNamed(context, "/order",
+      Get.offAllNamed("/");
+      pushNamed("/order",
           arguments: OrderPageArgs(id: "${res.data["order"]["oid"]}"));
     } catch (e) {
       errorHandler(
@@ -78,7 +79,7 @@ class _PaymentPageState extends State<PaymentPage> {
       final args =
           ModalRoute.of(context)?.settings.arguments as PaymentScreenArgs;
       if (args.url == null) {
-        Navigator.pushNamed(context, '/');
+        pushNamed('/');
         return;
       }
       setState(() {
@@ -117,7 +118,7 @@ class _PaymentPageState extends State<PaymentPage> {
     return PageWrapper(
       appBar: childAppbar(),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.orange,
+        backgroundColor: TuColors.primary,
         onPressed: () {
           _controller.loadRequest(Uri.parse(_args!.url!));
         },
@@ -130,8 +131,9 @@ class _PaymentPageState extends State<PaymentPage> {
           child: _args == null || _progress < 100
               ? Column(
                   children: [
-                    LinearProgressIndicator(value: _progress / 100,),
-                
+                    LinearProgressIndicator(
+                      value: _progress / 100,
+                    ),
                   ],
                 )
               : Column(

@@ -37,7 +37,6 @@ class _MobileAppState extends State<MobileApp> {
     appCtx = context;
     Map<String, Widget Function(BuildContext)> routes = {};
     for (var page in pages) {
-      /* TODO: CHANGE THIS FOR NO HOME WIDGET */
       if (page.name != '/nfn') routes[page.name] = (context) => page.widget;
     }
     return GetMaterialApp(
@@ -45,7 +44,7 @@ class _MobileAppState extends State<MobileApp> {
       scrollBehavior: MyCustomScrollBehavior(),
       routes: routes,
       debugShowCheckedModeBanner: false,
-      initialRoute: "/",
+      initialRoute: "/account/profile",
       //home: MyReviewsPage(),
       builder: (context, child) {
         return child!;

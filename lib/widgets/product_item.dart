@@ -44,8 +44,7 @@ class ProductItem extends StatelessWidget {
         child: ListTile(
           onTap: () async {
             if (_appBarCtrl.selected.isEmpty) {
-              Navigator.pushNamed(context, "/product",
-                  arguments: {"pid": product["pid"]});
+              pushNamed("/product", arguments: {"pid": product["pid"]});
             } else {
               _selectItem(product);
             }
@@ -103,13 +102,11 @@ class ProductItem extends StatelessWidget {
                         "pid": product["pid"]
                       });
 
-                      pushTo(
-                          context,
-                          const AddProductForm(
-                            title: "Edit product",
-                            mode: "edit",
-                            btnTxt: "Edit product",
-                          ));
+                      pushTo(const AddProductForm(
+                        title: "Edit product",
+                        mode: "edit",
+                        btnTxt: "Edit product",
+                      ));
                     },
                     child: const Text(
                       "Edit",

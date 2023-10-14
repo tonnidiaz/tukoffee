@@ -29,7 +29,7 @@ class OldSettingsPage extends StatelessWidget {
             children: [
               InfoItem(
                   onTap: () {
-                    pushNamed(context, '/admin/settings');
+                    pushNamed('/admin/settings');
                   },
                   child: Obx(
                       () => Text("About ${MainApp.appCtrl.store['name']}"))),
@@ -59,12 +59,10 @@ class OldSettingsPage extends StatelessWidget {
               InfoItem(
                 child: const Text("Licences"),
                 onTap: () async {
-                  pushTo(
-                      context,
-                      LicensePage(
-                        applicationName: appCtrl.store['name'],
-                        applicationVersion: await getAppVersion(),
-                      ));
+                  pushTo(LicensePage(
+                    applicationName: appCtrl.store['name'],
+                    applicationVersion: await getAppVersion(),
+                  ));
                 },
               )
             ],

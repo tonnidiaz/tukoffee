@@ -100,18 +100,18 @@ class _TuFormFieldState extends State<TuFormField> {
     });
     final border = widget.hasBorder
         ? UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black12, width: 2),
+            borderSide: BorderSide(color: TuColors.primaryFade, width: 2),
             borderRadius: BorderRadius.circular(widget.radius),
           )
         : OutlineInputBorder(
             borderRadius: BorderRadius.circular(widget.radius),
-            borderSide: BorderSide(color: Colors.transparent));
+            borderSide: const BorderSide(color: Colors.transparent));
     final focusedBorder = !widget.hasBorder
         ? OutlineInputBorder(
             borderRadius: BorderRadius.circular(widget.radius),
-            borderSide: BorderSide(color: Colors.transparent))
+            borderSide: const BorderSide(color: Colors.transparent))
         : UnderlineInputBorder(
-            borderSide: const BorderSide(color: Colors.black45, width: 3),
+            borderSide: BorderSide(color: TuColors.primary, width: 3),
             borderRadius: BorderRadius.circular(widget.radius),
           );
     return Container(
@@ -134,6 +134,7 @@ class _TuFormFieldState extends State<TuFormField> {
               autofocus: widget.autofocus,
               onTap: widget.onTap,
               onFieldSubmitted: widget.onSubmitted,
+              
               // autovalidateMode: AutovalidateMode.onUserInteraction,
               focusNode: widget.focusNode ?? _focusNode,
               onChanged: widget.onChanged,
@@ -149,14 +150,18 @@ class _TuFormFieldState extends State<TuFormField> {
                     }
                     return msg;
                   },
+              autocorrect: true,
+              autofillHints: ["email"],
               keyboardType: widget.keyboard,
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(
+                fontSize: 16,
+              ),
               decoration: InputDecoration(
                 prefixIconColor:
                     _focusNode.hasFocus ? TuColors.note : Colors.black45,
                 suffixIconColor:
                     _focusNode.hasFocus ? TuColors.note : Colors.black45,
-                fillColor: widget.fill ?? Color.fromARGB(51, 179, 155, 134),
+                fillColor: widget.fill ?? Color.fromRGBO(134, 179, 172, 0.145),
                 filled: true,
                 isDense: true,
                 contentPadding: EdgeInsets.only(
@@ -165,6 +170,7 @@ class _TuFormFieldState extends State<TuFormField> {
                   left: 10,
                   right: 10,
                 ),
+
                 prefixIcon: widget.prefixIcon,
                 prefix: widget.prefix,
                 suffix: widget.suffix,
@@ -190,6 +196,7 @@ class _TuFormFieldState extends State<TuFormField> {
                             });
                           }
                         },
+                        splashRadius: 18,
                         icon: Icon(!_showPass
                             ? CupertinoIcons.eye
                             : CupertinoIcons.eye_slash))
@@ -197,6 +204,7 @@ class _TuFormFieldState extends State<TuFormField> {
 
                 labelText:
                     !widget.hasBorder || !widget.isLegacy ? widget.label : null,
+
                 hintText: widget.hint,
                 hintStyle: const TextStyle(fontSize: 12.5),
                 floatingLabelAlignment: widget.labelAlignment,

@@ -26,6 +26,10 @@ class _CartPageState extends State<CartPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (_appCtrl.user.isEmpty) {
+        Get.offNamed('/auth/login');
+        return;
+      }
       _init();
     });
   }
@@ -106,7 +110,7 @@ class _CartPageState extends State<CartPage> {
                           _storeCtrl.cart["products"].isEmpty
                       ? null
                       : () {
-                          Navigator.pushNamed(context, "/order/checkout");
+                          pushNamed("/order/checkout");
                         },
                 ),
               )

@@ -90,7 +90,7 @@ class _DashboardState extends State<Dashboard> {
               ItemCard(
                 title: "Product reviews",
                 onTap: () {
-                  pushTo(context, const ProductsReviews());
+                  pushTo(const ProductsReviews());
                 },
                 icon: svgIcon(
                   name: 'br-comment-user',
@@ -102,7 +102,7 @@ class _DashboardState extends State<Dashboard> {
               ItemCard(
                 title: "Settings",
                 onTap: () {
-                  Navigator.pushNamed(context, '/admin/settings');
+                  pushNamed('/admin/settings');
                 },
                 icon: Icon(
                   Icons.settings_outlined,

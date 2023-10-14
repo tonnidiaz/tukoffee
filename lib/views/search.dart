@@ -69,6 +69,7 @@ class _SearchPageState extends State<SearchPage> {
           elevation: .5,
           title: TuFormField(
             hint: "Search",
+            hasBorder: false,
             fill: Colors.transparent,
             autofocus: true,
             prefixIcon: TuIcon(Icons.search),

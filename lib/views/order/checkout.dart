@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:lebzcafe/utils/vars.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
 import 'dart:io';
@@ -454,9 +455,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
           });
       var oid = res.data["order"]["oid"];
       clog(oid);
-      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-      Navigator.pushNamed(context, "/order",
-          arguments: OrderPageArgs(id: "$oid"));
+      Get.offAllNamed("/");
+      pushNamed("/order", arguments: OrderPageArgs(id: "$oid"));
     } catch (e) {
       errorHandler(e: e, context: context, msg: "Failed to create order");
     }
@@ -487,7 +487,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         "name":
             "${_appCtrl.user['first_name']} ${_appCtrl.user['last_name']}'s ${_appCtrl.store['name']} Order",
         "amount": total * 100,
-        "description": "Checkout your Tukoffee order.",
+        "description": "Checkout your $STORE_NAME order.",
         "redirect_url": "$apiURL/payment"
       };
       clog(body);
@@ -496,7 +496,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         final resData = res.data["data"];
         final checkoutUrl = "$paystackPayUrl/${resData['slug']}";
         // Navigate to payment page and pass checkoutUrl as arg to be used in webview
-        Navigator.pushNamed(context, "/order/checkout/payment",
+        pushNamed("/order/checkout/payment",
             arguments: PaymentScreenArgs(checkoutUrl));
       }
 
@@ -517,7 +517,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         }
       }
     }
-    //Navigator.pushNamed(context, "/order/checkout/payment");
+    //pushNamed( "/order/checkout/payment");
   }
 }
 

@@ -71,12 +71,12 @@ bool isNumeric(dynamic s) {
   return double.tryParse("$s") != null;
 }
 
-void pushTo(BuildContext context, Widget widget) {
-  Navigator.push(context, MaterialPageRoute(builder: (ctx) => widget));
+void pushTo(Widget widget) {
+  getx.Get.to(widget);
 }
 
-void pushNamed(BuildContext context, String name, {Object? args}) {
-  Navigator.pushNamed(context, name, arguments: args);
+void pushNamed(String name, {Object? arguments}) {
+  getx.Get.toNamed(name, arguments: arguments);
 }
 
 double roundDouble(double value, int places) {
@@ -133,10 +133,12 @@ Future<void> initHive() async {
   }
 }
 
-setupUser() async {
+setupUser({bool full = true}) async {
   final storeCtrl = MainApp.storeCtrl;
   final appCtrl = MainApp.appCtrl;
-  appCtrl.setReady(false);
+  if (full) {
+    appCtrl.setReady(false);
+  }
   if (appBox == null) {
     appCtrl.setUser({});
     storeCtrl.setcart({});

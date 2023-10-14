@@ -139,7 +139,7 @@ class OrderItem extends StatelessWidget {
           },
           onTap: () async {
             if (_appBarCtrl.selected.isEmpty) {
-              Navigator.pushNamed(context, "/order",
+              pushNamed("/order",
                   arguments: OrderPageArgs(id: "${order['oid']}"));
             } else {
               _selectItem(order);

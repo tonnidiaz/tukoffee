@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/widgets/common4.dart';
+import 'package:lebzcafe/widgets/tu/common.dart';
+import 'package:lebzcafe/widgets/tu/form.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
 import 'package:dio/dio.dart';
@@ -52,6 +54,10 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (_appCtrl.user.isEmpty) {
+        Get.offNamed('/auth/login');
+        return;
+      }
       _getAccount();
     });
   }
@@ -67,6 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
             if (val.isEmpty) return;
             try {
               //showToast("Adding address...").show(context);
+              showProgressSheet();
               final res =
                   await apiDio().post("/user/edit?field=address", data: {
                 "value": {'location': val}
@@ -77,8 +84,10 @@ class _ProfilePageState extends State<ProfilePage> {
               if (_account!['_id'] == appCtrl.user['_id']) {
                 appCtrl.setUser(_account!);
               }
+              Get.back();
               // Navigator.pop(context);
             } catch (e) {
+              Get.back();
               clog(e);
               if (e.runtimeType == DioException) {
                 handleDioException(
@@ -175,16 +184,18 @@ class _ProfilePageState extends State<ProfilePage> {
         "last_name": _account!['last_name'],
       });
       final form = ctrl.form;
-      pushTo(
-          context,
-          FormView(
-              title: "Edit personal details",
-              fields: [
+      Get.bottomSheet(SingleChildScrollView(
+        child: TuForm(
+          builder: (key) => Container(
+            padding: EdgeInsets.fromLTRB(14, 14, 14, keyboardPadding(context)),
+            color: cardBGLight,
+            child: tuColumn(
+              min: true,
+              children: [
                 TuFormField(
                   label: "First name:",
                   hint: "e.g. John",
                   radius: 5,
-                  hasBorder: false,
                   required: true,
                   value: form["first_name"],
                   onChanged: (val) {
@@ -195,39 +206,44 @@ class _ProfilePageState extends State<ProfilePage> {
                   label: "Last name:",
                   hint: "e.g. Doe",
                   radius: 5,
-                  hasBorder: false,
                   required: true,
                   value: form["last_name"],
                   onChanged: (val) {
                     formCtrl.setFormField("last_name", val);
                   },
                 ),
+                mY(5),
+                TuButton(
+                    width: double.infinity,
+                    text: "SAVE CHANGES",
+                    onPressed: () async {
+                      if (key.currentState == null ||
+                          !key.currentState!.validate()) return;
+                      try {
+                        showProgressSheet();
+                        final res = await apiDio().post("/user/edit", data: {
+                          'value': form,
+                        });
+                        setState(() {
+                          _account = res.data['user'];
+                        });
+                        if (_account!['_id'] == appCtrl.user['_id']) {
+                          appCtrl.setUser(_account!);
+                        }
+                        Get.back();
+                        Get.back();
+                      } catch (e) {
+                        //
+                        Get.back();
+                        errorHandler(e: e, context: context);
+                      }
+                    }),
+                mY(15)
               ],
-              onSubmit: () async {
-                try {
-                  final res = await apiDio().post("/user/edit", data: {
-                    'value': form,
-                  });
-                  setState(() {
-                    _account = res.data['user'];
-                  });
-                  if (_account!['_id'] == appCtrl.user['_id']) {
-                    appCtrl.setUser(_account!);
-                  }
-                  Navigator.pop(context);
-                } catch (e) {
-                  //
-                  clog(e.runtimeType);
-                  if (e.runtimeType == DioException) {
-                    e as DioException;
-                    handleDioException(context: context, exception: e);
-                  } else {
-                    clog(e);
-                    showToast("Something went wrong!", isErr: true)
-                        .show(context);
-                  }
-                }
-              }));
+            ),
+          ),
+        ),
+      ));
     }
 
     return Scaffold(
@@ -393,8 +409,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 ),
                                                 TextButton(
                                                     onPressed: () {
-                                                      formCtrl.setForm(
-                                                          _account!['address']);
+                                                      if (_account![
+                                                              'address'] !=
+                                                          null) {
+                                                        formCtrl.setForm(
+                                                            _account![
+                                                                'address']);
+                                                      }
                                                       addEditAddress(
                                                           title:
                                                               "Edit address");

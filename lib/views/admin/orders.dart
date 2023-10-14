@@ -130,6 +130,10 @@ class _OrdersPageState extends State<OrdersPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        if (_appCtrl.user.isEmpty) {
+        Get.offNamed('/auth/login');
+        return;
+      }
       ever(_ctrl.sortedOrders, (callback) {
         _appBarCtrl.setSelected([]);
       });

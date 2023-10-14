@@ -45,7 +45,7 @@ class ReviewItem extends StatelessWidget {
           onTap: !hasTap
               ? null
               : () {
-                  pushTo(context, ProductReviewPage(id: item['_id']));
+                  pushTo(ProductReviewPage(id: item['_id']));
                 },
           //Checkbox, cover, content, deleteBtn
           tileColor: cardBGLight,

@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
         // User already exists and password is correct
         appBox!.put("authToken", res.data["token"]);
         setupUser();
-        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+        Get.offAllNamed('/');
       }
     } catch (e) {
       errorHandler(e: e, context: context);
@@ -45,10 +45,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: childAppbar(title: 'Login', showCart: false),
       child: Container(
         color: cardBGLight,
-        height: screenSize(context).height -
-            appBarH -
-            statusBarH(context: context) -
-            4,
+        height: screenSize(context).height - appBarH - statusBarH() - 4,
         margin: const EdgeInsets.only(top: 4),
         padding: defaultPadding,
         child: Form(
@@ -95,7 +92,8 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       TextButton(
                           onPressed: () {
-                            pushNamed(context, '/auth/signup');
+                            //pushNamed( '/auth/signup');
+                            Get.toNamed('/auth/signup');
                           },
                           child: const Text(
                             "Create new account",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lebzcafe/utils/functions.dart';
 import '../utils/colors.dart';
 import '../utils/constants.dart';
 
@@ -11,7 +12,7 @@ class TBottomBar extends StatefulWidget {
 
 class _TBottomBarState extends State<TBottomBar> {
   void _onItemTapped(String route) {
-    Navigator.pushNamed(context, route);
+    pushNamed(route);
   }
 
   @override

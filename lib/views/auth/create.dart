@@ -1,4 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:lebzcafe/utils/colors.dart';
+import 'package:lebzcafe/utils/constants2.dart';
+import 'package:lebzcafe/utils/vars.dart';
+import 'package:lebzcafe/views/account/profile.dart';
+import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
 import 'dart:async';
@@ -13,7 +18,7 @@ import 'package:lebzcafe/widgets/common2.dart';
 import 'package:get/get.dart';
 
 class SignupCtrl extends GetxController {
-  RxMap<String, dynamic> user = <String, dynamic>{"phone": '0726013383'}.obs;
+  RxMap<String, dynamic> user = <String, dynamic>{}.obs;
 
   RxString title = "Create an account".obs;
   set setuser(Map<String, dynamic> val) {
@@ -43,50 +48,43 @@ class Step1 extends StatelessWidget {
     final ctrl = Get.find<SignupCtrl>();
     return CreateAccountPageWrapper(
       onSubmit: () async {
-        clog(ctrl.user);
         try {
-          final res = await apiDio().post('/auth/login', data: ctrl.user);
-          if (res.data['user'] != null) {
-            // User already exists and password is correct
-            appBox!.put("authToken", res.data["token"]);
-            setupUser();
-            Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-          } else {
-            // Proceed to next step
-            clog(res.data);
-            pushTo(context, const Step2());
-          }
+          showProgressSheet();
+          final res = await apiDio().post('/auth/signup', data: ctrl.user);
+          Get.back();
+          // Proceed to next step
+          clog(res.data);
+          pushTo(const Step2());
         } catch (e) {
+          Get.back();
           errorHandler(e: e, context: context);
         }
       },
       btnTxt: "Next",
       fields: [
         Obx(() => TuFormField(
-              label: "Mobile Number:",
-              hint: "e.g. +2771245678",
-              keyboard: TextInputType.phone,
+              label: "Email address:",
+              hint: "Enter your email...",
+              keyboard: TextInputType.emailAddress,
               required: true,
-              hasBorder: false,
-              value: ctrl.user["phone"],
               validator: (val) {
                 if (val == null || val.isEmpty) {
-                  return "Mobile Number is required";
-                } else if (val.length != 12 && val.length != 10) {
-                  return "Enter a valid mobile number";
+                  return 'Email is required';
+                } else if (!val.contains(RegExp(
+                    r"^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-]+)(\.[a-zA-Z]{2,5}){1,2}$"))) {
+                  return "Enter a valid email address";
                 }
-
                 return null;
               },
+              value: ctrl.user["email"],
               onChanged: (val) {
-                ctrl.setuser = {...ctrl.user, "phone": val};
+                ctrl.setuser = {...ctrl.user, "email": val};
               },
             )),
         Obx(() => TuFormField(
               label: "Password:",
               hint: "More than 6 characters...",
               required: true,
-              hasBorder: false,
               value: ctrl.user["password"],
               isPass: true,
               validator: (val) {
@@ -102,12 +100,6 @@ class Step1 extends StatelessWidget {
                 ctrl.setuser = {...ctrl.user, "password": val};
               },
             )),
-        InkWell(
-          onTap: () {
-            pushNamed(context, '/auth/resetPass');
-          },
-          child: const Text("Forgot password?"),
-        )
       ],
     );
   }
@@ -160,22 +152,34 @@ class _Step2State extends State<Step2> {
     return CreateAccountPageWrapper(
       onSubmit: () async {
         try {
+          showProgressSheet();
           await apiDio().post('/auth/otp/verify',
-              data: {'phone': ctrl.user['phone'], 'otp': ctrl.user['otp']});
-
-          pushTo(context, const Step3());
+              data: {'email': ctrl.user['email'], 'otp': ctrl.user['otp']});
+          Get.back();
+          pushTo(const Step3());
         } catch (e) {
+          Get.back();
           errorHandler(e: e, context: context);
         }
       },
       btnTxt: "Verify",
-      title: "Verify number",
+      title: "Verify email",
       fields: [
         mY(5),
-        Obx(() => Text(
-              "Enter the 4 digit pin sent to ${ctrl.user['phone']}",
-              textAlign: TextAlign.center,
-            )),
+        SizedBox(
+          width: screenSize(context).width,
+          child: Column(
+            children: [
+              const Text("Enter the 4 digit pin sent to:"),
+              Obx(() => Text(
+                    "${ctrl.user['email']}",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: TuColors.primary),
+                  )),
+            ],
+          ),
+        ),
+        mY(10),
         Obx(() => TuFormField(
               my: 0,
               textAlign: TextAlign.center,
@@ -186,7 +190,7 @@ class _Step2State extends State<Step2> {
               ///label: "OTP:",
               value: ctrl.user['otp'],
               keyboard: TextInputType.number,
-              hasBorder: false,
+
               maxLength: 4,
               required: true,
               onChanged: (val) {
@@ -198,11 +202,14 @@ class _Step2State extends State<Step2> {
               ? null
               : () async {
                   try {
+                    showProgressSheet();
                     await apiDio().post('/auth/otp/resend',
-                        data: {'phone': ctrl.user['phone']});
+                        data: {'email': ctrl.user['email']});
                     _setSecs(60);
                     _initTimer();
+                    Get.back();
                   } catch (e) {
+                    Get.back();
                     errorHandler(
                         e: e, context: context, msg: 'Failed to request OTP');
                     _setSecs(0);
@@ -210,7 +217,8 @@ class _Step2State extends State<Step2> {
                 },
           child: Text(
             _secs > 0 ? "Resend PIN in: $_secs" : "Resend PIN",
-            style: TextStyle(color: _secs > 0 ? Colors.black45 : Colors.orange),
+            style:
+                TextStyle(color: _secs > 0 ? Colors.black45 : TuColors.primary),
           ),
         )
       ],
@@ -225,29 +233,36 @@ class Step3 extends StatelessWidget {
   Widget build(BuildContext context) {
     final ctrl = Get.find<SignupCtrl>();
     return CreateAccountPageWrapper(
-      btnTxt: "Sign up",
+      btnTxt: "SUBMIT",
       onSubmit: () async {
         try {
-          final res = await apiDio().post("/auth/signup", data: ctrl.user);
-          clog(res.data);
+          showProgressSheet();
+          final res =
+              await apiDio().post("/auth/signup?act=complete", data: ctrl.user);
           appBox!.put("authToken", res.data["token"]);
-          setupUser();
-          await Navigator.pushNamed(context, '/');
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/account/profile', (route) => false);
+          await setupUser(full: false);
+          Get.back();
+
+          Get.offAllNamed('/');
+          Get.toNamed('/account/profile');
         } catch (e) {
+          Get.back();
           errorHandler(e: e, context: context);
         }
       },
       title: "Finish up",
       fields: [
+        const Text(
+          "FINISH UP",
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+        ),
+        mY(10),
         Obx(() => TuFormField(
               label: "First name:",
               hint: "e.g. John",
               keyboard: TextInputType.name,
               required: true,
               value: ctrl.user['first_name'],
-              hasBorder: false,
               onChanged: (val) {
                 ctrl.setuser = {...ctrl.user, "first_name": val};
               },
@@ -257,21 +272,19 @@ class Step3 extends StatelessWidget {
               keyboard: TextInputType.name,
               hint: "e.g. Doe",
               required: true,
-              hasBorder: false,
               value: ctrl.user['last_name'],
               onChanged: (val) {
                 ctrl.setuser = {...ctrl.user, "last_name": val};
               },
             )),
         TuFormField(
-          label: "Email:",
-          hint: "e.g. johndoe@gmail.com",
+          label: "Phone:",
+          hint: "e.g. 0712345678",
           required: true,
-          hasBorder: false,
-          value: ctrl.user['email'],
-          keyboard: TextInputType.emailAddress,
+          value: ctrl.user['phone'],
+          keyboard: TextInputType.phone,
           onChanged: (val) {
-            ctrl.setuser = {...ctrl.user, "email": val};
+            ctrl.setuser = {...ctrl.user, "phone": val};
           },
         ),
       ],
@@ -290,7 +303,7 @@ class CreateAccountPageWrapper extends StatefulWidget {
       this.fields = const [],
       required this.onSubmit,
       this.btnTxt = "Submit",
-      this.title = "TuKoffee auth"});
+      this.title = "$STORE_NAME auth"});
 
   @override
   State<CreateAccountPageWrapper> createState() =>
@@ -309,21 +322,17 @@ class _CreateAccountPageWrapperState extends State<CreateAccountPageWrapper> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      appBar: childAppbar(title: "Login/Sign up", showCart: false),
+      appBar: childAppbar(title: "New account", showCart: false),
       child: Container(
-          padding: const EdgeInsets.all(14),
-          height: screenSize(context).height -
-              (appBarH + statusBarH(context: context)),
+          color: cardBGLight,
+          height:
+              screenSize(context).height - appBarH - statusBarH() - topMargin,
+          margin: EdgeInsets.only(top: topMargin),
+          padding: defaultPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              mY(screenSize(context).height / 30),
-              Text(
-                widget.title,
-                style: Styles.h1,
-              ),
-              mY(5),
               Form(
                   key: _formKey,
                   child: Column(
@@ -333,15 +342,26 @@ class _CreateAccountPageWrapperState extends State<CreateAccountPageWrapper> {
               mY(10),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   TuButton(
+                      width: double.infinity,
                       text: widget.btnTxt,
                       onPressed: () async {
-                        if (_formKey.currentState != null &&
-                            _formKey.currentState!.validate()) {
+                        if (_formKey.currentState!.validate()) {
                           await widget.onSubmit();
                         }
                       }),
+                  mY(5),
+                  TextButton(
+                      onPressed: () {
+                        //pushNamed( '/auth/signup');
+                        Get.back();
+                      },
+                      child: const Text(
+                        "Login instead",
+                        style: TextStyle(color: Colors.blue),
+                      )),
                 ],
               ),
             ],

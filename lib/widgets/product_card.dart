@@ -63,8 +63,7 @@ class ProductCard extends StatelessWidget {
       padding: 0,
       onTap: () async {
         storeCtrl.setCurrProduct(product);
-        await Navigator.pushNamed(context, "/product",
-            arguments: {"pid": product["pid"]});
+        pushNamed("/product", arguments: {"pid": product["pid"]});
       },
       mx: 0,
       my: 0,

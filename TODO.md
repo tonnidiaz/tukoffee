@@ -4,9 +4,9 @@
 ## TO IMPL
 
 - While selected, back no go back but unselects
-- Loader for /profile
-
-
+- User settings page
+- Finish check updates
+- top selling products page
 ## TO FIX
 
-- Loaders not at center
+- /search

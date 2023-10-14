@@ -1,9 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:lebzcafe/main.dart';
+import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/utils/functions.dart';
 import 'package:lebzcafe/widgets/common.dart';
+import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/searchfield.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -22,6 +29,8 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   MapPageArgs? _args;
+  final _formCtrl = MainApp.formViewCtrl;
+
   LatLng? _center = const LatLng(-26.1974939, 28.0534776);
   _setCenter(LatLng? val) {
     setState(() {
@@ -75,6 +84,94 @@ class _MapPageState extends State<MapPage> {
     _setIsGeocoding(false);
   }
 
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      //Get.back();
+      if (context.mounted) {
+        await showToast(
+                'Location services are disabled. Please enable the services',
+                isErr: true)
+            .show(context);
+      }
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      //Get.back();
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        if (context.mounted) {
+          await showToast('Location permissions are denied', isErr: true)
+              .show(context);
+        }
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      Get.back();
+      if (context.mounted) {
+        await showToast(
+                'Location permissions are permanently denied, we cannot request permissions.',
+                isErr: true)
+            .show(context);
+      }
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _getCurrentPosition() async {
+    showProgressSheet();
+    final hasPermission = await _handleLocationPermission();
+    if (!hasPermission) {
+      Get.back();
+      return;
+    }
+    try {
+      final position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      await _getAddressFromLatLng(position);
+      Get.back();
+    } catch (e) {
+      Get.back();
+      if (context.mounted) {
+        await showToast("Something went wrong", isErr: true).show(context);
+      }
+      clog(e);
+      Get.back();
+    }
+  }
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    clog("GETTING...");
+    await placemarkFromCoordinates(position.latitude, position.longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      clog("${place.administrativeArea}");
+      List<String?> placeAsList = [
+        place.street,
+        place.subLocality,
+        place.locality,
+        place.administrativeArea,
+        place.postalCode
+      ].where((element) => element != null).toList();
+
+      String placeAsTxt = placeAsList.join(", ");
+      _setAddress({
+        "name": placeAsTxt,
+        "center": [position.latitude, position.longitude]
+      });
+      final cent = LatLng(position.latitude, position.longitude);
+      _setCenter(cent);
+      _mapController.move(cent, 17.5);
+    }).catchError((e) {
+      clog(e);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -88,6 +185,12 @@ class _MapPageState extends State<MapPage> {
           //_setCurrCenter(LatLng(_args!.center.first, _args!.center.last));
           _setCenter(cent);
           _mapController.move(cent, 17.5);
+        } else if (_formCtrl.form['location'] != null) {
+          var formLoc = _formCtrl.form['location'];
+          clog(formLoc);
+          _setCenter(LatLng(formLoc['center'].first, formLoc['center'].last));
+          _mapController.move(_center!, 17.5);
+          _setAddress(formLoc);
         }
       });
     });
@@ -101,30 +204,62 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    double bottomSheetH = 60;
     return Scaffold(
+        bottomNavigationBar: Material(
+          elevation: 3,
+          color: cardBGLight,
+          child: Container(
+            padding: defaultPadding2,
+            child: iconText(_address['name'] ?? "No address", Icons.location_on,
+                alignment: MainAxisAlignment.start, iconSize: 23),
+          ),
+        ),
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             FloatingActionButton.small(
                 heroTag: "My location",
                 backgroundColor: Colors.black,
                 child: const Icon(Icons.my_location),
                 onPressed: () {
-                  //TODO: go to user location
+                  _getCurrentPosition();
                 }),
             mY(10),
-            FloatingActionButton.small(
-              heroTag: "Use location",
-              backgroundColor: Colors.black,
-              child: const Icon(Icons.check),
-              onPressed: () async {
-                /// _setCenter(_currCenter);
-                if (widget.onSubmit != null) {
-                  widget.onSubmit!(_address);
-                }
-                Navigator.pop(context);
-              },
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                InkWell(
+                  borderRadius: BorderRadius.circular(100),
+                  onTap: () {
+                    _mapController.move(_center ?? LatLng(0, 0), 18.5);
+                  },
+                  child: Container(
+                    padding: defaultPadding2,
+                    decoration: BoxDecoration(
+                        color: Colors.black87,
+                        borderRadius: BorderRadius.circular(100)),
+                    child: const Text(
+                      'Re-center',
+                      style:
+                          TextStyle(color: Color.fromRGBO(255, 255, 255, .9)),
+                    ),
+                  ),
+                ),
+                mX(10),
+                FloatingActionButton.small(
+                  heroTag: "Use location",
+                  backgroundColor: Colors.black,
+                  child: const Icon(Icons.check),
+                  onPressed: () async {
+                    /// _setCenter(_currCenter);
+                    if (widget.onSubmit != null) {
+                      widget.onSubmit!(_address);
+                    }
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
             ),
           ],
         ),
@@ -168,21 +303,21 @@ class _MapPageState extends State<MapPage> {
                       ),
                       MarkerLayer(
                         markers: [
-                          Marker(
+                          /*      Marker(
                             // curr position
                             point: _currCenter ?? const LatLng(0, 0),
-                            builder: (context) => const Icon(
-                              Icons.location_searching_rounded,
-                              color: Color.fromRGBO(10, 10, 10, 01),
-                              size: 20,
+                            builder: (context) => Icon(
+                              Icons.explore,
+                              color: Colors.blue,
+                              size: 35,
                             ),
-                          ),
+                          ), */
                           Marker(
                             // curr location
                             point: _center ?? const LatLng(0, 0),
-                            builder: (context) => const Icon(
+                            builder: (context) => Icon(
                               Icons.location_pin,
-                              color: Colors.orange,
+                              color: TuColors.primary,
                               size: 30,
                             ),
                           ),
@@ -237,7 +372,8 @@ class _MapPageState extends State<MapPage> {
                                             _setCenter(latlng);
                                             _setAddress({
                                               "name": val.value['place_name'],
-                                              "center": center,
+                                              "center": center.reversed
+                                                  .toList(), // REVERSING IT TO MAP MODE
                                             });
                                           }),
                                     )

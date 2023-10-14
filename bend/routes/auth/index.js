@@ -17,12 +17,20 @@ const importantEmails = ["tonnidiazed@gmail.com", "clickbait4587@gmail.com", "op
 
 router.post("/signup", async (req, res) => {
     try {
-        const { body } = req;
+        const { body, query } = req;
 
         //Email not required / not yet verified
         //Find user by number and add the other fields
         //Save user ,gen token
-
+        if (query.act == 'complete'){
+            const user = await User.findOne({email: body.email}).exec()
+            for (let k of Object.keys(body)){
+                user.set(k, body[k])
+            }
+            await user.save();
+            const token = genToken({ id: user._id });
+            return res.json({token})
+        }
         // Delete existing user with unverified number
         await User.findOneAndDelete({phone: body.phone, phone_verified: false}).exec()
         
@@ -46,6 +54,7 @@ router.post("/signup", async (req, res) => {
 
         
         const otp = randomInRange(1000, 9999);
+        console.log(otp)
         user.otp = otp;
         await sendMail("Tukoffee Verification Email",
                 `<h2 style="font-weight: 500">Here is your signup verification One-Time-PIN:</h2>
@@ -53,9 +62,12 @@ router.post("/signup", async (req, res) => {
                 ` , user.email
                )
         // Send the otp && save user
-        const number = body.phone.startsWith("+")
+        if (body.phone){
+             const number = body.phone.startsWith("+")
             ? phone
             : "+27" + body.phone.slice(1);
+        }
+       
 
         // const smsRes = await sendSMS(number, `Tukoffee - your code is: ${otp}`)
         //console.log(smsRes.data)

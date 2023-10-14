@@ -214,7 +214,7 @@ class _ProductPageState extends State<ProductPage> {
       ),
       child: SizedBox(
         width: double.infinity,
-        height: screenSize(context).height ,
+        height: screenSize(context).height,
         child: _product == null
             ? Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -376,10 +376,8 @@ class _ProductPageState extends State<ProductPage> {
                                           ),
                                           TextButton(
                                               onPressed: () {
-                                                pushTo(
-                                                    context,
-                                                    ProductReviewsPage(
-                                                        id: "${_product!['pid']}"));
+                                                pushTo(ProductReviewsPage(
+                                                    id: "${_product!['pid']}"));
                                               },
                                               child: Text(
                                                 '${_product!['reviews'].length} REVIEW(S)',
