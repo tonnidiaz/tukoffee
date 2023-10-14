@@ -226,12 +226,7 @@ class AccountSettingsPage extends StatelessWidget {
                     bgColor: Colors.black,
                     onPressed: () {
                       // show edit pass dialog
-                      showDialog(
-                          useRootNavigator: false,
-                          context: context,
-                          builder: (context) {
-                            return const EditPassForm();
-                          });
+                      Get.bottomSheet(const EditPassForm());
                     },
                     text: "Change password"),
               ),
@@ -329,59 +324,63 @@ class EditPassForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ctrl = MainApp.formViewCtrl;
-    return TuDialogView(
-      title: "Change password",
-      isForm: true,
-      onOk: () async {
-        //Validate old password
-        //If old password is valid -> change the password for the user
-        try {
-          await apiDio().post("/auth/password/change", data: {
-            'old': ctrl.form['old'],
-            'new': ctrl.form['new'],
-          });
-          MainApp.appCtrl
-              .setUser({...MainApp.appCtrl.user, 'password': ctrl.form['new']});
-          Navigator.pop(context);
-          await Future.delayed(const Duration(milliseconds: 10));
-          showToast("Password changed successfully!").show(context);
-        } catch (e) {
-          if (e.runtimeType == DioException) {
-            e as DioException;
-            handleDioException(
-                context: context,
-                exception: e,
-                msg: "Failed to change password!");
-          } else {
-            clog(e);
-            showToast("Failed to change password", isErr: true).show(context);
-          }
-        }
-      },
-      fields: [
-        Obx(() => TuFormField(
-              label: "Old password:",
-              hint: "Enter old password...",
-              isPass: true,
-              required: true,
-              hasBorder: false,
-              value: ctrl.form['old'],
-              onChanged: (val) {
-                ctrl.setFormField('old', val);
+    return Container(
+      padding: defaultPadding2,
+      color: cardBGLight,
+      child: TuForm(
+        builder: (key) => Column(
+          children: [
+            Obx(() => TuFormField(
+                  label: "Old password:",
+                  hint: "Enter old password...",
+                  isPass: true,
+                  showEye: false,
+                  required: true,
+                  value: ctrl.form['old'],
+                  onChanged: (val) {
+                    ctrl.setFormField('old', val);
+                  },
+                )),
+            Obx(() => TuFormField(
+                  label: "New password:",
+                  hint: "Enter your new password...",
+                  isPass: true,
+                  required: true,
+                  value: ctrl.form['new'],
+                  onChanged: (val) {
+                    ctrl.setFormField('new', val);
+                  },
+                )),
+            mY(6),
+            TuButton(
+              width: double.infinity,
+              text: "SUBMIT",
+              onPressed: () async {
+                //Validate old password
+                //If old password is valid -> change the password for the user
+                if (!key.currentState!.validate()) return;
+                try {
+                  showProgressSheet();
+                  await apiDio().post("/auth/password/change", data: {
+                    'old': ctrl.form['old'],
+                    'new': ctrl.form['new'],
+                  });
+
+                  gpop();
+                  gpop();
+                  showToast("Password changed successfully!").show(context);
+                } catch (e) {
+                  gpop();
+                  errorHandler(
+                      context: context,
+                      e: e,
+                      msg: "Failed to change password!");
+                }
               },
-            )),
-        Obx(() => TuFormField(
-              label: "New password:",
-              hint: "Enter your new password...",
-              isPass: true,
-              required: true,
-              hasBorder: false,
-              value: ctrl.form['new'],
-              onChanged: (val) {
-                ctrl.setFormField('new', val);
-              },
-            )),
-      ],
+            )
+          ],
+        ),
+      ),
     );
   }
 }
