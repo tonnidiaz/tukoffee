@@ -19,7 +19,9 @@ class ProductCard extends StatelessWidget {
   final Map<String, dynamic> product;
   final String? cols;
   final double? width;
-  const ProductCard({super.key, required this.product, this.cols, this.width});
+  final double mx;
+  const ProductCard(
+      {super.key, required this.product, this.cols, this.width, this.mx = 0});
 
   @override
   Widget build(BuildContext context) {
@@ -57,15 +59,18 @@ class ProductCard extends StatelessWidget {
     return TuCard(
       //  color: cardBG2,
       //elevation: 0,
+      mx: mx,
       radius: rad,
       height: 180,
-      //width: cardW,
+      width: width,
       padding: 0,
       onTap: () async {
+        clog('Tap');
         storeCtrl.setCurrProduct(product);
-        pushNamed("/product", arguments: {"pid": product["pid"]});
+        Navigator.of(context)
+            .pushNamed("/product", arguments: {"pid": product["pid"]});
+        //      pushNamed();
       },
-      mx: 0,
       my: 0,
       child: Container(
         padding: EdgeInsets.zero,

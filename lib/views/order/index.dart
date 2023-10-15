@@ -481,7 +481,7 @@ class TuCard extends StatelessWidget {
   final Widget? child;
   final Function()? onTap;
   final Function()? onLongPress;
-  final double width;
+  final double? width;
   final double? height;
   final Color? color;
   const TuCard(

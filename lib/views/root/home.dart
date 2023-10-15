@@ -114,7 +114,6 @@ class _HomePageState extends State<HomePage> {
                   hasBorder: false,
                   readOnly: true,
                   onTap: () {
-                    return;
                     TuFuncs.showBottomSheet(
                         context: context, widget: const SearchPage());
                   },

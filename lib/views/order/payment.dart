@@ -128,7 +128,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PageWrapper(
+    return Scaffold(
       appBar: AppBar(
         title: Text("Checkout"),
       ),
@@ -139,10 +139,8 @@ class _PaymentPageState extends State<PaymentPage> {
         },
         child: const Icon(Icons.refresh),
       ),
-      child: SizedBox(
-          height: screenSize(context).height -
-              appBarH -
-              statusBarH(context: context),
+      body: SizedBox(
+          height: screenSize(context).height - appBarH - statusBarH(),
           child: _progress < 100
               ? Column(
                   children: [

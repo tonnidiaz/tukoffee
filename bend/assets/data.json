@@ -13,6 +13,13 @@
             "url": "https://tukoffee.verce.app/hooks/yoco",
             "mode": "test",
             "secret": "whsec_MUFBRTFDNDM0Qjk4MEZBRjYwNDI4QTM5Qjg3QzFFNUU="
+        },
+        {
+            "id": "sub_Kx6mJYpoB7nUAlXuaaDiYjRg",
+            "name": "tukoffee-onrender-live-hook",
+            "url": "https://tukoffee.onrender.com/hooks/yoco",
+            "mode": "test",
+            "secret": "whsec_OUMxNDE4OUVENDQ3NEI4OTY2MjBBNDE3M0YxN0VDQzM="
         }
     ]
     }
