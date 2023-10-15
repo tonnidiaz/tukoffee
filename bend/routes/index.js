@@ -10,6 +10,8 @@ const os = require("os");
 const { parser, OrderStatus } = require("../utils/constants");
 const { auth } = require("../utils/middleware");
 
+
+
 /* GET home page. */
 router.get("/", function (req, res, next) {
     console.log(os.arch());

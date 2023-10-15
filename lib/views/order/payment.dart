@@ -5,6 +5,7 @@ import 'package:lebzcafe/controllers/store_ctrl.dart';
 import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
+import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/utils/styles.dart';
 import 'package:lebzcafe/views/order/checkout.dart';
 import 'package:get/get.dart';
@@ -15,13 +16,9 @@ import '../../utils/functions.dart';
 import '../../widgets/common2.dart';
 import 'index.dart';
 
-class PaymentScreenArgs {
-  final String? url;
-  const PaymentScreenArgs(this.url);
-}
-
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({super.key});
+  final String url;
+  const PaymentPage({super.key, required this.url});
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -53,15 +50,22 @@ class _PaymentPageState extends State<PaymentPage> {
     }
   }
 
-  PaymentScreenArgs? _args;
-
-  _createOrder() async {
+  _createOrder({
+    Map<String, dynamic>? yocoData,
+    Map<String, dynamic>? paystackData,
+  }) async {
     //create the order
     showProgressSheet(msg: "Creating order...");
     try {
       final res = await apiDio().post(
-          "/order/create?cartId=${_storeCtrl.cart["_id"]}",
-          data: {"address": checkoutCtrl.selectedAddr});
+          "/order/create?cartId=${_storeCtrl.cart["_id"]}&mode=${checkoutCtrl.mode.value == OrderMode.deliver ? 0 : 1}",
+          data: {
+            "address": checkoutCtrl.selectedAddr,
+            "store": checkoutCtrl.store['_id'],
+            "collector": checkoutCtrl.collector,
+            'yocoData': yocoData,
+            'paystackData': paystackData
+          });
       Get.offAllNamed("/");
       pushNamed("/order",
           arguments: OrderPageArgs(id: "${res.data["order"]["oid"]}"));
@@ -74,19 +78,27 @@ class _PaymentPageState extends State<PaymentPage> {
     }
   }
 
+  _initSocketio() {
+    clog('Socketio init...');
+    socket.on('payment', (data) {
+      clog('On payment');
+      if (data['gateway'] == 'yoco') {
+        final yocoData = data['data'];
+        if (yocoData['type'] == 'payment.succeeded') {
+          _createOrder(yocoData: yocoData);
+        } else {
+          clog(yocoData);
+        }
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final args =
-          ModalRoute.of(context)?.settings.arguments as PaymentScreenArgs;
-      if (args.url == null) {
-        pushNamed('/');
-        return;
-      }
+      _initSocketio();
       setState(() {
-        _args = args;
-
         _controller
           ..setJavaScriptMode(JavaScriptMode.unrestricted)
           ..setBackgroundColor(const Color(0x00000000))
@@ -94,7 +106,6 @@ class _PaymentPageState extends State<PaymentPage> {
             NavigationDelegate(
               onProgress: (int progress) {
                 // Update loading bar.
-                clog("Progress: $progress%");
                 _setProgress(progress);
               },
               onPageStarted: (String url) {},
@@ -110,7 +121,7 @@ class _PaymentPageState extends State<PaymentPage> {
               },
             ),
           )
-          ..loadRequest(Uri.parse(_args!.url!));
+          ..loadRequest(Uri.parse(widget.url));
       });
     });
   }
@@ -118,11 +129,13 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      appBar: childAppbar(),
+      appBar: AppBar(
+        title: Text("Checkout"),
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: TuColors.primary,
         onPressed: () {
-          _controller.loadRequest(Uri.parse(_args!.url!));
+          _controller.loadRequest(Uri.parse(widget.url));
         },
         child: const Icon(Icons.refresh),
       ),
@@ -130,7 +143,7 @@ class _PaymentPageState extends State<PaymentPage> {
           height: screenSize(context).height -
               appBarH -
               statusBarH(context: context),
-          child: _args == null || _progress < 100
+          child: _progress < 100
               ? Column(
                   children: [
                     LinearProgressIndicator(

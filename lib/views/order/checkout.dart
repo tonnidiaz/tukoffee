@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lebzcafe/utils/vars.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
@@ -77,7 +78,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (_appCtrl.user.isEmpty) {
-        TuFuncs.showBottomSheet(context: context, widget: LoginPage());
+        TuFuncs.showBottomSheet(context: context, widget: const LoginPage());
         return;
       }
 
@@ -110,7 +111,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   text: "Login",
                   onPressed: () {
                     TuFuncs.showBottomSheet(
-                        context: context, widget: LoginPage());
+                        context: context, widget: const LoginPage());
                   },
                 ),
               ),
@@ -208,7 +209,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 ? Column(
                                     children: [
                                       tuTableRow(
-                                        Text("Items"),
+                                        const Text("Items"),
                                         Obx(
                                           () => Text(
                                               "${_storeCtrl.cart['products']?.length ?? 0}"),
@@ -217,7 +218,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       ),
                                       devider(),
                                       tuTableRow(
-                                        Text("Subtotal"),
+                                        const Text("Subtotal"),
                                         Obx(
                                           () {
                                             double total = 0;
@@ -239,7 +240,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       ),
                                       devider(),
                                       tuTableRow(
-                                        Text("Delivery fee"),
+                                        const Text("Delivery fee"),
                                         Obx(
                                           () =>
                                               Text("${_storeCtrl.deliveryFee}"),
@@ -465,14 +466,19 @@ class _CheckoutPageState extends State<CheckoutPage> {
   _onCheckoutBtnPress() async {
     if (_ctrl.mode.value == OrderMode.deliver && _ctrl.selectedAddr.isEmpty) {
       // Disallow if user has no delivery addresses
-      return showToast("Delivery address is required!", isErr: true)
-          .show(context);
+      showToast("Delivery address is required!", isErr: true).show(context);
+      return;
     } else if (_ctrl.mode.value == OrderMode.collect && _ctrl.store.isEmpty) {
-      return showToast("Please select a store", isErr: true).show(context);
+      showToast("Please select a store", isErr: true).show(context);
+      return;
     } else if (_storeCtrl.cart.isEmpty) {
-      return showToast("Please Add some items to your cart!", isErr: true)
+      showToast("Please Add some items to your cart!", isErr: true)
           .show(context);
+      return;
     }
+
+    // SELECT PAYMENT GATEWAY
+
     try {
       double total = 0;
       if (_storeCtrl.cart.isNotEmpty) {
@@ -480,30 +486,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
           total += (it['product']["price"] * it['quantity']).toDouble();
         }
       }
-      clog(total);
       total += _storeCtrl.deliveryFee.value;
-
-      var body = {
-        "name":
-            "${_appCtrl.user['first_name']} ${_appCtrl.user['last_name']}'s ${_appCtrl.store['name']} Order",
-        "amount": total * 100,
-        "description": "Checkout your $STORE_NAME order.",
-        "redirect_url": "$apiURL/payment"
-      };
-      clog(body);
-      if (!DEV) {
-        final res = await paystackDio.post("/page", data: body);
-        final resData = res.data["data"];
-        final checkoutUrl = "$paystackPayUrl/${resData['slug']}";
-        // Navigate to payment page and pass checkoutUrl as arg to be used in webview
-        pushNamed("/order/checkout/payment",
-            arguments: PaymentScreenArgs(checkoutUrl));
-      }
-
-      if (Platform.isLinux || Platform.isWindows) {
-        _createOrder();
-        return;
-      }
+      Get.bottomSheet(GatewaysSheet(total: total));
     } catch (e) {
       clog(e);
       if (e.runtimeType == DioException) {
@@ -695,4 +679,100 @@ Widget editCollectorModal(BuildContext context) {
           )),
     ],
   );
+}
+
+class GatewaysSheet extends StatelessWidget {
+  final double total;
+  const GatewaysSheet({super.key, required this.total});
+
+  @override
+  Widget build(BuildContext context) {
+    final appCtrl = MainApp.appCtrl;
+
+    createPaystackURL() async {
+      var body = {
+        "name":
+            "${appCtrl.user['first_name']} ${appCtrl.user['last_name']}'s ${appCtrl.store['name']} Order",
+        "amount": total * 100,
+        "description": "Checkout your $STORE_NAME order.",
+        "redirect_url": "$apiURL/payment"
+      };
+      final res = await paystackDio.post("/page", data: body);
+      final resData = res.data["data"];
+      final checkoutUrl = "$paystackPayUrl/${resData['slug']}";
+      // Navigate to payment page and pass checkoutUrl as arg to be used in webview
+      return checkoutUrl;
+    }
+
+    createYocoURL() async {
+      final res = await yocoDio
+          .post('/checkouts', data: {"amount": total * 100, 'currency': "ZAR"});
+
+      return res.data['redirectUrl'];
+    }
+
+    return Container(
+      padding: defaultPadding2,
+      color: cardBGLight,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          h3('PAY WITH'),
+          mY(10),
+          TuButton(
+            onPressed: () async {
+              try {
+                final url = await createPaystackURL();
+                gpop();
+                pushTo(PaymentPage(url: url));
+              } catch (e) {
+                errorHandler(e: e, context: context);
+              }
+            },
+            radius: 100,
+            bgColor: appBGLight,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // svgIcon(name: 'paystack'),
+                mX(10),
+                Text(
+                  "Paystack",
+                  style: GoogleFonts.poppins(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
+                )
+              ],
+            ),
+          ),
+          mY(5),
+          TuButton(
+            width: double.infinity,
+            bgColor: appBGLight,
+            radius: 100,
+            onPressed: () async {
+              try {
+                final url = await createYocoURL();
+                gpop();
+                pushTo(PaymentPage(url: url));
+              } catch (e) {
+                errorHandler(e: e, context: context);
+              }
+            },
+            child: Row(
+              /* TODO: USE ICONS */
+              children: [
+                /*  Image.asset(
+                  'assets/images/yoco.png',
+                  height: 35,
+                ), */
+                Text("YOCO")
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

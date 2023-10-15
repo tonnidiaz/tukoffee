@@ -1,1 +1,30 @@
-{"store":{"name":"LebzCafe","phone":"0769196476","email":"tukoffee@gmail.com","site":"https://store.com","image":{"url":"https://res.cloudinary.com/sketchi/image/upload/v1694715912/TunedBass/TuKoffee/DEV/images/products/TuKoffee_-_product_-_epoch-1694715908591.jpg","publicId":"TunedBass/TuKoffee/DEV/images/products/TuKoffee_-_product_-_epoch-1694715908591"}},"address":{"street":"50 Davis street","suburb":"Doornfontein","city":"Johannesburg","state":"Gauteng"},"owner":{"name":"Tonni Diaz","phone":"0769196476","email":"tonnidiazed@gmail.com","site":"https://thabiso.vercel.app"},"developer":{"name":"Tonni Diaz","phone":"0769196476","email":"tonnidiazed@gmail.com","site":"https://thabiso.vercel.app"}}
+{
+    "store": {
+        "name": "LebzCafe",
+        "phone": "0769196476",
+        "email": "tukoffee@gmail.com",
+        "site": "https://store.com",
+        "image": {
+            "url": "https://res.cloudinary.com/sketchi/image/upload/v1694715912/TunedBass/TuKoffee/DEV/images/products/TuKoffee_-_product_-_epoch-1694715908591.jpg",
+            "publicId": "TunedBass/TuKoffee/DEV/images/products/TuKoffee_-_product_-_epoch-1694715908591"
+        }
+    },
+    "address": {
+        "street": "50 Davis street",
+        "suburb": "Doornfontein",
+        "city": "Johannesburg",
+        "state": "Gauteng"
+    },
+    "owner": {
+        "name": "Tonni Diaz",
+        "phone": "0769196476",
+        "email": "tonnidiazed@gmail.com",
+        "site": "https://thabiso.vercel.app"
+    },
+    "developer": {
+        "name": "Tonni Diaz",
+        "phone": "0769196476",
+        "email": "tonnidiazed@gmail.com",
+        "site": "https://thabiso.vercel.app"
+    }
+}

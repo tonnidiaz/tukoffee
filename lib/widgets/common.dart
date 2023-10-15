@@ -183,6 +183,7 @@ class TuButton extends StatefulWidget {
   final Color? color;
   final Widget? child;
   final String text;
+  final bool outlined;
   const TuButton(
       {super.key,
       this.text = "",
@@ -191,6 +192,7 @@ class TuButton extends StatefulWidget {
       this.vp = 5,
       this.radius = 3,
       this.hp = 10,
+      this.outlined = false,
       this.onPressed,
       this.bgColor,
       this.color,
@@ -213,32 +215,63 @@ class _TuButtonState extends State<TuButton> {
     return SizedBox(
       width: widget.width,
       height: widget.height,
-      child: ElevatedButton(
-        onPressed: _isProcessing
-            ? null
-            : () async {
-                _setIsProcessing(true);
-                if (widget.onPressed != null) {
-                  await widget.onPressed!();
-                }
-                _setIsProcessing(false);
-              },
-        style: ElevatedButton.styleFrom(
-            alignment: Alignment.center,
-            backgroundColor: widget.bgColor ??
-                Colors.black87, //const Color.fromRGBO(26, 92, 255, 1),
-            shadowColor: TuColors
-                .coffee1Shadow, // const Color.fromRGBO(26, 92, 255, .5),
-            elevation: 1.5,
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(widget.radius))),
-        child: widget.child ??
-            Text(
-              widget.text.toUpperCase(),
-              style: TextStyle(color: widget.color),
+      child: widget.outlined
+          ? OutlinedButton(
+              onPressed: _isProcessing
+                  ? null
+                  : () async {
+                      _setIsProcessing(true);
+                      if (widget.onPressed != null) {
+                        await widget.onPressed!();
+                      }
+                      _setIsProcessing(false);
+                    },
+              style: OutlinedButton.styleFrom(
+                  alignment: Alignment.center,
+
+                  /*   shadowColor: TuColors
+                      .coffee1Shadow, // const Color.fromRGBO(26, 92, 255, .5),
+                  elevation: 1.5, */
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  side: BorderSide(
+                      color: widget.color ?? TuColors.text, width: 1.5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(widget.radius),
+                  )),
+              child: widget.child ??
+                  Text(
+                    widget.text.toUpperCase(),
+                    style: TextStyle(color: widget.color ?? TuColors.text),
+                  ),
+            )
+          : ElevatedButton(
+              onPressed: _isProcessing
+                  ? null
+                  : () async {
+                      _setIsProcessing(true);
+                      if (widget.onPressed != null) {
+                        await widget.onPressed!();
+                      }
+                      _setIsProcessing(false);
+                    },
+              style: ElevatedButton.styleFrom(
+                  alignment: Alignment.center,
+                  backgroundColor: widget.bgColor ??
+                      Colors.black87, //const Color.fromRGBO(26, 92, 255, 1),
+                  shadowColor: TuColors
+                      .coffee1Shadow, // const Color.fromRGBO(26, 92, 255, .5),
+                  elevation: 1.5,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(widget.radius))),
+              child: widget.child ??
+                  Text(
+                    widget.text.toUpperCase(),
+                    style: TextStyle(color: widget.color),
+                  ),
             ),
-      ),
     );
   }
 }

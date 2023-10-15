@@ -15,15 +15,18 @@ const authRouter = require('./routes/auth');
 const searchRouter = require('./routes/search');
 const storesRouter = require('./routes/stores');
 const userRouter = require('./routes/user');
+const hooksRouter = require('./routes/hooks');
 const { onGetGenToken } = require("./utils/functions")
 const app = express();
 const { default: mongoose } = require('mongoose');
 const multer = require('multer');
 const cors = require('cors');
+
 require("dotenv").config();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
 
 
 app.use(cors()) 
@@ -57,6 +60,7 @@ app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
 app.use('/order', orderRouter);
 app.use('/orders', ordersRouter);
+app.use('/hooks', hooksRouter);
 app.use('/products', parser, productsRouter);
 app.use('/auth', parser, authRouter);
 app.use('/search', parser, searchRouter);

@@ -252,12 +252,15 @@ class _ProfilePageState extends State<ProfilePage> {
               ? "Profile"
               : "${_account!['first_name']} ${_account!['last_name']}"),
           actions: [
-            IconButton(
-              splashRadius: 20,
-              icon: Icon(Icons.settings_outlined),
-              onPressed: () {
-                pushNamed('/account/settings');
-              },
+            Visibility(
+              visible: widget.id == null,
+              child: IconButton(
+                splashRadius: 20,
+                icon: Icon(Icons.settings_outlined),
+                onPressed: () {
+                  pushNamed('/account/settings');
+                },
+              ),
             ),
             mX(7)
           ],

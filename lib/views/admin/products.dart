@@ -231,6 +231,7 @@ class _ProductsState extends State<Products> {
                     hasBorder: false,
                     fill: appBGLight,
                     hint: "Search",
+                    height: borderlessInpHeight,
                     prefixIcon: TuIcon(Icons.search),
                     radius: 5,
                     suffixIcon: IconButton(

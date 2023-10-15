@@ -44,7 +44,7 @@ class _MobileAppState extends State<MobileApp> {
       scrollBehavior: MyCustomScrollBehavior(),
       routes: routes,
       debugShowCheckedModeBanner: false,
-      initialRoute: "/",
+      initialRoute: "/cart",
       //home: MyReviewsPage(),
       builder: (context, child) {
         return child!;

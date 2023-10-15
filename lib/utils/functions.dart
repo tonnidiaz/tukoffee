@@ -72,7 +72,7 @@ bool isNumeric(dynamic s) {
 }
 
 void pushTo(Widget widget) {
-  getx.Get.to(widget);
+  getx.Get.to(() => widget);
 }
 
 void pushNamed(String name, {Object? arguments}) {
@@ -93,23 +93,14 @@ setupStoreDetails({Map<String, dynamic>? data}) async {
     if (data != null) {
       details = data;
     } else {
-      clog('details');
       final res = await dio.get("$apiURL/store");
       details = res.data;
-      clog(details);
       appCtrl.setserverDown(false);
     }
 
     appCtrl.setStore(details['store']);
     appCtrl.setOwner(details['owner']);
     appCtrl.setDeveloper(details['developer']);
-    /* appCtrl.setstoreName(details['name']);
-    appCtrl.setStoreAddress(details['address']);
-    appCtrl.setStorePhone(details['phone']);
-    appCtrl.setownerName(details['ownerName']);
-    appCtrl.setownerPhone(details['ownerPhone']);
-    appCtrl.setstoreSite(details['site']);
-    appCtrl.setStoreImage(details['image']); */
   } catch (e) {
     if (e.runtimeType == DioException) {
       e as DioException;

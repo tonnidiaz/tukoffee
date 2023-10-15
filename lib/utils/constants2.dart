@@ -4,6 +4,7 @@ import 'package:cloudinary/cloudinary.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'colors.dart';
 import 'constants.dart';
@@ -134,3 +135,9 @@ const sheetRadius = BorderRadius.only(
     topLeft: Radius.circular(10), topRight: Radius.circular(10));
 
 double topMargin = 4;
+
+IO.Socket socket = IO.io(
+    apiURL,
+    IO.OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
+        .setExtraHeaders({'foo': 'bar'}) // optional
+        .build());

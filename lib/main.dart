@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:lebzcafe/controllers/appbar.dart';
 import 'package:lebzcafe/controllers/products_ctrl.dart';
 import 'package:lebzcafe/controllers/store_ctrl.dart';
+import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/views/admin/orders.dart';
 import 'package:lebzcafe/views/auth/create.dart';
 import 'package:lebzcafe/widgets/form_view.dart';
 import 'package:lebzcafe/widgets/splash.dart';
 import 'package:get/get.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import 'controllers/app_ctrl.dart';
 import 'mobile.dart';
 import 'utils/constants.dart';
@@ -20,6 +22,13 @@ import 'widgets/drawer.dart';
 import 'widgets/titlebars.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
+initSocketio() {
+  socket.onConnect((_) {
+    clog('connected');
+    socket.emit('test', 'test');
+  });
+}
+
 enableWebviewDebugging() async {
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
     //await InAppWebViewController.setWebContentsDebuggingEnabled(true);
@@ -28,6 +37,7 @@ enableWebviewDebugging() async {
 
 void main() async {
   await initHive();
+  initSocketio();
   WidgetsFlutterBinding.ensureInitialized();
   //setupWindowManager();
   if (Platform.isAndroid || Platform.isIOS) {

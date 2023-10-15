@@ -15,6 +15,7 @@ import 'package:lebzcafe/widgets/common.dart';
 import 'package:lebzcafe/widgets/common2.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/common4.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class RFPage extends StatefulWidget {
   const RFPage({super.key});
@@ -27,9 +28,39 @@ class _RFPageState extends State<RFPage> {
   final _storeCtrl = MainApp.storeCtrl;
   int _selected = 0;
 
+  _connectIO() async {
+    socket.on('event', (data) => clog(data));
+    socket.on('payment', (data) => {clog(data)});
+    socket.onDisconnect((_) => clog('disconnect'));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _connectIO();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return PageWithSearchAndList();
+    return Scaffold(
+      appBar: childAppbar(showCart: false),
+      body: Container(
+        child: Column(
+          children: [
+            TuButton(onPressed: _connectIO, text: "Connect IO"),
+            TuButton(
+                onPressed: () {
+                  clog('EMMIT');
+                  clog(socket.connected);
+                  socket.emit("event", "HELLO");
+                },
+                text: "EMIT"),
+          ],
+        ),
+      ),
+    );
   }
 }
 

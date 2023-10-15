@@ -325,6 +325,7 @@ class _OrdersPageState extends State<OrdersPage> {
                             fill: appBGLight,
                             hasBorder: false,
                             hint: "Order ID",
+                            height: borderlessInpHeight,
                             prefixIcon: TuIcon(Icons.search),
                             radius: 5,
                             value: _ctrl.orderId.value,

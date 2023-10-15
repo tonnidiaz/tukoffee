@@ -163,6 +163,7 @@ class _AccountsState extends State<Accounts> {
                       child: TuFormField(
                         hint: "Name or email",
                         fill: appBGLight,
+                        height: borderlessInpHeight,
                         hasBorder: false,
                         prefixIcon: TuIcon(Icons.search),
                         value: _ctrl.query.value,

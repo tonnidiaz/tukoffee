@@ -61,7 +61,6 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
     return SingleChildScrollView(
       child: Container(
         padding: defaultPadding2,
-        margin: EdgeInsets.only(bottom: keyboardPadding(context)),
         color: cardBGLight,
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -242,8 +241,10 @@ class AccountSettingsPage extends StatelessWidget {
                                 url: "/user/delete",
                                 onOk: () async {
                                   // logout
+                                  showProgressSheet();
                                   logout();
-                                  pushNamed('/');
+
+                                  Get.offAllNamed('/');
                                 },
                               );
                             });
@@ -304,8 +305,6 @@ class ConfirmPassForm extends StatelessWidget {
         Obx(() => TuFormField(
               label: "Password",
               isPass: true,
-              hasBorder: false,
-              isLegacy: true,
               hint: "Enter your password...",
               required: true,
               value: MainApp.formViewCtrl.form['password'],
@@ -324,61 +323,64 @@ class EditPassForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ctrl = MainApp.formViewCtrl;
-    return Container(
-      padding: defaultPadding2,
-      color: cardBGLight,
-      child: TuForm(
-        builder: (key) => Column(
-          children: [
-            Obx(() => TuFormField(
-                  label: "Old password:",
-                  hint: "Enter old password...",
-                  isPass: true,
-                  showEye: false,
-                  required: true,
-                  value: ctrl.form['old'],
-                  onChanged: (val) {
-                    ctrl.setFormField('old', val);
-                  },
-                )),
-            Obx(() => TuFormField(
-                  label: "New password:",
-                  hint: "Enter your new password...",
-                  isPass: true,
-                  required: true,
-                  value: ctrl.form['new'],
-                  onChanged: (val) {
-                    ctrl.setFormField('new', val);
-                  },
-                )),
-            mY(6),
-            TuButton(
-              width: double.infinity,
-              text: "SUBMIT",
-              onPressed: () async {
-                //Validate old password
-                //If old password is valid -> change the password for the user
-                if (!key.currentState!.validate()) return;
-                try {
-                  showProgressSheet();
-                  await apiDio().post("/auth/password/change", data: {
-                    'old': ctrl.form['old'],
-                    'new': ctrl.form['new'],
-                  });
+    return SingleChildScrollView(
+      child: Container(
+        padding: defaultPadding2,
+        color: cardBGLight,
+        child: TuForm(
+          builder: (key) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Obx(() => TuFormField(
+                    label: "Old password:",
+                    hint: "Enter old password...",
+                    isPass: true,
+                    showEye: false,
+                    required: true,
+                    value: ctrl.form['old'],
+                    onChanged: (val) {
+                      ctrl.setFormField('old', val);
+                    },
+                  )),
+              Obx(() => TuFormField(
+                    label: "New password:",
+                    hint: "Enter your new password...",
+                    isPass: true,
+                    required: true,
+                    value: ctrl.form['new'],
+                    onChanged: (val) {
+                      ctrl.setFormField('new', val);
+                    },
+                  )),
+              mY(6),
+              TuButton(
+                width: double.infinity,
+                text: "SUBMIT",
+                onPressed: () async {
+                  //Validate old password
+                  //If old password is valid -> change the password for the user
+                  if (!key.currentState!.validate()) return;
+                  try {
+                    showProgressSheet();
+                    await apiDio().post("/auth/password/change", data: {
+                      'old': ctrl.form['old'],
+                      'new': ctrl.form['new'],
+                    });
 
-                  gpop();
-                  gpop();
-                  showToast("Password changed successfully!").show(context);
-                } catch (e) {
-                  gpop();
-                  errorHandler(
-                      context: context,
-                      e: e,
-                      msg: "Failed to change password!");
-                }
-              },
-            )
-          ],
+                    gpop();
+                    gpop();
+                    showToast("Password changed successfully!").show(context);
+                  } catch (e) {
+                    gpop();
+                    errorHandler(
+                        context: context,
+                        e: e,
+                        msg: "Failed to change password!");
+                  }
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

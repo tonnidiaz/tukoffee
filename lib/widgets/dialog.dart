@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lebzcafe/utils/constants2.dart';
+import 'package:lebzcafe/utils/functions.dart';
 
 import '../utils/colors.dart';
 import '../utils/constants.dart';
@@ -18,7 +19,7 @@ class TuDialogView extends StatefulWidget {
       this.isForm = false,
       this.onOk,
       this.content,
-      this.okTxt = "Submit",
+      this.okTxt = "CONTINUE",
       this.title = "",
       this.fields = const []});
 
@@ -35,10 +36,11 @@ class _TuDialogViewState extends State<TuDialogView> {
       contentPadding: const EdgeInsets.symmetric(horizontal: 15),
       titlePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       insetPadding: const EdgeInsets.all(15),
+      actionsPadding: EdgeInsets.fromLTRB(6, 10, 15, 16),
       elevation: .5,
       title: Text(
         widget.title,
-        style: Styles.h4(),
+        style: Styles.h4(isLight: true),
       ),
       content: widget.isForm
           ? Form(
@@ -52,11 +54,21 @@ class _TuDialogViewState extends State<TuDialogView> {
               ))
           : widget.content,
       actions: [
-        TextButton(
-          child: Text(
-            widget.okTxt,
-            style: const TextStyle(color: Colors.black),
-          ),
+        TuButton(
+          text: "CANCEL",
+          height: 35,
+          bgColor: TuColors.medium,
+          radius: 5,
+          onPressed: () {
+            gpop();
+          },
+        ),
+        TuButton(
+          text: widget.okTxt,
+          height: 35,
+
+          radius: 5,
+          bgColor: Colors.blue,
           //bgColor: Colors.black87,
           // height: 35,
           onPressed: () async {
@@ -66,16 +78,13 @@ class _TuDialogViewState extends State<TuDialogView> {
                 if (widget.onOk != null) {
                   await widget.onOk!();
                 }
-
-                await Future.delayed(const Duration(milliseconds: 50));
-                // Navigator.pop(context);
               }
             } else {
               if (widget.onOk != null) {
                 await widget.onOk!();
               }
               await Future.delayed(const Duration(milliseconds: 50));
-              Navigator.pop(context);
+              gpop();
             }
           },
         )

@@ -47,3 +47,19 @@ paypal_sdk.Buttons({
     }).render("#paypal");
 
  }
+
+ var socket = io();
+ socket.on('connect', ()=>{
+    console.log('CONNECTED')
+ })
+ socket.on('event', d=>{
+    console.log(d)
+ })
+    const btn = document.getElementById('emit-go-btn')
+    btn.onclick = ()=>{
+        console.log('EMIT GO')
+        console.log(socket.connected)
+        socket.emit('go', {data: 'jst go'})
+        console.log('EMIT MSG')
+        socket.emit('msg', {data: 'jst go'})
+    }

@@ -48,76 +48,73 @@ class _FeedbackFormState extends State<FeedbackForm> {
       padding: defaultPadding,
       margin: EdgeInsets.only(bottom: keyboardPadding(context)),
       child: SingleChildScrollView(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "Help / Feedback",
-                style: Styles.h3(),
-              ),
-              mY(10),
-              Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TuFormField(
-                        label: "Full name:",
-                        hint: "e.g. John Doe ",
-                        required: true,
-                        onChanged: (val) {
-                          _setFormKey('name', val);
-                        },
-                        value: _form['name'],
-                        keyboard: TextInputType.name,
-                      ),
-                      TuFormField(
-                        label: "Email:",
-                        hint: "Your email here... ",
-                        required: true,
-                        onChanged: (val) {
-                          _setFormKey('email', val);
-                        },
-                        value: _form['email'],
-                        keyboard: TextInputType.emailAddress,
-                      ),
-                      TuFormField(
-                        label: "Message:",
-                        maxLines: 3,
-                        hint: "Your message here... ",
-                        required: true,
-                        keyboard: TextInputType.multiline,
-                        onChanged: (val) {
-                          _setFormKey('msg', val);
-                        },
-                        value: _form['msg'],
-                      ),
-                      mY(6),
-                      TuButton(
-                        text: "SUBMIT FEEDBACK",
-                        width: double.infinity,
-                        onPressed: () async {
-                          try {
-                            if (_formKey.currentState!.validate()) {
-                              await apiDio().post('/message/send', data: {
-                                "app": MainApp.appCtrl.store['name'],
-                                ..._form
-                              });
-                            }
-                            showToast("Feedback sent!")
-                                .show(context)
-                                .then((value) => pop(context));
-                          } catch (e) {
-                            errorHandler(
-                                e: e,
-                                context: context,
-                                msg: "Failed to  send feedback");
-                          }
-                        },
-                      )
-                    ],
-                  ))
-            ]),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Text(
+            "Help / Feedback",
+            style: Styles.h3(),
+          ),
+          mY(10),
+          Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TuFormField(
+                    label: "Full name:",
+                    hint: "e.g. John Doe ",
+                    required: true,
+                    onChanged: (val) {
+                      _setFormKey('name', val);
+                    },
+                    value: _form['name'],
+                    keyboard: TextInputType.name,
+                  ),
+                  TuFormField(
+                    label: "Email:",
+                    hint: "Your email here... ",
+                    required: true,
+                    onChanged: (val) {
+                      _setFormKey('email', val);
+                    },
+                    value: _form['email'],
+                    keyboard: TextInputType.emailAddress,
+                  ),
+                  TuFormField(
+                    label: "Message:",
+                    maxLines: 3,
+                    hint: "Your message here... ",
+                    required: true,
+                    keyboard: TextInputType.multiline,
+                    onChanged: (val) {
+                      _setFormKey('msg', val);
+                    },
+                    value: _form['msg'],
+                  ),
+                  mY(6),
+                  TuButton(
+                    text: "SUBMIT FEEDBACK",
+                    width: double.infinity,
+                    onPressed: () async {
+                      try {
+                        if (_formKey.currentState!.validate()) {
+                          await apiDio().post('/message/send', data: {
+                            "app": MainApp.appCtrl.store['name'],
+                            ..._form
+                          });
+                        }
+                        showToast("Feedback sent!")
+                            .show(context)
+                            .then((value) => pop(context));
+                      } catch (e) {
+                        errorHandler(
+                            e: e,
+                            context: context,
+                            msg: "Failed to  send feedback");
+                      }
+                    },
+                  )
+                ],
+              ))
+        ]),
       ),
     );
   }

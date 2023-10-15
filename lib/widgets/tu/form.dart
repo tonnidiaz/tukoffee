@@ -17,7 +17,7 @@ class _TuFormState extends State<TuForm> {
   @override
   Widget build(BuildContext context) {
     _key.currentState?.save();
-    return SingleChildScrollView(child: Form(key: _key, child: _wid()));
+    return Form(key: _key, child: _wid());
   }
 
   Widget _wid() {

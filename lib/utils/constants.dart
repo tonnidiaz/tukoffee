@@ -123,8 +123,6 @@ final List<TuPage> pages = [
   TuPage("/order/checkout", const CheckoutPage(),
       icon: CupertinoIcons.home, inList: false),
   TuPage("/order", const OrderPage(), icon: CupertinoIcons.home, inList: false),
-  TuPage("/order/checkout/payment", const PaymentPage(),
-      icon: CupertinoIcons.home, inList: false),
   TuPage("/about", const AboutPage(),
       icon: CupertinoIcons.info_circle, isAction: true),
   TuPage("/account/profile", const ProfilePage(),
@@ -215,6 +213,18 @@ var paystackDio = Dio(
     baseUrl: "https://api.paystack.co",
   ),
 );
+
+const yocoSecretDemo = "sk_test_acf7a241aZWkGV857044259b2c8f";
+var yocoDio = Dio(
+  BaseOptions(
+    headers: {
+      "Authorization": 'Bearer $yocoSecretDemo',
+    },
+    contentType: "application/json",
+    baseUrl: "https://payments.yoco.com/api",
+  ),
+);
+
 Dio apiDio() => Dio(BaseOptions(
     baseUrl: apiURL,
     contentType: "application/json",

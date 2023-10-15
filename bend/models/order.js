@@ -16,6 +16,8 @@ const OrderSchema = new Schema({
     delivery_time: {
         type: String
     },
+    yocoData: {type: Object},
+    paystackData: {type: Object},
     products: {
         type: [{
             product: {type: Schema.ObjectId, ref: "Product"},
