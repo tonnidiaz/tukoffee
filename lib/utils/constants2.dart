@@ -136,8 +136,4 @@ const sheetRadius = BorderRadius.only(
 
 double topMargin = 4;
 
-IO.Socket socket = IO.io(
-    apiURL,
-    IO.OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
-        .setExtraHeaders({'foo': 'bar'}) // optional
-        .build());
+IO.Socket? socket;

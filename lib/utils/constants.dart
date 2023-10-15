@@ -151,7 +151,8 @@ Box<dynamic>? appBox;
 const bool isMobile = true;
 final dio = Dio();
 const localhost = false ? "http://192.168.43.231" : "http://172.16.10.204";
-const String apiURL = !dev ? "https://tukoffee.vercel.app" : "$localhost:8000";
+const String apiURL =
+    !dev || true ? "https://tukoffee.vercel.app" : "$localhost:8000";
 const defaultPadding = EdgeInsets.all(8);
 const defaultPadding2 = EdgeInsets.all(12);
 Size screenSize(BuildContext context) {

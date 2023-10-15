@@ -80,7 +80,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
   _initSocketio() {
     clog('Socketio init...');
-    socket.on('payment', (data) {
+    socket?.on('payment', (data) {
       clog('On payment');
       if (data['gateway'] == 'yoco') {
         final yocoData = data['data'];

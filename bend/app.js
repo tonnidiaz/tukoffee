@@ -21,8 +21,10 @@ const app = express();
 const { default: mongoose } = require('mongoose');
 const multer = require('multer');
 const cors = require('cors');
+const { DEV } = require('./utils/constants');
 
-require("dotenv").config();
+const envPath = DEV ? path.resolve(process.cwd(), '.env') : '/etc/secrets/prod.env'
+require("dotenv").config({path: envPath});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

@@ -1,11 +1,19 @@
 {
     "yoco": {
-        "hook": {
+        "hooks": [{
             "id": "sub_Kx6mJYQDwjbsAK6tb42hjpag",
             "name": "tukoffee-test-hook",
             "url": "https://arriving-repeatedly-raccoon.ngrok-free.app/hooks/yoco",
             "mode": "test",
             "secret": "whsec_RkJEQUU3NDM0NUY0MjVGMTEzNzdFRDZBM0U1RjlDOUY="
+        },
+        {
+            "id": "sub_2xYW86lmYveuM2wul1fyoAEd",
+            "name": "tukoffee-live-hook",
+            "url": "https://tukoffee.verce.app/hooks/yoco",
+            "mode": "test",
+            "secret": "whsec_MUFBRTFDNDM0Qjk4MEZBRjYwNDI4QTM5Qjg3QzFFNUU="
         }
+    ]
     }
 }

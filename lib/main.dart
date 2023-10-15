@@ -12,7 +12,7 @@ import 'package:lebzcafe/views/auth/create.dart';
 import 'package:lebzcafe/widgets/form_view.dart';
 import 'package:lebzcafe/widgets/splash.dart';
 import 'package:get/get.dart';
-import 'package:socket_io_client/socket_io_client.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'controllers/app_ctrl.dart';
 import 'mobile.dart';
 import 'utils/constants.dart';
@@ -23,9 +23,15 @@ import 'widgets/titlebars.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
 initSocketio() {
-  socket.onConnect((_) {
+  clog("initing socketio...");
+  socket = IO.io(
+      apiURL,
+      IO.OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
+          .setExtraHeaders({'foo': 'bar'}) // optional
+          .build());
+  socket?.onConnect((_) {
     clog('connected');
-    socket.emit('test', 'test');
+    socket?.emit('test', 'test');
   });
 }
 

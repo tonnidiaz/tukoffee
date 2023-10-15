@@ -29,9 +29,9 @@ class _RFPageState extends State<RFPage> {
   int _selected = 0;
 
   _connectIO() async {
-    socket.on('event', (data) => clog(data));
-    socket.on('payment', (data) => {clog(data)});
-    socket.onDisconnect((_) => clog('disconnect'));
+    socket?.on('event', (data) => clog(data));
+    socket?.on('payment', (data) => {clog(data)});
+    socket?.onDisconnect((_) => clog('disconnect'));
   }
 
   @override
@@ -53,8 +53,8 @@ class _RFPageState extends State<RFPage> {
             TuButton(
                 onPressed: () {
                   clog('EMMIT');
-                  clog(socket.connected);
-                  socket.emit("event", "HELLO");
+                  clog(socket?.connected);
+                  socket?.emit("event", "HELLO");
                 },
                 text: "EMIT"),
           ],
