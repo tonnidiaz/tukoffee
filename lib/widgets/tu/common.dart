@@ -1,29 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/widgets/common.dart';
 
-Widget progressSheet({Color? color, String? msg}) => Visibility(
-    child: Container(
-        height: 45,
-        color: color ?? cardBGLight,
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const LinearProgressIndicator(),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [Text(msg ?? 'Hang on...')],
-              ),
-            )
-          ],
-        )));
+class ProgressSheet extends StatefulWidget {
+  final Color? color;
+  final String? msg;
+  const ProgressSheet({super.key, this.color, this.msg});
+
+  @override
+  State<ProgressSheet> createState() => _ProgressSheetState();
+}
+
+class _ProgressSheetState extends State<ProgressSheet> {
+  final _ctrl = MainApp.progressCtrl;
+
+  @override
+  void dispose() {
+    if (context.mounted) {
+      _ctrl.setProgress(null);
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Visibility(
+        child: Container(
+            height: 45,
+            color: widget.color ?? cardBGLight,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Obx(() => LinearProgressIndicator(
+                      value: _ctrl.progress.value,
+                    )),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [Text(widget.msg ?? 'Hang on...')],
+                    ),
+                  ),
+                )
+              ],
+            )));
+  }
+}
+
 void showProgressSheet({String? msg}) {
-  Get.bottomSheet(progressSheet(msg: msg), isDismissible: false);
+  Get.bottomSheet(ProgressSheet(msg: msg), isDismissible: false);
 }
 
 class TuCollapse extends StatelessWidget {

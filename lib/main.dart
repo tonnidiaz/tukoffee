@@ -4,6 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lebzcafe/controllers/appbar.dart';
+import 'package:lebzcafe/controllers/common_ctrls.dart';
 import 'package:lebzcafe/controllers/products_ctrl.dart';
 import 'package:lebzcafe/controllers/store_ctrl.dart';
 import 'package:lebzcafe/utils/constants2.dart';
@@ -60,34 +61,6 @@ void main() async {
   );
 }
 
-class TestApp extends StatefulWidget {
-  const TestApp({super.key});
-
-  @override
-  State<TestApp> createState() => _TestAppState();
-}
-
-class _TestAppState extends State<TestApp> {
-  @override
-  void initState() {
-    super.initState();
-    Get.put(FormViewCtrl());
-    Get.put(AppCtrl());
-    Get.put(StoreCtrl());
-    Get.put(AppBarCtrl());
-    Get.put(ProductsCtrl());
-    Get.put(OrdersCtrl());
-    Get.put(SignupCtrl());
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: RFPage(),
-    );
-  }
-}
-
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
@@ -97,7 +70,7 @@ class MainApp extends StatefulWidget {
   static AppBarCtrl appBarCtrl = Get.put(AppBarCtrl());
   static ProductsCtrl productsCtrl = Get.put(ProductsCtrl());
   static SignupCtrl signupCtrl = Get.put(SignupCtrl());
-
+  static ProgressCtrl progressCtrl = Get.put(ProgressCtrl());
   @override
   State<MainApp> createState() => _MainAppState();
 }

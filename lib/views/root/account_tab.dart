@@ -3,15 +3,11 @@ import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/vars.dart';
 import 'package:lebzcafe/views/auth/logout.dart';
-import 'package:lebzcafe/views/order/index.dart';
 import 'package:lebzcafe/widgets/common.dart';
 import 'package:lebzcafe/widgets/common2.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/feedback_form.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/updates2.dart';
 import 'package:get/get.dart';
 
 class AccountTab extends StatelessWidget {

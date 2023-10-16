@@ -11,6 +11,7 @@ import 'package:lebzcafe/widgets/common.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/common4.dart';
 import 'package:lebzcafe/widgets/dialogs/loading_dialog.dart';
+import 'package:lebzcafe/widgets/tu/updates3.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -38,33 +39,10 @@ class SettingsPage extends StatelessWidget {
                     widget: const LoadingDialog(
                       msg: 'Checking updates...',
                     ));
-                await sleep(1500);
+
+                final res = await checkUpdates();
                 Get.back();
-                Get.bottomSheet(const UpdatesView(updates: {
-                  "_id": "65258fc3edb12e71231d0e13",
-                  "is_lts": true,
-                  "notes": ["Note 1", "Note2", "Note 3"],
-                  "date_created": "2023-10-10T17:50:34.701Z",
-                  "last_modifed": "2023-10-10T17:50:34.701Z",
-                  "app": "65204189961633afa277ffc3",
-                  "version": "1.0",
-                  "file":
-                      "https://github.com/tonnidiaz/tunedapps/releases/download/v1.0/Tukoffee-v0.1.apk",
-                  "size": 13.6,
-                  "__v": 0
-                }));
-
-                return;
-
-                final res = await dio.get(
-                    "${await tbURL()}/api/app/updates/check",
-                    queryParameters: {
-                      "uid": "com.tb.tukoffee",
-                      "v": appCtrl.appVersion,
-                    });
-
-                clog(res.data);
-                if (context.mounted) pop(context);
+                Get.bottomSheet(UpdatesView3(update: res));
               } catch (e) {
                 if (context.mounted) {
                   pop(context);
@@ -73,53 +51,6 @@ class SettingsPage extends StatelessWidget {
               }
             },
             child: const Text("Check updates"),
-          )
-        ]),
-      ),
-    );
-  }
-}
-
-class UpdatesView extends StatelessWidget {
-  final Map<String, dynamic> updates;
-  const UpdatesView({super.key, required this.updates});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: defaultPadding2,
-      color: cardBGLight,
-      child: SingleChildScrollView(
-        child: tuColumn(min: true, children: [
-          h3('Updates available'),
-          mY(8),
-          tuTableRow(Text("Version:"), Text("${updates['version']}")),
-          mY(10),
-          Text(
-            "Release notes",
-            style: Styles.h4(),
-          ),
-          Padding(
-            padding: defaultPadding,
-            child: tuColumn(children: [
-              ...updates['notes'].map((e) => bulletItem(e)).toList()
-            ]),
-          ),
-          TuButton(
-            bgColor: TuColors.success,
-            width: double.infinity,
-            text: "UPDATE NOW",
-            onPressed: () async {
-              showLoading(context,
-                  widget: const LoadingDialog(
-                    msg: "Downloading updates...",
-                  ));
-
-              await sleep(1500);
-              // Close downloader loader
-              Get.back();
-              Get.back();
-            },
           )
         ]),
       ),

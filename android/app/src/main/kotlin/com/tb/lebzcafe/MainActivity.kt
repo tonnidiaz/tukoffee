@@ -1,4 +1,4 @@
-package com.tb.lebzcafe.lebzcafe
+package com.tb.lebzcafe
 
 import io.flutter.embedding.android.FlutterActivity
 

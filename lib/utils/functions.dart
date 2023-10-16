@@ -315,12 +315,9 @@ Future<String> getAppVersion() async {
   return packageInfo.version;
 }
 
-Future<void> requestPermissions() async {
+Future requestPermissions() async {
   clog("Requesting...");
-  if (await Permission.storage.request().isGranted) {
-    clog("Granted!");
-    // Either the permission was already granted before or the user just granted it.
-  }
+  return await Permission.storage.request().isGranted;
 }
 
 double fullHeight(BuildContext context) {
@@ -345,4 +342,14 @@ Future<String> tbURL() async {
     'https://raw.githubusercontent.com/tonnidiaz/tunedapps/main/meta.json',
   );
   return jsonDecode(res.data)['baseURL'];
+}
+
+Future<Map<String, dynamic>?> checkUpdates() async {
+  final res =
+      await dio.get("${await tbURL()}/api/app/updates/check", queryParameters: {
+    "uid": "com.tb.tukoffee",
+    "v": MainApp.appCtrl.appVersion,
+  });
+  final ret = res.data.runtimeType == String ? null : res.data;
+  return ret;
 }
