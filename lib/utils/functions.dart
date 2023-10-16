@@ -353,3 +353,9 @@ Future<Map<String, dynamic>?> checkUpdates() async {
   final ret = res.data.runtimeType == String ? null : res.data;
   return ret;
 }
+
+bool autoCheck() {
+  final acu = appBox!.get('AUTO_CHECK_UPDATES');
+  final autoCheck = acu == null || acu;
+  return autoCheck;
+}

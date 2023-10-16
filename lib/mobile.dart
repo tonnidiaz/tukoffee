@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lebzcafe/main.dart';
+import 'package:lebzcafe/utils/functions.dart';
 import 'package:lebzcafe/utils/theme.dart';
 import 'package:get/get.dart';
 import 'package:lebzcafe/views/getx/home.dart';
+import 'package:lebzcafe/widgets/tu/updates3.dart';
 
 import '/utils/constants.dart';
 
@@ -23,13 +25,27 @@ class _MobileAppState extends State<MobileApp> {
 
   final getxPages = [TuPage('/', GetxHomePage())];
 
+  _checkUpdates() async {
+    final _autoCheck = autoCheck();
+    MainApp.appCtrl.setAutoCheckUpdates(_autoCheck);
+    clog('AUTO CHECK: $_autoCheck');
+    if (_autoCheck) {
+      final res = await checkUpdates();
+      if (res != null) {
+        Get.bottomSheet(UpdatesView3(update: res));
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     ever(MainApp.appCtrl.darkMode, (val) {
       _setDarkMode(val);
     });
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _checkUpdates();
+    });
   }
 
   @override

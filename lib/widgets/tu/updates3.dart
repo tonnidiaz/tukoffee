@@ -47,6 +47,7 @@ class UpdatesView3State extends State<UpdatesView3> {
         gpop(); //HIDE DOWNLOADER PROGRESS SHEET
         clog("Opening file");
         FlutterDownloader.open(taskId: _taskId!);
+        // HIDE MAIN SHEET
       }
     });
 
@@ -120,8 +121,10 @@ class UpdatesView3State extends State<UpdatesView3> {
 
   @override
   void dispose() {
-    FlutterDownloader.cancelAll();
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
+    if (FlutterDownloader.initialized) {
+      FlutterDownloader.cancelAll();
+      IsolateNameServer.removePortNameMapping('downloader_send_port');
+    }
 
     super.dispose();
   }

@@ -19,15 +19,22 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appCtrl = MainApp.appCtrl;
-
     return Scaffold(
       appBar: AppBar(title: const Text("Settings")),
       body: Container(
         margin: EdgeInsets.only(top: topMargin),
         child: Column(children: [
           InfoItem(
-            child: tuTableRow(const Text("Auto check updates"),
-                Switch(value: true, onChanged: (val) {})),
+            child: tuTableRow(
+                const Text("Auto check updates"),
+                Obx(
+                  () => Switch(
+                      value: appCtrl.autoCheckUpdates.value,
+                      onChanged: (val) {
+                        appBox!.put('AUTO_CHECK_UPDATES', val);
+                        appCtrl.setAutoCheckUpdates(val);
+                      }),
+                )),
           ),
           InfoItem(
               child: tuTableRow(

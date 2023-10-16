@@ -91,6 +91,11 @@ class AppCtrl extends GetxController {
     backEnabled.value = !val;
   }
 
+  RxBool autoCheckUpdates = false.obs;
+  void setAutoCheckUpdates(bool val) {
+    autoCheckUpdates.value = val;
+  }
+
   RxBool backEnabled = true.obs;
   void setBackEnabled(bool val) {
     backEnabled.value = val;
