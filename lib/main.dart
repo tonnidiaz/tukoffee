@@ -108,11 +108,13 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => MainApp.appCtrl.ready.value &&
-            MainApp.appCtrl.store['name'] != null &&
-            MainApp.appCtrl.store['name'].isNotEmpty
-        ? const MobileApp()
-        : const TuSplash());
+    return MaterialApp(
+      home: Obx(() => MainApp.appCtrl.ready.value &&
+              MainApp.appCtrl.store['name'] != null &&
+              MainApp.appCtrl.store['name'].isNotEmpty
+          ? const MobileApp()
+          : const TuSplash()),
+    );
   }
 }
 

@@ -12,11 +12,14 @@ import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/utils/functions.dart';
 import 'package:lebzcafe/utils/styles.dart';
+import 'package:lebzcafe/views/order/index.dart';
 import 'package:lebzcafe/widgets/common.dart';
 import 'package:lebzcafe/widgets/common2.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/common4.dart';
 import 'package:lebzcafe/widgets/prompt_modal.dart';
+import 'package:lebzcafe/widgets/tu/form.dart';
+import 'package:lebzcafe/widgets/tu/form_field.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class RFPage extends StatefulWidget {
@@ -27,13 +30,25 @@ class RFPage extends StatefulWidget {
 }
 
 class _RFPageState extends State<RFPage> {
-  final _storeCtrl = MainApp.storeCtrl;
-  int _selected = 0;
+  List<String> _comments = ["Hey", "Sho"];
+  String _comment = "";
 
   _connectIO() async {
-    socket?.on('event', (data) => clog(data));
-    socket?.on('payment', (data) => {clog(data)});
+    socket?.off("rf");
+    socket?.off("comment");
+
+    socket?.on('rf', (data) => {clog("RF: $data")});
+    socket?.on('comment', (data) {
+      setState(() {
+        _comments.add(data);
+      });
+    });
     socket?.onDisconnect((_) => clog('disconnect'));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -47,36 +62,53 @@ class _RFPageState extends State<RFPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: childAppbar(showCart: false),
-      body: Container(
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            TuButton(onPressed: _connectIO, text: "Connect IO"),
-            mY(10),
-            TuButton(
+        appBar: childAppbar(showCart: false),
+        bottomNavigationBar: Container(
+          padding: defaultPadding,
+          color: cardBGLight,
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            TuFormField(
+              hint: 'Comment:',
+              value: _comment,
+              onChanged: (val) {
+                setState(() {
+                  _comment = val;
+                });
+              },
+              suffix: IconButton(
+                splashRadius: 20,
+                padding: EdgeInsets.zero,
                 onPressed: () {
-                  requestNotifsPermission(context);
+                  socket!.emit('comment', _comment);
                 },
-                text: "EMIT"),
-            mY(10),
-            TuButton(
-                onPressed: () {
-                  AwesomeNotifications().createNotification(
-                      content: NotificationContent(
-                          id: 10,
-                          channelKey: 'order_channel',
-                          actionType: ActionType.Default,
-                          title: 'New order',
-                          body: 'A new order has been placed',
-                          payload: {'orderId': "434901"}));
-                },
-                text: "Create"),
-          ],
+                icon: Icon(Icons.send),
+              ),
+            )
+          ]),
         ),
-      ),
-    );
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+          },
+          child: Icon(Icons.home_outlined),
+        ),
+        body: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: defaultPadding,
+              sliver: SliverToBoxAdapter(child: h3("Comments:")),
+            ),
+            SliverToBoxAdapter(
+              child: mY(6),
+            ),
+            SliverList.builder(
+                itemCount: _comments.length,
+                itemBuilder: (context, index) => TuCard(
+                      my: 1,
+                      child: Text(_comments[index]),
+                    ))
+          ],
+        ));
   }
 }
 

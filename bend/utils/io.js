@@ -7,6 +7,18 @@ io.on("connection", (client) => {
     client.on('event', (d)=>{
         console.log(d)
     })
+    client.on('comment', data=>{
+        console.log('RETURNING THE COMMENT..')
+
+        io.emit('comment', data)
+    })
+    client.on("rf", d=>{
+        console.log("RF:", d);
+        setTimeout(()=>{
+            console.log('RETURNING THE FAVOUR..')
+            io.emit('rf', 'I got you dawg')
+        }, 1500)
+    })
 });
 
 

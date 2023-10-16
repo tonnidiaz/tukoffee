@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
         appBox!.put("authToken", res.data["token"]);
         setupUser(full: false);
         //gpop();
-        Get.offAllNamed('/');
+        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
       }
     } catch (e) {
       gpop();

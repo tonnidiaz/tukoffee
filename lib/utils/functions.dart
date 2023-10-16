@@ -394,21 +394,21 @@ initNotifs() {
 }
 
 requestNotifsPermission(BuildContext context) {
-  TuFuncs.showTDialog(
-      context,
-      PromptDialog(
-        title: 'Notifications permission',
-        msg: "The app requires permission to send notifications",
-        onOk: () {
-          AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-            clog("Allowed: $isAllowed");
-            if (!isAllowed) {
+  AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+    clog("Allowed: $isAllowed");
+    if (!isAllowed) {
+      TuFuncs.showTDialog(
+          context,
+          PromptDialog(
+            title: 'Notifications permission',
+            msg: "The app requires permission to send notifications",
+            onOk: () {
               // This is just a basic example. For real apps, you must show some
               // friendly dialog box before call the request method.
               // This is very important to not harm the user experience
               AwesomeNotifications().requestPermissionToSendNotifications();
-            }
-          });
-        },
-      ));
+            },
+          ));
+    }
+  });
 }

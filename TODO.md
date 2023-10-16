@@ -13,4 +13,6 @@
  
  - AppIcon
 ## TO FIX
+- loader for product
+- ic too small
 

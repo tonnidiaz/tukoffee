@@ -215,7 +215,7 @@ class _ProductPageState extends State<ProductPage> {
         },
         child: CustomScrollView(
           slivers: [
-            _product == null
+            _product == null || true
                 ? const SliverFillRemaining(
                     child: Center(child: CircularProgressIndicator()),
                   )

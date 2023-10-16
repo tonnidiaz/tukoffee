@@ -1,4 +1,5 @@
 const { User } = require("../../models");
+const { DEV } = require("../../utils/constants");
 const { genOTP, randomInRange, sendMail } = require("../../utils/functions");
 const { auth, lightAuth } = require("../../utils/middleware");
 const bcrypt = require("bcrypt");
@@ -26,7 +27,7 @@ router.post("/reset", async (req, res) => {
             return res.status(400).send("tuned:Incorrect OTP");}
         } else if (act == "gen-otp") {
             const _otp = randomInRange(1000, 9999);
-            if (process.env.NODE_ENV == 'development'){
+            if (DEV){
                 console.log(otp)
             }
             user.otp = _otp;

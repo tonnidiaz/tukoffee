@@ -31,6 +31,17 @@ class _IndexPageState extends State<IndexPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    clog("ROOT MOUNTED");
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (context.mounted) {
+        _onTabTap(0);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<TuPage> indexTabs = [
       TuPage('/~/home', const HomePage(), label: 'Home', svg: 'br-home'),
