@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,6 +16,7 @@ import 'package:lebzcafe/widgets/common.dart';
 import 'package:lebzcafe/widgets/common2.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/common4.dart';
+import 'package:lebzcafe/widgets/prompt_modal.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class RFPage extends StatefulWidget {
@@ -47,16 +49,30 @@ class _RFPageState extends State<RFPage> {
     return Scaffold(
       appBar: childAppbar(showCart: false),
       body: Container(
+        width: double.infinity,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             TuButton(onPressed: _connectIO, text: "Connect IO"),
+            mY(10),
             TuButton(
                 onPressed: () {
-                  clog('EMMIT');
-                  clog(socket?.connected);
-                  socket?.emit("event", "HELLO");
+                  requestNotifsPermission(context);
                 },
                 text: "EMIT"),
+            mY(10),
+            TuButton(
+                onPressed: () {
+                  AwesomeNotifications().createNotification(
+                      content: NotificationContent(
+                          id: 10,
+                          channelKey: 'order_channel',
+                          actionType: ActionType.Default,
+                          title: 'New order',
+                          body: 'A new order has been placed',
+                          payload: {'orderId': "434901"}));
+                },
+                text: "Create"),
           ],
         ),
       ),

@@ -122,35 +122,31 @@ class ProductCard extends StatelessWidget {
                             .where(
                                 (el) => el["product"]["_id"] == product["_id"])
                             .isNotEmpty;
-                    return Material(
-                      elevation: 2,
-                      borderRadius: BorderRadius.circular(105),
-                      color: inCart ? TuColors.primary : appBGLight,
-                      child: Container(
-                        child: product['quantity'] <= 0
-                            ? none()
-                            : IconButton(
-                                padding: EdgeInsets.zero,
-                                icon: inCart
-                                    ? svgIcon(
-                                        name: 'rr-cart-minus',
-                                        color: const Color.fromRGBO(
-                                            20, 20, 20, 0.7),
-                                        size: 20,
-                                      )
-                                    : svgIcon(
-                                        name: 'rr-cart-add',
-                                        color: Colors.black87,
-                                        size: 20,
-                                      ),
-                                onPressed: product['quantity'] <= 0
-                                    ? null
-                                    : () async {
-                                        addRemoveCart();
-                                      },
-                              ),
-                      ),
-                    );
+                    return product['quantity'] <= 0
+                        ? none()
+                        : TuButton(
+                            radius: 100,
+                            height: 40,
+                            width: 40,
+                            bgColor: inCart ? TuColors.primary : appBGLight,
+                            onPressed: product['quantity'] <= 0
+                                ? null
+                                : () async {
+                                    await addRemoveCart();
+                                  },
+                            child: inCart
+                                ? svgIcon(
+                                    name: 'rr-cart-minus',
+                                    color:
+                                        const Color.fromRGBO(20, 20, 20, 0.7),
+                                    size: 20,
+                                  )
+                                : svgIcon(
+                                    name: 'rr-cart-add',
+                                    color: Colors.black87,
+                                    size: 20,
+                                  ),
+                          );
                   }),
                 ),
               ],

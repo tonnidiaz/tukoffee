@@ -151,7 +151,6 @@ class _TuFormFieldState extends State<TuFormField> {
                     return msg;
                   },
               autocorrect: true,
-              autofillHints: ["email"],
               keyboardType: widget.keyboard,
               style: const TextStyle(
                 fontSize: 16,

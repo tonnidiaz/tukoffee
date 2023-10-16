@@ -64,7 +64,7 @@ class OrdersCtrl extends GetxController {
       case OrderStatus.pending:
         ords = orders.where((it) => it['status'] == 'pending').toList();
         break;
-      case OrderStatus.delivered:
+      case OrderStatus.completed:
         ords = orders.where((it) => it['status'] == 'delivered').toList();
         break;
       case OrderStatus.cancelled:
@@ -184,8 +184,8 @@ class _OrdersPageState extends State<OrdersPage> {
       clog("Getting orders");
       _ctrl.setOrdersFetched(false);
       final res = ModalRoute.of(context)?.settings.name == "/orders"
-          ? await dio.get("$apiURL/orders?user=${_appCtrl.user['_id']}")
-          : await dio.get("$apiURL/orders");
+          ? await apiDio().get("/orders?user=${_appCtrl.user['_id']}")
+          : await apiDio().get("/orders");
       _ctrl.setOrders(res.data['orders']);
       _ctrl.setOrdersFetched(true);
     } catch (e) {
@@ -265,7 +265,7 @@ class _OrdersPageState extends State<OrdersPage> {
                       items: [
                         SelectItem("All", OrderStatus.all),
                         SelectItem("Pending", OrderStatus.pending),
-                        SelectItem("Delivered", OrderStatus.delivered),
+                        SelectItem("Completed", OrderStatus.completed),
                         SelectItem("Cancelled", OrderStatus.cancelled),
                       ],
                       onChanged: (p0) {

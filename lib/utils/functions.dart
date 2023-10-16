@@ -14,11 +14,13 @@ import 'package:lebzcafe/controllers/store_ctrl.dart';
 import 'package:lebzcafe/main.dart';
 import 'package:get/get.dart' as getx;
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:lebzcafe/utils/colors.dart';
+import 'package:lebzcafe/widgets/prompt_modal.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '/utils/constants.dart';
 import 'package:window_manager/window_manager.dart';
-
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'constants2.dart';
 
 void clog(dynamic p) {
@@ -93,7 +95,7 @@ setupStoreDetails({Map<String, dynamic>? data}) async {
     if (data != null) {
       details = data;
     } else {
-      final res = await dio.get("$apiURL/store");
+      final res = await apiDio().get("/store");
       details = res.data;
       appCtrl.setserverDown(false);
     }
@@ -164,7 +166,7 @@ void setupCart(String id) async {
   final StoreCtrl storeCtrl = getx.Get.find();
   final AppCtrl appCtrl = getx.Get.find();
   try {
-    final res = await dio.get("$apiURL/user/cart?user=$id");
+    final res = await apiDio().get("/user/cart?user=$id");
     storeCtrl.setcart(res.data["cart"]);
     appCtrl.setReady(true);
   } catch (e) {
@@ -315,8 +317,9 @@ Future<String> getAppVersion() async {
   return packageInfo.version;
 }
 
-Future requestPermissions() async {
+Future requestStoragePermission() async {
   clog("Requesting...");
+
   return await Permission.storage.request().isGranted;
 }
 
@@ -339,9 +342,17 @@ sleep(int ms) async {
 Future<String> tbURL() async {
   if (DEV) return "$localhost:3000";
   final res = await dio.get(
-    'https://raw.githubusercontent.com/tonnidiaz/tunedapps/main/meta.json',
+    githubURL,
   );
   return jsonDecode(res.data)['baseURL'];
+}
+
+Future<String> getApiURL() async {
+  if (DEV) return "$localhost:8000";
+  final res = await dio.get(
+    githubURL,
+  );
+  return jsonDecode(res.data)['lebzcafeURL'];
 }
 
 Future<Map<String, dynamic>?> checkUpdates() async {
@@ -358,4 +369,46 @@ bool autoCheck() {
   final acu = appBox!.get('AUTO_CHECK_UPDATES');
   final autoCheck = acu == null || acu;
   return autoCheck;
+}
+
+initNotifs() {
+  AwesomeNotifications().initialize(
+      // set the icon to null if you want to use the default app icon
+      null,
+      [
+        NotificationChannel(
+            channelGroupKey: 'order_channel_group',
+            channelKey: 'order_channel',
+            channelName: 'Order notifications',
+            channelDescription: 'Notification channel for order creation',
+            defaultColor: TuColors.primary,
+            ledColor: Colors.white)
+      ],
+      // Channel groups are only visual and are not required
+      channelGroups: [
+        NotificationChannelGroup(
+            channelGroupKey: 'order_channel_group',
+            channelGroupName: 'Basic group')
+      ],
+      debug: DEV);
+}
+
+requestNotifsPermission(BuildContext context) {
+  TuFuncs.showTDialog(
+      context,
+      PromptDialog(
+        title: 'Notifications permission',
+        msg: "The app requires permission to send notifications",
+        onOk: () {
+          AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+            clog("Allowed: $isAllowed");
+            if (!isAllowed) {
+              // This is just a basic example. For real apps, you must show some
+              // friendly dialog box before call the request method.
+              // This is very important to not harm the user experience
+              AwesomeNotifications().requestPermissionToSendNotifications();
+            }
+          });
+        },
+      ));
 }

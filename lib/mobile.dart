@@ -1,6 +1,10 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:lebzcafe/main.dart';
+import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/utils/functions.dart';
+import 'package:lebzcafe/utils/functions2.dart';
+import 'package:lebzcafe/utils/notifs_ctrl.dart';
 import 'package:lebzcafe/utils/theme.dart';
 import 'package:get/get.dart';
 import 'package:lebzcafe/views/getx/home.dart';
@@ -10,7 +14,8 @@ import '/utils/constants.dart';
 
 class MobileApp extends StatefulWidget {
   const MobileApp({Key? key}) : super(key: key);
-
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
   @override
   State<MobileApp> createState() => _MobileAppState();
 }
@@ -37,13 +42,36 @@ class _MobileAppState extends State<MobileApp> {
     }
   }
 
+  _setNotifsListeners() {
+    // Only after at least the action method is set, the notification events are delivered
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+        onNotificationCreatedMethod:
+            NotificationController.onNotificationCreatedMethod,
+        onNotificationDisplayedMethod:
+            NotificationController.onNotificationDisplayedMethod,
+        onDismissActionReceivedMethod:
+            NotificationController.onDismissActionReceivedMethod);
+  }
+
   @override
   void initState() {
     super.initState();
+
+    _setNotifsListeners();
     ever(MainApp.appCtrl.darkMode, (val) {
       _setDarkMode(val);
     });
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      requestNotifsPermission(context);
+      socket?.on('order', (data) {
+        clog("ON ORDER");
+        //CREATE NOTIF IF USER IS ADMIN
+        if (MainApp.appCtrl.user.isNotEmpty &&
+            MainApp.appCtrl.user['permissions'] > 0) {
+          createOrderNotification("$data");
+        }
+      });
       _checkUpdates();
     });
   }
@@ -56,6 +84,7 @@ class _MobileAppState extends State<MobileApp> {
       if (page.name != '/nfn') routes[page.name] = (context) => page.widget;
     }
     return GetMaterialApp(
+      navigatorKey: MobileApp.navigatorKey,
       theme: tuTheme(_darkMode), //(Brightness.light),
       scrollBehavior: MyCustomScrollBehavior(),
       routes: routes,

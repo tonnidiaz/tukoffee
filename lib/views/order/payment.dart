@@ -39,7 +39,7 @@ class _PaymentPageState extends State<PaymentPage> {
     });
     final url = await _controller.currentUrl();
     clog(_isLoading);
-    if (url != null && url.contains("$apiURL/payment")) {
+    if (url != null && url.contains("${MainApp.appCtrl.apiURL}/payment")) {
       if (_isLoading) {
         _createOrder();
         _isLoading = false;
@@ -130,7 +130,7 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Checkout"),
+        title: const Text("Checkout"),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: TuColors.primary,
@@ -139,24 +139,13 @@ class _PaymentPageState extends State<PaymentPage> {
         },
         child: const Icon(Icons.refresh),
       ),
-      body: SizedBox(
-          height: screenSize(context).height - appBarH - statusBarH(),
-          child: _progress < 100
-              ? Column(
-                  children: [
-                    LinearProgressIndicator(
-                      value: _progress / 100,
-                    ),
-                  ],
-                )
-              : Column(
-                  children: [
-                    Expanded(
-                        child: WebViewWidget(
-                      controller: _controller,
-                    ))
-                  ],
-                )),
+      body: _progress < 100
+          ? LinearProgressIndicator(
+              value: _progress / 100,
+            )
+          : WebViewWidget(
+              controller: _controller,
+            ),
     );
   }
 }

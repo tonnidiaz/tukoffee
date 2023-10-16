@@ -3,6 +3,7 @@ const { Cart, Order, User } = require("../models");
 const { auth } = require("../utils/middleware");
 const { OrderStatus } = require("../utils/constants");
 const { tunedErr } = require("../utils/functions");
+const io = require("../utils/io");
 const router = express.Router();
 
 const genOID = async () => {
@@ -97,6 +98,7 @@ router.post("/create", auth, async (req, res) => {
             //user.cart = null
             //await user.save()
             console.log("Cart deleted");
+            io.emit('order', order.oid)
             res.json({ order: { ...order.toJSON(), customer: null } });
         } else {
             res.status(400).json({ msg: "Provide cart id" });

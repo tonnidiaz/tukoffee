@@ -49,6 +49,11 @@ class AppCtrl extends GetxController {
     slogan.value = val;
   }
 
+  RxString apiURL = "".obs;
+  void setApiURL(String val) {
+    apiURL.value = val;
+  }
+
   setStoreField(String field, dynamic val) {
     setStore({...store, field: val});
   }

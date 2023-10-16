@@ -88,7 +88,7 @@ class _ProductPageState extends State<ProductPage> {
     clog(pid);
     //if (_product != null) return _product;
     try {
-      final url = "$apiURL/products?pid=$pid";
+      final url = "${MainApp.appCtrl.apiURL}/products?pid=$pid";
       final res = await dio.get(url);
       final List<dynamic> data = res.data['data'];
       return data.isNotEmpty ? data[0] : null;

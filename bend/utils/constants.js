@@ -3,7 +3,7 @@ const multer = require("multer")
 
 const OrderStatus = {
     pending: "pending",
-    delivered: "delivered",
+    completed: "completed",
     cancelled: "cancelled",
 }
 const OrderMode  = {

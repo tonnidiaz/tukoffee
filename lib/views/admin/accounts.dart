@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/constants2.dart';
@@ -76,7 +77,7 @@ class _AccountsState extends State<Accounts> {
                     .map((element) => element['_id'])
                     .toList();
                 final res =
-                    await dio.post("$apiURL/users/delete", data: {'ids': ids});
+                    await apiDio().post("/users/delete", data: {'ids': ids});
                 _ctrl.setAccounts(_ctrl.accounts.value!
                     .where((it) => !ids.contains(it['_id']))
                     .toList());
@@ -226,7 +227,7 @@ class _AccountsState extends State<Accounts> {
   _getAccounts() async {
     try {
       _ctrl.setAccounts(null);
-      final res = await dio.get('$apiURL/users');
+      final res = await apiDio().get('/users');
       _ctrl.setAccounts(res.data['users']);
     } catch (e) {
       if (e.runtimeType == DioException) {

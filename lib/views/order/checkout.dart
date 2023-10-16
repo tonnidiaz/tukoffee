@@ -117,9 +117,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ),
             ),
           )
-        : PageWrapper(
+        : Scaffold(
             appBar: appBar,
-            bottomNavBar: Container(
+            bottomNavigationBar: Container(
               decoration: const BoxDecoration(
                   color: cardBGLight,
                   border:
@@ -165,11 +165,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     )
                   ]),
             ),
-            child: Container(
-                color: Colors.transparent,
-                height: screenSize(context).height - statusBarH() - appBarH,
-                width: double.infinity,
-                child: SingleChildScrollView(
+            body: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -440,27 +438,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             )),
                     ],
                   ),
-                )));
-  }
-
-  _createOrder() async {
-    //create the order
-    showToast("Creating order...").show(context);
-    try {
-      final res = await apiDio().post(
-          "/order/create?mode=${_ctrl.mode.value == OrderMode.deliver ? 0 : 1}&cartId=${_storeCtrl.cart["_id"]}",
-          data: {
-            "address": _ctrl.selectedAddr,
-            'store': _ctrl.store['_id'],
-            'collector': _ctrl.collector
-          });
-      var oid = res.data["order"]["oid"];
-      clog(oid);
-      Get.offAllNamed("/");
-      pushNamed("/order", arguments: OrderPageArgs(id: "$oid"));
-    } catch (e) {
-      errorHandler(e: e, context: context, msg: "Failed to create order");
-    }
+                ),
+              ],
+            ));
   }
 
   _onCheckoutBtnPress() async {
@@ -688,14 +668,14 @@ class GatewaysSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appCtrl = MainApp.appCtrl;
-
+    final CheckoutCtrl ctrl = Get.find();
     createPaystackURL() async {
       var body = {
         "name":
             "${appCtrl.user['first_name']} ${appCtrl.user['last_name']}'s ${appCtrl.store['name']} Order",
         "amount": total * 100,
         "description": "Checkout your ${appCtrl.store['name']} order.",
-        "redirect_url": "$apiURL/payment"
+        "redirect_url": "${MainApp.appCtrl.apiURL}/payment"
       };
       final res = await paystackDio.post("/page", data: body);
       final resData = res.data["data"];
@@ -711,6 +691,26 @@ class GatewaysSheet extends StatelessWidget {
       return res.data['redirectUrl'];
     }
 
+    _createOrder() async {
+      //create the order
+      showToast("Creating order...").show(context);
+      try {
+        final res = await apiDio().post(
+            "/order/create?mode=${ctrl.mode.value == OrderMode.deliver ? 0 : 1}&cartId=${MainApp.storeCtrl.cart["_id"]}",
+            data: {
+              "address": ctrl.selectedAddr,
+              'store': ctrl.store['_id'],
+              'collector': ctrl.collector
+            });
+        var oid = res.data["order"]["oid"];
+        clog(oid);
+        Get.offAllNamed("/");
+        pushNamed("/order", arguments: OrderPageArgs(id: "$oid"));
+      } catch (e) {
+        errorHandler(e: e, context: context, msg: "Failed to create order");
+      }
+    }
+
     return Container(
       padding: defaultPadding2,
       color: cardBGLight,
@@ -722,6 +722,10 @@ class GatewaysSheet extends StatelessWidget {
           TuButton(
             onPressed: () async {
               try {
+                if (Platform.isLinux) {
+                  _createOrder();
+                  return;
+                }
                 final url = await createPaystackURL();
                 gpop();
                 pushTo(PaymentPage(url: url));
@@ -734,12 +738,12 @@ class GatewaysSheet extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // svgIcon(name: 'paystack'),
+                svgIcon(name: 'paystack'),
                 mX(10),
                 Text(
                   "Paystack",
                   style: GoogleFonts.poppins(
-                      color: Colors.black87,
+                      color: const Color.fromARGB(221, 27, 16, 16),
                       fontWeight: FontWeight.bold,
                       fontSize: 18),
                 )
@@ -761,13 +765,12 @@ class GatewaysSheet extends StatelessWidget {
               }
             },
             child: Row(
-              /* TODO: USE ICONS */
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                /*  Image.asset(
+                Image.asset(
                   'assets/images/yoco.png',
                   height: 35,
-                ), */
-                Text("YOCO")
+                ),
               ],
             ),
           ),

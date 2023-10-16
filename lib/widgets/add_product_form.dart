@@ -146,7 +146,7 @@ class _AddProductFormState extends State<AddProductForm> {
 
       // Request storage permission
       if (Platform.isAndroid || Platform.isIOS) {
-        requestPermissions();
+        requestStoragePermission();
       }
     });
   }

@@ -2,12 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
+import 'package:lebzcafe/utils/constants2.dart';
+import 'package:lebzcafe/utils/functions2.dart';
 import 'package:lebzcafe/utils/styles.dart';
 import 'package:lebzcafe/widgets/common.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import '../utils/functions.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+initSocketio() {
+  final appCtrl = MainApp.appCtrl;
+  clog("initing socketio...");
+  socket = IO.io(
+      MainApp.appCtrl.apiURL.value,
+      IO.OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
+          .setExtraHeaders({'foo': 'bar'}) // optional
+          .build());
+  socket?.onConnect((_) {
+    clog('IO connected');
+    socket?.emit('test', 'test');
+  });
+}
 
 class TuSplash extends StatefulWidget {
   const TuSplash({super.key});
@@ -39,7 +56,19 @@ class _TuSplashState extends State<TuSplash> {
     // Check for internet connection
     clog('Initi splash...');
     if (_appCtrl.store['name'] != null) return;
+
+    try {
+      //GET APIURL
+      final apiURL = await getApiURL();
+      _appCtrl.setApiURL(apiURL);
+    } catch (e) {
+      clog(e);
+      return;
+    }
+
     _setConnected(true);
+
+    initSocketio();
     bool result = await InternetConnectionChecker().hasConnection;
     await Future.delayed(const Duration(milliseconds: 100));
     clog("Connected: $result");

@@ -2,6 +2,7 @@
 import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/views/order/checkout.dart';
 import 'package:lebzcafe/widgets/common3.dart';
+import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
 import 'package:flutter/material.dart';
@@ -59,7 +60,7 @@ class _OrderPageState extends State<OrderPage> {
     try {
       _setOrder(null);
       // Fetch the order
-      final res = await dio.get("$apiURL/orders?oid=${_args!.id}");
+      final res = await apiDio().get("/orders?oid=${_args!.id}");
       if (res.data["orders"].isNotEmpty) {
         _setOrder(res.data["orders"][0]);
       } else {
@@ -111,10 +112,13 @@ class _OrderPageState extends State<OrderPage> {
                 Map<String, dynamic> val = mode == 1
                     ? _order!['collector']
                     : _order!['delivery_address'];
+                showProgressSheet();
                 final res = await apiDio()
                     .post('/order/edit?id=${_order!['_id']}', data: {
                   field: {...val, ...form}
                 });
+                gpop(); //POP SHEET
+                gpop(); //POP MAP
                 _reload(res);
               } catch (e) {
                 errorHandler(
@@ -131,6 +135,7 @@ class _OrderPageState extends State<OrderPage> {
         widget: MapPage(onSubmit: (val) async {
           if (val.isEmpty) return;
           try {
+            showProgressSheet();
             final res =
                 await apiDio().post('/order/edit?id=${_order!['_id']}', data: {
               "delivery_address": {
@@ -138,6 +143,7 @@ class _OrderPageState extends State<OrderPage> {
                 "location": val
               }
             });
+            gpop();
             _reload(res);
           } catch (e) {
             errorHandler(e: e, context: context, msg: "Error editing fields!");
@@ -146,14 +152,49 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   _reload(res) async {
-    Get.offAllNamed("/");
-    pushNamed('/order', arguments: OrderPageArgs(id: "${res.data['id']}"));
+    //Get.offAllNamed("/");
+    Navigator.popAndPushNamed(context, '/order',
+        arguments: OrderPageArgs(id: "${res.data['id']}"));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: childAppbar(title: "Order #${_args?.id}"),
+      bottomNavigationBar: _order == null || _appCtrl.user['permissions'] == 0
+          ? null
+          : Material(
+              elevation: 5,
+              color: cardBGLight,
+              child: Padding(
+                padding: defaultPadding,
+                child: TuSelect(
+                  elevation: 2,
+                  label: 'Order status:',
+                  value: _order!['status'],
+                  items: [
+                    SelectItem('Pending', 'pending'),
+                    SelectItem('Completed', 'completed'),
+                    SelectItem('Cancelled', 'cancelled'),
+                  ],
+                  onChanged: (val) async {
+                    try {
+                      showProgressSheet();
+                      final res = await apiDio().post(
+                          '/order/edit?id=${_order!['_id']}',
+                          data: {"status": val});
+                      gpop();
+                      _reload(res);
+                    } catch (e) {
+                      errorHandler(
+                          e: e,
+                          context: context,
+                          msg: "Error editing order status!");
+                    }
+                  },
+                ),
+              ),
+            ),
       body: RefreshIndicator(
         onRefresh: () async {
           await _init();
@@ -193,7 +234,7 @@ class _OrderPageState extends State<OrderPage> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          Text(
+                                          SelectableText(
                                             _args!.id,
                                           ),
                                           my: 10),
@@ -203,8 +244,19 @@ class _OrderPageState extends State<OrderPage> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          Text(
-                                            "${_order!['status']}",
+                                          Chip(
+                                            backgroundColor:
+                                                _order!['status'] == 'pending'
+                                                    ? TuColors.medium
+                                                    : _order!['status'] ==
+                                                            'cancelled'
+                                                        ? TuColors.danger
+                                                        : TuColors.success,
+                                            label: Text(
+                                              "${_order!['status']}",
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                           my: 10),
                                       tuTableRow(
@@ -350,11 +402,11 @@ class _OrderPageState extends State<OrderPage> {
                                                   .where((element) =>
                                                       element['_id'] == val)
                                                   .first;
-                                              clog(store);
-                                              //_ctrl.setStore(store);
+                                              showProgressSheet(); //_ctrl.setStore(store);
                                               final res = await apiDio().post(
                                                   '/order/edit?id=${_order!['_id']}',
                                                   data: {'store': store});
+                                              gpop();
                                               _reload(res);
                                             },
                                           ),

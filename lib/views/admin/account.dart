@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/functions.dart';
@@ -379,7 +380,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
 
   _getAccount() async {
     try {
-      final res = await dio.get('$apiURL/users?id=${widget.id}');
+      final res = await apiDio().get('/users?id=${widget.id}');
       _setUser(res.data['users'][0]);
     } catch (e) {
       errorHandler(e: e, context: context);

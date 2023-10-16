@@ -66,7 +66,7 @@ class UpdatesView3State extends State<UpdatesView3> {
     //
 
     try {
-      final hasPermission = await requestPermissions();
+      final hasPermission = await requestStoragePermission();
       clog("Has perm: $hasPermission");
       if (hasPermission == null || !hasPermission) {
         if (!context.mounted) return;

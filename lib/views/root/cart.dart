@@ -47,7 +47,7 @@ class _CartPageState extends State<CartPage> {
   Future<void> setupCart(String email) async {
     _storeCtrl.setcartFetched(false);
     try {
-      final res = await dio.get("$apiURL/user/cart?user=$email");
+      final res = await apiDio().get("/user/cart?user=$email");
       _storeCtrl.setcart(res.data["cart"]);
     } catch (e) {
       clog(e);

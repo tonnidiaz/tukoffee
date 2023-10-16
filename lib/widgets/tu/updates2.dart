@@ -243,7 +243,7 @@ class _UpdatesView2State extends State<UpdatesView2> {
   Future<void> _downloadUpdate() async {
     // _checkUpdates();
     try {
-      await requestPermissions();
+      await requestStoragePermission();
       setState(() {
         _isUpdating = true;
         _progress = 0;

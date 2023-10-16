@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/utils/functions.dart';
 import 'package:lebzcafe/views/about.dart';
@@ -38,7 +39,7 @@ enum SortBy { name, price, dateCreated, lastModified }
 
 enum SortOrder { ascending, descending }
 
-enum OrderStatus { pending, delivered, cancelled, all }
+enum OrderStatus { pending, completed, cancelled, all }
 
 class TuPage {
   Widget widget;
@@ -152,9 +153,11 @@ const testUser = {"email": "tonni@gmail.com", "password": "Baseline@072"};
 Box<dynamic>? appBox;
 const bool isMobile = true;
 final dio = Dio();
+
+const String githubURL =
+    'https://raw.githubusercontent.com/tonnidiaz/tunedapps/main/meta.json';
 const localhost = false ? "http://192.168.43.231" : "http://172.16.10.204";
-const String apiURL =
-    !dev ? "https://tukoffee.onrender.com" : "$localhost:8000";
+
 const defaultPadding = EdgeInsets.all(8);
 const defaultPadding2 = EdgeInsets.all(12);
 Size screenSize(BuildContext context) {
@@ -229,7 +232,7 @@ var yocoDio = Dio(
 );
 
 Dio apiDio() => Dio(BaseOptions(
-    baseUrl: apiURL,
+    baseUrl: MainApp.appCtrl.apiURL.value,
     contentType: "application/json",
     headers: appBox!.get("authToken") != null
         ? {"Authorization": "Bearer ${appBox!.get("authToken")}"}
