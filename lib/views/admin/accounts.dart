@@ -327,59 +327,53 @@ class AccountCard extends StatelessWidget {
                     splashRadius: 23,
                     padding: EdgeInsets.zero,
                     itemBuilder: (context) {
-                      return !isAdmin
-                          ? []
-                          : [
-                              PopupMenuItem(
-                                  onTap: () async {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return PromptDialog(
-                                            title: "Delete account",
-                                            okTxt: "Yes",
-                                            msg:
-                                                "Do you want to permenently delete this account?",
-                                            onOk: () async {
-                                              try {
-                                                final res = await apiDio().post(
-                                                    "/users/delete",
-                                                    data: {
-                                                      'ids': [account['_id']]
-                                                    });
-                                                var accs = ctrl.accounts.value!;
-                                                ctrl.setAccounts(accs
-                                                    .where((it) =>
-                                                        it['_id'] !=
-                                                        account['_id'])
-                                                    .toList());
-                                                clog(res.data);
-                                                showToast(
-                                                        "Account deleted successfully!")
-                                                    .show(context);
-                                              } catch (e) {
-                                                clog(e);
-                                                if (e.runtimeType ==
-                                                    DioException) {
-                                                  e as DioException;
-                                                  handleDioException(
-                                                      context: context,
-                                                      exception: e,
-                                                      msg:
-                                                          'Error deleting account!');
-                                                } else {
-                                                  showToast(
-                                                          'Error deleting account!',
-                                                          isErr: true)
-                                                      .show(context);
-                                                }
-                                              }
-                                            },
-                                          );
-                                        });
-                                  },
-                                  child: Text("Delete"))
-                            ];
+                      return [
+                        PopupMenuItem(
+                            enabled: isAdmin,
+                            onTap: () async {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return PromptDialog(
+                                      title: "Delete account",
+                                      okTxt: "Yes",
+                                      msg:
+                                          "Do you want to permenently delete this account?",
+                                      onOk: () async {
+                                        try {
+                                          final res = await apiDio()
+                                              .post("/users/delete", data: {
+                                            'ids': [account['_id']]
+                                          });
+                                          var accs = ctrl.accounts.value!;
+                                          ctrl.setAccounts(accs
+                                              .where((it) =>
+                                                  it['_id'] != account['_id'])
+                                              .toList());
+                                          clog(res.data);
+                                          showToast(
+                                                  "Account deleted successfully!")
+                                              .show(context);
+                                        } catch (e) {
+                                          clog(e);
+                                          if (e.runtimeType == DioException) {
+                                            e as DioException;
+                                            handleDioException(
+                                                context: context,
+                                                exception: e,
+                                                msg: 'Error deleting account!');
+                                          } else {
+                                            showToast('Error deleting account!',
+                                                    isErr: true)
+                                                .show(context);
+                                          }
+                                        }
+                                      },
+                                    );
+                                  });
+                            },
+                            child: Text("Delete"))
+                      ];
                     });
               }),
             ),

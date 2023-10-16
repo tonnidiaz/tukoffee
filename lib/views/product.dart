@@ -214,254 +214,191 @@ class _ProductPageState extends State<ProductPage> {
         onRefresh: () async {
           await _setupProduct();
         },
-        child: TuScrollview(
-          child: SizedBox(
-            width: double.infinity,
-            height: screenSize(context).height,
-            child: _product == null
-                ? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Loading...",
-                          style: Styles.h1,
-                        ),
-                        mY(5),
-                        TuButton(
-                            text: "Refresh",
-                            onPressed: () async {
-                              final res = await _getProduct(_args['pid']);
-                              setState(() {
-                                _product = res;
-                              });
-                            })
-                      ],
-                    ),
+        child: CustomScrollView(
+          slivers: [
+            _product == null
+                ? const SliverFillRemaining(
+                    child: Center(child: CircularProgressIndicator()),
                   )
-                : Stack(
-                    children: [
-                      SingleChildScrollView(
-                        child: Container(
-                          //padding: const EdgeInsets.all(8),
-                          margin: const EdgeInsets.only(bottom: 100),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                : SliverToBoxAdapter(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                        Stack(
+                          children: [
+                            LayoutBuilder(builder: (context, constraints) {
+                              return Container(
+                                //id=img-wrap
+                                color: appBGLight,
+                                width: constraints.maxWidth,
+                                margin: const EdgeInsets.only(top: 6),
+                                height: constraints.maxWidth - 20 - 40,
+                                padding: const EdgeInsets.only(
+                                    left: 5, right: 5, top: 5),
+
+                                child: _product!['images'].isNotEmpty
+                                    ? Image.network(_product!['images']
+                                            [_currImgIndex][
+                                        'url']) //"https://loremflickr.com/g/320/240/tea?random=${Random().nextInt(100)}")
+                                    : const Icon(
+                                        Icons.coffee_outlined,
+                                        size: 50,
+                                        color: Colors.black54,
+                                      ),
+                              );
+                            }),
+                            Visibility(
+                              visible: _product!['images'].isNotEmpty,
+                              child: Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  width: screenSize(context).width,
+                                  child: Container(
+                                    height: 60,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5, vertical: 2),
+                                    color: Colors.black54,
+                                    child: Row(
+                                        children: (_product!['images'] as List)
+                                            .asMap()
+                                            .entries
+                                            .map((e) {
+                                      return imgCard(
+                                        onTap: () {
+                                          _setCurrImgIndex(e.key);
+                                        },
+                                        mode: 'add',
+                                        context: context,
+                                        canRemove: false,
+                                        index: e.key,
+                                        child: Image.network(e.value['url']),
+                                      );
+                                    }).toList()),
+                                  )),
+                            )
+                          ],
+                        ),
+                        Container(
+                          color: cardBGLight,
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SizedBox(
-                                width: double.infinity,
-                                child: LayoutBuilder(
-                                    builder: (context, constraints) {
-                                  return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Stack(
-                                          children: [
-                                            Container(
-                                              //id=img-wrap
-                                              color: appBGLight,
-                                              width: constraints.maxWidth,
-                                              margin: EdgeInsets.only(top: 6),
-                                              height: constraints.maxWidth -
-                                                  20 -
-                                                  40,
-                                              padding: const EdgeInsets.only(
-                                                  left: 5, right: 5, top: 5),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${_product!['name']}",
+                                      style: Styles.h3(),
+                                    ),
+                                    mY(5),
+                                    Container(
+                                      color: Colors.transparent,
+                                      width: double.infinity,
+                                      child: Text(
+                                        "${_product!['description']}",
+                                        softWrap: true,
 
-                                              child: _product!['images']
-                                                      .isNotEmpty
-                                                  ? Image.network(_product![
-                                                              'images']
-                                                          [_currImgIndex][
-                                                      'url']) //"https://loremflickr.com/g/320/240/tea?random=${Random().nextInt(100)}")
-                                                  : const Icon(
-                                                      Icons.coffee_outlined,
-                                                      size: 50,
-                                                      color: Colors.black54,
-                                                    ),
-                                            ),
-                                            Visibility(
-                                              visible: _product!['images']
-                                                  .isNotEmpty,
-                                              child: Positioned(
-                                                  bottom: 0,
-                                                  left: 0,
-                                                  width: constraints.maxWidth,
-                                                  child: Container(
-                                                    height: 60,
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 5,
-                                                        vertical: 2),
-                                                    color: Colors.black54,
-                                                    child: Row(
-                                                        children:
-                                                            (_product!['images']
-                                                                    as List)
-                                                                .asMap()
-                                                                .entries
-                                                                .map((e) {
-                                                      return imgCard(
-                                                        onTap: () {
-                                                          _setCurrImgIndex(
-                                                              e.key);
-                                                        },
-                                                        mode: 'add',
-                                                        context: context,
-                                                        canRemove: false,
-                                                        index: e.key,
-                                                        child: Image.network(
-                                                            e.value['url']),
-                                                      );
-                                                    }).toList()),
-                                                  )),
-                                            )
-                                          ],
-                                        ),
-                                        Container(
-                                          color: cardBGLight,
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "${_product!['name']}",
-                                                      style: Styles.h3(),
-                                                    ),
-                                                    mY(5),
-                                                    Container(
-                                                      color: Colors.transparent,
-                                                      width: double.infinity,
-                                                      child: Text(
-                                                        "${_product!['description']}",
-                                                        softWrap: true,
-
-                                                        //style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        mY(6),
-                                        Container(
-                                          color: cardBGLight,
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  const Icon(Icons.star,
-                                                      size: 20,
-                                                      color: Colors
-                                                          .amber //Color.fromARGB(108, 255, 255, 0),
-                                                      ),
-                                                  Text(
-                                                    " ${_product!['rating'] ?? 0}",
-                                                    style: const TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.black87,
-                                                        fontWeight:
-                                                            FontWeight.w900),
-                                                  )
-                                                ],
-                                              ),
-                                              TextButton(
-                                                  onPressed: () {
-                                                    pushTo(ProductReviewsPage(
-                                                        id: "${_product!['pid']}"));
-                                                  },
-                                                  child: Text(
-                                                    '${_product!['reviews'].length} REVIEW(S)',
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ))
-                                            ],
-                                          ),
-                                        ),
-                                        mY(6),
-                                        Container(
-                                          color: cardBGLight,
-                                          width: double.infinity,
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: tuColumn(children: [
-                                            Text(
-                                              'EXTRA INFORMATION',
-                                              style: Styles.h4(),
-                                            ),
-                                            mY(10),
-                                            tuTableRow(
-                                                const Text(
-                                                  'Weight',
-                                                ),
-                                                Text(
-                                                    '${_product!['weight']} KG'))
-                                          ]),
-                                        ),
-                                        mY(6),
-                                        Container(
-                                            color: cardBGLight,
-                                            width: double.infinity,
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 5.0),
-                                            child: tuColumn(children: [
-                                              TuCard(
-                                                child: Text(
-                                                  'You may also like',
-                                                  style: Styles.h4(),
-                                                ),
-                                              ),
-                                              mY(10),
-                                              TuCard(
-                                                color: appBGLight,
-                                                child: Visibility(
-                                                  visible: true,
-                                                  child: SingleChildScrollView(
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    child: _related == null
-                                                        ? none()
-                                                        : Row(
-                                                            children: _related!
-                                                                .map((e) =>
-                                                                    ProductCard(
-                                                                        mx: 6,
-                                                                        width:
-                                                                            130,
-                                                                        product:
-                                                                            e))
-                                                                .toList()),
-                                                  ),
-                                                ),
-                                              )
-                                            ]))
-                                      ]);
-                                }),
+                                        //style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-          ),
+                        mY(6),
+                        Container(
+                          color: cardBGLight,
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const Icon(Icons.star,
+                                      size: 20,
+                                      color: Colors
+                                          .amber //Color.fromARGB(108, 255, 255, 0),
+                                      ),
+                                  Text(
+                                    " ${_product!['rating'] ?? 0}",
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w900),
+                                  )
+                                ],
+                              ),
+                              TextButton(
+                                  onPressed: () {
+                                    pushTo(ProductReviewsPage(
+                                        id: "${_product!['pid']}"));
+                                  },
+                                  child: Text(
+                                    '${_product!['reviews'].length} REVIEW(S)',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600),
+                                  ))
+                            ],
+                          ),
+                        ),
+                        mY(6),
+                        Container(
+                          color: cardBGLight,
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(10.0),
+                          child: tuColumn(children: [
+                            Text(
+                              'EXTRA INFORMATION',
+                              style: Styles.h4(),
+                            ),
+                            mY(10),
+                            tuTableRow(
+                                const Text(
+                                  'Weight',
+                                ),
+                                Text('${_product!['weight']} KG'))
+                          ]),
+                        ),
+                        mY(6),
+                        Container(
+                            color: cardBGLight,
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(vertical: 5.0),
+                            child: tuColumn(children: [
+                              TuCard(
+                                child: Text(
+                                  'You may also like',
+                                  style: Styles.h4(),
+                                ),
+                              ),
+                              mY(10),
+                              TuCard(
+                                color: appBGLight,
+                                child: Visibility(
+                                  visible: true,
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: _related == null
+                                        ? none()
+                                        : Row(
+                                            children: _related!
+                                                .map((e) => ProductCard(
+                                                    mx: 6,
+                                                    width: 130,
+                                                    product: e))
+                                                .toList()),
+                                  ),
+                                ),
+                              )
+                            ]))
+                      ])),
+          ],
         ),
       ),
     );

@@ -694,7 +694,7 @@ class GatewaysSheet extends StatelessWidget {
         "name":
             "${appCtrl.user['first_name']} ${appCtrl.user['last_name']}'s ${appCtrl.store['name']} Order",
         "amount": total * 100,
-        "description": "Checkout your $STORE_NAME order.",
+        "description": "Checkout your ${appCtrl.store['name']} order.",
         "redirect_url": "$apiURL/payment"
       };
       final res = await paystackDio.post("/page", data: body);

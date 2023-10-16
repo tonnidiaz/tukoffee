@@ -44,6 +44,11 @@ class AppCtrl extends GetxController {
     store.value = val;
   }
 
+  RxString slogan = "".obs;
+  void setSlogan(String val) {
+    slogan.value = val;
+  }
+
   setStoreField(String field, dynamic val) {
     setStore({...store, field: val});
   }
@@ -51,6 +56,11 @@ class AppCtrl extends GetxController {
   RxMap owner = {}.obs;
   setOwner(Map val) {
     owner.value = val;
+  }
+
+  RxMap socials = {}.obs;
+  setSocials(Map val) {
+    socials.value = val;
   }
 
   setOwnerField(String field, dynamic val) {

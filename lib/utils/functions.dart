@@ -72,7 +72,7 @@ bool isNumeric(dynamic s) {
 }
 
 void pushTo(Widget widget) {
-  getx.Get.to(() => widget);
+  getx.Get.to(widget);
 }
 
 void pushNamed(String name, {Object? arguments}) {
@@ -101,6 +101,8 @@ setupStoreDetails({Map<String, dynamic>? data}) async {
     appCtrl.setStore(details['store']);
     appCtrl.setOwner(details['owner']);
     appCtrl.setDeveloper(details['developer']);
+    appCtrl.setSlogan(details['store']['slogan']);
+    appCtrl.setSocials(details['socials']);
   } catch (e) {
     if (e.runtimeType == DioException) {
       e as DioException;

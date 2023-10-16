@@ -77,137 +77,148 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return PageWrapper(
+    return Scaffold(
       appBar: AppBar(
         leading: const CartBtn(),
-        title: const Text("LebzCafe"),
+        title: Text("${_appCtrl.store['name']}"),
         centerTitle: true,
         titleSpacing: 14,
       ),
-      child: SizedBox(
-        height: screenSize(context).height - statusBarH() - (appBarH * 2),
-        child: SingleChildScrollView(
-          child: Container(
-            padding: defaultPadding2,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                mY(10),
-                Text(
-                  "The best coffee in town!",
-                  textAlign: TextAlign.center,
-                  style: Styles.title(isLight: true),
-                ),
-                Text(
-                  "Grab yours now!",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.pacifico(
-                      fontSize: 30, fontWeight: FontWeight.w900),
-                ),
-                mY(5),
-                TuFormField(
-                  hint: "Search",
-                  prefixIcon: TuIcon(Icons.search),
-                  radius: 500,
-                  elevation: 1,
-                  fill: cardBGLight,
-                  hasBorder: false,
-                  readOnly: true,
-                  onTap: () {
-                    TuFuncs.showBottomSheet(
-                        context: context, widget: const SearchPage());
-                  },
-                ),
-                mY(15),
-                Obx(
-                  () => _ctrl.topSelling.value != null &&
-                          _ctrl.topSelling.value!.isEmpty
-                      ? none()
-                      : Column(
-                          //top-selling section
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Top selling",
-                              style: Styles.h3(isLight: true),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await _init();
+        },
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: defaultPadding2,
+              sliver: SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    mY(10),
+                    Text(
+                      "${_appCtrl.slogan}",
+                      textAlign: TextAlign.end,
+                      style: GoogleFonts.firaCode(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: TuColors.surface600),
+                    ),
+                    Text(
+                      "Grab one now!",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.pacifico(
+                          fontSize: 30, fontWeight: FontWeight.w900),
+                    ),
+                    mY(5),
+                    TuFormField(
+                      hint: "Search",
+                      prefixIcon: TuIcon(Icons.search),
+                      radius: 500,
+                      elevation: 1,
+                      fill: cardBGLight,
+                      hasBorder: false,
+                      readOnly: true,
+                      onTap: () {
+                        TuFuncs.showBottomSheet(
+                            context: context, widget: const SearchPage());
+                      },
+                    ),
+                    mY(15),
+                    Obx(
+                      () => _ctrl.topSelling.value != null &&
+                              _ctrl.topSelling.value!.isEmpty
+                          ? none()
+                          : Column(
+                              //top-selling section
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Top selling",
+                                  style: Styles.h3(isLight: true),
+                                ),
+                                mY(15),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Obx(
+                                    () => Row(
+                                        children: _ctrl.topSelling.value == null
+                                            ? List.generate(
+                                                10,
+                                                (index) =>
+                                                    const TuProductCircle(
+                                                        dummy: true))
+                                            : _ctrl.topSelling.value!.map((it) {
+                                                return TuProductCircle(
+                                                  subtitle:
+                                                      "R${roundDouble(it['price'].toDouble(), 2)}",
+                                                  title: "${it['name']}",
+                                                  img: it['images'].isNotEmpty
+                                                      ? it['images'][0]['url']
+                                                      : null,
+                                                  onTap: () {
+                                                    pushNamed('/product',
+                                                        arguments: {
+                                                          "pid": it["pid"]
+                                                        });
+                                                  },
+                                                );
+                                              }).toList()),
+                                  ),
+                                )
+                              ],
                             ),
-                            mY(15),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Obx(
-                                () => Row(
-                                    children: _ctrl.topSelling.value == null
-                                        ? List.generate(
-                                            10,
-                                            (index) => const TuProductCircle(
-                                                dummy: true))
-                                        : _ctrl.topSelling.value!.map((it) {
-                                            return TuProductCircle(
-                                              subtitle:
-                                                  "R${roundDouble(it['price'].toDouble(), 2)}",
-                                              title: "${it['name']}",
-                                              img: it['images'].isNotEmpty
-                                                  ? it['images'][0]['url']
-                                                  : null,
-                                              onTap: () {
-                                                pushNamed('/product',
-                                                    arguments: {
-                                                      "pid": it["pid"]
-                                                    });
-                                              },
-                                            );
-                                          }).toList()),
-                              ),
-                            )
-                          ],
-                        ),
-                ),
-                mY(15),
-                Obx(
-                  () => _ctrl.special.value != null &&
-                          _ctrl.special.value!.isEmpty
-                      ? none()
-                      : Column(
-                          //top-selling section
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Today's special",
-                              style: Styles.h3(isLight: true),
+                    ),
+                    mY(15),
+                    Obx(
+                      () => _ctrl.special.value != null &&
+                              _ctrl.special.value!.isEmpty
+                          ? none()
+                          : Column(
+                              //top-selling section
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Today's special",
+                                  style: Styles.h3(isLight: true),
+                                ),
+                                mY(15),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Obx(
+                                    () => Row(
+                                        children: _ctrl.special.value == null
+                                            ? List.generate(
+                                                10,
+                                                (index) =>
+                                                    const TuProductCircle(
+                                                        dummy: true))
+                                            : _ctrl.special.value!.map((it) {
+                                                return TuProductCircle(
+                                                  subtitle:
+                                                      "R${roundDouble(it['price'].toDouble(), 2)}",
+                                                  img: it['images'].isNotEmpty
+                                                      ? it['images'][0]['url']
+                                                      : null,
+                                                  onTap: () {
+                                                    pushNamed('/product',
+                                                        arguments: {
+                                                          "pid": it["pid"]
+                                                        });
+                                                  },
+                                                );
+                                              }).toList()),
+                                  ),
+                                )
+                              ],
                             ),
-                            mY(15),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Obx(
-                                () => Row(
-                                    children: _ctrl.special.value == null
-                                        ? List.generate(
-                                            10,
-                                            (index) => const TuProductCircle(
-                                                dummy: true))
-                                        : _ctrl.special.value!.map((it) {
-                                            return TuProductCircle(
-                                              subtitle:
-                                                  "R${roundDouble(it['price'].toDouble(), 2)}",
-                                              img: it['images'].isNotEmpty
-                                                  ? it['images'][0]['url']
-                                                  : null,
-                                              onTap: () {
-                                                pushNamed('/product',
-                                                    arguments: {
-                                                      "pid": it["pid"]
-                                                    });
-                                              },
-                                            );
-                                          }).toList()),
-                              ),
-                            )
-                          ],
-                        ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

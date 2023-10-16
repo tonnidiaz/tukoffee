@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
+import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/utils/functions.dart';
 import 'package:lebzcafe/utils/styles.dart';
+import 'package:lebzcafe/views/order/index.dart';
 import 'package:lebzcafe/widgets/common.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/product_card.dart';
@@ -63,7 +65,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: BackButton(),
+          leading: const BackButton(),
           leadingWidth: appBarH - 8,
           backgroundColor: cardBGLight,
           elevation: .5,
@@ -98,69 +100,73 @@ class _SearchPageState extends State<SearchPage> {
                 })
           ],
         ),
-        body: SingleChildScrollView(
-          child: Container(
-              padding: defaultPadding2,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        body: CustomScrollView(slivers: [
+          SliverToBoxAdapter(child: mY(topMargin)),
+          SliverToBoxAdapter(
+            child: TuCard(
+              child: TuDropdownButton(
+                label: "Search by:",
+                value: _searchBy,
+                onChanged: (val) {
+                  _setSearchBy(val);
+                },
+                items: [
+                  SelectItem("Product ID", "pid"),
+                  SelectItem("Name", "name"),
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Visibility(
+              visible: _query.isNotEmpty,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
                   children: [
-                    TuDropdownButton(
-                      label: "Search by:",
-                      value: _searchBy,
-                      onChanged: (val) {
-                        _setSearchBy(val);
-                      },
-                      items: [
-                        SelectItem("Product ID", "pid"),
-                        SelectItem("Name", "name"),
-                      ],
+                    const Text(
+                      "Search results for:  ",
+                      // style: Styles.title(isLight: true),
                     ),
-                    Visibility(
-                      visible: _query.isNotEmpty,
-                      child: Row(
-                        children: [
-                          Text(
-                            "Search results for:  ",
-                            // style: Styles.title(isLight: true),
-                          ),
-                          Text(
-                            _query,
-                            style: Styles.title(color: Colors.orange),
-                          )
-                        ],
+                    Text(
+                      _query,
+                      style: Styles.title(color: Colors.orange),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(child: mY(10)),
+          _products == null
+              ? _query.isEmpty
+                  ? SliverToBoxAdapter(child: none())
+                  : SliverFillRemaining(
+                      child: Center(
+                          child: Text(
+                      "Searching...",
+                      style: Styles.h3(isLight: true),
+                    )))
+              : _products!.isNotEmpty
+                  ? SliverPadding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 10),
+                      sliver: SliverGrid.builder(
+                        itemCount: _products!.length,
+                        itemBuilder: (context, i) =>
+                            ProductCard(product: _products![i]),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 5,
+                                mainAxisSpacing: 9),
                       ),
-                    ),
-                    mY(10),
-                    _products == null
-                        ? _query.isEmpty
-                            ? none()
-                            : Expanded(
-                                child: Center(
-                                    child: Text(
-                                "Searching...",
-                                style: Styles.h3(isLight: true),
-                              )))
-                        : _products!.isNotEmpty
-                            ? LayoutBuilder(builder: (context, c) {
-                                return Wrap(
-                                  alignment: WrapAlignment.spaceBetween,
-                                  //runAlignment: WrapAlignment.spaceBetween,
-                                  //Products
-                                  children: _products!
-                                      .map((it) => ProductCard(
-                                            product: it,
-                                            width: (c.maxWidth / 2) - 5,
-                                          ))
-                                      .toList(),
-                                );
-                              })
-                            : Expanded(
-                                child: Center(
-                                    child: Text(
-                                "No results",
-                                style: Styles.h3(isLight: true),
-                              )))
-                  ])),
-        ));
+                    )
+                  : SliverFillRemaining(
+                      child: Center(
+                          child: Text(
+                      "No results",
+                      style: Styles.h3(isLight: true),
+                    )))
+        ]));
   }
 }

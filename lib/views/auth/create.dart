@@ -294,7 +294,7 @@ class Step3 extends StatelessWidget {
 class CreateAccountPageWrapper extends StatefulWidget {
   final List<Widget> fields;
   final String btnTxt;
-  final String title;
+  final String? title;
   final Function() onSubmit;
 
   const CreateAccountPageWrapper(
@@ -302,7 +302,7 @@ class CreateAccountPageWrapper extends StatefulWidget {
       this.fields = const [],
       required this.onSubmit,
       this.btnTxt = "Submit",
-      this.title = "$STORE_NAME auth"});
+      this.title});
 
   @override
   State<CreateAccountPageWrapper> createState() =>

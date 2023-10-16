@@ -19,14 +19,14 @@ import 'package:get/get.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
-class AdminSettingsPage extends StatefulWidget {
-  const AdminSettingsPage({super.key});
+class StoreInfoPage extends StatefulWidget {
+  const StoreInfoPage({super.key});
 
   @override
-  State<AdminSettingsPage> createState() => _AdminSettingsPageState();
+  State<StoreInfoPage> createState() => _StoreInfoPageState();
 }
 
-class _AdminSettingsPageState extends State<AdminSettingsPage> {
+class _StoreInfoPageState extends State<StoreInfoPage> {
   final appCtrl = Get.find<AppCtrl>();
   final formCtrl = Get.find<FormViewCtrl>();
   final storeCtrl = MainApp.storeCtrl;
@@ -109,6 +109,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                     radius: 0,
                     my: .5,
                     child: TuCollapse(
+                        expanded: e.key == 0,
                         title:
                             '${(e.key == 0 ? 'Store' : e.key == 1 ? 'Owner' : 'Developer')} details',
                         child: tuColumn(children: [
@@ -150,6 +151,22 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                               devider(),
                               mY(7)
                             ],
+                          ),
+                          Visibility(
+                            visible: e.value['site'] != null,
+                            child: tuColumn(
+                              children: [
+                                h4("Website:", isLight: true),
+                                mY(8),
+                                Obx(() => SelectableText(
+                                      e.value['site'],
+                                      style: TextStyle(color: TuColors.text2),
+                                    )),
+                                mY(4),
+                                devider(),
+                                mY(7)
+                              ],
+                            ),
                           ),
                         ]))))
                 .toList(),

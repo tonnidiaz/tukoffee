@@ -53,13 +53,22 @@ const genOTP = async (phone, email) => {
 };
 const parseProducts = async (products) => {
     let data = [];
-
+    
     for (let prod of products){
+        
         let rating = 0
-      for (let revId of prod.reviews){
-        const rev = await Review.findById(revId).exec()
+
+        let revs = prod.reviews
+
+        // Clear the reviews
+
+        prod.reviews = []
+      for (let revId of revs){
+        
+        const rev = await Review.findOne({_id: revId, status: ReviewStatus.approved}).exec()
         if (rev){
-            rating += rev.rating
+            rating += rev.rating;
+            prod.reviews.push(rev._id)
         }
       }
       if (prod.reviews?.length){
@@ -73,6 +82,7 @@ const parseProducts = async (products) => {
 };
 const axios = require("axios");
 const { Review } = require("../models");
+const { ReviewStatus } = require("../models/review");
 const sendSMS = async (number, message)=>{
     const encodedParams = new URLSearchParams();
     encodedParams.set("sms", number);

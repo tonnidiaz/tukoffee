@@ -20,6 +20,13 @@ Widget h3(String txt, {Color? color, bool isLight = false}) {
   );
 }
 
+Widget h4(String txt, {Color? color, bool isLight = false}) {
+  return Text(
+    txt,
+    style: Styles.h4(color: color, isLight: isLight),
+  );
+}
+
 Widget navItem({String text = "", void Function()? onClick}) {
   return InkWell(
     onTap: onClick,

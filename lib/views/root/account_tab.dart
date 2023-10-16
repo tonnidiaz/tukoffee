@@ -10,6 +10,7 @@ import 'package:lebzcafe/widgets/common.dart';
 import 'package:lebzcafe/widgets/common2.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/feedback_form.dart';
+import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/updates2.dart';
 import 'package:get/get.dart';
 
@@ -21,8 +22,8 @@ class AccountTab extends StatelessWidget {
     final appCtrl = MainApp.appCtrl;
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          STORE_NAME,
+        title: Text(
+          "${appCtrl.store['name']}",
         ),
         titleSpacing: 14,
         actions: const [CartBtn()],
@@ -56,9 +57,9 @@ class AccountTab extends StatelessWidget {
                           child: const Text("Orders")),
                       InfoItem(
                           onTap: () {
-                            pushNamed('/store/details');
+                            pushNamed('/store/info');
                           },
-                          child: const Text("Store details")),
+                          child: const Text("About store")),
                       Visibility(
                         visible: DEV,
                         child: InfoItem(

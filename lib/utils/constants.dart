@@ -27,6 +27,7 @@ import 'package:lebzcafe/views/search.dart';
 import 'package:geocode/geocode.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lebzcafe/views/setting.dart';
+import 'package:lebzcafe/views/store/info.dart';
 import '../views/admin/index.dart';
 import '../views/admin/settings.dart';
 import '../views/app/settings.dart';
@@ -129,6 +130,7 @@ final List<TuPage> pages = [
       icon: CupertinoIcons.info_circle, isAction: true),
   TuPage("/account/settings", const AccountSettingsPage(),
       icon: CupertinoIcons.info_circle, isAction: true),
+  TuPage('/store/info', const StoreInfoPage())
 ];
 
 const String tag = "Tunedbass";

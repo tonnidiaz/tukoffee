@@ -143,6 +143,11 @@ class _AddProductFormState extends State<AddProductForm> {
       if (widget.mode == "edit") {
         _formCtrl.setTempImgs(formImgs);
       }
+
+      // Request storage permission
+      if (Platform.isAndroid || Platform.isIOS) {
+        requestPermissions();
+      }
     });
   }
 

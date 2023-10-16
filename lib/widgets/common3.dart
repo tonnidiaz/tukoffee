@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/vars.dart';
 import 'package:lebzcafe/views/map.dart';
@@ -153,7 +154,7 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
             size: 30,
           ),
           title: Text(
-            "$STORE_NAME ${store['location']['name']}",
+            "${store['location']['name']}",
             softWrap: false,
             style: const TextStyle(fontWeight: FontWeight.w600),
           ),

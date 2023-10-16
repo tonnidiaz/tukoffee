@@ -92,17 +92,17 @@ class OrdersCtrl extends GetxController {
       switch (sortBy) {
         case SortBy.lastModified:
           s = sortOrder == SortOrder.ascending
-              ? dateInMs(a['last_modified'])
-                  .compareTo(dateInMs(b['last_modified']))
-              : dateInMs(b['last_modified'])
-                  .compareTo(dateInMs(a['last_modified']));
+              ? dateInMs(b['last_modified'])
+                  .compareTo(dateInMs(a['last_modified']))
+              : dateInMs(a['last_modified'])
+                  .compareTo(dateInMs(b['last_modified']));
           break;
         case SortBy.dateCreated:
           s = sortOrder == SortOrder.ascending
-              ? dateInMs(a['date_created'])
-                  .compareTo(dateInMs(b['date_created']))
-              : dateInMs(b['date_created'])
-                  .compareTo(dateInMs(a['date_created']));
+              ? dateInMs(b['date_created'])
+                  .compareTo(dateInMs(a['date_created']))
+              : dateInMs(a['date_created'])
+                  .compareTo(dateInMs(b['date_created']));
           break;
         default:
           break;
@@ -283,29 +283,33 @@ class _OrdersPageState extends State<OrdersPage> {
 
     return Scaffold(
         key: _scaffoldKey,
-        appBar: childAppbar(title: "Orders", actions: [
-          PopupMenuButton(
-              itemBuilder: (context) => [
-                    (_appBarCtrl.selected.length == _ctrl.sortedOrders.length &&
-                            _ctrl.sortedOrders.isNotEmpty)
-                        ? PopupMenuItem(
+        appBar: childAppbar(
+            title: "Orders",
+            showCart: routeName == '/orders',
+            actions: [
+              PopupMenuButton(
+                  itemBuilder: (context) => [
+                        (_appBarCtrl.selected.length ==
+                                    _ctrl.sortedOrders.length &&
+                                _ctrl.sortedOrders.isNotEmpty)
+                            ? PopupMenuItem(
+                                onTap: () {
+                                  _appBarCtrl.setSelected([]);
+                                },
+                                child: const Text("Deselect all"))
+                            : PopupMenuItem(
+                                onTap: () {
+                                  _appBarCtrl.setSelected(_ctrl.sortedOrders);
+                                },
+                                child: const Text("Select all")),
+                        PopupMenuItem(
+                            enabled: _appBarCtrl.selected.isNotEmpty,
                             onTap: () {
-                              _appBarCtrl.setSelected([]);
+                              _cancelOrders();
                             },
-                            child: const Text("Deselect all"))
-                        : PopupMenuItem(
-                            onTap: () {
-                              _appBarCtrl.setSelected(_ctrl.sortedOrders);
-                            },
-                            child: const Text("Select all")),
-                    PopupMenuItem(
-                        enabled: _appBarCtrl.selected.isNotEmpty,
-                        onTap: () {
-                          _cancelOrders();
-                        },
-                        child: const Text("Cancel orders")),
-                  ])
-        ]),
+                            child: const Text("Cancel orders")),
+                      ])
+            ]),
         body: RefreshIndicator(
             onRefresh: () async {
               await _getOrders();

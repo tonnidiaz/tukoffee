@@ -47,7 +47,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //setupWindowManager();
   if (Platform.isAndroid || Platform.isIOS) {
-    requestPermissions();
     await FlutterDownloader.initialize(
         debug:
             true, // optional: set to false to disable printing logs to console (default: true)

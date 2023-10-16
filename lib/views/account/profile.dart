@@ -76,7 +76,8 @@ class _ProfilePageState extends State<ProfilePage> {
               showProgressSheet();
               final res =
                   await apiDio().post("/user/edit?field=address", data: {
-                "value": {'location': val}
+                "value": {'location': val},
+                'userId': _account!['_id'],
               });
               setState(() {
                 _account = res.data["user"];
@@ -221,9 +222,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           !key.currentState!.validate()) return;
                       try {
                         showProgressSheet();
-                        final res = await apiDio().post("/user/edit", data: {
-                          'value': form,
-                        });
+                        final res = await apiDio().post("/user/edit",
+                            data: {'value': form, "userId": _account!['_id']});
                         setState(() {
                           _account = res.data['user'];
                         });
@@ -308,8 +308,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             mY(8),
                                             Text(
                                               "${_account!['first_name']} ${_account!['last_name']}",
-                                              style: Styles.h5(
-                                                  isLight: true,
+                                              style: TextStyle(
                                                   color: TuColors.text2),
                                             ),
                                           ])),
@@ -338,8 +337,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 SelectableText(
                                                   "${_account!['email']}",
                                                   maxLines: 1,
-                                                  style:
-                                                      Styles.h5(isLight: true),
+                                                  style: TextStyle(
+                                                      color: TuColors.text2),
                                                 ),
                                                 Visibility(
                                                     visible: !_account![
@@ -396,10 +395,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 ),
                                                 mY(8),
                                                 SelectableText(
-                                                  "${_account!['phone']}",
-                                                  style:
-                                                      Styles.h5(isLight: true),
-                                                ),
+                                                    "${_account!['phone']}",
+                                                    style: TextStyle(
+                                                        color: TuColors.text2)),
                                               ],
                                             ),
                                           ])),
@@ -466,9 +464,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       children: [
                                                         Text(
                                                           "${_account!['address']['location']['name']}",
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 14),
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              color: TuColors
+                                                                  .text2),
                                                         )
                                                       ],
                                                     );

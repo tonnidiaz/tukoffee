@@ -66,13 +66,9 @@ class _DashAccountPageState extends State<DashAccountPage> {
                         BoxConstraints(minHeight: constraints.maxHeight),
                     color: cardBGLight,
                     alignment: Alignment.center,
-                    child: Text(
-                      "Loading...",
-                      style: Styles.h2(),
-                    ),
-                  )
+                    child: const CircularProgressIndicator())
                 : SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
+                    physics: const AlwaysScrollableScrollPhysics(),
                     child: Container(
                       padding: defaultPadding,
                       constraints:

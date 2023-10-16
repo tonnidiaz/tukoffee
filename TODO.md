@@ -14,10 +14,4 @@
  
  - send email after creating order
 ## TO FIX
-- product page
 - Order delivery address edit => set form address
-- /search
-- reverse the lists
-- edit user address loader
-- home searcfield
-- only request storage permission if need be

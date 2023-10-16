@@ -57,7 +57,6 @@ class OrderItem extends StatelessWidget {
                   'ids': [order['_id']],
                   "userId": isAdmin ? null : MainApp.appCtrl.user['_id']
                 });
-                await sleep(1500);
                 pop(tcontext);
                 _appBarCtrl.setSelected([]);
                 ctrl.setOrders(res.data['orders']);

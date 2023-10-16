@@ -61,7 +61,7 @@ class _DashboardState extends State<Dashboard> {
                     name: "br-box-open-full",
                     color: TuColors.coffee2,
                     size: 24),
-                subtitle: "${_ctrl.data.value['products'].length}",
+                subtitle: "${_ctrl.data['products'].length}",
               ),
               ItemCard(
                 title: "Orders",
@@ -73,7 +73,7 @@ class _DashboardState extends State<Dashboard> {
                   size: 24,
                   color: Colors.orangeAccent,
                 ),
-                subtitle: "${_ctrl.data.value['orders'].length}",
+                subtitle: "${_ctrl.data['orders'].length}",
               ),
               ItemCard(
                 title: "Accounts",
@@ -85,7 +85,7 @@ class _DashboardState extends State<Dashboard> {
                   size: 24,
                   color: TuColors.text2,
                 ),
-                subtitle: "${_ctrl.data.value['customers'].length}",
+                subtitle: "${_ctrl.data['customers'].length}",
               ),
               ItemCard(
                 title: "Product reviews",
@@ -97,15 +97,15 @@ class _DashboardState extends State<Dashboard> {
                   size: 24,
                   color: TuColors.success,
                 ),
-                subtitle: "${_ctrl.data.value['reviews'].length}",
+                subtitle: "${_ctrl.data['reviews'].length}",
               ),
               ItemCard(
-                title: "Settings",
+                title: "Store Info",
                 onTap: () {
-                  pushNamed('/admin/settings');
+                  pushNamed('/store/info');
                 },
                 icon: Icon(
-                  Icons.settings_outlined,
+                  Icons.info_outline,
                   color: TuColors.text2,
                 ),
               ),
