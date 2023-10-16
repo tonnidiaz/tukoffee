@@ -99,6 +99,7 @@ router.post("/create", auth, async (req, res) => {
             //await user.save()
             console.log("Cart deleted");
             io.emit('order', order.oid)
+            console.log("On order emitted")
             res.json({ order: { ...order.toJSON(), customer: null } });
         } else {
             res.status(400).json({ msg: "Provide cart id" });
