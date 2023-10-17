@@ -37,6 +37,7 @@ showLoading(
   return showDialog(
       barrierDismissible: false,
       context: context,
+      useRootNavigator: false,
       barrierColor: const Color.fromRGBO(0, 0, 0, 0.5),
       builder: (context) => widget ?? const LoadingDialog());
 }

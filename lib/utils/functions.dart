@@ -261,6 +261,7 @@ class TuFuncs {
 
   static showTDialog(BuildContext context, Widget widget) {
     return showDialog(
+        useRootNavigator: false,
         context: context,
         barrierColor: const Color.fromRGBO(0, 0, 0, 0.03),
         builder: (context) => widget);

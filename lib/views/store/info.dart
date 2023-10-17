@@ -170,323 +170,19 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
                           ),
                         ]))))
                 .toList(),
+            mY(topMargin),
             Visibility(
-              visible: false,
+              visible: true,
               child: TuCard(
                   child: Column(
                 children: [
-                  Column(
-                    children: [
-                      /*     tuTableRow(
-                          Text(
-                            "Store details",
-                            style: Styles.h3(),
-                          ),
-                      ) */
-                      tuTableRow(
-                          Text(
-                            "Name:",
-                            style: Styles.label(isBold: true),
-                          ),
-                          Obx(
-                            () => Text(
-                              appCtrl.store['name'],
-                              style: Styles.label(isLight: true),
-                            ),
-                          )),
-                      tuTableRow(
-                          Text(
-                            "Phone:",
-                            style: Styles.label(isBold: true),
-                          ),
-                          Obx(
-                            () => SelectableText(
-                              appCtrl.store['phone'],
-                              style: Styles.label(isLight: true),
-                            ),
-                          )),
-                      tuTableRow(
-                          Text(
-                            "Email:",
-                            style: Styles.label(isBold: true),
-                          ),
-                          Obx(
-                            () => SizedBox(
-                              width: 100,
-                              child: SelectableText(
-                                appCtrl.store['email'],
-                                maxLines: 1,
-                                style: Styles.label(isLight: true),
-                              ),
-                            ),
-                          )),
-                      tuTableRow(
-                          Text(
-                            "Website:",
-                            style: Styles.label(isBold: true),
-                          ),
-                          Obx(
-                            () => SizedBox(
-                              width: 100,
-                              child: SelectableText(
-                                appCtrl.store['site'],
-                                maxLines: 1,
-                                style: Styles.label(isLight: true),
-                              ),
-                            ),
-                          )),
-                    ],
-                  ),
-                  mY(10),
-                  TuCard(
-                    child: Column(
-                      children: [
-                        tuTableRow(
-                            Text(
-                              "Store owner",
-                              style: Styles.h3(),
-                            ),
-                            Obx(
-                              () => appCtrl.user.isEmpty
-                                  ? none()
-                                  : Visibility(
-                                      visible: appCtrl.user['permissions'] > 0,
-                                      child: InkWell(
-                                        onTap: () {
-                                          formCtrl.setFormField("owner", {
-                                            'name': appCtrl.owner['name'],
-                                            'phone': appCtrl.owner['phone'],
-                                            'email': appCtrl.owner['email'],
-                                            'site': appCtrl.owner['site'],
-                                          });
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) => FormView(
-                                                  title: "Edit owner details",
-                                                  fields: [
-                                                    TuFormField(
-                                                      label: "Owner name:",
-                                                      hint:
-                                                          "Enter owner name...",
-                                                      required: true,
-                                                      hasBorder: false,
-                                                      value:
-                                                          formCtrl.form['owner']
-                                                              ['name'],
-                                                      onChanged: (val) {
-                                                        Map owner = formCtrl
-                                                            .form['owner'];
-                                                        formCtrl.setFormField(
-                                                            'owner', {
-                                                          ...owner,
-                                                          'name': val
-                                                        });
-                                                      },
-                                                    ),
-                                                    TuFormField(
-                                                      label: "Owner phone:",
-                                                      hasBorder: false,
-                                                      hint:
-                                                          "Enter owner phone number...",
-                                                      keyboard:
-                                                          TextInputType.phone,
-                                                      required: true,
-                                                      value:
-                                                          formCtrl.form['owner']
-                                                              ['phone'],
-                                                      onChanged: (val) {
-                                                        Map owner = formCtrl
-                                                            .form['owner'];
-                                                        formCtrl.setFormField(
-                                                            'owner', {
-                                                          ...owner,
-                                                          'phone': val
-                                                        });
-                                                      },
-                                                    ),
-                                                    TuFormField(
-                                                      label: "Owner email:",
-                                                      hasBorder: false,
-                                                      hint:
-                                                          "Enter owner email number...",
-                                                      keyboard: TextInputType
-                                                          .emailAddress,
-                                                      required: true,
-                                                      value:
-                                                          formCtrl.form['owner']
-                                                              ['email'],
-                                                      onChanged: (val) {
-                                                        Map owner = formCtrl
-                                                            .form['owner'];
-                                                        formCtrl.setFormField(
-                                                            'owner', {
-                                                          ...owner,
-                                                          'email': val
-                                                        });
-                                                      },
-                                                    ),
-                                                    mY(10),
-                                                    TuFormField(
-                                                      label: "Owner website:",
-                                                      hasBorder: false,
-                                                      hint:
-                                                          "Enter owner website...",
-                                                      keyboard:
-                                                          TextInputType.url,
-                                                      required: true,
-                                                      value:
-                                                          formCtrl.form['owner']
-                                                              ['site'],
-                                                      onChanged: (val) {
-                                                        Map owner = formCtrl
-                                                            .form['owner'];
-                                                        formCtrl.setFormField(
-                                                            'owner', {
-                                                          ...owner,
-                                                          'site': val
-                                                        });
-                                                      },
-                                                    ),
-                                                    mY(10)
-                                                  ],
-                                                  onSubmit: () async {
-                                                    editFields();
-                                                  }));
-                                        },
-                                        child: const Icon(
-                                          Icons.edit,
-                                          size: 20,
-                                        ),
-                                      ),
-                                    ),
-                            )),
-                        tuTableRow(
-                            Text(
-                              "Name:",
-                              style: Styles.label(isBold: true),
-                            ),
-                            Obx(
-                              () => Text(
-                                appCtrl.owner['name'],
-                                style: Styles.label(isLight: true),
-                              ),
-                            )),
-                        tuTableRow(
-                            Text(
-                              "Phone:",
-                              style: Styles.label(isBold: true),
-                            ),
-                            Obx(
-                              () => SelectableText(
-                                appCtrl.owner['phone'],
-                                style: Styles.label(isLight: true),
-                              ),
-                            )),
-                        tuTableRow(
-                            Text(
-                              "Email:",
-                              style: Styles.label(isBold: true),
-                            ),
-                            Obx(
-                              () => SizedBox(
-                                width: 100,
-                                child: SelectableText(
-                                  appCtrl.owner['email'],
-                                  maxLines: 1,
-                                  style: Styles.label(isLight: true),
-                                ),
-                              ),
-                            )),
-                        tuTableRow(
-                            Text(
-                              "Website:",
-                              style: Styles.label(isBold: true),
-                            ),
-                            Obx(
-                              () => SizedBox(
-                                width: 100,
-                                child: SelectableText(
-                                  appCtrl.owner['site'],
-                                  maxLines: 1,
-                                  style: Styles.label(isLight: true),
-                                ),
-                              ),
-                            )),
-                      ],
-                    ),
-                  ),
-                  mY(10),
-                  TuCard(
-                    child: tuColumn(
-                      children: [
-                        Text(
-                          "Developer",
-                          style: Styles.h3(),
-                        ),
-                        mY(7),
-                        tuTableRow(
-                            Text(
-                              "Name:",
-                              style: Styles.label(isBold: true),
-                            ),
-                            Obx(
-                              () => Text(
-                                appCtrl.developer['name'],
-                                style: Styles.label(isLight: true),
-                              ),
-                            )),
-                        tuTableRow(
-                            Text(
-                              "Phone:",
-                              style: Styles.label(isBold: true),
-                            ),
-                            Obx(
-                              () => SelectableText(
-                                appCtrl.developer['phone'],
-                                style: Styles.label(isLight: true),
-                              ),
-                            )),
-                        tuTableRow(
-                            Text(
-                              "Email:",
-                              style: Styles.label(isBold: true),
-                            ),
-                            Obx(
-                              () => SizedBox(
-                                width: 100,
-                                child: SelectableText(
-                                  appCtrl.developer['email'],
-                                  maxLines: 1,
-                                  style: Styles.label(isLight: true),
-                                ),
-                              ),
-                            )),
-                        tuTableRow(
-                            Text(
-                              "Website:",
-                              style: Styles.label(isBold: true),
-                            ),
-                            Obx(
-                              () => SizedBox(
-                                width: 100,
-                                child: SelectableText(
-                                  appCtrl.developer['site'],
-                                  maxLines: 1,
-                                  style: Styles.label(isLight: true),
-                                ),
-                              ),
-                            )),
-                      ],
-                    ),
-                  ),
-                  mY(10),
                   TuCard(child: Obx(
                     () {
                       return Column(
                         children: [
                           tuTableRow(
                               Text(
-                                "Locations",
+                                "Locations & times",
                                 style: Styles.h3(),
                               ),
                               Obx(
@@ -513,7 +209,8 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
                           storeCtrl.stores.value == null
                               ? const CircularProgressIndicator()
                               : Column(
-                                  children: storeCtrl.stores.value!.map((it) {
+                                  children: storeCtrl.stores.value!.reversed
+                                      .map((it) {
                                     return storeCard(context, it);
                                   }).toList(),
                                 )
@@ -536,7 +233,7 @@ class AddStoreView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formCtrl = MainApp.formViewCtrl;
+    final formCtrl = MainApp.formCtrl;
     final storeCtrl = MainApp.storeCtrl;
     return FormView(
       title: "Add store location",
@@ -549,12 +246,17 @@ class AddStoreView extends StatelessWidget {
               .show(context);
         }
         try {
+          showProgressSheet();
           final res = await apiDio().post('/stores/add', data: formCtrl.form);
           storeCtrl.setStores(res.data['stores']);
+          gpop();
 
           /// Navigator.pop(context);
-          showToast("Store added successfully").show(context);
+          showToast("Store added successfully").show(context).then((value) {
+            gpop();
+          });
         } catch (e) {
+          gpop();
           errorHandler(e: e, context: context);
         }
       },
@@ -575,7 +277,7 @@ class AddStoreView extends StatelessWidget {
         mY(10),
         Text(
           "Weekdays",
-          style: Styles.h3(),
+          style: Styles.h3(isLight: true),
         ),
         mY(10),
         LayoutBuilder(builder: (context, c) {
@@ -585,7 +287,7 @@ class AddStoreView extends StatelessWidget {
                     hasBorder: true,
                     readOnly: true,
                     required: true,
-                    width: (c.maxWidth / 2) - 5,
+                    width: (c.maxWidth / 2) - 2.5,
                     // formCtrl.form represents the store
                     value: formCtrl.form['open_time'],
                     onTap: () async {
@@ -602,7 +304,7 @@ class AddStoreView extends StatelessWidget {
                     hasBorder: true,
                     readOnly: true,
                     required: true,
-                    width: (c.maxWidth / 2) - 5,
+                    width: (c.maxWidth / 2) - 2.5,
                     // formCtrl.form represents the store
                     value: formCtrl.form['close_time'],
                     onTap: () async {
@@ -613,12 +315,13 @@ class AddStoreView extends StatelessWidget {
                             'close_time', (val as TimeOfDay).format(context));
                       }
                     },
-                  )));
+                  )),
+              crossAxisAlignment: WrapCrossAlignment.start);
         }),
         mY(10),
         Text(
-          "Weekends",
-          style: Styles.h3(),
+          "Weekend",
+          style: Styles.h3(isLight: true),
         ),
         mY(10),
         LayoutBuilder(builder: (context, c) {
@@ -628,14 +331,14 @@ class AddStoreView extends StatelessWidget {
                     hasBorder: true,
                     readOnly: true,
                     required: true,
-                    width: (c.maxWidth / 2) - 5,
+                    width: (c.maxWidth / 2) - 2.5,
                     // formCtrl.form represents the store
-                    value: formCtrl.form['open_time_weekends'],
+                    value: formCtrl.form['open_time_weekend'],
                     onTap: () async {
                       final val = await TuFuncs.showTDialog(context,
                           TimePickerDialog(initialTime: TimeOfDay.now()));
                       if (val != null) {
-                        formCtrl.setFormField('open_time_weekends',
+                        formCtrl.setFormField('open_time_weekend',
                             (val as TimeOfDay).format(context));
                       }
                     },
@@ -645,18 +348,19 @@ class AddStoreView extends StatelessWidget {
                     hasBorder: true,
                     readOnly: true,
                     required: true,
-                    width: (c.maxWidth / 2) - 5,
+                    width: (c.maxWidth / 2) - 2.5,
                     // formCtrl.form represents the store
-                    value: formCtrl.form['close_time_weekends'],
+                    value: formCtrl.form['close_time_weekend'],
                     onTap: () async {
                       final val = await TuFuncs.showTDialog(context,
                           TimePickerDialog(initialTime: TimeOfDay.now()));
                       if (val != null) {
-                        formCtrl.setFormField('close_time_weekends',
+                        formCtrl.setFormField('close_time_weekend',
                             (val as TimeOfDay).format(context));
                       }
                     },
-                  )));
+                  )),
+              crossAxisAlignment: WrapCrossAlignment.start);
         }),
       ],
     );

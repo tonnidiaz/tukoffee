@@ -3,6 +3,7 @@
 import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/styles.dart';
 import 'package:lebzcafe/widgets/common.dart';
+import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
 import 'package:flutter/material.dart';
@@ -96,15 +97,21 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     onPressed: () async {
                       try {
                         if (_formKey.currentState!.validate()) {
+                          showProgressSheet(msg: 'Sending feedback...');
                           await apiDio().post('/message/send', data: {
                             "app": MainApp.appCtrl.store['name'],
                             ..._form
                           });
+
+                          gpop();
+                          showToast("Feedback sent!")
+                              .show(context)
+                              .then((value) {
+                            pop(context);
+                          });
                         }
-                        showToast("Feedback sent!")
-                            .show(context)
-                            .then((value) => pop(context));
                       } catch (e) {
+                        gpop();
                         errorHandler(
                             e: e,
                             context: context,

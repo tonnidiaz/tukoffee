@@ -319,7 +319,7 @@ class AccountCard extends StatelessWidget {
               ],
             ),
             trailing: SizedBox(
-              width: 20,
+              width: 25,
               child: Obx(() {
                 int perms = _appCtrl.user['permissions'];
                 bool isAdmin = perms == 2;

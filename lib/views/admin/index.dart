@@ -8,6 +8,13 @@ import 'package:lebzcafe/views/admin/products.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:get/get.dart';
 
+final Map<String, dynamic> initDashData = {
+  "products": [],
+  "orders": [],
+  "customers": [],
+  "reviews": [],
+};
+
 class DashCtrl extends GetxController {
   RxInt tab = 0.obs;
   RxList<dynamic> orders = [].obs;
@@ -24,12 +31,7 @@ class DashCtrl extends GetxController {
     productsFetched.value = val;
   }
 
-  RxMap<String, dynamic> data = <String, dynamic>{
-    "products": [],
-    "orders": [],
-    "customers": [],
-    "reviews": [],
-  }.obs;
+  RxMap<String, dynamic> data = initDashData.obs;
   setData(Map<String, dynamic> val) {
     data.value = val;
   }

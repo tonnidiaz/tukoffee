@@ -376,7 +376,7 @@ class _ProductPageState extends State<ProductPage> {
                                         : Row(
                                             children: _related!
                                                 .map((e) => ProductCard(
-                                                    mx: 6,
+                                                    mx: 3,
                                                     width: 130,
                                                     product: e))
                                                 .toList()),

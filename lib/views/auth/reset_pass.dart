@@ -30,7 +30,7 @@ class Step1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formCtrl = MainApp.formViewCtrl;
+    final formCtrl = MainApp.formCtrl;
 
     return FormView(
       title: "Reset Password",
@@ -84,7 +84,7 @@ class Step2 extends StatefulWidget {
 }
 
 class _Step2State extends State<Step2> {
-  final formCtrl = MainApp.formViewCtrl;
+  final formCtrl = MainApp.formCtrl;
   late Timer timer;
   int _secs = 60;
   _setSecs(int val) {
@@ -200,7 +200,7 @@ class Step3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formCtrl = MainApp.formViewCtrl;
+    final formCtrl = MainApp.formCtrl;
 
     return FormView(
       title: "Reset Password",

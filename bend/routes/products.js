@@ -2,6 +2,8 @@ const express = require("express");
 const { Product, Order, Review } = require("../models");
 const { parseProducts, tunedErr } = require("../utils/functions");
 const { auth, lightAuth } = require("../utils/middleware");
+const { OrderStatus } = require("../utils/constants");
+const { ReviewStatus } = require("../models/review");
 const router = express.Router();
 
 const genPID = async () => {
@@ -35,7 +37,7 @@ router.get("/", lightAuth, async (req, res, next) => {
             case "received":
                 let orders = await Order.find({
                     customer: req.user._id,
-                    status: "completed",
+                    status:OrderStatus.completed,
                 }).exec();
                 orders = await Promise.all(
                     orders.map(
@@ -81,7 +83,7 @@ router.post("/add", auth, async (req, res) => {
     }
 });
 
-router.get("/reviews", auth, async (req, res) => {
+router.get("/reviews", lightAuth, async (req, res) => {
     try {
         const { id, pid, user, ids } = req.query;
         let reviews = [];
@@ -128,7 +130,7 @@ router.post("/review", auth, async (req, res) => {
             for (let key of Object.keys(review)) {
                 rev.set(key, review[key]);
             }
-
+        rev.status = ReviewStatus.pending
             rev.last_modified = new Date();
             await rev.save();
            

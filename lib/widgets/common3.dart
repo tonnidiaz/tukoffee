@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/vars.dart';
-import 'package:lebzcafe/views/map.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:lebzcafe/widgets/prompt_modal.dart';
+import 'package:lebzcafe/widgets/tu/common.dart';
 import '../utils/constants.dart';
 import '../utils/functions.dart';
 import '../utils/styles.dart';
@@ -139,37 +141,101 @@ class _TuInkwellState extends State<TuInkwell> {
 }
 
 Widget storeCard(BuildContext context, Map<String, dynamic> store) {
-  return TuCard(
-      borderSize: 0,
-      radius: 0,
-      onTap: () {
-        //TODO://Open map with location coordinates
-        final center = store['location']['center'];
-        pushNamed('/map',
-            arguments: MapPageArgs(center: [center[1], center[0]]));
-      },
-      child: TuListTile(
-          leading: const Icon(
-            Icons.storefront,
-            size: 30,
-          ),
-          title: Text(
-            "${store['location']['name']}",
-            softWrap: false,
-            style: const TextStyle(fontWeight: FontWeight.w600),
-          ),
-          subtitle: tuTableRow(
-            const Text(
-              "CLOSED",
-              softWrap: false,
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+  final formCtrl = MainApp.formCtrl;
+  final appCtrl = MainApp.appCtrl;
+  final storeCtrl = MainApp.storeCtrl;
+  return Obx(
+    () => Slidable(
+      endActionPane: appCtrl.user.isEmpty || appCtrl.user['permissions'] == 0
+          ? null
+          : ActionPane(
+              motion: const ScrollMotion(),
+              children: [
+                SlidableAction(
+                  // An action can be bigger than the others.
+                  flex: 1,
+                  onPressed: (c) async {
+                    TuFuncs.showTDialog(
+                        context,
+                        PromptDialog(
+                          title: 'Delete store location',
+                          msg: "Continue to delete store?",
+                          onOk: () async {
+                            try {
+                              showProgressSheet();
+                              final res = await apiDio().post('/stores/del',
+                                  queryParameters: {'id': store['_id']});
+                              storeCtrl.setStores(res.data['stores']);
+                              gpop();
+
+                              /// Navigator.pop(context);
+                              if (c.mounted) {
+                                showToast("Store deleted successfully")
+                                    .show(c)
+                                    .then((value) {
+                                  gpop();
+                                });
+                              }
+                            } catch (e) {
+                              gpop();
+                              if (c.mounted) {
+                                errorHandler(e: e, context: context);
+                              }
+                            }
+                          },
+                        ));
+                  },
+                  backgroundColor: Colors.black12,
+                  foregroundColor: TuColors.text,
+                  icon: Icons.delete_outline,
+                ),
+              ],
             ),
-            Text(
-              "Opens at ${store['open_time']}",
-              softWrap: false,
-              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
-            ),
-          )));
+      child: TuCard(
+          borderSize: 0,
+          radius: 0,
+          onTap: () {
+            //formCtrl.clear();
+            formCtrl.setForm(store);
+            clog(store['location']);
+            pushNamed(
+              '/map',
+            );
+          },
+          child: TuListTile(
+              leading: Icon(
+                Icons.storefront,
+                color: TuColors.text2,
+                size: 30,
+              ),
+              title: Text(
+                "${store['location']['name']}",
+                softWrap: false,
+                style:
+                    const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+              ),
+              subtitle: tuColumn(
+                children: [
+                  tuTableRow(
+                    const Text(
+                      "CLOSED",
+                      softWrap: false,
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+                    ),
+                    Text(
+                      "Opens at ${store['open_time']}",
+                      softWrap: false,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w500, fontSize: 12),
+                    ),
+                  ),
+                  mY(5),
+                  devider()
+                ],
+              ))),
+    ),
+  );
 }
 
 Icon TuIcon(IconData icon) {
@@ -219,7 +285,7 @@ class InfoItem extends StatelessWidget {
           width: double.infinity,
           height: 50,
           alignment: Alignment.centerLeft,
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
           margin: const EdgeInsets.symmetric(vertical: .5),
           decoration: const BoxDecoration(
               color: cardBGLight,

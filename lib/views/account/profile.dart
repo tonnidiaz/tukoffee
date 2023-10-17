@@ -66,6 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final AppCtrl appCtrl = Get.find();
     final FormViewCtrl formCtrl = Get.find();
+
     addEditAddress({String? title}) async {
       TuFuncs.showBottomSheet(
           context: context,
@@ -474,55 +475,61 @@ class _ProfilePageState extends State<ProfilePage> {
                                             })
                                           ])),
                                   mY(2.5),
-                                  Container(
-                                    color: cardBGLight,
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 14, vertical: 8),
-                                    child: tuColumn(
-                                      children: [
-                                        tuTableRow(
-                                            Text(
-                                              "Permissions",
-                                              style: Styles.h4(
-                                                  isLight: true,
-                                                  color: TuColors.text),
-                                            ),
-                                            TextButton(
-                                                onPressed:
-                                                    onEditPermissionsClick,
-                                                child: const Text('Edit')),
-                                            my: 0),
-                                        mY(8),
-                                        Wrap(
-                                          spacing: 10,
-                                          children: [
-                                            TuLabeledCheckbox(
-                                              onChanged: (val) {},
-                                              label: 'READ',
-                                              value:
-                                                  _account!['permissions'] >= 0,
-                                              radius: 100,
-                                            ),
-                                            TuLabeledCheckbox(
-                                              onChanged: (val) {},
-                                              label: 'WRITE',
-                                              value:
-                                                  _account!['permissions'] >= 1,
-                                              radius: 100,
-                                            ),
-                                            TuLabeledCheckbox(
-                                              onChanged: (val) {},
-                                              label: 'DELETE',
-                                              value:
-                                                  _account!['permissions'] >= 2,
-                                              radius: 100,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  )
+                                  widget.id == null
+                                      ? none()
+                                      : Container(
+                                          color: cardBGLight,
+                                          width: double.infinity,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 14, vertical: 8),
+                                          child: tuColumn(
+                                            children: [
+                                              tuTableRow(
+                                                  Text(
+                                                    "Permissions",
+                                                    style: Styles.h4(
+                                                        isLight: true,
+                                                        color: TuColors.text),
+                                                  ),
+                                                  TextButton(
+                                                      onPressed:
+                                                          onEditPermissionsClick,
+                                                      child:
+                                                          const Text('Edit')),
+                                                  my: 0),
+                                              mY(8),
+                                              Wrap(
+                                                spacing: 10,
+                                                children: [
+                                                  TuLabeledCheckbox(
+                                                    onChanged: (val) {},
+                                                    label: 'READ',
+                                                    value: _account![
+                                                            'permissions'] >=
+                                                        0,
+                                                    radius: 100,
+                                                  ),
+                                                  TuLabeledCheckbox(
+                                                    onChanged: (val) {},
+                                                    label: 'WRITE',
+                                                    value: _account![
+                                                            'permissions'] >=
+                                                        1,
+                                                    radius: 100,
+                                                  ),
+                                                  TuLabeledCheckbox(
+                                                    onChanged: (val) {},
+                                                    label: 'DELETE',
+                                                    value: _account![
+                                                            'permissions'] >=
+                                                        2,
+                                                    radius: 100,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        )
                                 ])
                           ]),
                     ),

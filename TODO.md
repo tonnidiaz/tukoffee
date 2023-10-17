@@ -6,13 +6,17 @@
 - Refund option
 - While selected, back no go back but unselects
 - top selling products page
-- User/dash
-    - orders
-    - cart
-    - refunds
+- DELIVERY TIMES
  
- - AppIcon
+ - Locations and times in about store
+ - Some back listeners for loaders
+ - Save notifs
+ - prevent screen rotate
+- Navigate to address
 ## TO FIX
-- loader for product
-- ic too small
 
+Notifs only vibrating
+- Send the feedback email to owner / Notifs categories: Orders/Feedback
+
+- Change review statuses
+- 

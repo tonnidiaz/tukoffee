@@ -31,7 +31,9 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
       final res = await apiDio().get("/products/reviews?id=${widget.id}");
       _setReview(res.data['reviews'][0]);
     } catch (e) {
-      errorHandler(e: e, context: context, msg: "Failed to fetch reviews");
+      if (mounted) {
+        errorHandler(e: e, context: context, msg: "Failed to fetch reviews");
+      }
     }
   }
 
@@ -49,15 +51,18 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
       appBar: AppBar(
         title: const Text('Review'),
         actions: [
-          IconButton(
-              splashRadius: 20,
-              onPressed: () {
-                //TODO: DEL REVIEW
-              },
-              icon: const Icon(
-                CupertinoIcons.delete,
-                size: 20,
-              )),
+          Visibility(
+            visible: false,
+            child: IconButton(
+                splashRadius: 20,
+                onPressed: () {
+                  //TODO: DEL REVIEW
+                },
+                icon: const Icon(
+                  CupertinoIcons.delete,
+                  size: 20,
+                )),
+          ),
           IconButton(
               splashRadius: 20,
               onPressed: () {

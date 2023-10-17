@@ -195,7 +195,7 @@ Container imgCard(
     bool uploading = false,
     bool canRemove = true,
     required int index}) {
-  final formViewCtrl = MainApp.formViewCtrl;
+  final formViewCtrl = MainApp.formCtrl;
   double width = 60;
   return Container(
       width: width,

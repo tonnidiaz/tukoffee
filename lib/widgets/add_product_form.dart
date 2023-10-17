@@ -36,7 +36,7 @@ class AddProductForm extends StatefulWidget {
 class _AddProductFormState extends State<AddProductForm> {
   final _innerController = ScrollController();
   final _appCtrl = MainApp.appCtrl;
-  final _formCtrl = MainApp.formViewCtrl;
+  final _formCtrl = MainApp.formCtrl;
 
   @override
   void dispose() {

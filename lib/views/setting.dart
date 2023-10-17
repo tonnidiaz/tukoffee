@@ -42,17 +42,19 @@ class SettingsPage extends StatelessWidget {
           InfoItem(
             onTap: () async {
               try {
-                showLoading(context,
-                    widget: const LoadingDialog(
-                      msg: 'Checking updates...',
-                    ));
+                showLoading(
+                  context,
+                  widget: const LoadingDialog(
+                    msg: 'Checking updates...',
+                  ),
+                );
 
                 final res = await checkUpdates();
-                Get.back();
+                gpop();
                 Get.bottomSheet(UpdatesView3(update: res));
               } catch (e) {
+                gpop();
                 if (context.mounted) {
-                  pop(context);
                   errorHandler(e: e, context: context);
                 }
               }

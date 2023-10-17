@@ -24,6 +24,7 @@ class FormViewCtrl extends GetxController {
   }
 
   setForm(Map<String, dynamic> val) {
+    form.value = {};
     form.value = val;
   }
 

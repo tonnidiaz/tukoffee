@@ -35,21 +35,46 @@ class TuProductCircle extends StatelessWidget {
                 width: _avatarW,
                 height: _avatarW,
                 decoration: BoxDecoration(
-                    color: Colors.black26,
+                    color: Colors.black12,
                     borderRadius: BorderRadius.circular(100)),
                 child: CircleAvatar(
                   // borderRadius: BorderRadius.circular(100),
-                  backgroundColor: Colors.black12,
+                  backgroundColor: const Color.fromRGBO(0, 0, 0, 0.05),
                   backgroundImage: dummy || img == null
                       ? null
                       : Image.network(img!,
                           width: _avatarW,
                           height: _avatarW,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                                child: SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 3,
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            ));
+                          },
                           errorBuilder: (context, error, stackTrace) => svgIcon(
                                 name: "br-image-slash",
                                 size: 26,
                                 color: Colors.black54,
                               )).image,
+                  child: dummy || img == null
+                      ? Center(
+                          child: SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 3,
+                              )))
+                      : null,
                 )),
             mY(10),
             dummy

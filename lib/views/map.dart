@@ -29,7 +29,7 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   MapPageArgs? _args;
-  final _formCtrl = MainApp.formViewCtrl;
+  final _formCtrl = MainApp.formCtrl;
 
   LatLng? _center = const LatLng(-26.1974939, 28.0534776);
   _setCenter(LatLng? val) {
@@ -179,7 +179,7 @@ class _MapPageState extends State<MapPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
         _args = ModalRoute.of(context)?.settings.arguments as MapPageArgs?;
-        clog(_args?.center);
+        //clog(_args?.center);
         if (_args != null) {
           var cent = LatLng(_args!.center.first, _args!.center.last);
           //_setCurrCenter(LatLng(_args!.center.first, _args!.center.last));
@@ -187,7 +187,7 @@ class _MapPageState extends State<MapPage> {
           _mapController.move(cent, 17.5);
         } else if (_formCtrl.form['location'] != null) {
           var formLoc = _formCtrl.form['location'];
-          clog(formLoc);
+          // clog(formLoc);
           _setCenter(LatLng(formLoc['center'].first, formLoc['center'].last));
           _mapController.move(_center!, 17.5);
           _setAddress(formLoc);
@@ -250,6 +250,8 @@ class _MapPageState extends State<MapPage> {
                   child: const Icon(Icons.check),
                   onPressed: () async {
                     /// _setCenter(_currCenter);
+                    clog(_address);
+                    _formCtrl.setFormField('location', _address);
                     if (widget.onSubmit != null) {
                       widget.onSubmit!(_address);
                     }

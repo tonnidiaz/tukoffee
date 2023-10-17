@@ -15,7 +15,8 @@ import 'package:get/get.dart';
 import 'create.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final bool pop;
+  const LoginPage({super.key, this.pop = false});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -23,7 +24,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _formCtrl = MainApp.formViewCtrl;
+  final _formCtrl = MainApp.formCtrl;
 
   _login() async {
     try {
@@ -34,7 +35,12 @@ class _LoginPageState extends State<LoginPage> {
         appBox!.put("authToken", res.data["token"]);
         setupUser(full: false);
         //gpop();
-        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+        if (widget.pop) {
+          gpop(); //Hide sheet
+          gpop(); //Back to prev page
+        } else {
+          Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+        }
       }
     } catch (e) {
       gpop();

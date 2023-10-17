@@ -1,3 +1,4 @@
+import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class AddReviewView extends StatefulWidget {
 
 class _AddReviewViewState extends State<AddReviewView> {
   final _formKey = GlobalKey<FormState>();
-  final _formCtrl = MainApp.formViewCtrl;
+  final _formCtrl = MainApp.formCtrl;
 
   _submitReview() async {
     final form = _formCtrl.form;
@@ -33,11 +34,15 @@ class _AddReviewViewState extends State<AddReviewView> {
     try {
       if (widget.rev != null) {
         //showLoading({})
+        showProgressSheet();
         await apiDio().post('/products/review?act=edit',
             data: {'id': widget.rev!['_id'], 'review': form});
         //hideLoader()
-        showToast('Review edited successfully!');
-        Navigator.pop(context);
+        gpop();
+        if (mounted) {
+          await showToast('Review edited successfully!').show(context);
+        }
+        gpop();
         if (widget.onOk != null) {
           widget.onOk!();
         }
@@ -46,13 +51,15 @@ class _AddReviewViewState extends State<AddReviewView> {
             data: {'pid': widget.product['pid'], 'review': form});
         //  hideLoader()
         showToast('Review added successfully!');
-        Navigator.pop(context);
+        gpop();
         if (widget.onOk != null) {
           widget.onOk!();
         }
       }
     } catch (e) {
-      errorHandler(e: e, context: context, msg: 'Failed to add review');
+      if (mounted) {
+        errorHandler(e: e, context: context, msg: 'Failed to add review');
+      }
       // hideLoader()
     }
   }
@@ -86,84 +93,82 @@ class _AddReviewViewState extends State<AddReviewView> {
       padding: defaultPadding,
       width: double.infinity,
       child: SingleChildScrollView(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                widget.rev == null ? 'New review' : "Edit review",
-                style: Styles.h3(),
-              ),
-              mY(8),
-              SizedBox(
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Obx(
-                      () => RatingBar.builder(
-                          initialRating:
-                              _formCtrl.form['rating']?.toDouble() ?? 0,
-                          itemSize: 24,
-                          itemBuilder: (context, _) =>
-                              const Icon(Icons.star, color: Colors.amber),
-                          onRatingUpdate: (val) {
-                            _formCtrl.setFormField('rating', val);
-                          }),
-                    ),
-                    mY(8),
-                    Obx(
-                      () => Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              TuFormField(
-                                label: 'Your name:',
-                                required: true,
-                                value: _formCtrl.form['name'],
-                                onChanged: (val) {
-                                  _formCtrl.setFormField('name', val);
-                                },
-                                hint: "Enter your name...",
-                              ),
-                              TuFormField(
-                                label: 'Review title:',
-                                required: true,
-                                value: _formCtrl.form['title'],
-                                onChanged: (val) {
-                                  _formCtrl.setFormField('title', val);
-                                },
-                                hint: "Enter title for your review...",
-                              ),
-                              TuFormField(
-                                label: 'Review:',
-                                required: true,
-                                maxLength: 1000,
-                                keyboard: TextInputType.multiline,
-                                value: _formCtrl.form['body'],
-                                maxLines: 4,
-                                onChanged: (val) {
-                                  _formCtrl.setFormField('body', val);
-                                },
-                                hint: "Write your review...",
-                              ),
-                              mY(8),
-                              TuButton(
-                                text: "SUBMIT REVIEW",
-                                width: double.infinity,
-                                onPressed: () async {
-                                  if (_formKey.currentState!.validate()) {
-                                    await _submitReview();
-                                  }
-                                },
-                              )
-                            ],
-                          )),
-                    )
-                  ],
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Text(
+            widget.rev == null ? 'New review' : "Edit review",
+            style: Styles.h3(),
+          ),
+          mY(8),
+          SizedBox(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Obx(
+                  () => RatingBar.builder(
+                      initialRating: _formCtrl.form['rating']?.toDouble() ?? 0,
+                      itemSize: 24,
+                      itemBuilder: (context, _) =>
+                          const Icon(Icons.star, color: Colors.amber),
+                      onRatingUpdate: (val) {
+                        _formCtrl.setFormField('rating', val);
+                      }),
                 ),
-              )
-            ]),
+                mY(8),
+                Obx(
+                  () => Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          TuFormField(
+                            label: 'Your name:',
+                            required: true,
+                            value: _formCtrl.form['name'],
+                            onChanged: (val) {
+                              _formCtrl.setFormField('name', val);
+                            },
+                            hint: "Enter your name...",
+                          ),
+                          TuFormField(
+                            label: 'Review title:',
+                            required: true,
+                            value: _formCtrl.form['title'],
+                            onChanged: (val) {
+                              _formCtrl.setFormField('title', val);
+                            },
+                            hint: "Enter title for your review...",
+                          ),
+                          TuFormField(
+                            label: 'Review:',
+                            required: true,
+                            maxLength: 1000,
+                            keyboard: TextInputType.multiline,
+                            value: _formCtrl.form['body'],
+                            maxLines: 4,
+                            onChanged: (val) {
+                              _formCtrl.setFormField('body', val);
+                            },
+                            hint: "Write your review...",
+                          ),
+                          mY(8),
+                          TuButton(
+                            text: widget.rev != null
+                                ? "SAVE CHANGES"
+                                : "SUBMIT REVIEW",
+                            width: double.infinity,
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                await _submitReview();
+                              }
+                            },
+                          )
+                        ],
+                      )),
+                )
+              ],
+            ),
+          )
+        ]),
       ),
     );
   }

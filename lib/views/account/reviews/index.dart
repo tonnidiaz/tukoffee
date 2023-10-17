@@ -9,22 +9,10 @@ class MyReviewsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text("My reviews"),
-            bottom: const TabBar(tabs: [
-              Tab(
-                text: "ITEMS",
-              ),
-              Tab(
-                text: "HISTORY",
-              ),
-            ]),
-          ),
-          body: const TabBarView(children: [ItemsTab(), HistoryTab()]),
-        ));
+    return Scaffold(
+      appBar: AppBar(title: const Text("Review history")),
+      body: const ItemsTab(),
+    );
   }
 }
 

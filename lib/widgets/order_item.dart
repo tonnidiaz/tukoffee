@@ -6,7 +6,9 @@ import 'package:lebzcafe/controllers/appbar.dart';
 import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/styles.dart';
 import 'package:lebzcafe/views/order/index.dart';
+import 'package:lebzcafe/views/rf.dart';
 import 'package:lebzcafe/widgets/common2.dart';
+import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/dialogs/loading_dialog.dart';
 import 'package:get/get.dart';
 
@@ -91,28 +93,86 @@ class OrderItem extends StatelessWidget {
             overflow: TextOverflow.fade,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
-          subtitle: Row(
+          subtitle: Column(
             children: [
-              Text(
-                "${DateTime.parse(order["date_created"]).toLocal()}"
-                    .split(' ')
-                    .first,
-                style: TextStyle(
-                    color: TuColors.note,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 13),
+              Row(
+                children: [
+                  Text(
+                    "${DateTime.parse(order["date_created"]).toLocal()}"
+                        .split(' ')
+                        .first,
+                    style: TextStyle(
+                        color: TuColors.note,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13),
+                  ),
+                  mX(10),
+                  Chip(
+                      backgroundColor: order['status'] == 'pending'
+                          ? TuColors.medium
+                          : order['status'] == 'cancelled'
+                              ? TuColors.danger
+                              : TuColors.success,
+                      label: Text(
+                        '${order['status']}',
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.white),
+                      ))
+                ],
               ),
-              mX(10),
-              Chip(
-                  backgroundColor: order['status'] == 'pending'
-                      ? TuColors.medium
-                      : order['status'] == 'cancelled'
-                          ? TuColors.danger
-                          : TuColors.success,
-                  label: Text(
-                    '${order['status']}',
-                    style: const TextStyle(fontSize: 12, color: Colors.white),
-                  ))
+              mY(3),
+              Container(
+                height: 30,
+                alignment: Alignment.centerLeft,
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: order['products'].length,
+                    itemBuilder: (context, index) {
+                      var item = order['products'][index]['product'];
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 2),
+                        child: Material(
+                          elevation: .1,
+                          child: Container(
+                            width: 40,
+                            height: 30,
+                            margin: const EdgeInsets.symmetric(vertical: 0),
+                            alignment: Alignment.center,
+                            child: item['images'].isEmpty
+                                ? svgIcon(
+                                    name: 'br-image-slash',
+                                    size: 20,
+                                    color: Colors.black54,
+                                  )
+                                : ClipRRect(
+                                    child: Image.network(
+                                    item['images'][0]['url'],
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                          child: SizedBox(
+                                        height: 15,
+                                        width: 15,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      ));
+                                    },
+                                  )),
+                          ),
+                        ),
+                      );
+                    }),
+              )
             ],
           ),
           trailing: PopupMenuButton(
@@ -144,6 +204,7 @@ class OrderItem extends StatelessWidget {
               _selectItem(order);
             }
           },
+          isThreeLine: true,
         ),
       ),
     );

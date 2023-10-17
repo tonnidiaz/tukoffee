@@ -21,7 +21,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final formCtrl = MainApp.formViewCtrl;
+    final formCtrl = MainApp.formCtrl;
     final appCtrl = MainApp.appCtrl;
     return Container(
       padding: defaultPadding2,

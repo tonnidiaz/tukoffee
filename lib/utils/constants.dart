@@ -164,7 +164,7 @@ Size screenSize(BuildContext context) {
   return MediaQuery.of(context).size;
 }
 
-const DEV = false;//kDebugMode;
+const DEV = kDebugMode;
 
 Size screenPercent(BuildContext context, double p) {
   final h = MediaQuery.of(context).size.height;
@@ -178,22 +178,7 @@ double keyboardPadding(BuildContext context) {
   return MediaQuery.of(context).viewInsets.bottom;
 }
 
-final defaultMenu = [
-  MenuItemButton(
-    onPressed: () {
-      clog("Open clicked");
-    },
-    shortcut: const SingleActivator(LogicalKeyboardKey.keyO, control: true),
-    child: const Text("Open"),
-  ),
-  MenuItemButton(
-    onPressed: () {
-      clog("Open clicked");
-    },
-    shortcut: const SingleActivator(LogicalKeyboardKey.keyS, control: true),
-    child: const Text("Save"),
-  ),
-];
+
 
 class SelectItem {
   final String label;

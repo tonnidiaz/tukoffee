@@ -519,7 +519,7 @@ class AddStoreView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formCtrl = MainApp.formViewCtrl;
+    final formCtrl = MainApp.formCtrl;
     final storeCtrl = MainApp.storeCtrl;
     return FormView(
       title: "Add store location",

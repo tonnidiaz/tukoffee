@@ -36,7 +36,7 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
     });
   }
 
-  final _formCtrl = MainApp.formViewCtrl;
+  final _formCtrl = MainApp.formCtrl;
   Future<void> _verifyOTP() async {
     final form = _formCtrl.form;
     try {
@@ -280,7 +280,7 @@ class ConfirmPassForm extends StatelessWidget {
       onOk: () async {
         try {
           await apiDio().post(url, data: {
-            'password': MainApp.formViewCtrl.form['password'],
+            'password': MainApp.formCtrl.form['password'],
           });
           if (onOk != null) {
             onOk!();
@@ -307,9 +307,9 @@ class ConfirmPassForm extends StatelessWidget {
               isPass: true,
               hint: "Enter your password...",
               required: true,
-              value: MainApp.formViewCtrl.form['password'],
+              value: MainApp.formCtrl.form['password'],
               onChanged: (val) {
-                MainApp.formViewCtrl.setFormField('password', val);
+                MainApp.formCtrl.setFormField('password', val);
               },
             ))
       ],
@@ -322,7 +322,7 @@ class EditPassForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ctrl = MainApp.formViewCtrl;
+    final ctrl = MainApp.formCtrl;
     return SingleChildScrollView(
       child: Container(
         padding: defaultPadding2,

@@ -51,7 +51,7 @@ void main() async {
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
-  static FormViewCtrl formViewCtrl = Get.put(FormViewCtrl());
+  static FormViewCtrl formCtrl = Get.put(FormViewCtrl());
   static AppCtrl appCtrl = Get.put(AppCtrl());
   static StoreCtrl storeCtrl = Get.put(StoreCtrl());
   static AppBarCtrl appBarCtrl = Get.put(AppBarCtrl());
@@ -109,6 +109,7 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Obx(() => MainApp.appCtrl.ready.value &&
               MainApp.appCtrl.store['name'] != null &&
               MainApp.appCtrl.store['name'].isNotEmpty

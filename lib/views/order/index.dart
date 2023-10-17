@@ -36,7 +36,7 @@ class _OrderPageState extends State<OrderPage> {
   OrderPageArgs? _args;
   final _appCtrl = MainApp.appCtrl;
   final _storeCtrl = MainApp.storeCtrl;
-  final _formViewCtrl = MainApp.formViewCtrl;
+  final _formViewCtrl = MainApp.formCtrl;
   Map<String, dynamic>? _order;
   void _setOrder(Map<String, dynamic>? val) {
     setState(() {
@@ -493,14 +493,15 @@ class _OrderPageState extends State<OrderPage> {
   }
 }
 
-Widget tuTableRow(Widget? first, Widget? last, {double my = 2}) {
+Widget tuTableRow(Widget? first, Widget? last,
+    {double my = 2, WrapCrossAlignment? crossAxisAlignment}) {
   return Container(
     margin: EdgeInsets.symmetric(vertical: my),
     width: double.infinity,
     child: Wrap(
       alignment: WrapAlignment.spaceBetween,
       runAlignment: WrapAlignment.spaceBetween,
-      crossAxisAlignment: WrapCrossAlignment.center,
+      crossAxisAlignment: crossAxisAlignment ?? WrapCrossAlignment.center,
       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [first ?? none(), last ?? none()],
     ),

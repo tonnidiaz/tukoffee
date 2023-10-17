@@ -2,6 +2,7 @@ const { OTP } = require("../models/otp");
 const jwt = require("jsonwebtoken");
 const cloudinary = require('cloudinary').v2
 const nodemailer = require('nodemailer')
+const fs = require('fs')
 const { env } = process
 
 function configCloudinary(){
@@ -115,6 +116,7 @@ const delCloudinary = async (publicId)=>{
 
 const sendMail = async (subject, body, clients, sender) => {
     try {
+      
       // create reusable transporter object using the default SMTP transport
       let transporter = nodemailer.createTransport({
         host: process.env.GMAIL_HOST, //"smtp.ethereal.email",
@@ -126,9 +128,13 @@ const sendMail = async (subject, body, clients, sender) => {
         },
       });
   
+      const storeDetails = getStoreDetails()
       // send mail with defined transport object
+      const _sender =sender ?? storeDetails.store.email;
+        console.log('SENDING FROM: ', _sender);
+        console.log('SENDING MAIL TO: ', clients);
       let info = await transporter.sendMail({
-        from: `"${process.env.SITE_NAME}" <${process.env.EMAIL}>`, // sender address
+        from: `"${storeDetails.store.name}" <${_sender}>`, // sender address
         to: `"${clients}"`, // list of receivers
         subject, // Subject line
         html: `<html lang="en">
@@ -227,7 +233,7 @@ const sendMail = async (subject, body, clients, sender) => {
   
               <div class="tb">
               ${body}
-              <p>For support please contact the Developer at <a href="mailto:${process.env.DEV_EMAIL}">${process.env.DEV_EMAIL}</a></p>
+              <p>For support please contact the Developer at <a href="mailto:${storeDetails.developer.email}">${storeDetails.developer.email}</a></p>
               </div>
   
           </body>
@@ -243,4 +249,9 @@ const sendMail = async (subject, body, clients, sender) => {
       return null;
     }
   };
-module.exports = { sendMail, genToken, delCloudinary, onGetGenToken, sendSMS, parseProducts, genOTP, randomInRange, tunedErr };
+  const jsonPath = __dirname + '/../assets/store.json'
+  const getStoreDetails = ()=>{
+    const buff = fs.readFileSync(jsonPath, { encoding: "utf-8" });
+    return JSON.parse(buff)
+  }
+module.exports = { sendMail,getStoreDetails, genToken, delCloudinary, onGetGenToken, sendSMS, parseProducts, genOTP, randomInRange, tunedErr };

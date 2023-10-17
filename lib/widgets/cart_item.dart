@@ -33,7 +33,7 @@ class CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formCtrl = MainApp.formViewCtrl;
+    final formCtrl = MainApp.formCtrl;
     final prod = item["product"];
     final storeCtrl = Get.find<StoreCtrl>();
 
@@ -137,10 +137,30 @@ class CartItem extends StatelessWidget {
                       size: 25,
                       color: Colors.black54,
                     )
-                  : ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child:
-                          Image.network(item['product']['images'][0]['url'])),
+                  : Container(
+                      margin: const EdgeInsets.symmetric(vertical: 1),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(5),
+                          child: Image.network(
+                            item['product']['images'][0]['url'],
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(
+                                  child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 3,
+                                  value: loadingProgress.expectedTotalBytes !=
+                                          null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              ));
+                            },
+                          )),
+                    ),
             ),
           ),
 

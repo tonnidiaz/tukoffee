@@ -105,11 +105,27 @@ class ProductCard extends StatelessWidget {
                                 ),
                               );
                             },
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(
+                                  child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 3,
+                                  value: loadingProgress.expectedTotalBytes !=
+                                          null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              ));
+                            },
                           ),
                         ) //"https://loremflickr.com/g/320/240/tea?random=${Random().nextInt(100)}")
                       : svgIcon(
                           name: 'br-image-slash',
-                          size: 40,
+                          size: 30,
                           color: Colors.black54,
                         ),
                 ),

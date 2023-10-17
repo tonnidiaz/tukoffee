@@ -113,7 +113,6 @@ router.post("/update-field", multer().none(), async (req, res) => {
         res.status(500).json({ msg: "something went wrong" });
     }
 });
-const baseDir = path.resolve("./");
 const jsonPath = __dirname + '/../assets/store.json' //path.join(__dirname, "assets", "store.json");
 router.get("/store", async (req, res) => {
     const buff = fs.readFileSync(jsonPath, { encoding: "utf-8" });
