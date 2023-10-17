@@ -57,7 +57,7 @@ class AccountTab extends StatelessWidget {
                           },
                           child: const Text("About store")),
                       Visibility(
-                        visible: DEV,
+                        visible: DEV || true /* TODO: REMOVE THE TRUE */,
                         child: InfoItem(
                             onTap: () {
                               pushNamed('/rf');

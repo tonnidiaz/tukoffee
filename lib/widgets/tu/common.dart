@@ -93,3 +93,23 @@ class TuCollapse extends StatelessWidget {
     );
   }
 }
+
+class TuBottomBar extends StatelessWidget {
+  final Widget? child;
+  const TuBottomBar({super.key, this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: defaultPadding2,
+      decoration: const BoxDecoration(color: cardBGLight, boxShadow: [
+        BoxShadow(
+          color: Color.fromRGBO(158, 158, 158, .5),
+          offset: Offset(0, -.5),
+        )
+      ]),
+      child: child,
+    );
+  }
+}

@@ -205,11 +205,8 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: Material(
-          elevation: 3,
-          color: cardBGLight,
+        bottomNavigationBar: TuBottomBar(
           child: Container(
-            padding: defaultPadding2,
             child: iconText(_address['name'] ?? "No address", Icons.location_on,
                 alignment: MainAxisAlignment.start, iconSize: 23),
           ),

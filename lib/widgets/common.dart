@@ -309,8 +309,9 @@ Widget TDrawerItem(
 }
 
 Widget none() {
-  return Container(
+  return const SizedBox(
     width: 0,
+    height: 0,
   );
 }
 

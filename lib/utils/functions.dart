@@ -390,7 +390,7 @@ initNotifs() {
             channelGroupKey: 'order_channel_group',
             channelGroupName: 'Basic group')
       ],
-      debug: DEV);
+      debug: true);
 }
 
 requestNotifsPermission(BuildContext context) {

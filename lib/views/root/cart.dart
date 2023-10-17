@@ -10,6 +10,7 @@ import 'package:lebzcafe/utils/styles.dart';
 import 'package:lebzcafe/widgets/cart_item.dart';
 import 'package:lebzcafe/widgets/common.dart';
 import 'package:get/get.dart';
+import 'package:lebzcafe/widgets/tu/common.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -67,11 +68,7 @@ class _CartPageState extends State<CartPage> {
                       child: Text('Clear cart'))
                 ])
       ]),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-            color: cardBGLight,
-            border: Border(top: BorderSide(color: appBGLight, width: 1.5))),
-        padding: defaultPadding,
+      bottomNavigationBar: TuBottomBar(
         child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,

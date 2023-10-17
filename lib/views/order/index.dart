@@ -163,36 +163,30 @@ class _OrderPageState extends State<OrderPage> {
       appBar: childAppbar(title: "Order #${_args?.id}"),
       bottomNavigationBar: _order == null || _appCtrl.user['permissions'] == 0
           ? null
-          : Material(
-              elevation: 5,
-              color: cardBGLight,
-              child: Padding(
-                padding: defaultPadding,
-                child: TuSelect(
-                  elevation: 2,
-                  label: 'Order status:',
-                  value: _order!['status'],
-                  items: [
-                    SelectItem('Pending', 'pending'),
-                    SelectItem('Completed', 'completed'),
-                    SelectItem('Cancelled', 'cancelled'),
-                  ],
-                  onChanged: (val) async {
-                    try {
-                      showProgressSheet();
-                      final res = await apiDio().post(
-                          '/order/edit?id=${_order!['_id']}',
-                          data: {"status": val});
-                      gpop();
-                      _reload(res);
-                    } catch (e) {
-                      errorHandler(
-                          e: e,
-                          context: context,
-                          msg: "Error editing order status!");
-                    }
-                  },
-                ),
+          : TuBottomBar(
+              child: TuSelect(
+                label: 'Order status:',
+                value: _order!['status'],
+                items: [
+                  SelectItem('Pending', 'pending'),
+                  SelectItem('Completed', 'completed'),
+                  SelectItem('Cancelled', 'cancelled'),
+                ],
+                onChanged: (val) async {
+                  try {
+                    showProgressSheet();
+                    final res = await apiDio().post(
+                        '/order/edit?id=${_order!['_id']}',
+                        data: {"status": val});
+                    gpop();
+                    _reload(res);
+                  } catch (e) {
+                    errorHandler(
+                        e: e,
+                        context: context,
+                        msg: "Error editing order status!");
+                  }
+                },
               ),
             ),
       body: RefreshIndicator(

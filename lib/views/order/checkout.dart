@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lebzcafe/utils/vars.dart';
+import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
 import 'dart:io';
@@ -119,14 +120,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
           )
         : Scaffold(
             appBar: appBar,
-            bottomNavigationBar: Container(
-              decoration: const BoxDecoration(
-                  color: cardBGLight,
-                  border:
-                      Border(top: BorderSide(color: appBGLight, width: 1.5))),
-              padding: defaultPadding,
-              height: 100,
+            bottomNavigationBar: TuBottomBar(
               child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(

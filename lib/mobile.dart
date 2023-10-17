@@ -66,6 +66,7 @@ class _MobileAppState extends State<MobileApp> {
       requestNotifsPermission(context);
       socket?.on('order', (data) {
         clog("ON ORDER");
+        clog("PERMS: ${MainApp.appCtrl.user['permissions']}");
         //CREATE NOTIF IF USER IS ADMIN
         if (MainApp.appCtrl.user.isNotEmpty &&
             MainApp.appCtrl.user['permissions'] > 0) {
@@ -89,7 +90,7 @@ class _MobileAppState extends State<MobileApp> {
       scrollBehavior: MyCustomScrollBehavior(),
       routes: routes,
       debugShowCheckedModeBanner: false,
-      initialRoute: "/rf",
+      initialRoute: "/",
       //home: MyReviewsPage(),
       builder: (context, child) {
         return child!;
