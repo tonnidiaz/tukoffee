@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:lebzcafe/utils/constants2.dart';
+import 'package:lebzcafe/views/auth/login.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
 import 'package:dio/dio.dart';
@@ -130,17 +131,24 @@ class _OrdersPageState extends State<OrdersPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (_appCtrl.user.isEmpty) {
-        Get.offNamed('/auth/login');
-        return;
-      }
-      ever(_ctrl.sortedOrders, (callback) {
-        _appBarCtrl.setSelected([]);
-      });
-      /*   _appBarCtrl.setSelectedActions([
-        ); */
-      _getOrders();
+      _init();
     });
+  }
+
+  _init() async {
+    await sleep(500);
+    if (_appCtrl.user.isEmpty) {
+      pushTo(const LoginPage(
+        to: '/orders',
+      ));
+      return;
+    }
+    ever(_ctrl.sortedOrders, (callback) {
+      _appBarCtrl.setSelected([]);
+    });
+    /*   _appBarCtrl.setSelectedActions([
+        ); */
+    _getOrders();
   }
 
   _cancelOrders({bool del = false}) async {

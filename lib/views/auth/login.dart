@@ -17,7 +17,8 @@ import 'create.dart';
 
 class LoginPage extends StatefulWidget {
   final bool pop;
-  const LoginPage({super.key, this.pop = false});
+  final String? to;
+  const LoginPage({super.key, this.pop = false, this.to});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -40,6 +41,10 @@ class _LoginPageState extends State<LoginPage> {
         if (widget.pop) {
           gpop(); //Hide sheet
           gpop(); //Back to prev page
+        } else if (widget.to != null) {
+          gpop();
+          Navigator.pushNamedAndRemoveUntil(
+              context, widget.to!, (route) => route.isFirst);
         } else {
           Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
         }

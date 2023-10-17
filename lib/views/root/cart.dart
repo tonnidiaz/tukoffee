@@ -7,6 +7,7 @@ import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/utils/functions.dart';
 import 'package:lebzcafe/utils/styles.dart';
+import 'package:lebzcafe/views/auth/login.dart';
 import 'package:lebzcafe/widgets/cart_item.dart';
 import 'package:lebzcafe/widgets/common.dart';
 import 'package:get/get.dart';
@@ -27,12 +28,19 @@ class _CartPageState extends State<CartPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (_appCtrl.user.isEmpty) {
-        Get.offNamed('/auth/login');
-        return;
-      }
-      _init();
+      _init0();
     });
+  }
+
+  _init0() async {
+    await sleep(500);
+    if (_appCtrl.user.isEmpty) {
+      pushTo(const LoginPage(
+        to: '/cart',
+      ));
+      return;
+    }
+    _init();
   }
 
   _init() async {

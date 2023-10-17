@@ -716,7 +716,10 @@ class GatewaysSheet extends StatelessWidget {
           h3('CONTINUE WITH'),
           mY(6),
           const Text(
-              "These secure payment gateways accept MasterCard, VISA, EFT, and a few more methods"),
+            "These secure payment gateways accept MasterCard, VISA, EFT, and a few other methods.",
+            style: TextStyle(fontSize: 12),
+            textAlign: TextAlign.center,
+          ),
           mY(10),
           TuButton(
             onPressed: () async {
@@ -733,7 +736,7 @@ class GatewaysSheet extends StatelessWidget {
               }
             },
             radius: 100,
-            bgColor: appBGLight,
+            bgColor: cardBGLight,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -752,7 +755,7 @@ class GatewaysSheet extends StatelessWidget {
           mY(5),
           TuButton(
             width: double.infinity,
-            bgColor: appBGLight,
+            bgColor: cardBGLight,
             radius: 100,
             onPressed: () async {
               try {
