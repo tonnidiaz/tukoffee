@@ -1,6 +1,6 @@
 const { User } = require("../../models");
 const { DEV } = require("../../utils/constants");
-const { genOTP, randomInRange, sendMail } = require("../../utils/functions");
+const { genOTP, randomInRange, sendMail, getStoreDetails } = require("../../utils/functions");
 const { auth, lightAuth } = require("../../utils/middleware");
 const bcrypt = require("bcrypt");
 const router = require("express").Router();
@@ -31,9 +31,11 @@ router.post("/reset", async (req, res) => {
                 console.log(otp)
             }
             user.otp = _otp;
-            await sendMail("Tukoffee Verification Email",
+
+            const storeDetails = getStoreDetails()
+            await sendMail(`${storeDetails.store.name} Verification Email`,
             `<h2 style="font-weight: 500">Here is your Email verification One-Time-PIN:</h2>
-                <p style="font-size: 20px; font-weight: 600">${_otp}</p>
+                <p class="otp m-auto" style="font-size: 20px; font-weight: 600">${_otp}</p>
             ` , email
            )
         }

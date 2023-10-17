@@ -47,12 +47,21 @@ void setupWindowManager() async {
 
 Flushbar showToast(String msg,
     {bool isErr = false, int duration = 2, bool autoDismiss = true}) {
+  // final appCtrl = MainApp.appCtrl;
   return Flushbar(
     backgroundColor: const Color.fromARGB(255, 236, 236, 236),
     messageColor: isErr ? Colors.red : Colors.black87,
     message: msg,
     duration: autoDismiss ? Duration(seconds: duration) : null,
     animationDuration: const Duration(milliseconds: 500),
+    onStatusChanged: (status) {
+      /*  if (status == FlushbarStatus.IS_APPEARING) {
+        appCtrl.setBackEnabled(false);
+      }
+      if (status == FlushbarStatus.DISMISSED) {
+        appCtrl.setBackEnabled(true);
+      } */
+    },
   ); //.show(context);
 }
 
@@ -397,6 +406,7 @@ initNotifs() {
 requestNotifsPermission(BuildContext context) {
   AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
     clog("Allowed: $isAllowed");
+    if (Platform.isLinux) return;
     if (!isAllowed) {
       TuFuncs.showTDialog(
           context,

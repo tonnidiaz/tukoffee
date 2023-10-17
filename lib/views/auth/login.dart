@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
         final res = await apiDio().post('/auth/login', data: _formCtrl.form);
         // User already exists and password is correct
         appBox!.put("authToken", res.data["token"]);
-        setupUser(full: false);
+        await setupUser(full: false);
         //gpop();
         if (widget.pop) {
           gpop(); //Hide sheet
@@ -53,6 +53,17 @@ class _LoginPageState extends State<LoginPage> {
       gpop();
       errorHandler(e: e, context: context);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (DEV) {
+        _formCtrl.setForm(
+            {'email': 'clickbait4587@gmail.com', 'password': 'Baseline'});
+      }
+    });
   }
 
   @override

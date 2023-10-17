@@ -60,8 +60,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   _init() async {
-    await sleep(500);
     if (_appCtrl.user.isEmpty) {
+      gpop();
       pushTo(const LoginPage(
         to: '/account/profile',
       ));

@@ -76,9 +76,7 @@ class UpdatesView3State extends State<UpdatesView3> {
       }
 
       _ctrl.setProgress(0);
-      showProgressSheet(
-        msg: "Downloading updates...",
-      );
+      showProgressSheet(msg: "Downloading updates...", dismissable: true);
 
       final dir = await getExternalStorageDirectory();
 
@@ -100,7 +98,7 @@ class UpdatesView3State extends State<UpdatesView3> {
         fileName: fileName,
         saveInPublicStorage: true,
         showNotification:
-            true, // show download progress in status bar (for Android)
+            false, // show download progress in status bar (for Android)
         openFileFromNotification:
             true, // click on notification to open downloaded file (for Android)
       );

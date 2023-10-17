@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/constants2.dart';
@@ -82,8 +83,12 @@ class _RFPageState extends State<RFPage> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+          onPressed: () async {
+            showProgressSheet();
+
+            await sleep(4500);
+            gpop();
+            // Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
           },
           child: Icon(Icons.home_outlined),
         ),

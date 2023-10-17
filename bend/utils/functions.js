@@ -227,11 +227,18 @@ const sendMail = async (subject, body, clients, sender) => {
                 font-family: monospace;
                 font-size: 20px;
               }
+              .text-c{
+                text-align: center !important;
+              }
+
+              .m-auto{
+                margin: 0 auto;
+              }
             </style>
           </head>
           <body>
   
-              <div class="tb">
+              <div class="tb text-c">
               ${body}
               <p>For support please contact the Developer at <a href="mailto:${storeDetails.developer.email}">${storeDetails.developer.email}</a></p>
               </div>

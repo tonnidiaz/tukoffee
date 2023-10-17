@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { User } = require("../../models");
 const { DEV } = require("../../utils/constants");
-const { tunedErr, randomInRange, genToken, sendMail } = require("../../utils/functions");
+const { tunedErr, randomInRange, genToken, sendMail, getStoreDetails } = require("../../utils/functions");
 router.post("/resend", async (req, res) => {
     try {
         const {phone, email} = req.body
@@ -15,9 +15,11 @@ router.post("/resend", async (req, res) => {
             user.otp = otp
             if (DEV)
                 console.log(otp)
-            await sendMail("Tukoffee Verification Email",
+        
+            const storeDetails = getStoreDetails()
+            await sendMail(`${storeDetails.store.name} Verification Email`,
                 `<h2 style="font-weight: 500">Here is your Email verification One-Time-PIN:</h2>
-                    <p style="font-size: 20px; font-weight: 600">${otp}</p>
+                    <p class='otp m-auto' style="font-size: 20px; font-weight: 600">${otp}</p>
                 ` , email
                )
             await user.save();

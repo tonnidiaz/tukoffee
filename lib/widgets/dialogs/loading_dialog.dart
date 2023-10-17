@@ -1,10 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:lebzcafe/utils/colors.dart';
+import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/widgets/common.dart';
 
-class LoadingDialog extends StatelessWidget {
+class LoadingDialog extends StatefulWidget {
   final String? msg;
   const LoadingDialog({super.key, this.msg});
+
+  @override
+  State<LoadingDialog> createState() => _LoadingDialogState();
+}
+
+class _LoadingDialogState extends State<LoadingDialog> {
+  @override
+  void initState() {
+    super.initState();
+    backEnabled = false;
+  }
+
+  @override
+  void dispose() {
+    backEnabled = true;
+    super.dispose();
+  }
 
   @override
   Widget build(
@@ -21,7 +39,7 @@ class LoadingDialog extends StatelessWidget {
         ),
         mX(10),
         Text(
-          msg ?? "Hang on...",
+          widget.msg ?? "Hang on...",
           style: TextStyle(
               fontWeight: FontWeight.w600, color: TuColors.note, fontSize: 14),
         )

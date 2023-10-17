@@ -33,8 +33,8 @@ class _CartPageState extends State<CartPage> {
   }
 
   _init0() async {
-    await sleep(500);
     if (_appCtrl.user.isEmpty) {
+      gpop();
       pushTo(const LoginPage(
         to: '/cart',
       ));

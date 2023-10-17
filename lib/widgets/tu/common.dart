@@ -3,12 +3,15 @@ import 'package:get/get.dart';
 import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
+import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/widgets/common.dart';
 
 class ProgressSheet extends StatefulWidget {
   final Color? color;
   final String? msg;
-  const ProgressSheet({super.key, this.color, this.msg});
+  final bool dismissable;
+  const ProgressSheet(
+      {super.key, this.color, this.msg, required this.dismissable});
 
   @override
   State<ProgressSheet> createState() => _ProgressSheetState();
@@ -19,10 +22,20 @@ class _ProgressSheetState extends State<ProgressSheet> {
 
   @override
   void dispose() {
-    if (context.mounted) {
+    backEnabled = true;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _ctrl.setProgress(null);
-    }
+    });
+
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (!widget.dismissable) {
+      backEnabled = false;
+    }
   }
 
   @override
@@ -52,8 +65,9 @@ class _ProgressSheetState extends State<ProgressSheet> {
   }
 }
 
-void showProgressSheet({String? msg}) {
-  Get.bottomSheet(ProgressSheet(msg: msg), isDismissible: false);
+void showProgressSheet({String? msg, bool dismissable = false}) {
+  Get.bottomSheet(ProgressSheet(msg: msg, dismissable: dismissable),
+      isDismissible: false);
 }
 
 class TuCollapse extends StatelessWidget {

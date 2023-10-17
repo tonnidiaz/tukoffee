@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/utils/functions.dart';
@@ -93,7 +94,21 @@ class _MobileAppState extends State<MobileApp> {
       initialRoute: "/",
       //home: MyReviewsPage(),
       builder: (context, child) {
-        return child!;
+        return CallbackShortcuts(
+          bindings: <ShortcutActivator, VoidCallback>{
+            const SingleActivator(LogicalKeyboardKey.escape): () {
+              clog('Popping');
+              gpop();
+            },
+          },
+          child: WillPopScope(
+            onWillPop: () async {
+              clog("BACK ENABLED: $backEnabled");
+              return backEnabled;
+            },
+            child: child!,
+          ),
+        );
       },
     );
   }

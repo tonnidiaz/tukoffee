@@ -136,8 +136,9 @@ class _OrdersPageState extends State<OrdersPage> {
   }
 
   _init() async {
-    await sleep(500);
     if (_appCtrl.user.isEmpty) {
+      clog('To Login');
+      gpop();
       pushTo(const LoginPage(
         to: '/orders',
       ));
@@ -207,6 +208,7 @@ class _OrdersPageState extends State<OrdersPage> {
   void dispose() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _appBarCtrl.setSelected([]);
+      _ctrl.setOrdersFetched(false);
     });
     super.dispose();
   }

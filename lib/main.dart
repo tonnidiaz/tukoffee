@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lebzcafe/controllers/appbar.dart';
 import 'package:lebzcafe/controllers/common_ctrls.dart';
 import 'package:lebzcafe/controllers/products_ctrl.dart';
@@ -33,6 +34,9 @@ void main() async {
   initNotifs();
 
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   //setupWindowManager();
   if (Platform.isAndroid || Platform.isIOS) {
     await FlutterDownloader.initialize(

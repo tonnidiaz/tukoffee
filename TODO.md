@@ -19,4 +19,3 @@ Notifs only vibrating
 - Send the feedback email to owner / Notifs categories: Orders/Feedback
 
 - Change review statuses
-- 

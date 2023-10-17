@@ -252,9 +252,14 @@ class Step3 extends StatelessWidget {
       },
       title: "Finish up",
       fields: [
-        const Text(
-          "FINISH UP",
-          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "FINISH UP",
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+            ),
+          ],
         ),
         mY(10),
         Obx(() => TuFormField(

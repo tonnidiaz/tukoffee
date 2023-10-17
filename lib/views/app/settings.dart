@@ -9,7 +9,6 @@ import 'package:lebzcafe/widgets/common2.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/dialog.dart';
 import 'package:lebzcafe/widgets/feedback_form.dart';
-import 'package:lebzcafe/widgets/tu/updates2.dart';
 import 'package:get/get.dart';
 
 class OldSettingsPage extends StatelessWidget {
@@ -52,7 +51,7 @@ class OldSettingsPage extends StatelessWidget {
                       context: context,
                       widget: const UpdatesView(),
                       full: true); */
-                  TuFuncs.showTDialog(context, const UpdatesView2());
+                  //  TuFuncs.showTDialog(context, const UpdatesView2());
                 },
                 child: const Text("Check updates"),
               ),
