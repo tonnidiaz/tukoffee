@@ -86,11 +86,11 @@ class _TuSplashState extends State<TuSplash> {
   }
 
   Widget refreshBtn() {
-    return ElevatedButton(
-        style: ElevatedButton.styleFrom(
+    return OutlinedButton(
+        style: OutlinedButton.styleFrom(
             elevation: .5,
             foregroundColor: Colors.white,
-            backgroundColor: TuColors.coffee1,
+            //backgroundColor: TuColors.medium,
             fixedSize: const Size(150, 35),
             shape: RoundedRectangleBorder(
                 side: const BorderSide(width: 1.5, color: Colors.white38),
@@ -110,19 +110,24 @@ class _TuSplashState extends State<TuSplash> {
           width: screenSize(context).width,
           height: screenSize(context).height,
           alignment: Alignment.center,
-          color: TuColors.coffee1,
+          color: Colors.black,
           child: _connected
               ? Obx(() => !_appCtrl.serverDown.value
-                  ? CircularProgressIndicator(
-                      color: TuColors.medium,
+                  ? Container(
+                      width: screenSize(context).width / 2,
+                      height: screenSize(context).width / 2,
+                      alignment: Alignment.center,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset(
+                            "assets/images/logo.jpg",
+                          )),
                     )
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Server down",
-                          textAlign: TextAlign.center,
-                        ),
+                        h4("Server down!",
+                            isLight: true, color: Colors.white70),
                         mY(5),
                         refreshBtn(),
                       ],
@@ -130,14 +135,8 @@ class _TuSplashState extends State<TuSplash> {
               : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                        radius: 40,
-                        backgroundColor: TuColors.coffee,
-                        child: const Icon(
-                          Icons.signal_wifi_off_rounded,
-                          color: Colors.white70,
-                          size: 40,
-                        )),
+                    h4("No internet access",
+                        isLight: true, color: Colors.white70),
                     mY(5),
                     refreshBtn()
                   ],

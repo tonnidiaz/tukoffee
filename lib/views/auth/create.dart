@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/utils/vars.dart';
@@ -332,6 +333,17 @@ class _CreateAccountPageWrapperState extends State<CreateAccountPageWrapper> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${MainApp.appCtrl.store['name']}",
+                    style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.bold, fontSize: 30),
+                  ),
+                ],
+              ),
+              mY(10),
               Form(
                   key: _formKey,
                   child: Column(

@@ -144,6 +144,25 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
   final formCtrl = MainApp.formCtrl;
   final appCtrl = MainApp.appCtrl;
   final storeCtrl = MainApp.storeCtrl;
+
+  bool isOpen() {
+    final now = DateTime.now(),
+        openTime =
+            store['open_time'].split(':').map((it) => int.parse(it)).toList(),
+        closeTime =
+            store['close_time'].split(':').map((it) => int.parse(it)).toList();
+
+    final int h = now.hour, m = now.minute;
+    var mIsOpen = false;
+    if (h >= openTime[0] && m >= openTime[1] && h <= closeTime[0]) {
+      mIsOpen =
+          h < closeTime[0] ? true : (h == closeTime[0] && m <= closeTime[1]);
+    } else {
+      mIsOpen = false;
+    }
+    return mIsOpen;
+  }
+
   return Obx(
     () => Slidable(
       endActionPane: appCtrl.user.isEmpty || appCtrl.user['permissions'] == 0
@@ -216,20 +235,35 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
               ),
               subtitle: tuColumn(
                 children: [
-                  tuTableRow(
-                    const Text(
-                      "CLOSED",
-                      softWrap: false,
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
-                    ),
-                    Text(
-                      "Opens at ${store['open_time']}",
-                      softWrap: false,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 12),
-                    ),
-                  ),
+                  isOpen()
+                      ? tuTableRow(
+                          const Text(
+                            "OPEN",
+                            softWrap: false,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 12),
+                          ),
+                          Text(
+                            "Closes at ${store['close_time']}",
+                            softWrap: false,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 12),
+                          ),
+                        )
+                      : tuTableRow(
+                          const Text(
+                            "CLOSED",
+                            softWrap: false,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 12),
+                          ),
+                          Text(
+                            "Opens at ${store['open_time']}",
+                            softWrap: false,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 12),
+                          ),
+                        ),
                   mY(5),
                   devider()
                 ],

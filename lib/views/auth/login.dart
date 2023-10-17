@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
@@ -25,6 +26,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _formCtrl = MainApp.formCtrl;
+  final _appCtrl = MainApp.appCtrl;
 
   _login() async {
     try {
@@ -63,6 +65,17 @@ class _LoginPageState extends State<LoginPage> {
               () => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "${_appCtrl.store['name']}",
+                        style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.bold, fontSize: 30),
+                      ),
+                    ],
+                  ),
+                  mY(10),
                   TuFormField(
                     label: "Email address:",
                     hint: "Enter your email...",

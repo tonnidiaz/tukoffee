@@ -713,7 +713,10 @@ class GatewaysSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          h3('PAY WITH'),
+          h3('CONTINUE WITH'),
+          mY(6),
+          const Text(
+              "These secure payment gateways accept MasterCard, VISA, EFT, and a few more methods"),
           mY(10),
           TuButton(
             onPressed: () async {
