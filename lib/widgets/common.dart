@@ -253,7 +253,7 @@ class _TuButtonState extends State<TuButton> {
                   ),
             )
           : ElevatedButton(
-              onPressed: _isProcessing
+              onPressed: _isProcessing || widget.onPressed == null
                   ? null
                   : () async {
                       _setIsProcessing(true);

@@ -15,7 +15,9 @@
 - Navigate to address
 ## TO FIX
 
-Notifs only vibrating
+- orders take too long to load
+- cancel order loader dissmiss issue
+- Notifs only vibrating
 - Send the feedback email to owner / Notifs categories: Orders/Feedback
 
 - Change review statuses

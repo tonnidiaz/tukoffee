@@ -9,6 +9,7 @@ import 'package:lebzcafe/views/order/index.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/dialog.dart';
 import 'package:get/get.dart';
+import 'package:lebzcafe/widgets/tu/common.dart';
 
 import '../controllers/products_ctrl.dart';
 import '../utils/colors.dart';
@@ -84,7 +85,9 @@ class CartItem extends StatelessWidget {
                               content: const Text(
                                   'Are you sure you want to remove this item?'),
                               onOk: () async {
+                                showProgressSheet();
                                 await updateCart('remove', null);
+                                gpop();
                               },
                             ));
                       },
@@ -100,7 +103,9 @@ class CartItem extends StatelessWidget {
                 width: double.infinity,
                 bgColor: Colors.black87,
                 onPressed: () async {
+                  showProgressSheet();
                   await updateCart('add', formCtrl.form['quantity']);
+                  gpop();
                 },
               )
             ]),

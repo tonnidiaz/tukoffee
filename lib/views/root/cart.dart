@@ -23,12 +23,36 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   final StoreCtrl _storeCtrl = Get.find();
   final AppCtrl _appCtrl = Get.find();
+  Worker? _cartWorker;
+  double _total = 0;
+  @override
+  void dispose() {
+    _cartWorker?.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _init0();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await _init0();
+
+      _cartWorker = ever(_storeCtrl.cart, (cart) {
+        _setupTotal(cart);
+      });
+    });
+  }
+
+  _setupTotal(Map<String, dynamic> cart) {
+    double total = 0;
+    if (cart.isNotEmpty) {
+      for (var it in cart["products"]) {
+        total += (it["product"]["price"] * it["quantity"]).toDouble();
+      }
+    }
+
+    setState(() {
+      _total = total;
     });
   }
 
@@ -45,26 +69,29 @@ class _CartPageState extends State<CartPage> {
 
   _init() async {
     _storeCtrl.setcartFetched(false);
-    var email = _appCtrl.user["email"];
-    if (email != null) {
-      setupCart(email);
+    var _id = _appCtrl.user["_id"];
+    if (_id != null) {
+      await setupCart(_id);
     } else {
       _storeCtrl.setcartFetched(true);
     }
   }
 
-  Future<void> setupCart(String email) async {
+  Future<void> setupCart(String uid) async {
     _storeCtrl.setcartFetched(false);
     try {
-      final res = await apiDio().get("/user/cart?user=$email");
-      _storeCtrl.setcart(res.data["cart"]);
+      final res = await apiDio().get("/user/cart?user=$uid");
+      if (context.mounted) {
+        //_storeCtrl.setcart(res.data["cart"]);
+        _setupTotal(res.data['cart']);
+      }
     } catch (e) {
+      clog("FETCH CART ERR");
       clog(e);
     }
     _storeCtrl.setcartFetched(true);
   }
 
-  final double _bottomSheetH = 90;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,20 +116,10 @@ class _CartPageState extends State<CartPage> {
                     "TOTAL:",
                     style: Styles.h4(),
                   ),
-                  Obx(() {
-                    double total = 0;
-                    if (_storeCtrl.cart.isNotEmpty) {
-                      for (var it in _storeCtrl.cart["products"]) {
-                        total += (it["product"]["price"] * it["quantity"])
-                            .toDouble();
-                      }
-                    }
-                    total += _storeCtrl.deliveryFee.value;
-                    return Text(
-                      "R${roundDouble(total, 2)}",
-                      style: Styles.h4(),
-                    );
-                  })
+                  Text(
+                    "R${roundDouble(_total, 2)}",
+                    style: Styles.h4(),
+                  )
                 ],
               ),
               mY(5),

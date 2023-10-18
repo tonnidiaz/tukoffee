@@ -39,7 +39,7 @@ enum SortBy { name, price, dateCreated, lastModified }
 
 enum SortOrder { ascending, descending }
 
-enum OrderStatus { pending, completed, cancelled, all }
+enum OrderStatus { pending, completed, cancelled, awaitingPickup, all }
 
 class TuPage {
   Widget widget;
@@ -177,8 +177,6 @@ Size screenPercent(BuildContext context, double p) {
 double keyboardPadding(BuildContext context) {
   return MediaQuery.of(context).viewInsets.bottom;
 }
-
-
 
 class SelectItem {
   final String label;

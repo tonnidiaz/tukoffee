@@ -32,7 +32,10 @@ ThemeData tuTheme(bool dark) {
           elevation: 0.5,
           foregroundColor: dark ? Colors.white70 : TuColors.text2),
       colorScheme: ColorScheme.fromSeed(
-          seedColor: TuColors.primary, brightness: Brightness.light),
+          primary: TuColors.primary,
+          secondary: TuColors.secondary,
+          seedColor: TuColors.primary,
+          brightness: Brightness.light),
       popupMenuTheme: const PopupMenuThemeData(
         color: cardBGLight,
 

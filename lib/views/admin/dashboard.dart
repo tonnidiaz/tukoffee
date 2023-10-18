@@ -64,7 +64,7 @@ class _DashboardState extends State<Dashboard> {
                 width: double.infinity,
                 child: Obx(
                   () => StaggeredGrid.count(
-                    crossAxisCount: 3,
+                    crossAxisCount: 2,
                     crossAxisSpacing: 6,
                     mainAxisSpacing: 6,
                     children: [

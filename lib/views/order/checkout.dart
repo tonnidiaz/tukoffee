@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lebzcafe/utils/vars.dart';
+import 'package:lebzcafe/views/order/checkout/step1.dart';
+import 'package:lebzcafe/views/order/checkout/step2.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
@@ -30,6 +32,12 @@ import '../../widgets/common.dart';
 enum OrderMode { deliver, collect }
 
 class CheckoutCtrl extends GetxController {
+  RxInt step = 0.obs;
+
+  setStep(int val) {
+    step.value = val;
+  }
+
   Rx<OrderMode> mode = OrderMode.collect.obs;
   setOrderMode(OrderMode val) {
     mode.value = val;
@@ -120,321 +128,94 @@ class _CheckoutPageState extends State<CheckoutPage> {
           )
         : Scaffold(
             appBar: appBar,
-            bottomNavigationBar: TuBottomBar(
-              child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Total:",
-                          style: Styles.h4(),
-                        ),
-                        Obx(
-                          () {
-                            double total = 0;
-                            if (_storeCtrl.cart.isNotEmpty) {
-                              for (var it in _storeCtrl.cart["products"]) {
-                                total +=
-                                    (it["product"]["price"] * it["quantity"])
-                                        .toDouble();
-                              }
-                            }
-                            total += _storeCtrl.deliveryFee.value;
-                            return Text(
-                              "R${roundDouble(total, 2)}",
-                              style: Styles.h4(),
-                            );
-                          },
-                        )
-                      ],
+            bottomNavigationBar: Obx(
+              () => _ctrl.step.value < 1
+                  ? none()
+                  : TuBottomBar(
+                      child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Total:",
+                                  style: Styles.h4(),
+                                ),
+                                Obx(
+                                  () {
+                                    double total = 0;
+                                    if (_storeCtrl.cart.isNotEmpty) {
+                                      for (var it
+                                          in _storeCtrl.cart["products"]) {
+                                        total += (it["product"]["price"] *
+                                                it["quantity"])
+                                            .toDouble();
+                                      }
+                                    }
+                                    total += _storeCtrl.deliveryFee.value;
+                                    return Text(
+                                      "R${roundDouble(total, 2)}",
+                                      style: Styles.h4(),
+                                    );
+                                  },
+                                )
+                              ],
+                            ),
+                            mY(4),
+                            TuButton(
+                              width: double.infinity,
+                              onPressed: _onCheckoutBtnPress,
+                              bgColor: Colors.green,
+                              text: "CONTINUE",
+                            )
+                          ]),
                     ),
-                    mY(4),
-                    TuButton(
-                      width: double.infinity,
-                      onPressed: _onCheckoutBtnPress,
-                      bgColor: Colors.green,
-                      text: "Pay now",
-                    )
-                  ]),
             ),
             body: CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      mY(topMargin),
-                      TuCard(
-                        child: Obx(
-                          () => TuSelect(
-                            label: 'Method:',
-                            value: _ctrl.mode.value,
-                            items: [
-                              SelectItem('Collect', OrderMode.collect),
-                              SelectItem('Deliver', OrderMode.deliver),
-                            ],
-                            onChanged: (v) {
-                              clog(v);
-                              _ctrl.setOrderMode(v);
-                            },
+                    child: Container(
+                  width: screenSize(context).width,
+                  height: screenSize(context).height,
+                  child: Obx(
+                    () => Stepper(
+                      elevation: .5,
+                      currentStep: _ctrl.step.value,
+                      type: StepperType.horizontal,
+                      onStepTapped: (step) {
+                        if (step == 0) _ctrl.setStep(step);
+                      },
+                      /* onStepContinue: () {
+                        if (_ctrl.step < 1) {
+                          _ctrl.step.value++;
+                        }
+                      },
+                      onStepCancel: () {
+                        if (_ctrl.step > 0) {
+                          _ctrl.step.value--;
+                        }
+                      }, */
+                      controlsBuilder: (context, details) => none(),
+                      steps: [
+                        Step(
+                          title: Text(CheckoutStep1.title),
+                          isActive: _ctrl.step.value >= 0,
+                          content: CheckoutStep1(
+                            ctrl: _ctrl,
                           ),
                         ),
-                      ),
-                      mY(topMargin),
-                      Column(
-                        //id=ordersummarysec
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 14.0),
-                            child: Text(
-                              "Order summary",
-                              style: Styles.h3(),
-                            ),
-                          ),
-                          mY(topMargin),
-                          TuCard(
-                            padding: 14,
-                            child: true
-                                ? Column(
-                                    children: [
-                                      tuTableRow(
-                                        const Text("Items"),
-                                        Obx(
-                                          () => Text(
-                                              "${_storeCtrl.cart['products']?.length ?? 0}"),
-                                        ),
-                                        my: 10,
-                                      ),
-                                      devider(),
-                                      tuTableRow(
-                                        const Text("Subtotal"),
-                                        Obx(
-                                          () {
-                                            double total = 0;
-                                            if (_storeCtrl.cart["products"] !=
-                                                null) {
-                                              for (var it in _storeCtrl
-                                                  .cart["products"]) {
-                                                total += (it["product"]
-                                                            ["price"] *
-                                                        it["quantity"])
-                                                    .toDouble();
-                                              }
-                                            }
-                                            return Text(
-                                                "R${roundDouble(total, 2)}");
-                                          },
-                                        ),
-                                        my: 10,
-                                      ),
-                                      devider(),
-                                      tuTableRow(
-                                        const Text("Delivery fee"),
-                                        Obx(
-                                          () =>
-                                              Text("${_storeCtrl.deliveryFee}"),
-                                        ),
-                                        my: 10,
-                                      ),
-                                      devider(),
-                                    ],
-                                  )
-                                : Table(
-                                    border: TableBorder.all(
-                                        width: 1,
-                                        color:
-                                            const Color.fromRGBO(0, 0, 0, 0.15),
-                                        borderRadius: BorderRadius.circular(0)),
-                                    children: [
-                                      TableRow(children: [
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text("Subtotal"),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Obx(() {
-                                            double total = 0;
-                                            if (_storeCtrl.cart["products"] !=
-                                                null) {
-                                              for (var it in _storeCtrl
-                                                  .cart["products"]) {
-                                                total += (it["product"]
-                                                            ["price"] *
-                                                        it["quantity"])
-                                                    .toDouble();
-                                              }
-                                            }
-
-                                            return Text(
-                                                "R${roundDouble(total, 2)}");
-                                          }),
-                                        )
-                                      ]),
-                                      TableRow(children: [
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text("Delivery fee"),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Obx(() => Text(
-                                              "R${_storeCtrl.deliveryFee}")),
-                                        )
-                                      ]),
-                                    ],
-                                  ),
-                          )
-                        ],
-                      ),
-                      Obx(() => _ctrl.mode.value == OrderMode.collect
-                          ? Container(
-                              color: appBGLight,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 14.0),
-                                    child: tuTableRow(
-                                      Text(
-                                        "Collection info",
-                                        style: Styles.h3(),
-                                      ),
-                                      SizedBox(
-                                        width: 24,
-                                        child: IconButton(
-                                          onPressed: () {
-                                            TuFuncs.showBottomSheet(
-                                                context: context,
-                                                widget: editCollectorModal(
-                                                    context));
-                                          },
-                                          icon: const Icon(
-                                            Icons.edit,
-                                            size: 20,
-                                          ),
-                                          padding: EdgeInsets.zero,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  mY(topMargin),
-                                  TuCard(
-                                    child: Obx(() {
-                                      return _storeCtrl.stores.value == null
-                                          ? none()
-                                          : TuSelect(
-                                              label: "Store:",
-                                              value: _ctrl.store['_id'],
-                                              items: _storeCtrl.stores.value!
-                                                  .map((e) {
-                                                return SelectItem(
-                                                    e['location']['name'],
-                                                    e['_id']);
-                                              }).toList(),
-                                              onChanged: (val) {
-                                                var store = _storeCtrl
-                                                    .stores.value!
-                                                    .where((element) =>
-                                                        element['_id'] == val)
-                                                    .first;
-                                                _ctrl.setStore(store);
-                                              },
-                                            );
-                                    }),
-                                  ),
-                                  mY(topMargin),
-                                  TuCard(
-                                    child: Obx(
-                                      () => TuListTile(
-                                        leading: CircleAvatar(
-                                          backgroundColor: Colors.black12,
-                                          child: svgIcon(
-                                              name: 'br-user',
-                                              color: TuColors.text2),
-                                        ),
-                                        title: Text(
-                                          _ctrl.collector['name'] ?? "",
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        subtitle: Text(
-                                          _ctrl.collector['phone'] ?? "",
-                                          style: const TextStyle(fontSize: 12),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ))
-                          : Column(
-                              //id=delivery-address-section
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 14.0),
-                                  child: tuTableRow(
-                                      h3(
-                                        "Delivery address",
-                                      ),
-                                      SizedBox(
-                                        width: 25,
-                                        child: IconButton(
-                                            onPressed: () {
-                                              TuFuncs.showBottomSheet(
-                                                  context: context,
-                                                  widget:
-                                                      const EditAddressForm());
-                                            },
-                                            splashRadius: 24,
-                                            padding: EdgeInsets.zero,
-                                            icon:
-                                                const Icon(Icons.add_outlined)),
-                                      )),
-                                ),
-                                mY(5),
-                                Obx(
-                                  () => _appCtrl
-                                          .user['delivery_addresses'].isNotEmpty
-                                      ? Column(
-                                          children: (_appCtrl.user[
-                                                  'delivery_addresses'] as List)
-                                              .map((e) {
-                                          return addressCard(
-                                              context: context, address: e);
-                                        }).toList())
-                                      : Center(
-                                          child: SizedBox(
-                                          width: double.infinity,
-                                          height: 70,
-                                          child: InkWell(
-                                            onTap: () {
-                                              TuFuncs.showBottomSheet(
-                                                  context: context,
-                                                  widget:
-                                                      const EditAddressForm());
-                                            },
-                                            child: const Card(
-                                                elevation: .5,
-                                                child: Icon(
-                                                  Icons.add,
-                                                  color: Colors.black87,
-                                                  // size: 50,
-                                                )),
-                                          ),
-                                        )),
-                                ),
-                              ],
-                            )),
-                    ],
+                        Step(
+                          isActive: _ctrl.step.value == 1,
+                          title: Text(CheckoutStep2.title),
+                          content: const CheckoutStep2(),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                )),
               ],
             ));
   }
@@ -714,13 +495,13 @@ class GatewaysSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           h3('CONTINUE WITH'),
-          mY(6),
+          mY(10),
           const Text(
             "These secure payment gateways accept MasterCard, VISA, EFT, and a few other methods.",
             style: TextStyle(fontSize: 12),
             textAlign: TextAlign.center,
           ),
-          mY(10),
+          mY(16),
           TuButton(
             onPressed: () async {
               try {
