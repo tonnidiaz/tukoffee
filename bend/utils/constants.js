@@ -16,10 +16,15 @@ const UserPermissions = {
     delete: 2
 }
 const AddressSchema = {
-   location:   {
-    name: String,
-    center: [Number]
-   },
+
+    place_name: String,
+    center: [Number],
+    street: String,
+    suburb: String,
+    city: String,
+    line2: String,
+    state: String,
+    postcode: Number,
     phone: String,
     name: String,
 }

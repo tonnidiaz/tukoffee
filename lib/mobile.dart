@@ -35,7 +35,7 @@ class _MobileAppState extends State<MobileApp> {
     final _autoCheck = autoCheck();
     MainApp.appCtrl.setAutoCheckUpdates(_autoCheck);
     clog('AUTO CHECK: $_autoCheck');
-    if (_autoCheck) {
+    if (_autoCheck && !DEV) {
       final res = await checkUpdates();
       if (res != null) {
         Get.bottomSheet(UpdatesView3(update: res));
@@ -91,7 +91,7 @@ class _MobileAppState extends State<MobileApp> {
       scrollBehavior: MyCustomScrollBehavior(),
       routes: routes,
       debugShowCheckedModeBanner: false,
-      initialRoute: "/",
+      initialRoute: "/orders",
       //home: MyReviewsPage(),
       builder: (context, child) {
         return CallbackShortcuts(

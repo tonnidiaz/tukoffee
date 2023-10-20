@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lebzcafe/controllers/app_ctrl.dart';
@@ -241,12 +243,13 @@ class AddStoreView extends StatelessWidget {
       onSubmit: () async {
         var form = formCtrl.form;
 
-        if (form['location'] == null) {
+        if (form['address'] == null) {
           return showToast("Valid store location is requred", isErr: true)
               .show(context);
         }
         try {
           showProgressSheet();
+
           final res = await apiDio().post('/stores/add', data: formCtrl.form);
           storeCtrl.setStores(res.data['stores']);
           gpop();
@@ -262,18 +265,31 @@ class AddStoreView extends StatelessWidget {
       },
       fields: [
         Obx(() {
-          var location = formCtrl.form['location'];
+          var address = formCtrl.form['address'] ?? {};
           return TuFormField(
             label: "Address:",
             prefixIcon: TuIcon(Icons.location_on),
             readOnly: true,
-            value: location != null ? location['name'] : null,
+            value: address != null ? address['place_name'] : null,
             required: true,
             onTap: () {
               pushTo(const MapPage());
             },
           );
         }),
+        Obx(
+          () => TuFormField(
+            label: "Address line 2:",
+            hint: "Apt / Suite / Bldng / Unit",
+            value: formCtrl.form['address']?['line2'],
+            required: true,
+            keyboard: TextInputType.streetAddress,
+            onChanged: (val) {
+              formCtrl.setFormField(
+                  'address', {...formCtrl.form['address'] ?? {}, "line2": val});
+            },
+          ),
+        ),
         mY(10),
         Text(
           "Weekdays",

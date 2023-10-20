@@ -82,7 +82,7 @@ class _CartPageState extends State<CartPage> {
     try {
       final res = await apiDio().get("/user/cart?user=$uid");
       if (context.mounted) {
-        //_storeCtrl.setcart(res.data["cart"]);
+        _storeCtrl.setcart(res.data["cart"]);
         _setupTotal(res.data['cart']);
       }
     } catch (e) {

@@ -383,12 +383,11 @@ class _OrderPageState extends State<OrderPage> {
                                         ? none()
                                         : TuSelect(
                                             label: "Store:",
-                                            value: _order!['store']['_id'],
+                                            value: _order!['store']?['_id'],
                                             items: _storeCtrl.stores.value!
                                                 .map((e) {
                                               return SelectItem(
-                                                  e['location']['name'],
-                                                  e['_id']);
+                                                  e['place_name'], e['_id']);
                                             }).toList(),
                                             onChanged: (val) async {
                                               var store = _storeCtrl
@@ -433,10 +432,10 @@ class _OrderPageState extends State<OrderPage> {
                                       Builder(builder: (context) {
                                         final addr =
                                             _order!["delivery_address"];
-                                        return addr['location'] == null
+                                        return addr == null
                                             ? const Text("No address")
                                             : Text(
-                                                addr['location']['name'],
+                                                addr['place_name'],
                                               );
                                       }),
                                     ],

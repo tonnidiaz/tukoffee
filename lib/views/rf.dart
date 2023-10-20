@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:get/get.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/constants2.dart';
+import 'package:lebzcafe/utils/dummies.dart';
 import 'package:lebzcafe/utils/functions.dart';
 import 'package:lebzcafe/utils/functions2.dart';
+import 'package:lebzcafe/views/map.dart';
 import 'package:lebzcafe/views/order/index.dart';
 import 'package:lebzcafe/widgets/common.dart';
 import 'package:lebzcafe/widgets/common2.dart';
@@ -84,10 +90,44 @@ class _RFPageState extends State<RFPage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            showProgressSheet();
+            try {
+              Get.bottomSheet(Container(
+                  height: screenSize(context).height, child: MapPage()));
+              return;
+              showProgressSheet();
+              String query = '50 davies street';
+              final mapboxPlaceRes = await dio.get(
+                  "https://api.mapbox.com/geocoding/v5/mapbox.places/$query.json",
+                  queryParameters: {
+                    "access_token": mapboxPublicToken,
+                    "proximity": "28.0534776,-26.1974939",
+                    "types": "address"
+                  });
+              gpop();
+              clog(jsonEncode(mapboxPlaceRes.data['features']));
+              return;
+              final davies = dummyFeatures[0]['center'].reversed.toList();
+              final daviesBox = dummyFeatures[0]['center'];
+              final placemarks =
+                  await placemarkFromCoordinates(davies[0], davies[1]);
+              var addr1 = placemarks[1];
+              var addr2 = await getAddressFromLatLng(davies);
 
-            await sleep(4500);
-            gpop();
+              final mapboxres = await dio.get(
+                  "https://api.mapbox.com/geocoding/v5/mapbox.places/${daviesBox[0]},${daviesBox[1]}.json",
+                  queryParameters: {
+                    "access_token": mapboxPublicToken,
+                    "proximity": "28.0534776,-26.1974939",
+                  });
+
+              clog(addr1.postalCode);
+              clog(addr2?.postalCode);
+              clog(mapboxres.data);
+              gpop();
+            } catch (e) {
+              gpop();
+              errorHandler(e: e, context: context);
+            }
             // Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
           },
           child: Icon(Icons.home_outlined),

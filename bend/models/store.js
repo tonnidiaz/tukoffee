@@ -1,11 +1,10 @@
 const { Schema } = require("mongoose");
+const { AddressSchema } = require("../utils/constants");
 
 const StoreSchema = new Schema({
-    location: {
-        type: {
-            name: String,
-            center: [Number]
-        }, required: true
+    address: {
+        type: AddressSchema,
+        required: true
     },
    
     open_time: {

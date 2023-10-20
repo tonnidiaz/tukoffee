@@ -26,6 +26,8 @@ router.get("/payment", async (req, res) => {
 });
 router.get("/clean", async (req, res) => {
     try {
+        const { cancelled } = req.query
+        
         // clean carts
         console.log("Cleaning carts");
         const carts = await Cart.find().exec();
@@ -45,6 +47,21 @@ router.get("/clean", async (req, res) => {
         for (let order of orders) {
             const user = await User.findById(order.customer).exec();
             if (!user) await Order.findByIdAndDelete(order._id).exec();
+            if (cancelled){
+                const ords = await Order.find({status: OrderStatus.cancelled}).exec()
+                for (let ord of ords){
+                    const u = await User.findById(ord.customer).exec()
+                    await Order.findByIdAndDelete(ord._id).exec()
+                    if(u){
+                u.orders = u.orders?.filter(o=> o != ord._id)
+               await u.save()
+               }
+                }
+               
+               
+               
+               
+            }
             else {
                 order.products = (
                     await order.populate("products")
@@ -68,6 +85,7 @@ router.get("/clean", async (req, res) => {
         }
         res.send("cleanup complete!");
     } catch (e) {
+        console.log(e)
         res.status(500).json({ msg: "something went wrong" });
     }
 });

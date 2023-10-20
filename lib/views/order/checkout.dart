@@ -24,6 +24,7 @@ import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/form_view.dart';
 import 'package:get/get.dart';
 import 'package:lebzcafe/widgets/tu/select.dart';
+import 'package:lebzcafe/widgets/tu/stepper.dart';
 import '../../controllers/app_ctrl.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
@@ -105,6 +106,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final appBar = childAppbar(showCart: false, title: "Checkout");
     return _appCtrl.user.isEmpty
@@ -179,9 +186,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 SliverToBoxAdapter(
                     child: Container(
                   width: screenSize(context).width,
-                  height: screenSize(context).height,
+                  height: screenSize(context).height - appBarH - statusBarH(),
                   child: Obx(
-                    () => Stepper(
+                    () => TuStepper(
                       elevation: .5,
                       currentStep: _ctrl.step.value,
                       type: StepperType.horizontal,
@@ -284,7 +291,7 @@ Widget addressCard(
         subtitle:
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            address['location']['name'],
+            address['place_name'],
             style: const TextStyle(fontSize: 13),
           ),
           mY(4),
@@ -304,12 +311,15 @@ Widget addressCard(
                   onPressed: () async {
                     // delete address
                     try {
+                      showProgressSheet();
                       var res = await apiDio().post(
                           '/user/delivery-address?action=remove',
                           data: {"address": address});
                       MainApp.appCtrl.setUser(res.data['user']);
                       checkoutCtrl.setSelectedAddr({});
+                      gpop();
                     } catch (e) {
+                      gpop();
                       errorHandler(
                           e: e,
                           context: context,
@@ -362,18 +372,29 @@ class _EditAddressFormState extends State<EditAddressForm> {
             required: true,
             prefixIcon: TuIcon(Icons.location_on),
             readOnly: true,
-            value: _deliveryAddress['location'] == null
-                ? ""
-                : _deliveryAddress['location']['name'],
+            value: _deliveryAddress['place_name'],
             onTap: () {
+              MainApp.formCtrl.clear();
               TuFuncs.showBottomSheet(
                   context: context,
                   widget: MapPage(
                     onSubmit: (val) {
                       clog(val);
-                      _setDeliveryAddressField('location', val);
+                      setState(() {
+                        _deliveryAddress = {..._deliveryAddress, ...val};
+                      });
                     },
                   ));
+            },
+          ),
+          TuFormField(
+            label: "Address line 2:",
+            hint: "Apt / Suite / Bldng / Unit",
+            value: _deliveryAddress['line2'],
+            required: true,
+            keyboard: TextInputType.streetAddress,
+            onChanged: (val) {
+              _setDeliveryAddressField("line2", val);
             },
           ),
           TuFormField(

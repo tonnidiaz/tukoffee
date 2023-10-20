@@ -216,7 +216,6 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
           onTap: () {
             //formCtrl.clear();
             formCtrl.setForm(store);
-            clog(store['location']);
             pushNamed(
               '/map',
             );
@@ -228,7 +227,7 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
                 size: 30,
               ),
               title: Text(
-                "${store['location']['name']}",
+                "${store['address']['place_name']}",
                 softWrap: false,
                 style:
                     const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),

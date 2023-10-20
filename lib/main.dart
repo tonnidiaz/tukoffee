@@ -22,6 +22,7 @@ import 'views/rf.dart';
 import 'widgets/drawer.dart';
 import 'widgets/titlebars.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:nominatim_geocoding/nominatim_geocoding.dart';
 
 enableWebviewDebugging() async {
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
@@ -32,7 +33,7 @@ enableWebviewDebugging() async {
 void main() async {
   await initHive();
   initNotifs();
-
+  await NominatimGeocoding.init(reqCacheNum: 20);
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

@@ -16,7 +16,7 @@ initSocketio() {
   final appCtrl = MainApp.appCtrl;
   clog("initing socketio...");
   socket = IO.io(
-      MainApp.appCtrl.apiURL.value,
+      appCtrl.apiURL.value,
       IO.OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
           .setExtraHeaders({'foo': 'bar'}) // optional
           .build());
@@ -56,24 +56,23 @@ class _TuSplashState extends State<TuSplash> {
     // Check for internet connection
     clog('Initi splash...');
     if (_appCtrl.store['name'] != null) return;
-
-    try {
-      //GET APIURL
-      final apiURL = await getApiURL();
-      _appCtrl.setApiURL(apiURL);
-    } catch (e) {
-      clog(e);
-      return;
-    }
-
     _setConnected(true);
 
-    initSocketio();
     bool result = await InternetConnectionChecker().hasConnection;
     await Future.delayed(const Duration(milliseconds: 100));
     clog("Connected: $result");
     _setConnected(result);
-    if (result || DEV) {
+    if (result) {
+      try {
+        //GET APIURL
+        final apiURL = await getApiURL();
+        clog(apiURL);
+        _appCtrl.setApiURL(apiURL);
+        initSocketio();
+      } catch (e) {
+        clog(e);
+        return;
+      }
       clog("await seupStoreDetails...");
       await setupStoreDetails();
       // If server is still down
@@ -96,6 +95,7 @@ class _TuSplashState extends State<TuSplash> {
                 side: const BorderSide(width: 1.5, color: Colors.white38),
                 borderRadius: BorderRadius.circular(5))),
         onPressed: () async {
+          clog("REFRESHING");
           _init();
         },
         child: const Text("REFRESH"));

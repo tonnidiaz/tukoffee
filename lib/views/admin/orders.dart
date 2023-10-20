@@ -165,8 +165,7 @@ class _OrdersPageState extends State<OrdersPage> {
             okTxt: "Yes",
             onOk: () async {
               try {
-                showLoading(context,
-                    widget: const LoadingDialog(msg: 'Canceling orders..'));
+                showProgressSheet(msg: 'Canceling orders..');
                 // Deselect all
                 final List<dynamic> ids =
                     _appBarCtrl.selected.map((it) => it['_id']).toList();
@@ -174,10 +173,10 @@ class _OrdersPageState extends State<OrdersPage> {
                 final res = await apiDio().post(
                     "/order/cancel?action=${act.toLowerCase()}",
                     data: {'ids': ids, "userId": MainApp.appCtrl.user['_id']});
-                Navigator.pop(_scaffoldKey.currentContext!);
+                gpop();
                 _ctrl.setOrders(res.data['orders']);
               } catch (e) {
-                Navigator.pop(context);
+                gpop();
                 clog(e);
                 errorHandler(
                     context: context, e: e, msg: "Failed to cancel orders!");
@@ -295,7 +294,7 @@ class _OrdersPageState extends State<OrdersPage> {
 
     const sheetRadius = Radius.circular(10);
     return Scaffold(
-        extendBody: true,
+        extendBody: false,
         key: _scaffoldKey,
         appBar: childAppbar(
             title: "Orders",
@@ -325,7 +324,7 @@ class _OrdersPageState extends State<OrdersPage> {
                       ])
             ]),
         bottomNavigationBar: TuBottomBar(
-            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             topRadius: 10,
             child: Container(
               child: Column(
@@ -458,7 +457,15 @@ class _OrdersPageState extends State<OrdersPage> {
                         )
                       : _ctrl.sortedOrders.isEmpty
                           ? SliverFillRemaining(
-                              child: Center(child: h3('Nothing to show')),
+                              child: Center(
+                                  child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                    routeName == '/orders'
+                                        ? 'You have not placed orders yet'
+                                        : 'No orders yet',
+                                    style: Styles.h4(isLight: true)),
+                              )),
                             )
                           : SliverPadding(
                               padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),

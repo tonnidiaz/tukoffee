@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -8,6 +10,7 @@ import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/constants2.dart';
+import 'package:lebzcafe/utils/dummies.dart';
 import 'package:lebzcafe/utils/functions.dart';
 import 'package:lebzcafe/widgets/common.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
@@ -69,13 +72,17 @@ class _MapPageState extends State<MapPage> {
   final _mapController = MapController();
 
   _searchAddress(String query) async {
-    if (_isGeocoding) return;
+    if (_isGeocoding || query.length < 3) return;
     _setIsGeocoding(true);
     try {
+      clog('setft');
+      _setFeatures(dummyFeatures);
+      return;
       const baseURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
       final res = await dio.get("$baseURL/$query.json", queryParameters: {
         "proximity": "28.0534776,-26.1974939",
-        "access_token": mapboxPublicToken
+        "access_token": mapboxPublicToken,
+        "country": "ZA"
       });
       _setFeatures(res.data['features']);
     } catch (e) {
@@ -158,10 +165,10 @@ class _MapPageState extends State<MapPage> {
         place.administrativeArea,
         place.postalCode
       ].where((element) => element != null).toList();
-
+/* TODO: ALSO INCLUDE ADDRESS */
       String placeAsTxt = placeAsList.join(", ");
       _setAddress({
-        "name": placeAsTxt,
+        "place_name": placeAsTxt,
         "center": [position.latitude, position.longitude]
       });
       final cent = LatLng(position.latitude, position.longitude);
@@ -185,8 +192,9 @@ class _MapPageState extends State<MapPage> {
           //_setCurrCenter(LatLng(_args!.center.first, _args!.center.last));
           _setCenter(cent);
           _mapController.move(cent, 17.5);
-        } else if (_formCtrl.form['location'] != null) {
-          var formLoc = _formCtrl.form['location'];
+        } else if (_formCtrl.form['address'] != null) {
+          clog(_formCtrl.form);
+          Map<String, dynamic> formLoc = _formCtrl.form['address'];
           // clog(formLoc);
           _setCenter(LatLng(formLoc['center'].first, formLoc['center'].last));
           _mapController.move(_center!, 17.5);
@@ -229,7 +237,7 @@ class _MapPageState extends State<MapPage> {
                 InkWell(
                   borderRadius: BorderRadius.circular(100),
                   onTap: () {
-                    _mapController.move(_center ?? LatLng(0, 0), 18.5);
+                    _mapController.move(_center ?? const LatLng(0, 0), 18.5);
                   },
                   child: Container(
                     padding: defaultPadding2,
@@ -250,8 +258,7 @@ class _MapPageState extends State<MapPage> {
                   child: const Icon(Icons.check),
                   onPressed: () async {
                     /// _setCenter(_currCenter);
-                    clog(_address);
-                    _formCtrl.setFormField('location', _address);
+                    _formCtrl.setFormField('address', _address);
                     if (widget.onSubmit != null) {
                       widget.onSubmit!(_address);
                     }
@@ -345,7 +352,7 @@ class _MapPageState extends State<MapPage> {
                               ? none()
                               : Row(
                                   children: [
-                                    BackButton(),
+                                    const BackButton(),
                                     Expanded(
                                       child: TuSearchField(
                                           hint: "Search location...",
@@ -364,16 +371,49 @@ class _MapPageState extends State<MapPage> {
                                             _searchAddress(val);
                                           },
                                           onSuggestionTap: (val) {
-                                            var center = val.value['center'];
-                                            var latlng =
-                                                LatLng(center[1], center[0]);
-                                            _mapController.move(latlng, 18.5);
-                                            _setCenter(latlng);
-                                            _setAddress({
-                                              "name": val.value['place_name'],
-                                              "center": center.reversed
-                                                  .toList(), // REVERSING IT TO MAP MODE
-                                            });
+                                            try {
+                                              var center = val.value['center'];
+                                              var latlng =
+                                                  LatLng(center[1], center[0]);
+                                              _mapController.move(latlng, 18.5);
+                                              _setCenter(latlng);
+
+                                              final List context =
+                                                  val.value['context'];
+
+                                              var addr = {
+                                                "street":
+                                                    "${val.value['address']} ${val.value['text']}",
+                                                "city": context
+                                                    .firstWhereOrNull((el) =>
+                                                        el['id'].startsWith(
+                                                            'place'))['text'],
+                                                "state": context
+                                                    .firstWhereOrNull((el) =>
+                                                        el['id'].startsWith(
+                                                            'region'))?['text'],
+                                                "postcode": context
+                                                        .firstWhereOrNull((el) =>
+                                                            el['id'].startsWith(
+                                                                'postcode'))?[
+                                                    'text'],
+                                                "locality": context
+                                                        .firstWhereOrNull((el) =>
+                                                            el['id'].startsWith(
+                                                                'locality'))?[
+                                                    'text'],
+                                              };
+                                              _setAddress({
+                                                "place_name":
+                                                    val.value['place_name'],
+                                                "center": center.reversed
+                                                    .toList(), // REVERSING IT TO MAP MODE
+
+                                                ...addr
+                                              });
+                                            } catch (e) {
+                                              clog(e);
+                                            }
                                           }),
                                     )
                                   ],

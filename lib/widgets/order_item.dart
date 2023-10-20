@@ -11,6 +11,7 @@ import 'package:lebzcafe/widgets/common2.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/dialogs/loading_dialog.dart';
 import 'package:get/get.dart';
+import 'package:lebzcafe/widgets/tu/common.dart';
 
 import '../utils/colors.dart';
 import '../utils/constants.dart';
@@ -52,18 +53,18 @@ class OrderItem extends StatelessWidget {
             okTxt: "Yes",
             onOk: () async {
               try {
-                showLoading(context,
-                    widget: const LoadingDialog(msg: 'Canceling order..'));
+                showProgressSheet(msg: 'Canceling order..');
                 final res =
                     await apiDio().post("/order/cancel?action=$act", data: {
                   'ids': [order['_id']],
                   "userId": isAdmin ? null : MainApp.appCtrl.user['_id']
                 });
-                pop(tcontext);
+
                 _appBarCtrl.setSelected([]);
                 ctrl.setOrders(res.data['orders']);
+                gpop();
               } catch (e) {
-                pop(tcontext);
+                gpop();
                 errorHandler(
                     context: context, e: e, msg: "Failed to cancel order!");
               }

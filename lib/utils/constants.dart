@@ -221,6 +221,12 @@ Dio apiDio() => Dio(BaseOptions(
         ? {"Authorization": "Bearer ${appBox!.get("authToken")}"}
         : {}));
 
+const courierGuyKey = "a601d99c75fc4c64b5a64288f97d52b4";
+Dio shiplogicDio() => Dio(BaseOptions(
+    baseUrl: 'https://api.shiplogic.com/v2',
+    contentType: "application/json",
+    headers: {"Authorization": "Bearer $courierGuyKey"}));
+
 Map<String, dynamic> dummyGeocodeRes = {
   "type": "FeatureCollection",
   "features": [

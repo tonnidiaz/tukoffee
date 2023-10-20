@@ -13,7 +13,7 @@ import 'package:lebzcafe/widgets/common3.dart';
 class CheckoutStep2 extends StatelessWidget {
   const CheckoutStep2({super.key});
 
-  static String title = "Payment";
+  static String title = "Summary";
   @override
   Widget build(BuildContext context) {
     final storeCtrl = MainApp.storeCtrl;

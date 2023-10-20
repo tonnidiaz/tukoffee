@@ -1,0 +1,16 @@
+{
+    "address": {
+        "place_name": "50 Davies Street, Johannesburg, Johannesburg, Gauteng 2094, South Africa",
+        "center": [-26.198363, 28.053828],
+        "street": "50 Davies Street",
+        "city": "Johannesburg",
+        "state": "Gauteng",
+        "postcode": "2094",
+        "locality": "Johannesburg",
+        "line2": "dghh"
+    },
+    "open_time": "15:54",
+    "close_time": "15:54",
+    "open_time_weekend": "15:54",
+    "close_time_weekend": "15:54"
+}

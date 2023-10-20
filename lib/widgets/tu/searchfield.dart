@@ -46,10 +46,11 @@ class _TuSearchFieldState extends State<TuSearchField> {
     });
   }
 
-  _hideOverlay() {
+  _hideOverlay() async {
     try {
       //clog(_entry == null);
       if (_entry != null) {
+        await sleep(200);
         _entry?.remove();
         _entry = null;
       }
@@ -77,12 +78,11 @@ class _TuSearchFieldState extends State<TuSearchField> {
   }
 
   _onFocusChanged() async {
-    if (_focusNode.hasFocus) {
+    if (_focusNode.hasFocus && widget.suggestions.isNotEmpty) {
       _showOverlay();
     } else {
       //clog("Unfocused");
       if (Platform.isAndroid || Platform.isIOS || true) {
-        await sleep(100);
         _hideOverlay();
       }
     }
@@ -122,6 +122,8 @@ class _TuSearchFieldState extends State<TuSearchField> {
           _hideOverlay();
         },
         onChanged: (val) {
+          clog(widget.suggestions.length);
+          if (widget.suggestions.isNotEmpty) _showOverlay();
           _setValue(val);
           _debouncer.run(() {
             widget.onChanged(val);
