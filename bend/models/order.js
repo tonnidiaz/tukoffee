@@ -18,6 +18,7 @@ const OrderSchema = new Schema({
     },
     yocoData: {type: Object},
     paystackData: {type: Object},
+    shiplogic: {type: Object},
     products: {
         type: [{
             product: {type: Schema.ObjectId, ref: "Product"},
@@ -29,6 +30,10 @@ const OrderSchema = new Schema({
     },
    delivery_address: {
         type: AddressSchema, required: false
+    },
+    fee: {
+        type: Number, 
+        default: 0
     },
     date_created: {
         type: Date,

@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:lebzcafe/utils/constants2.dart';
+import 'package:lebzcafe/utils/functions2.dart';
 import 'package:lebzcafe/views/auth/login.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
@@ -35,8 +36,13 @@ class OrdersCtrl extends GetxController {
   }
 
   RxList<dynamic> orders = <dynamic>[].obs;
-  setOrders(List<dynamic> val) {
-    orders.value = val;
+  setOrders(List<dynamic> val) async {
+    List orders = [];
+    for (var o in val) {
+      final status = await Shiplogic.getOrderStatus(o);
+      orders.add({...o, "status": status});
+    }
+    this.orders.value = orders;
     //selectedOrders.value = [];
     _sortOrders(orders);
   }
@@ -174,7 +180,7 @@ class _OrdersPageState extends State<OrdersPage> {
                     "/order/cancel?action=${act.toLowerCase()}",
                     data: {'ids': ids, "userId": MainApp.appCtrl.user['_id']});
                 gpop();
-                _ctrl.setOrders(res.data['orders']);
+                await _ctrl.setOrders(res.data['orders']);
               } catch (e) {
                 gpop();
                 clog(e);
@@ -196,10 +202,15 @@ class _OrdersPageState extends State<OrdersPage> {
       final res = ModalRoute.of(context)?.settings.name == "/orders"
           ? await apiDio().get("/orders?user=${_appCtrl.user['_id']}")
           : await apiDio().get("/orders");
-      _ctrl.setOrders(res.data['orders']);
+
+      await _ctrl.setOrders(res.data['orders']);
       _ctrl.setOrdersFetched(true);
     } catch (e) {
       clog(e);
+      if (e.runtimeType == DioException) {
+        e as DioException;
+        clog(e.response);
+      }
       _ctrl.setOrdersFetched(true);
     }
   }

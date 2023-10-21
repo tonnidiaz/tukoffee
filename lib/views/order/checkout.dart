@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lebzcafe/utils/functions2.dart';
 import 'package:lebzcafe/utils/vars.dart';
 import 'package:lebzcafe/views/order/checkout/step1.dart';
 import 'package:lebzcafe/views/order/checkout/step2.dart';
@@ -52,6 +53,11 @@ class CheckoutCtrl extends GetxController {
   RxMap<String, dynamic> collector = <String, dynamic>{}.obs;
   setCollector(Map<String, dynamic> val) {
     collector.value = val;
+  }
+
+  RxMap<String, dynamic> form = <String, dynamic>{}.obs;
+  setForm(Map<String, dynamic> val) {
+    form.value = val;
   }
 
   RxMap<String, dynamic> store = <String, dynamic>{}.obs;
@@ -107,7 +113,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   void dispose() {
-    _ctrl.dispose();
+    clog('Disposing');
+    Get.delete<CheckoutCtrl>();
     super.dispose();
   }
 
@@ -467,6 +474,8 @@ class GatewaysSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final appCtrl = MainApp.appCtrl;
     final CheckoutCtrl ctrl = Get.find();
+    final storeCtrl = MainApp.storeCtrl;
+
     createPaystackURL() async {
       var body = {
         "name":
@@ -491,20 +500,37 @@ class GatewaysSheet extends StatelessWidget {
 
     _createOrder() async {
       //create the order
-      showToast("Creating order...").show(context);
+      showProgressSheet(msg: "Creating order...");
       try {
+        // Create shiplogic shipment
+        final shiplogicRes = await createCourierGuyShipment(
+            items:
+                storeCtrl.cart['products'].map((pr) => pr['product']).toList(),
+            total: total - storeCtrl.deliveryFee.value,
+            from: storeCtrl.stores.value?[0]['address'],
+            to: ctrl.selectedAddr,
+            ref: "DELIVERY FOR ${ctrl.selectedAddr['name']}",
+            serviceLevelId: ctrl.form['shiplogic']['service_level']['id']);
+
+        // SAVE TRACKING CODE
+        ctrl.form['shiplogic']['shipment'] = {
+          "tracking_code": shiplogicRes['short_tracking_reference']
+        };
+
         final res = await apiDio().post(
             "/order/create?mode=${ctrl.mode.value == OrderMode.deliver ? 0 : 1}&cartId=${MainApp.storeCtrl.cart["_id"]}",
             data: {
               "address": ctrl.selectedAddr,
               'store': ctrl.store['_id'],
-              'collector': ctrl.collector
+              'collector': ctrl.collector,
+              "form": {...ctrl.form, "fee": storeCtrl.deliveryFee.value},
             });
         var oid = res.data["order"]["oid"];
-        clog(oid);
+        storeCtrl.cart.clear();
         Get.offAllNamed("/");
         pushNamed("/order", arguments: OrderPageArgs(id: "$oid"));
       } catch (e) {
+        gpop();
         errorHandler(e: e, context: context, msg: "Failed to create order");
       }
     }

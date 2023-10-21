@@ -193,7 +193,7 @@ class _MapPageState extends State<MapPage> {
           _setCenter(cent);
           _mapController.move(cent, 17.5);
         } else if (_formCtrl.form['address'] != null) {
-          clog(_formCtrl.form);
+          clog(_formCtrl.form['address']);
           Map<String, dynamic> formLoc = _formCtrl.form['address'];
           // clog(formLoc);
           _setCenter(LatLng(formLoc['center'].first, formLoc['center'].last));
@@ -215,7 +215,8 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
         bottomNavigationBar: TuBottomBar(
           child: Container(
-            child: iconText(_address['name'] ?? "No address", Icons.location_on,
+            child: iconText(
+                _address['place_name'] ?? "No address", Icons.location_on,
                 alignment: MainAxisAlignment.start, iconSize: 23),
           ),
         ),

@@ -149,7 +149,7 @@ class _ProductPageState extends State<ProductPage> {
                               horizontal: 5, vertical: -2),
                           label: Text(
                             _product!['quantity'] > 0
-                                ? "${_product!['quantity']} In stock"
+                                ? "In stock"
                                 : "out of stock",
                             style: const TextStyle(
                                 fontSize: 14, color: Colors.white),
@@ -349,7 +349,20 @@ class _ProductPageState extends State<ProductPage> {
                                 const Text(
                                   'Weight',
                                 ),
-                                Text('${_product!['weight']} KG'))
+                                Text('${_product!['weight']} KG'),
+                                my: 5),
+                            tuTableRow(
+                                const Text(
+                                  'Width',
+                                ),
+                                Text('${_product!['width']} cm'),
+                                my: 5),
+                            tuTableRow(
+                                const Text(
+                                  'Height',
+                                ),
+                                Text('${_product!['height']} cm'),
+                                my: 5),
                           ]),
                         ),
                         mY(6),

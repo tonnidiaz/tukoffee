@@ -65,7 +65,8 @@ class CheckoutStep1 extends StatelessWidget {
                                         value: ctrl.store['_id'],
                                         items: storeCtrl.stores.value!.map((e) {
                                           return SelectItem(
-                                              e['place_name'], e['_id']);
+                                              "${e['address']['place_name']}",
+                                              e['_id']);
                                         }).toList(),
                                         onChanged: (val) {
                                           var store = storeCtrl.stores.value!
@@ -252,9 +253,13 @@ class DatesRatesSheet extends StatelessWidget {
                   color: appBGLight,
                   child: ListTile(
                     onTap: () {
-                      clog("TAPPED");
+                      ctrl.form['shiplogic'] = {
+                        "service_level": {"id": rate['service_level']['id']}
+                      };
+
                       storeCtrl.setDeliveryFee(rate['rate'].toDouble());
                       gpop();
+                      clog('next step');
                       ctrl.step++;
                     },
                     title: Text("${rate['service_level']['delivery_date_from']}"
@@ -275,57 +280,6 @@ class DatesRatesSheet extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-Map<String, dynamic> addrToCourierGuyAddr(Map<String, dynamic> addr) {
-  return {
-    "street_address": addr['street'],
-    "local_area": addr['suburb'],
-    "city": addr['city'],
-    "zone": addr['state'],
-    "country": "ZA",
-    "code": "${addr['postcode']}",
-    "lat": addr['center'].first,
-    "lng": addr['center'].last
-  };
-}
-
-getCourierGuyRates(
-    {required Map<String, dynamic> from,
-    required Map<String, dynamic> to,
-    required double total,
-    required List items}) async {
-  try {
-    final today = DateTime.now().toLocal();
-    final collectionDate = "${today.year}-${today.month}-${today.day}";
-    final reqData = {
-      "collection_min_date": collectionDate,
-      "delivery_min_date": collectionDate,
-      "collection_address": {
-        "company": MainApp.appCtrl.store['name'],
-        "type": "business",
-        ...addrToCourierGuyAddr(from)
-      },
-      "declared_value": total,
-      "delivery_address": {"type": "residential", ...addrToCourierGuyAddr(to)},
-      "parcels": items
-          .map(
-            (e) => {
-              "submitted_width_cm": 13.5,
-              "submitted_height_cm": 27.5,
-              "submitted_weight_kg": e['weight']
-            },
-          )
-          .toList()
-    };
-    clog(collectionDate);
-    final r = await shiplogicDio().post('/rates', data: reqData);
-
-    return r.data;
-  } catch (e) {
-    errorHandler(e: e, context: appCtx!);
-    return null;
   }
 }
 

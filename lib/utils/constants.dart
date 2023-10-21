@@ -164,7 +164,7 @@ Size screenSize(BuildContext context) {
   return MediaQuery.of(context).size;
 }
 
-const DEV = kDebugMode;
+const DEV = false; // kDebugMode;
 
 Size screenPercent(BuildContext context, double p) {
   final h = MediaQuery.of(context).size.height;

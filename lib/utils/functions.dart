@@ -193,7 +193,8 @@ void handleDioException(
     {required BuildContext context,
     required DioException exception,
     String? msg}) {
-  clog(exception.response);
+  clog("ERROR RESP: ${exception.response}");
+  return;
   if (exception.response != null &&
       "${exception.response!.data}".startsWith("tuned")) {
     showToast("${exception.response!.data.split('tuned:').last}", isErr: true)
@@ -222,6 +223,7 @@ Future<String?> addProduct(BuildContext context, Map<String, dynamic> product,
     final res = await apiDio().post(url, data: product);
     return "${res.data["pid"]}";
   } catch (e) {
+    gpop();
     clog(e);
     if (e.runtimeType == DioException) {
       e as DioException;

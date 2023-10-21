@@ -1,15 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:lebzcafe/controllers/appbar.dart';
 import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/styles.dart';
+import 'package:lebzcafe/utils/functions2.dart';
 import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/views/rf.dart';
-import 'package:lebzcafe/widgets/common2.dart';
 import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/dialogs/loading_dialog.dart';
 import 'package:get/get.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
 
@@ -20,7 +16,7 @@ import 'common.dart';
 import 'prompt_modal.dart';
 
 class OrderItem extends StatelessWidget {
-  final Map<String, dynamic> order;
+  final Map order;
   final bool isAdmin;
   final bool dev;
   final dynamic ctrl;
@@ -33,7 +29,7 @@ class OrderItem extends StatelessWidget {
       required this.ctrl,
       this.isAdmin = false});
 
-  void _selectItem(Map<String, dynamic> item) {
+  void _selectItem(Map item) {
     var newList = !_appBarCtrl.selected.contains(item)
         ? [..._appBarCtrl.selected, item]
         : _appBarCtrl.selected.where((el) => el != item).toList();
@@ -54,6 +50,9 @@ class OrderItem extends StatelessWidget {
             onOk: () async {
               try {
                 showProgressSheet(msg: 'Canceling order..');
+
+                //cancel from shiplogic first
+                await Shiplogic.cancelOrder(order);
                 final res =
                     await apiDio().post("/order/cancel?action=$act", data: {
                   'ids': [order['_id']],
@@ -61,7 +60,7 @@ class OrderItem extends StatelessWidget {
                 });
 
                 _appBarCtrl.setSelected([]);
-                ctrl.setOrders(res.data['orders']);
+                await ctrl.setOrders(res.data['orders']);
                 gpop();
               } catch (e) {
                 gpop();
@@ -94,36 +93,29 @@ class OrderItem extends StatelessWidget {
             overflow: TextOverflow.fade,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
-          subtitle: Column(
+          subtitle: tuColumn(
             children: [
-              Row(
-                children: [
-                  Text(
-                    "${DateTime.parse(order["date_created"]).toLocal()}"
-                        .split(' ')
-                        .first,
-                    style: TextStyle(
-                        color: TuColors.note,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 13),
-                  ),
-                  mX(10),
-                  Chip(
-                      backgroundColor: order['status'] == 'pending'
-                          ? TuColors.medium
-                          : order['status'] == 'cancelled'
-                              ? TuColors.danger
-                              : TuColors.success,
-                      label: Text(
-                        '${order['status']}',
-                        style:
-                            const TextStyle(fontSize: 12, color: Colors.white),
-                      ))
-                ],
+              mY(10),
+              Text(
+                "${DateTime.parse(order["date_created"]).toLocal()}"
+                    .split(' ')
+                    .first,
+                style: TextStyle(
+                    color: TuColors.note,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13),
               ),
-              mY(3),
+              Chip(
+                  backgroundColor: order['status'] == 'cancelled'
+                      ? TuColors.danger
+                      : TuColors.medium,
+                  label: Text(
+                    '${order['status']}',
+                    style: const TextStyle(fontSize: 12, color: Colors.white),
+                  )),
+              mY(10),
               Container(
-                height: 30,
+                height: 35,
                 alignment: Alignment.centerLeft,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -136,39 +128,46 @@ class OrderItem extends StatelessWidget {
                           elevation: .1,
                           child: Container(
                             width: 40,
-                            height: 30,
+                            height: 35,
                             margin: const EdgeInsets.symmetric(vertical: 0),
                             alignment: Alignment.center,
-                            child: item['images'].isEmpty
-                                ? svgIcon(
-                                    name: 'br-image-slash',
-                                    size: 20,
-                                    color: Colors.black54,
-                                  )
-                                : ClipRRect(
-                                    child: Image.network(
-                                    item['images'][0]['url'],
-                                    loadingBuilder:
-                                        (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                          child: SizedBox(
-                                        height: 15,
-                                        width: 15,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          value: loadingProgress
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes!
-                                              : null,
-                                        ),
-                                      ));
-                                    },
-                                  )),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.black12,
+                              backgroundImage: item['images'].isEmpty
+                                  ? null
+                                  : Image.network(
+                                      item['images'][0]['url'],
+                                      loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        }
+                                        return Center(
+                                            child: SizedBox(
+                                          height: 15,
+                                          width: 15,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes!
+                                                : null,
+                                          ),
+                                        ));
+                                      },
+                                    ).image,
+                              child: item['images'].isEmpty
+                                  ? svgIcon(
+                                      name: 'br-image-slash',
+                                      size: 20,
+                                      color: Colors.black54,
+                                    )
+                                  : none(),
+                            ),
                           ),
                         ),
                       );

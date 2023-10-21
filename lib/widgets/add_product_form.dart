@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
+import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
 import 'package:cloudinary/cloudinary.dart';
@@ -177,41 +178,99 @@ class _AddProductFormState extends State<AddProductForm> {
               _formCtrl.setFormField("description", val);
             },
           ),
-          TuFormField(
-            label: "Price:",
-            prefix: const Text("R "),
-            hint: "Enter product price...",
-            value: _formCtrl.form["price"],
-            required: true,
-            validator: (val) {
-              bool isNum = isNumeric(val);
-              if (!isNum || (isNum && double.parse(val!) < 0)) {
-                return "Enter a valid positive number";
-              }
-              return null;
-            },
-            keyboard: TextInputType.number,
-            onChanged: (val) {
-              _formCtrl.setFormField("price", val);
-            },
-          ),
-          TuFormField(
-            label: "Quantity:",
-            keyboard: TextInputType.number,
-            hint: "How many are you adding?...",
-            value: _formCtrl.form["quantity"],
-            required: true,
-            validator: (val) {
-              bool isNum = isNumeric(val);
-              if (!isNum || (isNum && double.parse(val!) < 0)) {
-                return "Enter a valid positive integer";
-              }
-              return null;
-            },
-            onChanged: (val) {
-              _formCtrl.setFormField("quantity", val);
-            },
-          ),
+          LayoutBuilder(builder: (context, c) {
+            return Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TuFormField(
+                      label: "Price:",
+                      prefix: const Text("R "),
+                      hint: "Enter product price...",
+                      width: (c.maxWidth / 2) - 2.5,
+                      value: _formCtrl.form["price"],
+                      required: true,
+                      validator: (val) {
+                        bool isNum = isNumeric(val);
+                        if (!isNum || (isNum && double.parse(val!) < 0)) {
+                          return "Enter a valid positive number";
+                        }
+                        return null;
+                      },
+                      keyboard: TextInputType.number,
+                      onChanged: (val) {
+                        _formCtrl.setFormField("price", val);
+                      },
+                    ),
+                    TuFormField(
+                      label: "Weight:",
+                      width: (c.maxWidth / 2) - 2.5,
+                      keyboard: TextInputType.number,
+                      hint: "Weight in KG...",
+                      value: _formCtrl.form["weight"],
+                      required: true,
+                      suffix: const Text("KG"),
+                      onChanged: (val) {
+                        _formCtrl.setFormField("weight", val);
+                      },
+                    ),
+                  ],
+                ),
+                Obx(
+                  () => _formCtrl.form['on_sale'] == true
+                      ? TuFormField(
+                          label: "Sale price:",
+                          prefix: const Text("R "),
+                          hint: "Enter sale price...",
+                          value: _formCtrl.form["sale_price"],
+                          required: true,
+                          validator: (val) {
+                            bool isNum = isNumeric(val);
+                            if (!isNum || (isNum && double.parse(val!) < 0)) {
+                              return "Enter a valid positive number";
+                            }
+                            return null;
+                          },
+                          keyboard: TextInputType.number,
+                          onChanged: (val) {
+                            _formCtrl.setFormField("sale_price", val);
+                          },
+                        )
+                      : none(),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TuFormField(
+                      label: "Width:",
+                      width: (c.maxWidth / 2) - 2.5,
+                      keyboard: TextInputType.number,
+                      hint: "Width in cm...",
+                      value: _formCtrl.form["width"],
+                      required: true,
+                      suffix: const Text("cm"),
+                      onChanged: (val) {
+                        _formCtrl.setFormField("width", val);
+                      },
+                    ),
+                    TuFormField(
+                      label: "Height:",
+                      width: (c.maxWidth / 2) - 2.5,
+                      keyboard: TextInputType.number,
+                      hint: "Height in cm...",
+                      value: _formCtrl.form["height"],
+                      required: true,
+                      suffix: const Text("cm"),
+                      onChanged: (val) {
+                        _formCtrl.setFormField("height", val);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }),
           Center(
             child: Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
@@ -294,12 +353,13 @@ class _AddProductFormState extends State<AddProductForm> {
         useBottomSheet: true,
         onSubmit: () async {
           if (true) {
-            showToast("Processing...").show(context);
+            showProgressSheet();
             final res = await addProduct(context, {..._formCtrl.form},
                 mode: widget.mode);
             if (res != null) {
               /*   showToast('Successs!').show(context);
               return; */
+              gpop();
               Get.offAllNamed('/');
               pushNamed('/product', arguments: {"pid": res});
             }

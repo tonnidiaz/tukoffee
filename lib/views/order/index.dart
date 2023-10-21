@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:lebzcafe/utils/constants2.dart';
+import 'package:lebzcafe/utils/functions2.dart';
 import 'package:lebzcafe/views/order/checkout.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
@@ -36,7 +37,7 @@ class _OrderPageState extends State<OrderPage> {
   OrderPageArgs? _args;
   final _appCtrl = MainApp.appCtrl;
   final _storeCtrl = MainApp.storeCtrl;
-  final _formViewCtrl = MainApp.formCtrl;
+  final _formCtrl = MainApp.formCtrl;
   Map<String, dynamic>? _order;
   void _setOrder(Map<String, dynamic>? val) {
     setState(() {
@@ -128,7 +129,8 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   _onEditAddressPress() async {
-    _formViewCtrl.setForm({"delivery_address": _order!['delivery_address']});
+    _formCtrl.setForm({"delivery_address": _order!['delivery_address']});
+    _formCtrl.setForm({"address": _order!['delivery_address']});
 
     TuFuncs.showBottomSheet(
         context: context,
@@ -138,10 +140,7 @@ class _OrderPageState extends State<OrderPage> {
             showProgressSheet();
             final res =
                 await apiDio().post('/order/edit?id=${_order!['_id']}', data: {
-              "delivery_address": {
-                ..._order!['delivery_address'],
-                "location": val
-              }
+              "delivery_address": {..._order!['delivery_address'], ...val}
             });
             gpop();
             _reload(res);
@@ -163,30 +162,9 @@ class _OrderPageState extends State<OrderPage> {
       appBar: childAppbar(title: "Order #${_args?.id}"),
       bottomNavigationBar: _order == null || _appCtrl.user['permissions'] == 0
           ? null
-          : TuBottomBar(
-              child: TuSelect(
-                label: 'Order status:',
-                value: _order!['status'],
-                items: [
-                  SelectItem('Pending', 'pending'),
-                  SelectItem('Completed', 'completed'),
-                  SelectItem('Cancelled', 'cancelled'),
-                ],
-                onChanged: (val) async {
-                  try {
-                    showProgressSheet();
-                    final res = await apiDio().post(
-                        '/order/edit?id=${_order!['_id']}',
-                        data: {"status": val});
-                    gpop();
-                    _reload(res);
-                  } catch (e) {
-                    errorHandler(
-                        e: e,
-                        context: context,
-                        msg: "Error editing order status!");
-                  }
-                },
+          : const TuBottomBar(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
               ),
             ),
       body: RefreshIndicator(
@@ -219,7 +197,7 @@ class _OrderPageState extends State<OrderPage> {
                                     color: Colors.black12,
                                   ),
                                   mY(6),
-                                  Column(
+                                  tuColumn(
                                     //id=order-details
                                     children: [
                                       tuTableRow(
@@ -232,27 +210,30 @@ class _OrderPageState extends State<OrderPage> {
                                             _args!.id,
                                           ),
                                           my: 10),
-                                      tuTableRow(
-                                          const Text(
-                                            "Order status:",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          Chip(
-                                            backgroundColor:
-                                                _order!['status'] == 'pending'
-                                                    ? TuColors.medium
-                                                    : _order!['status'] ==
-                                                            'cancelled'
-                                                        ? TuColors.danger
-                                                        : TuColors.success,
-                                            label: Text(
-                                              "${_order!['status']}",
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                          my: 10),
+                                      tuColumn(children: [
+                                        const Text(
+                                          "Order status:",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        mY(6),
+                                        FutureBuilder<String>(
+                                            future: Shiplogic.getOrderStatus(
+                                                _order!),
+                                            builder: (context, snapshot) {
+                                              return Chip(
+                                                  backgroundColor:
+                                                      snapshot.data ==
+                                                              'cancelled'
+                                                          ? TuColors.danger
+                                                          : TuColors.medium,
+                                                  label: Text(
+                                                    snapshot.data ?? '',
+                                                    style: const TextStyle(
+                                                        color: Colors.white),
+                                                  ));
+                                            }),
+                                      ]),
                                       tuTableRow(
                                           const Text(
                                             "Date created:",

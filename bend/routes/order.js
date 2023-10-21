@@ -62,7 +62,7 @@ router.post("/cancel", auth, async (req, res) => {
 });
 router.post("/create", auth, async (req, res) => {
     const { cartId, mode } = req.query;
-    const { address, store, collector, yocoData, paystackData } = req.body;
+    const { address, store, collector, yocoData, paystackData, form } = req.body;
     try {
         if (cartId) {
             // The customer has paid. so get the cart and create an order
@@ -85,6 +85,12 @@ router.post("/create", auth, async (req, res) => {
             order.collector = collector;
             order.yocoData = yocoData
             order.paystackData = paystackData
+            if (form){
+                for (let key of Object.keys(form)){
+                order.set(key, form[key])
+            }
+            }
+            
             await order.save();
             // add order to user's orders
             user.orders.push(order);

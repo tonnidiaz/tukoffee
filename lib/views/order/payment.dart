@@ -6,14 +6,13 @@ import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/styles.dart';
+import 'package:lebzcafe/utils/functions2.dart';
 import 'package:lebzcafe/views/order/checkout.dart';
 import 'package:get/get.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../utils/functions.dart';
-import '../../widgets/common2.dart';
 import 'index.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -30,7 +29,7 @@ const testURLLive = "https://paystack.com/pay/8f3nqkd4vg";
 class _PaymentPageState extends State<PaymentPage> {
   final WebViewController _controller = WebViewController();
   final StoreCtrl _storeCtrl = Get.find();
-  final CheckoutCtrl checkoutCtrl = Get.find();
+  final CheckoutCtrl _ctrl = Get.find();
   int _progress = 0;
   bool _isLoading = true;
   _setProgress(int val) async {
@@ -57,14 +56,35 @@ class _PaymentPageState extends State<PaymentPage> {
     //create the order
     showProgressSheet(msg: "Creating order...");
     try {
+      double total = 0;
+      if (_storeCtrl.cart.isNotEmpty) {
+        for (var it in _storeCtrl.cart["products"]) {
+          total += (it['product']["price"] * it['quantity']).toDouble();
+        }
+      }
+      // Create shiplogic shipment
+      final shiplogicRes = await createCourierGuyShipment(
+          items:
+              _storeCtrl.cart['products'].map((pr) => pr['product']).toList(),
+          total: total,
+          from: _storeCtrl.stores.value?[0]['address'],
+          to: _ctrl.selectedAddr,
+          ref: "DELIVERY FOR ${_ctrl.selectedAddr['name']}",
+          serviceLevelId: _ctrl.form['shiplogic']['service_level']['id']);
+
+      // SAVE TRACKING CODE
+      _ctrl.form['shiplogic']['shipment'] = {
+        "tracking_code": shiplogicRes['short_tracking_reference']
+      };
       final res = await apiDio().post(
-          "/order/create?cartId=${_storeCtrl.cart["_id"]}&mode=${checkoutCtrl.mode.value == OrderMode.deliver ? 0 : 1}",
+          "/order/create?cartId=${_storeCtrl.cart["_id"]}&mode=${_ctrl.mode.value == OrderMode.deliver ? 0 : 1}",
           data: {
-            "address": checkoutCtrl.selectedAddr,
-            "store": checkoutCtrl.store['_id'],
-            "collector": checkoutCtrl.collector,
+            "address": _ctrl.selectedAddr,
+            "store": _ctrl.store['_id'],
+            "collector": _ctrl.collector,
             'yocoData': yocoData,
-            'paystackData': paystackData
+            'paystackData': paystackData,
+            "form": {..._ctrl.form, "fee": _storeCtrl.deliveryFee.value},
           });
       Get.offAllNamed("/");
       pushNamed("/order",
