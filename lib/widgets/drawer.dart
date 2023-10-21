@@ -102,7 +102,7 @@ class _TDrawerState extends State<TDrawer> {
               ),
             ), */
             Visibility(
-              visible: dev,
+              visible: DEV,
               child: TDrawerItem(
                   title: "Research",
                   index: 6,

@@ -68,12 +68,13 @@ router.post("/create", auth, async (req, res) => {
             // The customer has paid. so get the cart and create an order
             // Also delete the user cart
             console.log("Creating order for cart: " + cartId);
-            const cart = await Cart.findById(cartId).exec();
+            let cart = await Cart.findById(cartId).exec();
             if (!cart) return tunedErr(res, 400, "Carr not found")
             const user = await User.findById(cart.customer).exec();
             if (!user)
                 return tunedErr(res, 400, "Customer not found")
-
+            
+            cart = await cart.populate('products.product')
             const order = new Order();
             console.log(store)
             order.oid = await genOID();

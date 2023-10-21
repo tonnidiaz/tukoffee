@@ -21,7 +21,7 @@ const OrderSchema = new Schema({
     shiplogic: {type: Object},
     products: {
         type: [{
-            product: {type: Schema.ObjectId, ref: "Product"},
+            product: {type: Object,},
             quantity: {type:Number, default: 1}
         }], default: []
     },

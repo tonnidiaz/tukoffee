@@ -51,11 +51,10 @@ final cloudinary = Cloudinary.unsignedConfig(
 
 const cloudinaryURL =
     "https://api.cloudinary.com/v1_1/$cloudinaryCloudName/image/upload";
-const dev = kDebugMode;
 
 String getCloudinaryFolder(
     {required String storeName, String folder = "products"}) {
-  return "TunedBass/$storeName/${dev ? "DEV" : "PROD"}/images/$folder";
+  return "TunedBass/$storeName/${DEV ? "DEV" : "PROD"}/images/$folder";
 }
 
 enum ProductStatus { all, instock, out, topSelling, special, sale }

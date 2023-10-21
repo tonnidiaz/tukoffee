@@ -227,7 +227,7 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
                 size: 30,
               ),
               title: Text(
-                "${store['address']['place_name']}",
+                "${store['address']?['place_name']}",
                 softWrap: false,
                 style:
                     const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),

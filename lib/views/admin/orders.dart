@@ -264,7 +264,7 @@ class _OrdersPageState extends State<OrdersPage> {
                   Obx(() => TuDropdownButton(
                         label: "Sort by",
                         labelFontSize: 14,
-                        width: (c.maxWidth / 2) - 2.5,
+                        width: (c.maxWidth),
                         //height: 35,
                         value: _ctrl.sortBy.value,
                         radius: 1,
@@ -276,25 +276,28 @@ class _OrdersPageState extends State<OrdersPage> {
                           _ctrl.setSortBy(p0);
                         },
                       )),
-                  Obx(() {
-                    return TuDropdownButton(
-                      radius: 1,
-                      label: "Status",
-                      labelFontSize: 14,
-                      width: (c.maxWidth / 2) - 2.5,
-                      //height: 35,
-                      value: _ctrl.status.value,
-                      items: [
-                        SelectItem("All", OrderStatus.all),
-                        SelectItem("Pending", OrderStatus.pending),
-                        SelectItem("Completed", OrderStatus.completed),
-                        SelectItem("Cancelled", OrderStatus.cancelled),
-                      ],
-                      onChanged: (p0) {
-                        _ctrl.setStatus(p0);
-                      },
-                    );
-                  }),
+                  Visibility(
+                    visible: false,
+                    child: Obx(() {
+                      return TuDropdownButton(
+                        radius: 1,
+                        label: "Status",
+                        labelFontSize: 14,
+                        width: (c.maxWidth / 2) - 2.5,
+                        //height: 35,
+                        value: _ctrl.status.value,
+                        items: [
+                          SelectItem("All", OrderStatus.all),
+                          SelectItem("Pending", OrderStatus.pending),
+                          SelectItem("Completed", OrderStatus.completed),
+                          SelectItem("Cancelled", OrderStatus.cancelled),
+                        ],
+                        onChanged: (p0) {
+                          _ctrl.setStatus(p0);
+                        },
+                      );
+                    }),
+                  ),
                 ],
               );
             }),
@@ -334,87 +337,6 @@ class _OrdersPageState extends State<OrdersPage> {
                             child: const Text("Cancel orders")),
                       ])
             ]),
-        bottomNavigationBar: TuBottomBar(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            topRadius: 10,
-            child: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Visibility(
-                    visible: false,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("FILTER",
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black)),
-                        Obx(() => IconButton(
-                              splashRadius: 15,
-                              padding: EdgeInsets.zero,
-                              onPressed: () {
-                                _ctrl.sortOrder.value == SortOrder.descending
-                                    ? _ctrl.setSortOrder(SortOrder.ascending)
-                                    : _ctrl.setSortOrder(SortOrder.descending);
-                              },
-                              icon: Icon(
-                                  _ctrl.sortOrder.value == SortOrder.descending
-                                      ? CupertinoIcons.sort_down
-                                      : CupertinoIcons.sort_up),
-                              color: Colors.black87,
-                            )),
-                      ],
-                    ),
-                  ),
-                  LayoutBuilder(builder: (context, c) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Obx(() => TuSelect(
-                              label: "Sort by",
-                              labelFontSize: 14,
-                              bgColor: cardBGLight,
-                              width: (c.maxWidth / 2) - 2.5,
-                              //height: 35,
-                              value: _ctrl.sortBy.value,
-                              radius: 1,
-                              items: [
-                                SelectItem("Date created", SortBy.dateCreated),
-                                SelectItem(
-                                    "Last modified", SortBy.lastModified),
-                              ],
-                              onChanged: (p0) {
-                                _ctrl.setSortBy(p0);
-                              },
-                            )),
-                        Obx(() {
-                          return TuSelect(
-                            radius: 1,
-                            label: "Status",
-                            bgColor: cardBGLight,
-                            labelFontSize: 14,
-                            width: (c.maxWidth / 2) - 2.5,
-                            //height: 35,
-                            value: _ctrl.status.value,
-                            items: [
-                              SelectItem("All", OrderStatus.all),
-                              SelectItem("Pending", OrderStatus.pending),
-                              SelectItem("Completed", OrderStatus.completed),
-                              SelectItem("Cancelled", OrderStatus.cancelled),
-                            ],
-                            onChanged: (p0) {
-                              _ctrl.setStatus(p0);
-                            },
-                          );
-                        }),
-                      ],
-                    );
-                  }),
-                ],
-              ),
-            )),
         body: RefreshIndicator(
             onRefresh: () async {
               await _getOrders();
@@ -471,11 +393,11 @@ class _OrdersPageState extends State<OrdersPage> {
                               child: Center(
                                   child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                    routeName == '/orders'
-                                        ? 'You have not placed orders yet'
-                                        : 'No orders yet',
-                                    style: Styles.h4(isLight: true)),
+                                child: Image.asset(
+                                  'assets/images/box.png',
+                                  color: Colors.black45,
+                                  width: screenPercent(context, 35).width,
+                                ),
                               )),
                             )
                           : SliverPadding(

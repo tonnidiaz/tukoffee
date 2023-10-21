@@ -143,7 +143,7 @@ getCourierGuyRates(
 }
 
 class Shiplogic {
-  static Future<String> getOrderStatus(Map<String, dynamic> order) async {
+  static Future<String> getOrderStatus(Map order) async {
     try {
       final res = await shiplogicDio()
           .get('/tracking/shipments', queryParameters: {

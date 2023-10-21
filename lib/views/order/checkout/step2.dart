@@ -23,13 +23,6 @@ class CheckoutStep2 extends StatelessWidget {
           //id=ordersummarysec
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 14.0),
-              child: Text(
-                "Order summary",
-                style: Styles.h3(),
-              ),
-            ),
             mY(topMargin),
             TuCard(
               padding: 14,

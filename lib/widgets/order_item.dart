@@ -38,38 +38,32 @@ class OrderItem extends StatelessWidget {
 
   final AppBarCtrl _appBarCtrl = Get.find();
 
-  _cancelOrder(BuildContext context, {bool del = false}) async {
-    showDialog(
-        context: context,
-        builder: (context) {
-          var act = del ? "delete" : "cancel";
-          return PromptDialog(
-            title: "Cancel order",
-            msg: "Are you sure you want to cancel this order? ",
-            okTxt: "Yes",
-            onOk: () async {
-              try {
-                showProgressSheet(msg: 'Canceling order..');
+  _cancelOrder({bool del = false}) async {
+    var act = del ? "delete" : "cancel";
+    Get.dialog(PromptDialog(
+      title: "Cancel order",
+      msg: "Are you sure you want to cancel this order? ",
+      okTxt: "Yes",
+      onOk: () async {
+        try {
+          showProgressSheet(msg: 'Canceling order..');
 
-                //cancel from shiplogic first
-                await Shiplogic.cancelOrder(order);
-                final res =
-                    await apiDio().post("/order/cancel?action=$act", data: {
-                  'ids': [order['_id']],
-                  "userId": isAdmin ? null : MainApp.appCtrl.user['_id']
-                });
+          //cancel from shiplogic first
+          await Shiplogic.cancelOrder(order);
+          final res = await apiDio().post("/order/cancel?action=$act", data: {
+            'ids': [order['_id']],
+            "userId": isAdmin ? null : MainApp.appCtrl.user['_id']
+          });
 
-                _appBarCtrl.setSelected([]);
-                await ctrl.setOrders(res.data['orders']);
-                gpop();
-              } catch (e) {
-                gpop();
-                errorHandler(
-                    context: context, e: e, msg: "Failed to cancel order!");
-              }
-            },
-          );
-        });
+          _appBarCtrl.setSelected([]);
+          await ctrl.setOrders(res.data['orders']);
+          gpop();
+        } catch (e) {
+          gpop();
+          errorHandler(e: e, msg: "Failed to cancel order!");
+        }
+      },
+    ));
   }
 
   final _key = GlobalKey();
@@ -95,7 +89,7 @@ class OrderItem extends StatelessWidget {
           ),
           subtitle: tuColumn(
             children: [
-              mY(10),
+              mY(5),
               Text(
                 "${DateTime.parse(order["date_created"]).toLocal()}"
                     .split(' ')
@@ -185,7 +179,7 @@ class OrderItem extends StatelessWidget {
                 return [
                   PopupMenuItem(
                     onTap: () {
-                      _cancelOrder(context);
+                      _cancelOrder();
                     },
                     child: const Text(
                       "Cancel",

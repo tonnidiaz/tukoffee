@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/utils/functions.dart';
 
@@ -36,7 +37,7 @@ class _TuDialogViewState extends State<TuDialogView> {
       contentPadding: const EdgeInsets.symmetric(horizontal: 15),
       titlePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       insetPadding: const EdgeInsets.all(15),
-      actionsPadding: EdgeInsets.fromLTRB(6, 10, 15, 16),
+      actionsPadding: const EdgeInsets.fromLTRB(6, 10, 15, 16),
       elevation: .5,
       title: Text(
         widget.title,
@@ -60,7 +61,7 @@ class _TuDialogViewState extends State<TuDialogView> {
           bgColor: TuColors.medium,
           radius: 5,
           onPressed: () {
-            gpop();
+            Navigator.pop(context);
           },
         ),
         TuButton(
@@ -83,8 +84,6 @@ class _TuDialogViewState extends State<TuDialogView> {
               if (widget.onOk != null) {
                 await widget.onOk!();
               }
-              await Future.delayed(const Duration(milliseconds: 50));
-              gpop();
             }
           },
         )

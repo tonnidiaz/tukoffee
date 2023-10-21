@@ -201,7 +201,7 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
                                                 widget: const AddStoreView());
                                           },
                                           child: const Icon(
-                                            CupertinoIcons.add_circled,
+                                            CupertinoIcons.add,
                                             size: 27,
                                           ),
                                         ),

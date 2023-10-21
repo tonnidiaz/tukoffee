@@ -3,6 +3,7 @@ import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/utils/functions2.dart';
 import 'package:lebzcafe/views/order/checkout.dart';
 import 'package:lebzcafe/widgets/common3.dart';
+import 'package:lebzcafe/widgets/prompt_modal.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
@@ -38,7 +39,7 @@ class _OrderPageState extends State<OrderPage> {
   final _appCtrl = MainApp.appCtrl;
   final _storeCtrl = MainApp.storeCtrl;
   final _formCtrl = MainApp.formCtrl;
-  Map<String, dynamic>? _order;
+  Map? _order;
   void _setOrder(Map<String, dynamic>? val) {
     setState(() {
       _order = val;
@@ -156,15 +157,64 @@ class _OrderPageState extends State<OrderPage> {
         arguments: OrderPageArgs(id: "${res.data['id']}"));
   }
 
+  _cancelOrder({bool del = false}) async {
+    var act = del ? "delete" : "cancel";
+    Get.dialog(PromptDialog(
+      title: "Cancel order",
+      msg: "Are you sure you want to cancel this order? ",
+      okTxt: "Yes",
+      onOk: () async {
+        try {
+          showProgressSheet(msg: 'Canceling order..');
+
+          //cancel from shiplogic first
+          await Shiplogic.cancelOrder(_order!);
+          final res = await apiDio().post("/order/cancel?action=$act", data: {
+            'ids': [_order!['_id']],
+          });
+
+          gpop();
+          _init();
+        } catch (e) {
+          gpop();
+          errorHandler(e: e, msg: "Failed to cancel order!");
+        }
+      },
+    ));
+  }
+
+  _getTotal(Map order) {
+    double total = 0;
+    for (var p in order['products']) {
+      total +=
+          (p['product']['sale_price'] ?? p['product']['price']) * p['quantity'];
+    }
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: childAppbar(title: "Order #${_args?.id}"),
-      bottomNavigationBar: _order == null || _appCtrl.user['permissions'] == 0
+      bottomNavigationBar: _order == null
           ? null
-          : const TuBottomBar(
+          : TuBottomBar(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                children: [
+                  tuTableRow(h4("SUBTOTAL:"), Text("R${_getTotal(_order!)}")),
+                  tuTableRow(h4("DELIVERY FEE:"), Text("R${_order!['fee']}")),
+                  TuButton(
+                    text: "CANCEL ORDER",
+                    width: double.infinity,
+                    bgColor: TuColors.danger,
+                    onPressed: _order!['status'] == 'cancelled'
+                        ? null
+                        : () async {
+                            await _cancelOrder();
+                          },
+                  )
+                ],
               ),
             ),
       body: RefreshIndicator(
@@ -228,7 +278,7 @@ class _OrderPageState extends State<OrderPage> {
                                                           ? TuColors.danger
                                                           : TuColors.medium,
                                                   label: Text(
-                                                    snapshot.data ?? '',
+                                                    snapshot.data ?? '...',
                                                     style: const TextStyle(
                                                         color: Colors.white),
                                                   ));

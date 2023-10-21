@@ -85,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
               showProgressSheet();
               final res =
                   await apiDio().post("/user/edit?field=address", data: {
-                "value": {'location': val},
+                "value": val,
                 'userId': _account!['_id'],
               });
               setState(() {
@@ -432,6 +432,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       if (_account![
                                                               'address'] !=
                                                           null) {
+                                                        clog(_account![
+                                                            'address']);
                                                         formCtrl.setForm(
                                                             _account![
                                                                 'address']);
@@ -472,7 +474,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          "${_account!['address']['location']['name']}",
+                                                          "${_account!['address']['place_name']}",
                                                           style: TextStyle(
                                                               fontSize: 14,
                                                               color: TuColors

@@ -65,7 +65,7 @@ class CheckoutStep1 extends StatelessWidget {
                                         value: ctrl.store['_id'],
                                         items: storeCtrl.stores.value!.map((e) {
                                           return SelectItem(
-                                              "${e['address']['place_name']}",
+                                              "${e['address']?['place_name']}",
                                               e['_id']);
                                         }).toList(),
                                         onChanged: (val) {

@@ -234,20 +234,16 @@ class AccountSettingsPage extends StatelessWidget {
                   child: TuButton(
                       onPressed: () {
                         // confirm password -> delete paddword
-                        showDialog(
-                            context: context,
-                            builder: (ctx) {
-                              return ConfirmPassForm(
-                                url: "/user/delete",
-                                onOk: () async {
-                                  // logout
-                                  showProgressSheet();
-                                  logout();
+                        Get.dialog(ConfirmPassForm(
+                          url: "/user/delete",
+                          onOk: () async {
+                            // logout
+                            showProgressSheet();
+                            logout();
 
-                                  Get.offAllNamed('/');
-                                },
-                              );
-                            });
+                            Get.offAllNamed('/');
+                          },
+                        ));
                       },
                       bgColor: Colors.red,
                       child: Row(

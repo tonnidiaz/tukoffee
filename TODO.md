@@ -15,9 +15,9 @@
 - Navigate to address
 ## TO FIX
 
+- Loader after clicking yaco btn
 - orders take too long to load
-- cancel order loader dissmiss issue
 - Notifs only vibrating
 - Send the feedback email to owner / Notifs categories: Orders/Feedback
-
+- Product does not have quantity, only in or out
 - Change review statuses

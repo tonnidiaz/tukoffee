@@ -190,27 +190,26 @@ logout() async {
 }
 
 void handleDioException(
-    {required BuildContext context,
-    required DioException exception,
-    String? msg}) {
+    {BuildContext? context, required DioException exception, String? msg}) {
   clog("ERROR RESP: ${exception.response}");
-  return;
   if (exception.response != null &&
       "${exception.response!.data}".startsWith("tuned")) {
     showToast("${exception.response!.data.split('tuned:').last}", isErr: true)
-        .show(context);
+        .show(context ?? appCtx!);
   } else {
-    showToast(msg ?? "Something went wrong!", isErr: true).show(context);
+    showToast(msg ?? "Something went wrong!", isErr: true)
+        .show(context ?? appCtx!);
   }
 }
 
-void errorHandler({required e, required BuildContext context, String? msg}) {
+void errorHandler({required e, BuildContext? context, String? msg}) {
   if (e.runtimeType == DioException) {
     handleDioException(
         context: context, exception: e as DioException, msg: msg);
   } else {
     clog(e);
-    showToast(msg ?? "Something went wrong!", isErr: true).show(context);
+    showToast(msg ?? "Something went wrong!", isErr: true)
+        .show(context ?? appCtx!);
   }
 }
 
