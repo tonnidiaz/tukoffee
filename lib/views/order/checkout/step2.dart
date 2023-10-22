@@ -32,8 +32,13 @@ class CheckoutStep2 extends StatelessWidget {
                         tuTableRow(
                           const Text("Items"),
                           Obx(
-                            () => Text(
-                                "${storeCtrl.cart['products']?.length ?? 0}"),
+                            () {
+                              num totalItems = 0;
+                              for (var it in storeCtrl.cart['products']) {
+                                totalItems += 1 * it['quantity'];
+                              }
+                              return Text("$totalItems");
+                            },
                           ),
                           my: 10,
                         ),

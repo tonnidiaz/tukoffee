@@ -219,12 +219,22 @@ class CartItem extends StatelessWidget {
           ),
           subtitle: Row(
             children: [
-              Text(
-                "R${prod["price"]}",
-                style: TextStyle(
-                    color: TuColors.text2,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
+              Text("R${prod['price']}  ",
+                  style: TextStyle(
+                      color: prod['on_sale'] ? TuColors.text2 : Colors.black87,
+                      fontSize: prod['on_sale'] ? 12 : 14,
+                      decoration:
+                          prod['on_sale'] ? TextDecoration.lineThrough : null,
+                      fontWeight: FontWeight.w600)),
+              Visibility(
+                visible: prod['on_sale'],
+                child: Text(
+                  "R${prod["sale_price"]}",
+                  style: TextStyle(
+                      color: TuColors.text2,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14),
+                ),
               ),
               mX(10),
               Text(

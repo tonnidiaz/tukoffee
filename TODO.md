@@ -21,6 +21,7 @@
 - Product does not have quantity, only in or out
 - Change review statuses
 - connection check
+- Parcels in getcourierguyrates
 
 ## ORDER LOGIC
 

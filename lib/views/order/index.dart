@@ -192,9 +192,11 @@ class _OrderPageState extends State<OrderPage> {
 
   _getTotal(Map order) {
     double total = 0;
-    for (var p in order['products']) {
-      total +=
-          (p['product']['sale_price'] ?? p['product']['price']) * p['quantity'];
+    for (var it in order['products']) {
+      final prod = it['product'];
+      total += ((prod['on_sale'] ? prod['sale_price'] : prod["price"]) *
+              it["quantity"])
+          .toDouble();
     }
     return total;
   }

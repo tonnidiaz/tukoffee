@@ -193,9 +193,12 @@ class CheckoutStep1 extends StatelessWidget {
 
                               double total = 0;
                               for (var it in storeCtrl.cart["products"]) {
-                                total +=
-                                    (it["product"]["price"] * it["quantity"])
-                                        .toDouble();
+                                final prod = it['product'];
+                                total += ((prod['on_sale']
+                                            ? prod['sale_price']
+                                            : prod["price"]) *
+                                        it["quantity"])
+                                    .toDouble();
                               }
 
                               final res = await getCourierGuyRates(

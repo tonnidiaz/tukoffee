@@ -47,7 +47,10 @@ class _CartPageState extends State<CartPage> {
     double total = 0;
     if (cart.isNotEmpty) {
       for (var it in cart["products"]) {
-        total += (it["product"]["price"] * it["quantity"]).toDouble();
+        final prod = it['product'];
+        total += ((prod['on_sale'] ? prod['sale_price'] : prod["price"]) *
+                it["quantity"])
+            .toDouble();
       }
     }
 
