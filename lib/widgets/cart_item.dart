@@ -11,6 +11,7 @@ import 'package:lebzcafe/widgets/dialog.dart';
 import 'package:get/get.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
+import 'package:lebzcafe/widgets/tu/select.dart';
 
 import '../controllers/products_ctrl.dart';
 import '../utils/colors.dart';
@@ -61,7 +62,7 @@ class CartItem extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: true
+                child: false
                     ? Obx(
                         () => TuFormField(
                           radius: 100,
@@ -98,14 +99,13 @@ class CartItem extends StatelessWidget {
                         ),
                       )
                     : Obx(
-                        () => TuDropdownButton(
+                        () => TuSelect(
+                          label: "Quantity:",
                           value: formCtrl.form['quantity'],
                           onChanged: (val) =>
                               {formCtrl.setFormField('quantity', val)},
-                          items: List.generate(
-                              prod["quantity"],
-                              (index) =>
-                                  SelectItem("Qty: ${index + 1}", index + 1)),
+                          items: List.generate(prod["quantity"],
+                              (index) => SelectItem("${index + 1}", index + 1)),
                         ),
                       ),
               ),

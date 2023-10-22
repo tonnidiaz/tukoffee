@@ -149,7 +149,7 @@ class _ProductPageState extends State<ProductPage> {
                               horizontal: 5, vertical: -2),
                           label: Text(
                             _product!['quantity'] > 0
-                                ? "In stock"
+                                ? "${_product!['quantity']} In stock"
                                 : "out of stock",
                             style: const TextStyle(
                                 fontSize: 14, color: Colors.white),

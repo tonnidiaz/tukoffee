@@ -1,5 +1,5 @@
 const express = require("express");
-const { Cart, Order, User } = require("../models");
+const { Cart, Order, User, Product } = require("../models");
 const { auth } = require("../utils/middleware");
 const { OrderStatus } = require("../utils/constants");
 const { tunedErr } = require("../utils/functions");
@@ -19,7 +19,6 @@ router.post("/cancel", auth, async (req, res) => {
     try {
         for (let id of ids) {
             try {
-                console.log(action);
                 if (action == "delete") {
                     // Remove order from user document
                     const order = await Order.findById(id).exec();
@@ -32,11 +31,17 @@ router.post("/cancel", auth, async (req, res) => {
                         console.log(`Order #${id} deleted!`);
                     }
                 } else {
-                    await Order.findByIdAndUpdate(id, {
+                    const order = await Order.findByIdAndUpdate(id, {
                         status: OrderStatus.cancelled,
                         last_modified: new Date(),
                     }).exec();
                     console.log(`Order #${id} cancelled!`);
+                     //Update inventory
+            for (let item of order.products){
+                await Product.findByIdAndUpdate(item.product._id, {$inc: {
+                    quantity:  item.quantity
+                }}).exec()
+            }
                 }
             } catch (e) {
                 console.log(e);
@@ -75,8 +80,8 @@ router.post("/create", auth, async (req, res) => {
                 return tunedErr(res, 400, "Customer not found")
             
             cart = await cart.populate('products.product')
+            
             const order = new Order();
-            console.log(store)
             order.oid = await genOID();
             order.customer = user;
             order.products = cart.products;
@@ -97,6 +102,12 @@ router.post("/create", auth, async (req, res) => {
             user.orders.push(order);
             await user.save();
 
+            //Update inventory
+            for (let item of order.products){
+                await Product.findByIdAndUpdate(item.product._id, {$inc: {
+                    quantity: - item.quantity
+                }}).exec()
+            }
             // delete the cart
             await Cart.findByIdAndUpdate(cartId, {$set: {
                 products: []

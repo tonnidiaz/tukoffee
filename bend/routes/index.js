@@ -54,24 +54,6 @@ router.get("/clean", async (req, res) => {
                 await Order.findByIdAndDelete(order._id).exec()
                 u.orders = newOrders
                 await u.save()
-                /* const ords = await Order.find({status: OrderStatus.cancelled}).exec()
-                console.log(ords.length)
-                for (let ord of ords){
-                    
-                    //await Order.findByIdAndDelete(ord._id).exec()
-                    
-                    if(u){
-                //u.orders = u.orders?.filter(o=> o != ord._id)
-                u.orders?.filter(o=> {
-                    console.log(o === ord._id)
-                    return o != ord._id
-                })
-               //await u.save()
-               }
-                } */
-               
-               
-               
                
             }
             else {

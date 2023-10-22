@@ -183,6 +183,12 @@ class _OrdersPageState extends State<OrdersPage> {
                 final List<dynamic> ids =
                     _appBarCtrl.selected.map((it) => it['_id']).toList();
                 _appBarCtrl.setSelected([]);
+
+                for (var o in _appBarCtrl.selected
+                    .where((e) => e['mode'] == OrderMode.deliver.index)) {
+                  //cancel from shiplogic first
+                  await Shiplogic.cancelOrder(o);
+                }
                 final res = await apiDio().post(
                     "/order/cancel?action=${act.toLowerCase()}",
                     data: {'ids': ids, "userId": MainApp.appCtrl.user['_id']});

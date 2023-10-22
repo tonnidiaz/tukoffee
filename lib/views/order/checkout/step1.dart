@@ -43,7 +43,6 @@ class CheckoutStep1 extends StatelessWidget {
                     SelectItem('Delivery', OrderMode.deliver),
                   ],
                   onChanged: (v) {
-                    clog(v);
                     ctrl.setOrderMode(v);
                   },
                 ),
@@ -265,7 +264,7 @@ class DatesRatesSheet extends StatelessWidget {
                     isThreeLine: true,
                     onTap: () {
                       ctrl.form['shiplogic'] = {
-                        "service_level": rate['service_level']['id']
+                        "service_level": rate['service_level']
                       };
 
                       storeCtrl.setDeliveryFee(rate['rate'].toDouble());

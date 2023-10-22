@@ -20,3 +20,9 @@
 - Send the feedback email to owner / Notifs categories: Orders/Feedback
 - Product does not have quantity, only in or out
 - Change review statuses
+- connection check
+
+## ORDER LOGIC
+
+- ESTIMATE DELIVERY DATE
+- WHEN ORDER IS READY -> DATE CONFIRMED -> NOTIFY CUSTOMER

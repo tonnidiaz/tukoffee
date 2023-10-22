@@ -171,9 +171,12 @@ class _OrderPageState extends State<OrderPage> {
         try {
           showProgressSheet(msg: 'Canceling order..');
 
-          //cancel from shiplogic first
-          await Shiplogic.cancelOrder(_order!);
-          final res = await apiDio().post("/order/cancel?action=$act", data: {
+          if (_order!['mode'] == OrderMode.deliver.index) {
+            //cancel from shiplogic first
+            await Shiplogic.cancelOrder(_order!);
+          }
+
+          await apiDio().post("/order/cancel?action=$act", data: {
             'ids': [_order!['_id']],
           });
 
@@ -437,41 +440,109 @@ class _OrderPageState extends State<OrderPage> {
                                   )
                                 ],
                               ))
-                            : TuCard(
-                                width: double.infinity,
-                                child: TuCard(
-                                  color: appBGLight,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      tuTableRow(
-                                          Text(
-                                            "Delivery address",
-                                            style: Styles.h3(),
-                                          ),
-                                          IconButton(
-                                              padding: EdgeInsets.zero,
-                                              onPressed: _onEditAddressPress,
-                                              icon: const Icon(
-                                                Icons.edit,
-                                                size: 20,
-                                              )),
-                                          my: 0),
-                                      devider(),
-                                      mY(10),
-                                      Builder(builder: (context) {
-                                        final addr =
-                                            _order!["delivery_address"];
-                                        return addr == null
-                                            ? const Text("No address")
-                                            : Text(
-                                                addr['place_name'],
-                                              );
-                                      }),
-                                    ],
-                                  ),
-                                )),
+                            : tuColumn(
+                                children: [
+                                  TuCard(
+                                      width: double.infinity,
+                                      child: TuCard(
+                                        color: appBGLight,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            tuTableRow(
+                                                Text(
+                                                  "Delivery address",
+                                                  style: Styles.h3(),
+                                                ),
+                                                IconButton(
+                                                    padding: EdgeInsets.zero,
+                                                    onPressed:
+                                                        _onEditAddressPress,
+                                                    icon: const Icon(
+                                                      Icons.edit,
+                                                      size: 20,
+                                                    )),
+                                                my: 0),
+                                            devider(),
+                                            mY(10),
+                                            Builder(builder: (context) {
+                                              final addr =
+                                                  _order!["delivery_address"];
+                                              return addr == null
+                                                  ? const Text("No address")
+                                                  : Text(
+                                                      addr['place_name'],
+                                                    );
+                                            }),
+                                          ],
+                                        ),
+                                      )),
+                                  mY(6),
+                                  TuCard(
+                                      width: double.infinity,
+                                      child: TuCard(
+                                        color: appBGLight,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Pickup date & time",
+                                              style: Styles.h3(),
+                                            ),
+                                            devider(),
+                                            mY(10),
+                                            Text(
+                                              formatDate(_order!['shiplogic']
+                                                      ['service_level']
+                                                  ['collection_date']),
+                                            )
+                                          ],
+                                        ),
+                                      )),
+                                  TuCard(
+                                      width: double.infinity,
+                                      child: TuCard(
+                                        color: appBGLight,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Delivery dates & times",
+                                              style: Styles.h3(),
+                                            ),
+                                            devider(),
+                                            mY(10),
+                                            const Text(
+                                              "FROM:",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            mY(2.5),
+                                            Text(
+                                              formatDate(_order!['shiplogic']
+                                                      ['service_level']
+                                                  ['delivery_date_from']),
+                                            ),
+                                            mY(10),
+                                            const Text(
+                                              "TO:",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            mY(2.5),
+                                            Text(
+                                              formatDate(_order!['shiplogic']
+                                                      ['service_level']
+                                                  ['delivery_date_to']),
+                                            )
+                                          ],
+                                        ),
+                                      )),
+                                ],
+                              ),
                         mY(6),
                         TuCard(
                             width: double.infinity,

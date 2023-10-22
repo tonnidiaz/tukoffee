@@ -132,7 +132,6 @@ getCourierGuyRates(
           )
           .toList()
     };
-    clog(jsonEncode(reqData));
     final r = await shiplogicDio().post('/rates', data: reqData);
 
     return r.data;
@@ -169,6 +168,6 @@ class Shiplogic {
 }
 
 String formatDate(String dateString) {
-  final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
-  return formatter.format(DateTime.parse(dateString));
+  final DateFormat formatter = DateFormat('yyyy-MM-dd').add_jm();
+  return formatter.format(DateTime.parse(dateString).toLocal());
 }

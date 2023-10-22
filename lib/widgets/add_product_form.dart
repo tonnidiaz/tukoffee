@@ -178,6 +178,24 @@ class _AddProductFormState extends State<AddProductForm> {
               _formCtrl.setFormField("description", val);
             },
           ),
+          TuFormField(
+            label: "Price:",
+            prefix: const Text("R "),
+            hint: "Enter product price...",
+            value: _formCtrl.form["price"],
+            required: true,
+            validator: (val) {
+              bool isNum = isNumeric(val);
+              if (!isNum || (isNum && double.parse(val!) < 0)) {
+                return "Enter a valid positive number";
+              }
+              return null;
+            },
+            keyboard: TextInputType.number,
+            onChanged: (val) {
+              _formCtrl.setFormField("price", val);
+            },
+          ),
           LayoutBuilder(builder: (context, c) {
             return Column(
               children: [
@@ -185,11 +203,10 @@ class _AddProductFormState extends State<AddProductForm> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TuFormField(
-                      label: "Price:",
-                      prefix: const Text("R "),
-                      hint: "Enter product price...",
+                      label: "Quantity:",
+                      hint: "Enter product quantity...",
                       width: (c.maxWidth / 2) - 2.5,
-                      value: _formCtrl.form["price"],
+                      value: _formCtrl.form["quantity"],
                       required: true,
                       validator: (val) {
                         bool isNum = isNumeric(val);
@@ -200,7 +217,7 @@ class _AddProductFormState extends State<AddProductForm> {
                       },
                       keyboard: TextInputType.number,
                       onChanged: (val) {
-                        _formCtrl.setFormField("price", val);
+                        _formCtrl.setFormField("quantity", val);
                       },
                     ),
                     TuFormField(
