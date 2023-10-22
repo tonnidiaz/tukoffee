@@ -2,6 +2,7 @@
 import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/utils/functions2.dart';
 import 'package:lebzcafe/views/auth/login.dart';
+import 'package:lebzcafe/views/order/checkout.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
@@ -39,7 +40,13 @@ class OrdersCtrl extends GetxController {
   setOrders(List<dynamic> val) async {
     List orders = [];
     for (var o in val) {
-      final status = await Shiplogic.getOrderStatus(o);
+      String status;
+      //final
+      if (o['mode'] == OrderMode.deliver.index) {
+        status = await Shiplogic.getOrderStatus(o);
+      } else {
+        status = o['status'];
+      }
       orders.add({...o, "status": status});
     }
     this.orders.value = orders;

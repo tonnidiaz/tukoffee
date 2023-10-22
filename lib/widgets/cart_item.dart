@@ -10,6 +10,7 @@ import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/dialog.dart';
 import 'package:get/get.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
+import 'package:lebzcafe/widgets/tu/form_field.dart';
 
 import '../controllers/products_ctrl.dart';
 import '../utils/colors.dart';
@@ -52,64 +53,102 @@ class CartItem extends StatelessWidget {
       }
     }
 
+    Widget editSheet() {
+      return Container(
+        color: cardBGLight,
+        padding: defaultPadding,
+        child: tuColumn(min: true, children: [
+          Row(
+            children: [
+              Expanded(
+                child: true
+                    ? Obx(
+                        () => TuFormField(
+                          radius: 100,
+                          hasBorder: false,
+                          textAlign: TextAlign.center,
+                          readOnly: true,
+                          value: formCtrl.form['quantity'],
+                          prefixIcon: IconButton(
+                            padding: EdgeInsets.zero,
+                            splashRadius: 16,
+                            icon: const Icon(
+                              Icons.remove,
+                              color: Colors.black54,
+                            ),
+                            onPressed: () {
+                              if (formCtrl.form['quantity'] > 0) {
+                                formCtrl.form['quantity']--;
+                              } else {
+                                formCtrl.form['quantity'] = 0;
+                              }
+                            },
+                          ),
+                          suffixIcon: IconButton(
+                            padding: EdgeInsets.zero,
+                            splashRadius: 16,
+                            icon: const Icon(
+                              Icons.add,
+                              color: Colors.black54,
+                            ),
+                            onPressed: () {
+                              formCtrl.form['quantity']++;
+                            },
+                          ),
+                        ),
+                      )
+                    : Obx(
+                        () => TuDropdownButton(
+                          value: formCtrl.form['quantity'],
+                          onChanged: (val) =>
+                              {formCtrl.setFormField('quantity', val)},
+                          items: List.generate(
+                              prod["quantity"],
+                              (index) =>
+                                  SelectItem("Qty: ${index + 1}", index + 1)),
+                        ),
+                      ),
+              ),
+              IconButton(
+                  onPressed: () async {
+                    TuFuncs.showTDialog(
+                        context,
+                        TuDialogView(
+                          title: 'Delete item',
+                          okTxt: "Yes",
+                          content: const Text(
+                              'Are you sure you want to remove this item?'),
+                          onOk: () async {
+                            showProgressSheet();
+                            await updateCart('remove', null);
+                            gpop();
+                          },
+                        ));
+                  },
+                  icon: Icon(
+                    Icons.delete,
+                    color: TuColors.text2,
+                  ))
+            ],
+          ),
+          mY(4),
+          TuButton(
+            text: 'Save changes',
+            width: double.infinity,
+            bgColor: Colors.black87,
+            onPressed: () async {
+              showProgressSheet();
+              await updateCart('add', formCtrl.form['quantity']);
+              gpop();
+            },
+          )
+        ]),
+      );
+    }
+
     void showEditSheet() {
       formCtrl.setForm({'quantity': item['quantity']});
-      TuFuncs.showBottomSheet(
-          context: context,
-          widget: Container(
-            color: cardBGLight,
-            padding: defaultPadding,
-            child: tuColumn(min: true, children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Obx(
-                      () => TuDropdownButton(
-                        value: formCtrl.form['quantity'],
-                        onChanged: (val) =>
-                            {formCtrl.setFormField('quantity', val)},
-                        items: List.generate(
-                            prod["quantity"],
-                            (index) =>
-                                SelectItem("Qty: ${index + 1}", index + 1)),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                      onPressed: () async {
-                        TuFuncs.showTDialog(
-                            context,
-                            TuDialogView(
-                              title: 'Delete item',
-                              okTxt: "Yes",
-                              content: const Text(
-                                  'Are you sure you want to remove this item?'),
-                              onOk: () async {
-                                showProgressSheet();
-                                await updateCart('remove', null);
-                                gpop();
-                              },
-                            ));
-                      },
-                      icon: Icon(
-                        Icons.delete,
-                        color: TuColors.text2,
-                      ))
-                ],
-              ),
-              mY(4),
-              TuButton(
-                text: 'Save changes',
-                width: double.infinity,
-                bgColor: Colors.black87,
-                onPressed: () async {
-                  showProgressSheet();
-                  await updateCart('add', formCtrl.form['quantity']);
-                  gpop();
-                },
-              )
-            ]),
-          ));
+      TuFuncs.showBottomSheet(context: context, widget: editSheet());
     }
 
     return Container(
@@ -124,7 +163,7 @@ class CartItem extends StatelessWidget {
           },
           //Checkbox, cover, content, deleteBtn
           tileColor: cardBGLight,
-          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 10),
           leading: Material(
             elevation: 2,
             borderRadius: BorderRadius.circular(4),

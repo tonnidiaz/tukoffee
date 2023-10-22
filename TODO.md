@@ -7,14 +7,13 @@
 - While selected, back no go back but unselects
 - top selling products page
 - DELIVERY TIMES
- 
- - Locations and times in about store
- - Some back listeners for loaders
+
  - Save notifs
  - prevent screen rotate
 - Navigate to address
 ## TO FIX
 
+- Chande/add order statuses
 - Loader after clicking yaco btn
 - orders take too long to load
 - Notifs only vibrating

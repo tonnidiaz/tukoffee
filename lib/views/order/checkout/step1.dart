@@ -185,6 +185,11 @@ class CheckoutStep1 extends StatelessWidget {
                           ? null
                           : () async {
                               clog("Next up");
+
+                              if (ctrl.mode.value == OrderMode.collect) {
+                                ctrl.step++;
+                                return;
+                              }
                               showProgressSheet(msg: "Calculating total...");
 
                               double total = 0;
@@ -248,24 +253,43 @@ class DatesRatesSheet extends StatelessWidget {
               itemCount: rates.length,
               itemBuilder: (context, i) {
                 var rate = rates.elementAt(i);
+                final String deliveryDateFrom =
+                    rate['service_level']['delivery_date_from'];
+                final String deliveryDateTo =
+                    rate['service_level']['delivery_date_to'];
+                //final String date1
                 return Container(
                   margin: const EdgeInsets.symmetric(vertical: 1.5),
                   color: appBGLight,
                   child: ListTile(
+                    isThreeLine: true,
                     onTap: () {
                       ctrl.form['shiplogic'] = {
-                        "service_level": {"id": rate['service_level']['id']}
+                        "service_level": rate['service_level']['id']
                       };
 
                       storeCtrl.setDeliveryFee(rate['rate'].toDouble());
                       gpop();
-                      clog('next step');
                       ctrl.step++;
                     },
-                    title: Text("${rate['service_level']['delivery_date_from']}"
-                        .split('T')
-                        .first),
-                    subtitle: Text("${rate['service_level']['name']} delivery"),
+                    title: Text("${rate['service_level']['name']} delivery"),
+                    subtitle: tuColumn(
+                      min: true,
+                      children: [
+                        mY(5),
+                        const Text(
+                          "FROM:",
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        Text(formatDate(deliveryDateFrom)),
+                        mY(5),
+                        const Text(
+                          "TO:",
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        Text(formatDate(deliveryDateTo)),
+                      ],
+                    ),
                     trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                       Text(
                         "R${rate['rate']}",
@@ -282,190 +306,3 @@ class DatesRatesSheet extends StatelessWidget {
     );
   }
 }
-
-const Map<String, dynamic> courierGuyRatesRes = {
-  "message": "Success",
-  "rates": [
-    {
-      "rate": 85,
-      "rate_excluding_vat": 73.91304347826087,
-      "base_rate": {
-        "charge_per_parcel": [85],
-        "charge": 85,
-        "group_name": "Default group",
-        "vat": 11.086956521739125,
-        "vat_type": "standard",
-        "rate_formula_type": "flat",
-        "total_calculated_weight": 2
-      },
-      "service_level": {
-        "id": 18051,
-        "code": "ECO",
-        "name": "Economy",
-        "description": "Delivered within 2-3 days",
-        "delivery_date_from": "2023-10-20T08:00:00+02:00",
-        "delivery_date_to": "2023-10-23T08:00:00+02:00",
-        "collection_date": "2023-10-18T14:55:56.631274531+02:00",
-        "collection_cut_off_time": "2023-10-18T15:00:00+02:00",
-        "vat_type": "standard",
-        "insurance_disabled": false
-      },
-      "service_day_tags": {
-        "collection_service_day_tags": null,
-        "delivery_service_day_tags": null
-      },
-      "surcharges": [],
-      "rate_adjustments": [],
-      "time_based_rate_adjustments": [],
-      "extras": [
-        {"id": 11701, "insurance_charge": 0, "vat": 0, "vat_type": "standard"}
-      ],
-      "charged_weight": 2
-    },
-    {
-      "rate": 258.75,
-      "rate_excluding_vat": 225.00000000000003,
-      "base_rate": {
-        "charge_per_parcel": [86.25, 86.25, 86.25],
-        "charge": 258.75,
-        "group_name": "Default group",
-        "vat": 33.74999999999997,
-        "vat_type": "standard",
-        "rate_formula_type": "formula",
-        "total_calculated_weight": 3
-      },
-      "service_level": {
-        "id": 18053,
-        "code": "LSF",
-        "name": "Local Sameday Flyer",
-        "description": "",
-        "delivery_date_from": "2023-10-19T09:00:00+02:00",
-        "delivery_date_to": "2023-10-19T15:00:00+02:00",
-        "collection_date": "2023-10-19T08:00:00+02:00",
-        "collection_cut_off_time": "2023-10-18T10:30:00+02:00",
-        "vat_type": "standard",
-        "insurance_disabled": false
-      },
-      "service_day_tags": {
-        "collection_service_day_tags": null,
-        "delivery_service_day_tags": null
-      },
-      "surcharges": [],
-      "rate_adjustments": [],
-      "time_based_rate_adjustments": [],
-      "extras": [
-        {"id": 11701, "insurance_charge": 0, "vat": 0, "vat_type": "standard"}
-      ],
-      "charged_weight": 3
-    },
-    {
-      "rate": 258.75,
-      "rate_excluding_vat": 225.00000000000003,
-      "base_rate": {
-        "charge_per_parcel": [86.25, 86.25, 86.25],
-        "charge": 258.75,
-        "group_name": "Default group",
-        "vat": 33.74999999999997,
-        "vat_type": "standard",
-        "rate_formula_type": "formula",
-        "total_calculated_weight": 3
-      },
-      "service_level": {
-        "id": 18054,
-        "code": "LOF",
-        "name": "Local Overnight Flyer",
-        "description": "",
-        "delivery_date_from": "2023-10-19T16:00:00+02:00",
-        "delivery_date_to": "2023-10-20T15:00:00+02:00",
-        "collection_date": "2023-10-19T08:00:00+02:00",
-        "collection_cut_off_time": "2023-10-18T14:00:00+02:00",
-        "vat_type": "standard",
-        "insurance_disabled": false
-      },
-      "service_day_tags": {
-        "collection_service_day_tags": null,
-        "delivery_service_day_tags": null
-      },
-      "surcharges": [],
-      "rate_adjustments": [],
-      "time_based_rate_adjustments": [],
-      "extras": [
-        {"id": 11701, "insurance_charge": 0, "vat": 0, "vat_type": "standard"}
-      ],
-      "charged_weight": 3
-    },
-    {
-      "rate": 310.5,
-      "rate_excluding_vat": 270,
-      "base_rate": {
-        "charge_per_parcel": [103.5, 103.5, 103.5],
-        "charge": 310.5,
-        "group_name": "Default group",
-        "vat": 40.5,
-        "vat_type": "standard",
-        "rate_formula_type": "formula",
-        "total_calculated_weight": 3
-      },
-      "service_level": {
-        "id": 18055,
-        "code": "LSE",
-        "name": "Local Same Day Economy",
-        "description": "",
-        "delivery_date_from": "2023-10-19T09:00:00+02:00",
-        "delivery_date_to": "2023-10-19T15:00:00+02:00",
-        "collection_date": "2023-10-19T08:00:00+02:00",
-        "collection_cut_off_time": "2023-10-18T10:30:00+02:00",
-        "vat_type": "standard",
-        "insurance_disabled": false
-      },
-      "service_day_tags": {
-        "collection_service_day_tags": null,
-        "delivery_service_day_tags": null
-      },
-      "surcharges": [],
-      "rate_adjustments": [],
-      "time_based_rate_adjustments": [],
-      "extras": [
-        {"id": 11701, "insurance_charge": 0, "vat": 0, "vat_type": "standard"}
-      ],
-      "charged_weight": 3
-    },
-    {
-      "rate": 730,
-      "rate_excluding_vat": 634.7826086956522,
-      "base_rate": {
-        "charge_per_parcel": [560, 85, 85],
-        "charge": 730,
-        "group_name": "Default group",
-        "vat": 95.21739130434776,
-        "vat_type": "standard",
-        "rate_formula_type": "flat",
-        "total_calculated_weight": 3
-      },
-      "service_level": {
-        "id": 18056,
-        "code": "LSX",
-        "name": "Local Sameday Express",
-        "description":
-            "Collection sameday after 8:00 but before 15:00, delivery within 90 minutes.  ",
-        "delivery_date_from": "2023-10-19T09:00:00+02:00",
-        "delivery_date_to": "2023-10-19T15:00:00+02:00",
-        "collection_date": "2023-10-19T08:00:00+02:00",
-        "collection_cut_off_time": "2023-10-18T14:00:00+02:00",
-        "vat_type": "standard",
-        "insurance_disabled": false
-      },
-      "service_day_tags": {
-        "collection_service_day_tags": null,
-        "delivery_service_day_tags": null
-      },
-      "surcharges": [],
-      "rate_adjustments": [],
-      "time_based_rate_adjustments": [],
-      "extras": [
-        {"id": 11701, "insurance_charge": 0, "vat": 0, "vat_type": "standard"}
-      ],
-      "charged_weight": 3
-    }
-  ]
-};

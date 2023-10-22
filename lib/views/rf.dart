@@ -111,7 +111,6 @@ class _RFPageState extends State<RFPage> {
               final placemarks =
                   await placemarkFromCoordinates(davies[0], davies[1]);
               var addr1 = placemarks[1];
-              var addr2 = await getAddressFromLatLng(davies);
 
               final mapboxres = await dio.get(
                   "https://api.mapbox.com/geocoding/v5/mapbox.places/${daviesBox[0]},${daviesBox[1]}.json",
@@ -121,7 +120,6 @@ class _RFPageState extends State<RFPage> {
                   });
 
               clog(addr1.postalCode);
-              clog(addr2?.postalCode);
               clog(mapboxres.data);
               gpop();
             } catch (e) {

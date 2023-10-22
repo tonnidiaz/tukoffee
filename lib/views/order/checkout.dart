@@ -502,20 +502,23 @@ class GatewaysSheet extends StatelessWidget {
       //create the order
       showProgressSheet(msg: "Creating order...");
       try {
-        // Create shiplogic shipment
-        final shiplogicRes = await createCourierGuyShipment(
-            items:
-                storeCtrl.cart['products'].map((pr) => pr['product']).toList(),
-            total: total - storeCtrl.deliveryFee.value,
-            from: storeCtrl.stores.value?[0]['address'],
-            to: ctrl.selectedAddr,
-            ref: "DELIVERY FOR ${ctrl.selectedAddr['name']}",
-            serviceLevelId: ctrl.form['shiplogic']['service_level']['id']);
+        if (ctrl.mode.value == OrderMode.deliver) {
+          // Create shiplogic shipment
+          final shiplogicRes = await createCourierGuyShipment(
+              items: storeCtrl.cart['products']
+                  .map((pr) => pr['product'])
+                  .toList(),
+              total: total - storeCtrl.deliveryFee.value,
+              from: storeCtrl.stores.value?[0]['address'],
+              to: ctrl.selectedAddr,
+              ref: "DELIVERY FOR ${ctrl.selectedAddr['name']}",
+              serviceLevelId: ctrl.form['shiplogic']['service_level']['id']);
 
-        // SAVE TRACKING CODE
-        ctrl.form['shiplogic']['shipment'] = {
-          "tracking_code": shiplogicRes['short_tracking_reference']
-        };
+          // SAVE TRACKING CODE
+          ctrl.form['shiplogic']['shipment'] = {
+            "tracking_code": shiplogicRes['short_tracking_reference']
+          };
+        }
 
         final res = await apiDio().post(
             "/order/create?mode=${ctrl.mode.value == OrderMode.deliver ? 0 : 1}&cartId=${MainApp.storeCtrl.cart["_id"]}",

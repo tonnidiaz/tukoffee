@@ -47,16 +47,28 @@ router.get("/clean", async (req, res) => {
         for (let order of orders) {
             const user = await User.findById(order.customer).exec();
             if (!user) await Order.findByIdAndDelete(order._id).exec();
-            if (cancelled){
-                const ords = await Order.find({status: OrderStatus.cancelled}).exec()
+            if (cancelled && order.status == OrderStatus.cancelled){
+                //console.log(order._id)
+                const u = await User.findById(order.customer).exec()
+                const newOrders = u.orders?.filter(o=> {return o.toString() != order._id.toString()})
+                await Order.findByIdAndDelete(order._id).exec()
+                u.orders = newOrders
+                await u.save()
+                /* const ords = await Order.find({status: OrderStatus.cancelled}).exec()
+                console.log(ords.length)
                 for (let ord of ords){
-                    const u = await User.findById(ord.customer).exec()
-                    await Order.findByIdAndDelete(ord._id).exec()
+                    
+                    //await Order.findByIdAndDelete(ord._id).exec()
+                    
                     if(u){
-                u.orders = u.orders?.filter(o=> o != ord._id)
-               await u.save()
+                //u.orders = u.orders?.filter(o=> o != ord._id)
+                u.orders?.filter(o=> {
+                    console.log(o === ord._id)
+                    return o != ord._id
+                })
+               //await u.save()
                }
-                }
+                } */
                
                
                

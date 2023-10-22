@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:dio/dio.dart';
@@ -7,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/functions.dart';
-import 'package:nominatim_geocoding/nominatim_geocoding.dart';
 
 createOrderNotification(String orderId) {
   AwesomeNotifications().createNotification(
@@ -30,7 +30,7 @@ createNotif({required String title, required String msg}) {
           body: msg));
 }
 
-Future<Address?> getAddressFromLatLng(List center) async {
+/* Future<Address?> getAddressFromLatLng(List center) async {
   try {
     Coordinate coordinate =
         Coordinate(latitude: center.first, longitude: center.last);
@@ -41,7 +41,7 @@ Future<Address?> getAddressFromLatLng(List center) async {
     clog(e);
     return null;
   }
-}
+} */
 
 Map<String, dynamic> addrToCourierGuyAddr(Map<String, dynamic> addr) {
   return {
@@ -166,4 +166,9 @@ class Shiplogic {
     });
     return res.data;
   }
+}
+
+String formatDate(String dateString) {
+  final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
+  return formatter.format(DateTime.parse(dateString));
 }

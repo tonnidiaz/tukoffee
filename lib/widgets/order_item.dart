@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lebzcafe/controllers/appbar.dart';
 import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/functions2.dart';
+import 'package:lebzcafe/views/order/checkout.dart';
 import 'package:lebzcafe/views/order/index.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:get/get.dart';
@@ -48,8 +49,11 @@ class OrderItem extends StatelessWidget {
         try {
           showProgressSheet(msg: 'Canceling order..');
 
-          //cancel from shiplogic first
-          await Shiplogic.cancelOrder(order);
+          if (order['mode'] == OrderMode.deliver.index) {
+            //cancel from shiplogic first
+            await Shiplogic.cancelOrder(order);
+          }
+
           final res = await apiDio().post("/order/cancel?action=$act", data: {
             'ids': [order['_id']],
             "userId": isAdmin ? null : MainApp.appCtrl.user['_id']

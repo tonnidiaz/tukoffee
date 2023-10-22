@@ -64,7 +64,11 @@ class _OrderPageState extends State<OrderPage> {
       // Fetch the order
       final res = await apiDio().get("/orders?oid=${_args!.id}");
       if (res.data["orders"].isNotEmpty) {
-        _setOrder(res.data["orders"][0]);
+        var order = res.data["orders"][0];
+        order['status'] = order['mode'] == OrderMode.collect.index
+            ? order['status']
+            : await Shiplogic.getOrderStatus(order);
+        _setOrder(order);
       } else {
         _setOrder({});
       }
@@ -267,22 +271,17 @@ class _OrderPageState extends State<OrderPage> {
                                               fontWeight: FontWeight.w600),
                                         ),
                                         mY(6),
-                                        FutureBuilder<String>(
-                                            future: Shiplogic.getOrderStatus(
-                                                _order!),
-                                            builder: (context, snapshot) {
-                                              return Chip(
-                                                  backgroundColor:
-                                                      snapshot.data ==
-                                                              'cancelled'
-                                                          ? TuColors.danger
-                                                          : TuColors.medium,
-                                                  label: Text(
-                                                    snapshot.data ?? '...',
-                                                    style: const TextStyle(
-                                                        color: Colors.white),
-                                                  ));
-                                            }),
+                                        Chip(
+                                            backgroundColor: _order!['status']
+                                                        .toLowerCase() ==
+                                                    'cancelled'
+                                                ? TuColors.danger
+                                                : TuColors.medium,
+                                            label: Text(
+                                              "${_order!['status']}",
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ))
                                       ]),
                                       tuTableRow(
                                           const Text(
@@ -404,7 +403,7 @@ class _OrderPageState extends State<OrderPage> {
                               ),
                             )),
                         mY(6),
-                        _order!['mode'] == 1
+                        _order!['mode'] == OrderMode.collect.index
                             ? TuCard(
                                 child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -418,7 +417,8 @@ class _OrderPageState extends State<OrderPage> {
                                             items: _storeCtrl.stores.value!
                                                 .map((e) {
                                               return SelectItem(
-                                                  e['place_name'], e['_id']);
+                                                  "${e['address']['place_name']}",
+                                                  e['_id']);
                                             }).toList(),
                                             onChanged: (val) async {
                                               var store = _storeCtrl
