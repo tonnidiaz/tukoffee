@@ -16,13 +16,14 @@
 - Chande/add order statuses
 - Loader after clicking yaco btn
 - orders take too long to load
-- Notifs only vibrating
 - Send the feedback email to owner / Notifs categories: Orders/Feedback
-- Product does not have quantity, only in or out
+
 - Change review statuses
 - connection check
 - Parcels in getcourierguyrates
-
+- user address
+- dark safearea
+- Fee not cleared
 ## ORDER LOGIC
 
 - ESTIMATE DELIVERY DATE

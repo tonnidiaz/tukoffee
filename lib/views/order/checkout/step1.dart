@@ -191,21 +191,11 @@ class CheckoutStep1 extends StatelessWidget {
                               }
                               showProgressSheet(msg: "Calculating total...");
 
-                              double total = 0;
-                              for (var it in storeCtrl.cart["products"]) {
-                                final prod = it['product'];
-                                total += ((prod['on_sale']
-                                            ? prod['sale_price']
-                                            : prod["price"]) *
-                                        it["quantity"])
-                                    .toDouble();
-                              }
-
-                              final res = await getCourierGuyRates(
+                              final res = await Shiplogic.getRates(
                                   items: storeCtrl.cart['products']
                                       .map((pr) => pr['product'])
                                       .toList(),
-                                  total: total,
+                                  total: storeCtrl.total.value,
                                   from: storeCtrl.stores.value?[0]['address'],
                                   to: ctrl.selectedAddr);
                               gpop();

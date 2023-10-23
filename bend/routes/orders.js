@@ -19,14 +19,18 @@ router.get("/", async (req, res)=>{
         else{
             orders = await Order.find().exec()
         }
-        
         let populatedOrders = []
         for (let o of orders){
-            let ord = await (await (await o.populate("customer")).populate("products.product")).populate('store')
-            populatedOrders.push({...ord.toJSON(), products: ord.products.filter((it) => it.product != null)})
+            if (oid){
+                 let ord = await  (await o.populate("customer")).populate('store')
+                populatedOrders.push({...ord.toJSON()})
+            }else{
+                populatedOrders.push(o.toJSON())
+            }
+           
         }
         orders = populatedOrders//.map(it=> it.toJSON())
-        res.json({orders: orders})
+        res.json({orders})
     }
     catch(e){
         console.log(e);

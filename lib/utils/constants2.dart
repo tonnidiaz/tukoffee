@@ -57,6 +57,9 @@ String getCloudinaryFolder(
   return "TunedBass/$storeName/${DEV ? "DEV" : "PROD"}/images/$folder";
 }
 
+const paystackTestURL = "https://paystack.com/pay/spy9pzsw5u";
+const paystackTestURLLive = "https://paystack.com/pay/8f3nqkd4vg";
+
 enum ProductStatus { all, instock, out, topSelling, special, sale }
 
 final signedCloudinary = Cloudinary.signedConfig(

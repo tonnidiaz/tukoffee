@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:lebzcafe/utils/styles.dart';
 import 'package:lebzcafe/widgets/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,100 +18,54 @@ class CheckoutStep2 extends StatelessWidget {
     final storeCtrl = MainApp.storeCtrl;
     return Column(
       children: [
-        Column(
-          //id=ordersummarysec
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            mY(topMargin),
-            TuCard(
-              padding: 14,
-              child: true
-                  ? Column(
-                      children: [
-                        tuTableRow(
-                          const Text("Items"),
-                          Obx(
-                            () {
-                              num totalItems = 0;
-                              for (var it in storeCtrl.cart['products']) {
-                                totalItems += 1 * it['quantity'];
-                              }
-                              return Text("$totalItems");
-                            },
-                          ),
-                          my: 10,
-                        ),
-                        devider(),
-                        tuTableRow(
-                          const Text("Subtotal"),
-                          Obx(
-                            () {
-                              double total = 0;
-                              if (storeCtrl.cart["products"] != null) {
-                                for (var it in storeCtrl.cart["products"]) {
-                                  total +=
-                                      (it["product"]["price"] * it["quantity"])
-                                          .toDouble();
+        storeCtrl.cart['products'].isEmpty
+            ? none()
+            : Column(
+                //id=ordersummarysec
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  mY(topMargin),
+                  TuCard(
+                      padding: 14,
+                      child: Column(
+                        children: [
+                          tuTableRow(
+                            const Text("Items"),
+                            Obx(
+                              () {
+                                num totalItems = 0;
+                                for (var it in storeCtrl.cart['products']) {
+                                  totalItems += 1 * it['quantity'];
                                 }
-                              }
-                              return Text("R${roundDouble(total, 2)}");
-                            },
+                                return Text("$totalItems");
+                              },
+                            ),
+                            my: 10,
                           ),
-                          my: 10,
-                        ),
-                        devider(),
-                        tuTableRow(
-                          const Text("Delivery fee"),
-                          Obx(
-                            () => Text("${storeCtrl.deliveryFee}"),
+                          devider(),
+                          tuTableRow(
+                            const Text("Subtotal"),
+                            Obx(
+                              () {
+                                return Text(
+                                    "R${roundDouble(storeCtrl.total.value, 2)}");
+                              },
+                            ),
+                            my: 10,
                           ),
-                          my: 10,
-                        ),
-                        devider(),
-                      ],
-                    )
-                  : Table(
-                      border: TableBorder.all(
-                          width: 1,
-                          color: const Color.fromRGBO(0, 0, 0, 0.15),
-                          borderRadius: BorderRadius.circular(0)),
-                      children: [
-                        TableRow(children: [
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text("Subtotal"),
+                          devider(),
+                          tuTableRow(
+                            const Text("Delivery fee"),
+                            Obx(
+                              () => Text("${storeCtrl.deliveryFee}"),
+                            ),
+                            my: 10,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Obx(() {
-                              double total = 0;
-                              if (storeCtrl.cart["products"] != null) {
-                                for (var it in storeCtrl.cart["products"]) {
-                                  total +=
-                                      (it["product"]["price"] * it["quantity"])
-                                          .toDouble();
-                                }
-                              }
-
-                              return Text("R${roundDouble(total, 2)}");
-                            }),
-                          )
-                        ]),
-                        TableRow(children: [
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text("Delivery fee"),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Obx(() => Text("R${storeCtrl.deliveryFee}")),
-                          )
-                        ]),
-                      ],
-                    ),
-            )
-          ],
-        )
+                          devider(),
+                        ],
+                      ))
+                ],
+              )
       ],
     );
   }

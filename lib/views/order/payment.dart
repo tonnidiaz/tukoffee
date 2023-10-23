@@ -23,9 +23,6 @@ class PaymentPage extends StatefulWidget {
   State<PaymentPage> createState() => _PaymentPageState();
 }
 
-const testURL = "https://paystack.com/pay/spy9pzsw5u";
-const testURLLive = "https://paystack.com/pay/8f3nqkd4vg";
-
 class _PaymentPageState extends State<PaymentPage> {
   final WebViewController _controller = WebViewController();
   final StoreCtrl _storeCtrl = Get.find();
@@ -40,61 +37,12 @@ class _PaymentPageState extends State<PaymentPage> {
     clog(_isLoading);
     if (url != null && url.contains("${MainApp.appCtrl.apiURL}/payment")) {
       if (_isLoading) {
-        _createOrder();
+        _ctrl.createOrder(context: context);
         _isLoading = false;
         setState(() {
           _isLoading = false;
         });
       } else {}
-    }
-  }
-
-  _createOrder({
-    Map<String, dynamic>? yocoData,
-    Map<String, dynamic>? paystackData,
-  }) async {
-    //create the order
-    showProgressSheet(msg: "Creating order...");
-    try {
-      double total = 0;
-      if (_storeCtrl.cart.isNotEmpty) {
-        for (var it in _storeCtrl.cart["products"]) {
-          total += (it['product']["price"] * it['quantity']).toDouble();
-        }
-      }
-      // Create shiplogic shipment
-      final shiplogicRes = await createCourierGuyShipment(
-          items:
-              _storeCtrl.cart['products'].map((pr) => pr['product']).toList(),
-          total: total,
-          from: _storeCtrl.stores.value?[0]['address'],
-          to: _ctrl.selectedAddr,
-          ref: "DELIVERY FOR ${_ctrl.selectedAddr['name']}",
-          serviceLevelId: _ctrl.form['shiplogic']['service_level']['id']);
-
-      // SAVE TRACKING CODE
-      _ctrl.form['shiplogic']['shipment'] = {
-        "tracking_code": shiplogicRes['short_tracking_reference']
-      };
-      final res = await apiDio().post(
-          "/order/create?cartId=${_storeCtrl.cart["_id"]}&mode=${_ctrl.mode.value == OrderMode.deliver ? 0 : 1}",
-          data: {
-            "address": _ctrl.selectedAddr,
-            "store": _ctrl.store['_id'],
-            "collector": _ctrl.collector,
-            'yocoData': yocoData,
-            'paystackData': paystackData,
-            "form": {..._ctrl.form, "fee": _storeCtrl.deliveryFee.value},
-          });
-      Get.offAllNamed("/");
-      pushNamed("/order",
-          arguments: OrderPageArgs(id: "${res.data["order"]["oid"]}"));
-    } catch (e) {
-      Get.back(); //HIDE LOADER
-      errorHandler(
-          e: e,
-          context: context,
-          msg: "Failed to create order. Please contact the developer");
     }
   }
 
@@ -105,7 +53,7 @@ class _PaymentPageState extends State<PaymentPage> {
       if (data['gateway'] == 'yoco') {
         final yocoData = data['data'];
         if (yocoData['type'] == 'payment.succeeded') {
-          _createOrder(yocoData: yocoData);
+          _ctrl.createOrder(context: context, yocoData: yocoData);
         } else {
           clog(yocoData);
         }

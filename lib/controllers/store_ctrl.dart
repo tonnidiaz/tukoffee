@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lebzcafe/models/store.dart';
 import 'package:get/get.dart';
+import 'package:lebzcafe/utils/functions.dart';
 
 import '../utils/constants.dart';
 import '../utils/constants2.dart';
@@ -34,14 +35,41 @@ class StoreCtrl extends GetxController {
     cart.value = val;
   }
 
+  RxMap<String, dynamic> currProduct = <String, dynamic>{}.obs;
+  void setCurrProduct(Map<String, dynamic> val) {
+    currProduct.value = val;
+  }
+
   RxDouble deliveryFee = 0.0.obs;
   void setDeliveryFee(double val) {
     deliveryFee.value = val;
   }
 
-  RxMap<String, dynamic> currProduct = <String, dynamic>{}.obs;
-  void setCurrProduct(Map<String, dynamic> val) {
-    currProduct.value = val;
+  Worker? cartWorker;
+  RxDouble total = 0.0.obs;
+  @override
+  void onInit() {
+    super.onInit();
+
+    cartWorker = ever(cart, (val) {
+      if (val.isNotEmpty) {
+        total.value = 0;
+        for (var it in val["products"]) {
+          final prod = it['product'];
+          total.value +=
+              ((prod['on_sale'] ? prod['sale_price'] : prod["price"]) *
+                      it["quantity"])
+                  .toDouble();
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    clog("STORECTRL DISPOSE");
+    cartWorker?.dispose();
+    super.dispose();
   }
 
   Rx<SortBy> sortBy = SortBy.name.obs;

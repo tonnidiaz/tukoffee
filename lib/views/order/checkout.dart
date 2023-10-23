@@ -1,9 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lebzcafe/utils/functions2.dart';
 import 'package:lebzcafe/utils/vars.dart';
 import 'package:lebzcafe/views/order/checkout/step1.dart';
 import 'package:lebzcafe/views/order/checkout/step2.dart';
+import 'package:lebzcafe/widgets/tu/browser.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 
@@ -74,6 +76,59 @@ class CheckoutCtrl extends GetxController {
   void setdeliveryAddresses(List<dynamic> val) {
     deliveryAddresses.value = val;
   }
+
+  createOrder(
+      {required BuildContext context,
+      Map<String, dynamic>? yocoData,
+      Map<String, dynamic>? paystackData,
+      MyInAppBrowser? browser}) async {
+    final storeCtrl = MainApp.storeCtrl;
+    //create the order
+
+    try {
+      await browser?.close();
+      showProgressSheet(msg: "Creating order...");
+      if (mode.value == OrderMode.deliver) {
+        // Create shiplogic shipment
+        final shiplogicRes = await Shiplogic.createShipment(
+            items:
+                storeCtrl.cart['products'].map((pr) => pr['product']).toList(),
+            total: storeCtrl.total.value - storeCtrl.deliveryFee.value,
+            from: storeCtrl.stores.value?[0]['address'],
+            to: selectedAddr,
+            ref: "DELIVERY FOR ${selectedAddr['name']}",
+            serviceLevelId: form['shiplogic']['service_level']['id']);
+
+        // SAVE TRACKING CODE
+        form['shiplogic']['shipment'] = {
+          "tracking_code": shiplogicRes['short_tracking_reference']
+        };
+      }
+
+      final res = await apiDio().post(
+          "/order/create?mode=${mode.value == OrderMode.deliver ? 0 : 1}&cartId=${MainApp.storeCtrl.cart["_id"]}",
+          data: {
+            "address": selectedAddr,
+            'store': store['_id'],
+            'collector': collector,
+            "form": {...form, "fee": storeCtrl.deliveryFee.value},
+            'yocoData': yocoData,
+            'paystackData': paystackData,
+          });
+      var oid = res.data["order"]["oid"];
+
+      Get.offAllNamed("/");
+      pushNamed("/order", arguments: OrderPageArgs(id: "$oid"));
+      storeCtrl.cart['products'] = [];
+    } catch (e) {
+      gpop();
+      if (browser?.isOpened() == true) {
+        await browser?.close();
+      }
+
+      errorHandler(e: e, context: context, msg: "Failed to create order");
+    }
+  }
 }
 
 class CheckoutPage extends StatefulWidget {
@@ -88,11 +143,46 @@ class _CheckoutPageState extends State<CheckoutPage> {
   final AppCtrl _appCtrl = Get.find();
   final CheckoutCtrl _ctrl = Get.put(CheckoutCtrl());
 
+  _initSocketio() {
+    clog('Socketio init...');
+    socket?.off("payment");
+    socket?.on('payment', (data) {
+      clog('On payment');
+      if (data['gateway'] == 'yoco') {
+        final yocoData = data['data'];
+        if (yocoData['type'] == 'payment.succeeded') {
+          _ctrl.createOrder(
+              context: context, yocoData: yocoData, browser: _browser);
+        } else {
+          clog(yocoData);
+        }
+      }
+    });
+  }
+
+  late MyInAppBrowser _browser;
+  final _webviewOptions = InAppBrowserClassOptions(
+      crossPlatform:
+          InAppBrowserOptions(hideUrlBar: true, hideToolbarTop: false),
+      inAppWebViewGroupOptions: InAppWebViewGroupOptions(
+          crossPlatform: InAppWebViewOptions(javaScriptEnabled: true)));
+
+  void _onWebviewLoad(Uri? uri) async {
+    if (uri != null) {
+      final url = uri.toString();
+      if (url.contains("${MainApp.appCtrl.apiURL}/payment")) {
+        _ctrl.createOrder(context: context, browser: _browser);
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _initSocketio();
+      _browser = MyInAppBrowser(onLoad: _onWebviewLoad);
       if (_appCtrl.user.isEmpty) {
         TuFuncs.showBottomSheet(context: context, widget: const LoginPage());
         return;
@@ -106,8 +196,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
           'phone': user['phone']
         });
       }
-
-      getStores(storeCtrl: _storeCtrl);
+      if (_storeCtrl.stores.value == null || _storeCtrl.stores.value!.isEmpty) {
+        getStores(storeCtrl: _storeCtrl);
+      }
     });
   }
 
@@ -160,18 +251,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 ),
                                 Obx(
                                   () {
-                                    double total = 0;
-                                    if (_storeCtrl.cart.isNotEmpty) {
-                                      for (var it
-                                          in _storeCtrl.cart["products"]) {
-                                        total += (it["product"]["price"] *
-                                                it["quantity"])
-                                            .toDouble();
-                                      }
-                                    }
-                                    total += _storeCtrl.deliveryFee.value;
                                     return Text(
-                                      "R${roundDouble(total, 2)}",
+                                      "R${roundDouble(_storeCtrl.total.value + _storeCtrl.deliveryFee.value, 2)}",
                                       style: Styles.h4(),
                                     );
                                   },
@@ -251,14 +332,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
     // SELECT PAYMENT GATEWAY
 
     try {
-      double total = 0;
-      if (_storeCtrl.cart.isNotEmpty) {
-        for (var it in _storeCtrl.cart["products"]) {
-          total += (it['product']["price"] * it['quantity']).toDouble();
-        }
-      }
-      total += _storeCtrl.deliveryFee.value;
-      Get.bottomSheet(GatewaysSheet(total: total));
+      Get.bottomSheet(GatewaysSheet(
+        total: _storeCtrl.total.value + _storeCtrl.deliveryFee.value,
+        browser: _browser,
+        options: _webviewOptions,
+      ));
     } catch (e) {
       clog(e);
       if (e.runtimeType == DioException) {
@@ -468,13 +546,18 @@ Widget editCollectorModal(BuildContext context) {
 
 class GatewaysSheet extends StatelessWidget {
   final double total;
-  const GatewaysSheet({super.key, required this.total});
+  final MyInAppBrowser browser;
+  final InAppBrowserClassOptions options;
+  const GatewaysSheet(
+      {super.key,
+      required this.total,
+      required this.browser,
+      required this.options});
 
   @override
   Widget build(BuildContext context) {
     final appCtrl = MainApp.appCtrl;
     final CheckoutCtrl ctrl = Get.find();
-    final storeCtrl = MainApp.storeCtrl;
 
     createPaystackURL() async {
       var body = {
@@ -498,46 +581,6 @@ class GatewaysSheet extends StatelessWidget {
       return res.data['redirectUrl'];
     }
 
-    _createOrder() async {
-      //create the order
-      showProgressSheet(msg: "Creating order...");
-      try {
-        if (ctrl.mode.value == OrderMode.deliver) {
-          // Create shiplogic shipment
-          final shiplogicRes = await createCourierGuyShipment(
-              items: storeCtrl.cart['products']
-                  .map((pr) => pr['product'])
-                  .toList(),
-              total: total - storeCtrl.deliveryFee.value,
-              from: storeCtrl.stores.value?[0]['address'],
-              to: ctrl.selectedAddr,
-              ref: "DELIVERY FOR ${ctrl.selectedAddr['name']}",
-              serviceLevelId: ctrl.form['shiplogic']['service_level']['id']);
-
-          // SAVE TRACKING CODE
-          ctrl.form['shiplogic']['shipment'] = {
-            "tracking_code": shiplogicRes['short_tracking_reference']
-          };
-        }
-
-        final res = await apiDio().post(
-            "/order/create?mode=${ctrl.mode.value == OrderMode.deliver ? 0 : 1}&cartId=${MainApp.storeCtrl.cart["_id"]}",
-            data: {
-              "address": ctrl.selectedAddr,
-              'store': ctrl.store['_id'],
-              'collector': ctrl.collector,
-              "form": {...ctrl.form, "fee": storeCtrl.deliveryFee.value},
-            });
-        var oid = res.data["order"]["oid"];
-        storeCtrl.cart.clear();
-        Get.offAllNamed("/");
-        pushNamed("/order", arguments: OrderPageArgs(id: "$oid"));
-      } catch (e) {
-        gpop();
-        errorHandler(e: e, context: context, msg: "Failed to create order");
-      }
-    }
-
     return Container(
       padding: defaultPadding2,
       color: cardBGLight,
@@ -556,12 +599,18 @@ class GatewaysSheet extends StatelessWidget {
             onPressed: () async {
               try {
                 if (Platform.isLinux) {
-                  _createOrder();
+                  ctrl.createOrder(context: context);
                   return;
                 }
+                showProgressSheet();
                 final url = await createPaystackURL();
+
+                //pushTo(PaymentPage(url: url));
+                await browser.openUrlRequest(
+                    urlRequest: URLRequest(url: Uri.parse(url)),
+                    options: options);
                 gpop();
-                pushTo(PaymentPage(url: url));
+                gpop();
               } catch (e) {
                 errorHandler(e: e, context: context);
               }
@@ -590,9 +639,14 @@ class GatewaysSheet extends StatelessWidget {
             radius: 100,
             onPressed: () async {
               try {
+                showProgressSheet();
                 final url = await createYocoURL();
+                // pushTo(PaymentPage(url: url));
+                await browser.openUrlRequest(
+                    urlRequest: URLRequest(url: Uri.parse(url)),
+                    options: options);
                 gpop();
-                pushTo(PaymentPage(url: url));
+                gpop();
               } catch (e) {
                 errorHandler(e: e, context: context);
               }

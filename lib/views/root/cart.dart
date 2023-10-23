@@ -23,11 +23,8 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   final StoreCtrl _storeCtrl = Get.find();
   final AppCtrl _appCtrl = Get.find();
-  Worker? _cartWorker;
-  double _total = 0;
   @override
   void dispose() {
-    _cartWorker?.dispose();
     super.dispose();
   }
 
@@ -36,26 +33,6 @@ class _CartPageState extends State<CartPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await _init0();
-
-      _cartWorker = ever(_storeCtrl.cart, (cart) {
-        _setupTotal(cart);
-      });
-    });
-  }
-
-  _setupTotal(Map<String, dynamic> cart) {
-    double total = 0;
-    if (cart.isNotEmpty) {
-      for (var it in cart["products"]) {
-        final prod = it['product'];
-        total += ((prod['on_sale'] ? prod['sale_price'] : prod["price"]) *
-                it["quantity"])
-            .toDouble();
-      }
-    }
-
-    setState(() {
-      _total = total;
     });
   }
 
@@ -86,7 +63,6 @@ class _CartPageState extends State<CartPage> {
       final res = await apiDio().get("/user/cart?user=$uid");
       if (context.mounted) {
         _storeCtrl.setcart(res.data["cart"]);
-        _setupTotal(res.data['cart']);
       }
     } catch (e) {
       clog("FETCH CART ERR");
@@ -119,9 +95,11 @@ class _CartPageState extends State<CartPage> {
                     "TOTAL:",
                     style: Styles.h4(),
                   ),
-                  Text(
-                    "R${roundDouble(_total, 2)}",
-                    style: Styles.h4(),
+                  Obx(
+                    () => Text(
+                      "R${roundDouble(_storeCtrl.total.value, 2)}",
+                      style: Styles.h4(),
+                    ),
                   )
                 ],
               ),

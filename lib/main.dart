@@ -4,6 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lebzcafe/controllers/appbar.dart';
 import 'package:lebzcafe/controllers/common_ctrls.dart';
 import 'package:lebzcafe/controllers/products_ctrl.dart';
@@ -28,6 +29,10 @@ void main() async {
   await initHive();
   initNotifs();
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (Platform.isAndroid) {
+    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  }
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);

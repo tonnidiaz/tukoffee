@@ -95,9 +95,7 @@ class OrderItem extends StatelessWidget {
             children: [
               mY(5),
               Text(
-                "${DateTime.parse(order["date_created"]).toLocal()}"
-                    .split(' ')
-                    .first,
+                formatDate(order["date_created"]),
                 style: TextStyle(
                     color: TuColors.note,
                     fontWeight: FontWeight.w500,

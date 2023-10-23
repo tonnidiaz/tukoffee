@@ -66,7 +66,6 @@ class _TuSplashState extends State<TuSplash> {
       try {
         //GET APIURL
         final apiURL = await getApiURL();
-        clog(apiURL);
         _appCtrl.setApiURL(apiURL);
         initSocketio();
       } catch (e) {
