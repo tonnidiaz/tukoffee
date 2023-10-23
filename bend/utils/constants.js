@@ -5,6 +5,7 @@ const OrderStatus = {
     pending: "pending",
     completed: "completed",
     cancelled: "cancelled",
+    awaitingPickup: "Awaiting pickup",
 }
 const OrderMode  = {
     deliver: 0,

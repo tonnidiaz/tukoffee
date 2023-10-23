@@ -327,28 +327,29 @@ class _OrdersPageState extends State<OrdersPage> {
             title: "Orders",
             showCart: routeName == '/orders',
             actions: [
-              PopupMenuButton(
-                  itemBuilder: (context) => [
-                        (_appBarCtrl.selected.length ==
-                                    _ctrl.sortedOrders.length &&
-                                _ctrl.sortedOrders.isNotEmpty)
-                            ? PopupMenuItem(
-                                onTap: () {
-                                  _appBarCtrl.setSelected([]);
-                                },
-                                child: const Text("Deselect all"))
-                            : PopupMenuItem(
-                                onTap: () {
-                                  _appBarCtrl.setSelected(_ctrl.sortedOrders);
-                                },
-                                child: const Text("Select all")),
-                        PopupMenuItem(
-                            enabled: _appBarCtrl.selected.isNotEmpty,
-                            onTap: () {
-                              _cancelOrders();
-                            },
-                            child: const Text("Cancel orders")),
-                      ])
+              Obx(
+                () => TuPopupBtn(items: [
+                  (_appBarCtrl.selected.length == _ctrl.sortedOrders.length &&
+                          _ctrl.sortedOrders.isNotEmpty)
+                      ? PopupMenuItem(
+                          onTap: () {
+                            _appBarCtrl.setSelected([]);
+                          },
+                          child: const Text("Deselect all"))
+                      : PopupMenuItem(
+                          onTap: () {
+                            _appBarCtrl.setSelected(_ctrl.sortedOrders);
+                          },
+                          child: const Text("Select all")),
+                  _appBarCtrl.selected.isNotEmpty
+                      ? PopupMenuItem(
+                          onTap: () {
+                            _cancelOrders();
+                          },
+                          child: const Text("Cancel orders"))
+                      : null,
+                ]),
+              )
             ]),
         body: RefreshIndicator(
             onRefresh: () async {

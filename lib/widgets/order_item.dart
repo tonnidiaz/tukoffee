@@ -75,6 +75,7 @@ class OrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => Container(
+        margin: const EdgeInsets.symmetric(vertical: 1),
         key: _key,
         width: double.infinity,
         decoration: BoxDecoration(

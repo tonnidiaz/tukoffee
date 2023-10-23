@@ -190,11 +190,15 @@ class CheckoutStep1 extends StatelessWidget {
                                 return;
                               }
                               showProgressSheet(msg: "Calculating total...");
-
+                              List items = [];
+                              for (var item in storeCtrl.cart['products']) {
+                                for (var pr
+                                    in List.filled(item['quantity'], 0)) {
+                                  items.add(item['product']);
+                                }
+                              }
                               final res = await Shiplogic.getRates(
-                                  items: storeCtrl.cart['products']
-                                      .map((pr) => pr['product'])
-                                      .toList(),
+                                  items: items,
                                   total: storeCtrl.total.value,
                                   from: storeCtrl.stores.value?[0]['address'],
                                   to: ctrl.selectedAddr);

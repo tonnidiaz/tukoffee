@@ -39,7 +39,10 @@ enum SortBy { name, price, dateCreated, lastModified }
 
 enum SortOrder { ascending, descending }
 
-enum OrderStatus { pending, completed, cancelled, awaitingPickup, all }
+Type OrderStatus {"pending": "pending",
+    "completed": "completed",
+    "cancelled": "cancelled",
+    "awaitingPickup": "Awaiting pickup",}
 
 class TuPage {
   Widget widget;

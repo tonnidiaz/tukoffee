@@ -15,4 +15,3 @@
 - Chande/add order statuses
 - Send the feedback email to owner / Notifs categories: Orders/Feedback
 - Change review statuses
-- Parcels in getcourierguyrates

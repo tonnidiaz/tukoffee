@@ -468,7 +468,7 @@ class _ProductPageState extends State<ProductPage> {
         widget: const AddProductForm(
           title: "Edit product",
           mode: "edit",
-          btnTxt: "Edit product",
+          btnTxt: "Save changes",
         ));
     /*  editProductForm(
             context: context, formViewCtrl: _formViewCtrl, product: _product!)); */

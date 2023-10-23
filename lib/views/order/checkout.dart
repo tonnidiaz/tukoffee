@@ -90,9 +90,14 @@ class CheckoutCtrl extends GetxController {
       showProgressSheet(msg: "Creating order...");
       if (mode.value == OrderMode.deliver) {
         // Create shiplogic shipment
+        List items = [];
+        for (var item in storeCtrl.cart['products']) {
+          for (var pr in List.filled(item['quantity'], 0)) {
+            items.add(item['product']);
+          }
+        }
         final shiplogicRes = await Shiplogic.createShipment(
-            items:
-                storeCtrl.cart['products'].map((pr) => pr['product']).toList(),
+            items: items,
             total: storeCtrl.total.value - storeCtrl.deliveryFee.value,
             from: storeCtrl.stores.value?[0]['address'],
             to: selectedAddr,

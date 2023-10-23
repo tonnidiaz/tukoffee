@@ -204,7 +204,26 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: childAppbar(title: "Order #${_args?.id}"),
+      appBar: AppBar(
+        title: Text("Order #${_args?.id}"),
+        actions: [
+          TuPopupBtn(
+            items: [
+              (_appCtrl.user['permissions'] > 0 &&
+                      _order?['mode'] == OrderMode.collect.index)
+                  ? PopupMenuItem(
+                      onTap: _cancelOrder,
+                      child: const Text('Update status'),
+                    )
+                  : null,
+              PopupMenuItem(
+                onTap: _cancelOrder,
+                child: const Text('Cancel order'),
+              ),
+            ],
+          )
+        ],
+      ),
       bottomNavigationBar: _order == null
           ? null
           : TuBottomBar(
@@ -213,16 +232,6 @@ class _OrderPageState extends State<OrderPage> {
                 children: [
                   tuTableRow(h4("SUBTOTAL:"), Text("R${_getTotal(_order!)}")),
                   tuTableRow(h4("DELIVERY FEE:"), Text("R${_order!['fee']}")),
-                  TuButton(
-                    text: "CANCEL ORDER",
-                    width: double.infinity,
-                    bgColor: TuColors.danger,
-                    onPressed: _order!['status'] == 'cancelled'
-                        ? null
-                        : () async {
-                            await _cancelOrder();
-                          },
-                  )
                 ],
               ),
             ),
@@ -547,47 +556,42 @@ class _OrderPageState extends State<OrderPage> {
                               ),
                         mY(6),
                         TuCard(
-                            width: double.infinity,
-                            child: TuCard(
-                              color: appBGLight,
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Items",
-                                      style: Styles.h3(),
-                                    ),
-                                    devider(),
-                                    mY(10),
-                                    Builder(builder: (context) {
-                                      final items =
-                                          _order!["products"] as List<dynamic>;
-                                      return Column(
-                                        children: items
-                                            .map((it) => Column(
-                                                  children: [
-                                                    TuListTile(
-                                                        title: Text(
-                                                            "${it['product']['name']}",
-                                                            style: const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600)),
-                                                        subtitle: Text(
-                                                          "R${it['product']['price']}",
-                                                          style:
-                                                              Styles.subtitle,
-                                                        ),
-                                                        trailing: Text(
-                                                            "x${it['quantity']}")),
-                                                    devider()
-                                                  ],
-                                                ))
-                                            .toList(),
-                                      );
-                                    })
-                                  ]),
-                            ))
+                          child: TuCollapse(
+                            radius: 0,
+                            title: "Items    (${_order!["products"].length})",
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Builder(builder: (context) {
+                                    final items =
+                                        _order!["products"] as List<dynamic>;
+                                    return Column(
+                                      children: items
+                                          .map((it) => Column(
+                                                children: [
+                                                  TuListTile(
+                                                      title: Text(
+                                                          "${it['product']['name']}",
+                                                          style: const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600)),
+                                                      subtitle: Text(
+                                                        "R${it['product']['price']}",
+                                                        style: Styles.subtitle,
+                                                      ),
+                                                      trailing: Text(
+                                                          "x${it['quantity']}")),
+                                                  devider()
+                                                ],
+                                              ))
+                                          .toList(),
+                                    );
+                                  })
+                                ]),
+                          ),
+                        ),
+                        mY(6),
                       ]),
                 ),
         ),
