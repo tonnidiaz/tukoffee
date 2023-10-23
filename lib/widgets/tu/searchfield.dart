@@ -108,6 +108,7 @@ class _TuSearchFieldState extends State<TuSearchField> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _entry?.markNeedsBuild();
+      if (widget.suggestions.isNotEmpty) _showOverlay();
     });
     return CompositedTransformTarget(
       link: _layerLink,
@@ -123,7 +124,7 @@ class _TuSearchFieldState extends State<TuSearchField> {
         },
         onChanged: (val) {
           clog(widget.suggestions.length);
-          if (widget.suggestions.isNotEmpty) _showOverlay();
+
           _setValue(val);
           _debouncer.run(() {
             widget.onChanged(val);

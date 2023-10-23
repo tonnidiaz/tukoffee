@@ -432,11 +432,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       if (_account![
                                                               'address'] !=
                                                           null) {
-                                                        clog(_account![
-                                                            'address']);
-                                                        formCtrl.setForm(
-                                                            _account![
-                                                                'address']);
+                                                        formCtrl.setForm({
+                                                          "address": _account![
+                                                              'address']
+                                                        });
                                                       }
                                                       addEditAddress(
                                                           title:

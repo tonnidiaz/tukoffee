@@ -189,6 +189,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       }
 
       final user = _appCtrl.user;
+      _storeCtrl.setDeliveryFee(0);
       _ctrl.setdeliveryAddresses(user['delivery_addresses']);
       if (_ctrl.collector.isEmpty) {
         _ctrl.setCollector({

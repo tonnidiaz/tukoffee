@@ -121,7 +121,7 @@ class OrderItem extends StatelessWidget {
                       return Container(
                         margin: const EdgeInsets.symmetric(horizontal: 2),
                         child: Material(
-                          elevation: .1,
+                          elevation: 0,
                           child: Container(
                             width: 40,
                             height: 35,

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
@@ -46,7 +49,9 @@ class _TuSplashState extends State<TuSplash> {
   @override
   void initState() {
     super.initState();
-
+    /*  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.black12,
+    )); */
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       _init();
     });
@@ -57,8 +62,11 @@ class _TuSplashState extends State<TuSplash> {
     clog('Initi splash...');
     if (_appCtrl.store['name'] != null) return;
     _setConnected(true);
-
-    bool result = await InternetConnectionChecker().hasConnection;
+    final isReachable = await InternetConnectionChecker()
+        .isHostReachable(AddressCheckOptions(hostname: "1.1.1.1"));
+    //clog(isReachable.isSuccess);
+    bool result = isReachable
+        .isSuccess; // await InternetConnectionChecker().hasConnection;
     await Future.delayed(const Duration(milliseconds: 100));
     clog("Connected: $result");
     _setConnected(result);

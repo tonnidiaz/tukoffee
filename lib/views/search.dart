@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/constants.dart';
 import 'package:lebzcafe/utils/constants2.dart';
@@ -95,7 +96,14 @@ class _SearchPageState extends State<SearchPage> {
                         _setQuery("");
                         _setSearchBy(null);
                       },
-                    )
+                    ),
+                    /*       PopupMenuItem(
+                      child: const Text("Show sheet"),
+                      onTap: () {
+                        TuFuncs.showBottomSheet(
+                            context: context, widget: const SearchPage());
+                      },
+                    ), */
                   ];
                 })
           ],

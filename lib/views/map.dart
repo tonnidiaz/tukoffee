@@ -186,16 +186,12 @@ class _MapPageState extends State<MapPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
         _args = ModalRoute.of(context)?.settings.arguments as MapPageArgs?;
-        //clog(_args?.center);
         if (_args != null) {
           var cent = LatLng(_args!.center.first, _args!.center.last);
-          //_setCurrCenter(LatLng(_args!.center.first, _args!.center.last));
           _setCenter(cent);
           _mapController.move(cent, 17.5);
         } else if (_formCtrl.form['address'] != null) {
-          clog(_formCtrl.form['address']);
           Map<String, dynamic> formLoc = _formCtrl.form['address'];
-          // clog(formLoc);
           _setCenter(LatLng(formLoc['center'].first, formLoc['center'].last));
           _mapController.move(_center!, 17.5);
           _setAddress(formLoc);
@@ -257,13 +253,13 @@ class _MapPageState extends State<MapPage> {
                   heroTag: "Use location",
                   backgroundColor: Colors.black,
                   child: const Icon(Icons.check),
-                  onPressed: () async {
+                  onPressed: () {
                     /// _setCenter(_currCenter);
                     _formCtrl.setFormField('address', _address);
+                    gpop();
                     if (widget.onSubmit != null) {
                       widget.onSubmit!(_address);
                     }
-                    Navigator.pop(context);
                   },
                 ),
               ],
