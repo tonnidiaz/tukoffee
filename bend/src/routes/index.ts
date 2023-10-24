@@ -7,7 +7,8 @@ import fs from "fs";
 import os from "os";
 import { parser, OrderStatus } from "../utils/constants";
 import { auth } from "../utils/middleware";
-
+import axios from "axios";
+import { Car, CarColor } from "../models/car";
 
 
 /* GET home page. */
@@ -158,9 +159,7 @@ router.post("/encode", parser, async (req, res) => {
     }
 });
 
-import axios from "axios";
-import { Schema, Types } from "mongoose";
-import { Car, CarColor } from "@/models/car";
+
 
 router.get("/send-sms", async (req, res) => {
     try {

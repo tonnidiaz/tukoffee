@@ -1,6 +1,6 @@
 import { Schema, InferSchemaType, Document } from "mongoose";
 import { UserPermissions } from "../utils/constants";
-import { IAddress } from "@/utils/types";
+import { IAddress } from "../utils/types";
 
 const UserSchema = new Schema({
     first_name: {

@@ -3,10 +3,10 @@ import express, { Request } from 'express';
 const router = express.Router();
 
 import bcrypt from "bcrypt";
-import { User } from "@/models";
-import { genToken, genOTP, randomInRange, sendSMS, tunedErr, sendMail } from "@/utils/functions";
-import { auth, lightAuth } from "@/utils/middleware";
-import { UserPermissions } from "@/utils/constants";
+import { User } from "../../models";
+import { genToken, genOTP, randomInRange, sendSMS, tunedErr, sendMail } from "../../utils/functions";
+import { auth, lightAuth } from "../../utils/middleware";
+import { UserPermissions } from "../../utils/constants";
 import otpRouter from "./otp";
 import passwordRouter from "./password";
 const importantEmails = ["tonnidiazed@gmail.com", "clickbait4587@gmail.com", "openbytes@yahoo.com"];

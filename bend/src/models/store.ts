@@ -1,4 +1,4 @@
-import { IAddress } from "@/utils/types";
+import { IAddress } from "../utils/types";
 import { Schema } from "mongoose";
 
 const StoreSchema = new Schema({

@@ -1,7 +1,7 @@
 const router = require("express").Router();
-import { User } from "@/models";
-import { DEV } from "@/utils/constants";
-import { tunedErr, randomInRange, genToken, sendMail, getStoreDetails } from "@/utils/functions";
+import { User } from "../../models";
+import { DEV } from "../../utils/constants";
+import { tunedErr, randomInRange, genToken, sendMail, getStoreDetails } from "../../utils/functions";
 router.post("/resend", async (req, res) => {
     try {
         const {phone, email} = req.body

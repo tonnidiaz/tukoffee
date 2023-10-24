@@ -4,7 +4,7 @@ import { auth } from "../utils/middleware";
 import { OrderStatus } from "../utils/constants";
 import { tunedErr } from "../utils/functions";
 import io from "../utils/io";
-import { Obj } from "@/utils/types";
+import { Obj } from "../utils/types";
 const router = express.Router();
  
 const genOID = async () => {

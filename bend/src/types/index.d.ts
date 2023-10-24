@@ -1,5 +1,5 @@
 export {};
-import { IUser, UserSchema } from "@/models/user";
+import { IUser, UserSchema } from "../models/user";
 declare global {
     namespace Express {
         interface Request {

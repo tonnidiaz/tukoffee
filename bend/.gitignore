@@ -9,6 +9,8 @@ audio/**
 coverage
 .env
 *.env
+dist
+build
 # Benchmarking
 benchmarks/graphs
 
