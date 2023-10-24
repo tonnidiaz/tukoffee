@@ -1,4 +1,5 @@
 import "package:awesome_notifications/awesome_notifications.dart";
+import "package:get/get.dart";
 import "package:lebzcafe/mobile.dart";
 import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/views/order/index.dart";
@@ -33,9 +34,10 @@ class NotificationController {
     final payload = receivedAction.payload;
     if (payload != null && payload["orderId"] != null) {
       // Navigate into pages, avoiding to open the notification details page over another details page already opened
-      MobileApp.navigatorKey.currentState?.pushNamedAndRemoveUntil("/order",
+      /* MobileApp.navigatorKey.currentState?.pushAndRemoveUntil("/order",
           (route) => (route.settings.name != "/order") || route.isFirst,
-          arguments: OrderPageArgs(id: payload["orderId"]!));
+          arguments: OrderPageArgs(id: payload["orderId"]!)); */
+      Get.offAll(OrderPage(id: '${payload['orderId']}'));
     }
 
     return;

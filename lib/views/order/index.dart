@@ -22,20 +22,16 @@ import "package:get/get.dart";
 
 import "../../utils/functions.dart";
 
-class OrderPageArgs {
-  final String id;
-  const OrderPageArgs({required this.id});
-}
-
 class OrderPage extends StatefulWidget {
-  const OrderPage({super.key});
+  final String id;
+  final bool fromDash;
+  const OrderPage({super.key, required this.id, this.fromDash = false});
 
   @override
   State<OrderPage> createState() => _OrderPageState();
 }
 
 class _OrderPageState extends State<OrderPage> {
-  OrderPageArgs? _args;
   final _appCtrl = MainApp.appCtrl;
   final _storeCtrl = MainApp.storeCtrl;
   final _formCtrl = MainApp.formCtrl;
@@ -50,10 +46,6 @@ class _OrderPageState extends State<OrderPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      setState(() {
-        _args = ModalRoute.of(context)!.settings.arguments as OrderPageArgs;
-      });
-
       _init();
     });
   }
@@ -62,11 +54,11 @@ class _OrderPageState extends State<OrderPage> {
     try {
       _setOrder(null);
       // Fetch the order
-      final res = await apiDio().get("/orders?oid=${_args!.id}");
+      final res = await apiDio().get("/orders?oid=${widget.id}");
       if (res.data["orders"].isNotEmpty) {
         var order = res.data["orders"][0];
         order["status"] = order["mode"] == OrderMode.collect.index
-            ? order["status"]
+            ? order["status"] ?? OrderStatus.pending.name
             : await Shiplogic.getOrderStatus(order);
         _setOrder(order);
       } else {
@@ -156,9 +148,10 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   _reload(res) async {
-    //Get.offAllNamed("/");
-    Navigator.popAndPushNamed(context, "/order",
-        arguments: OrderPageArgs(id: "${res.data["id"]}"));
+    Get.off(OrderPage(
+      id: widget.id,
+      fromDash: widget.fromDash,
+    ));
   }
 
   _cancelOrder({bool del = false}) async {
@@ -201,18 +194,64 @@ class _OrderPageState extends State<OrderPage> {
     return total;
   }
 
+  _showUpdateStatusSheet() {
+    _formCtrl.setForm({'status': _order!['status']});
+    Get.bottomSheet(TuCard(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Obx(
+            () => TuSelect(
+              label: "Status:",
+              value: _formCtrl.form['status'],
+              items: [
+                SelectItem("Pending", OrderStatus.pending.name),
+                SelectItem("Awaiting pickup", OrderStatus.awaitingPickup.name),
+                SelectItem("Completed", OrderStatus.completed.name),
+                SelectItem("Cancelled", OrderStatus.cancelled.name),
+              ],
+              onChanged: (val) {
+                _formCtrl.setFormField('status', val);
+              },
+            ),
+          ),
+          mY(6),
+          TuButton(
+            text: "Save changes",
+            width: double.infinity,
+            onPressed: () async {
+              try {
+                showProgressSheet();
+                final res = await apiDio().post('/order/edit',
+                    queryParameters: {'id': _order!['_id']},
+                    data: {"status": _formCtrl.form['status']});
+                _setOrder(res.data['order']);
+                gpop(); //Hide loader
+                gpop(); // Hide sheet
+              } catch (e) {
+                gpop();
+                errorHandler(e: e);
+              }
+            },
+          )
+        ],
+      ),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Order #${_args?.id}"),
+        title: Text("Order #${widget.id}"),
         actions: [
           TuPopupBtn(
             items: [
               (_appCtrl.user["permissions"] > 0 &&
-                      _order?["mode"] == OrderMode.collect.index)
+                      _order?["mode"] == OrderMode.collect.index &&
+                      widget.fromDash)
                   ? PopupMenuItem(
-                      onTap: _cancelOrder,
+                      onTap: _showUpdateStatusSheet,
                       child: const Text("Update status"),
                     )
                   : null,
@@ -275,7 +314,7 @@ class _OrderPageState extends State<OrderPage> {
                                                 fontWeight: FontWeight.w600),
                                           ),
                                           SelectableText(
-                                            _args!.id,
+                                            widget.id,
                                           ),
                                           my: 10),
                                       tuColumn(children: [

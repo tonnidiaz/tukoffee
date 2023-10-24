@@ -195,8 +195,10 @@ class OrderItem extends StatelessWidget {
           },
           onTap: () async {
             if (_appBarCtrl.selected.isEmpty) {
-              pushNamed("/order",
-                  arguments: OrderPageArgs(id: "${order["oid"]}"));
+              pushTo(OrderPage(
+                id: "${order['oid']}",
+                fromDash: isAdmin,
+              ));
             } else {
               _selectItem(order);
             }

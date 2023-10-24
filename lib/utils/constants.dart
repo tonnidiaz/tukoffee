@@ -121,7 +121,6 @@ final List<TuPage> pages = [
   TuPage("/cart", const CartPage(), icon: CupertinoIcons.home, inList: false),
   TuPage("/order/checkout", const CheckoutPage(),
       icon: CupertinoIcons.home, inList: false),
-  TuPage("/order", const OrderPage(), icon: CupertinoIcons.home, inList: false),
   TuPage("/about", const AboutPage(),
       icon: CupertinoIcons.info_circle, isAction: true),
   TuPage("/account/profile", const ProfilePage(),

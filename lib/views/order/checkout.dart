@@ -123,7 +123,7 @@ class CheckoutCtrl extends GetxController {
       var oid = res.data["order"]["oid"];
 
       Get.offAllNamed("/");
-      pushNamed("/order", arguments: OrderPageArgs(id: "$oid"));
+      pushTo(OrderPage(id: "$oid"));
       storeCtrl.cart['products'] = [];
     } catch (e) {
       gpop();

@@ -41,11 +41,12 @@ class OrdersCtrl extends GetxController {
     List orders = [];
     for (var o in val) {
       String status;
+
       //final
       if (o["mode"] == OrderMode.deliver.index) {
         status = await Shiplogic.getOrderStatus(o);
       } else {
-        status = o["status"];
+        status = o["status"] ?? OrderStatus.pending.name;
       }
       orders.add({...o, "status": status});
     }
@@ -215,10 +216,10 @@ class _OrdersPageState extends State<OrdersPage> {
       final res = ModalRoute.of(context)?.settings.name == "/orders"
           ? await apiDio().get("/orders?user=${_appCtrl.user["_id"]}")
           : await apiDio().get("/orders");
-
       await _ctrl.setOrders(res.data["orders"]);
       _ctrl.setOrdersFetched(true);
     } catch (e) {
+      clog("FETCH ORDER ERR");
       clog(e);
       if (e.runtimeType == DioException) {
         e as DioException;
@@ -421,7 +422,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                   tcontext: _scaffoldKey.currentState!.context,
                                   ctrl: _ctrl,
                                   order: _ctrl.sortedOrders[i],
-                                  isAdmin: true,
+                                  isAdmin: routeName != '/orders',
                                 ),
                                 itemCount: _ctrl.sortedOrders.length,
                               ),
