@@ -1,9 +1,9 @@
 export {};
-import { TUser, UserSchema } from "@/models/user";
+import { IUser, UserSchema } from "@/models/user";
 declare global {
     namespace Express {
         interface Request {
-            user: TUser | null;
+            user: IUser | null;
         }
 
         export interface Tonics {}

@@ -84,10 +84,10 @@ router.post("/create", auth, async (req, res) => {
             
             const order = new Order();
             order.oid = await genOID();
-            order.customer = user;
+            order.customer = user._id;
             order.products = cart.products;
             order.delivery_address = address;
-            order.mode = mode as string;
+            order.mode = Number(mode);
             order.store = store;
             order.collector = collector;
             order.yocoData = yocoData
@@ -100,7 +100,7 @@ router.post("/create", auth, async (req, res) => {
             
             await order.save();
             // add order to user's orders
-            user.orders.push(order);
+            user.orders.push(order._id);
             await user.save();
 
             //Update inventory

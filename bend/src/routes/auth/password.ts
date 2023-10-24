@@ -24,7 +24,7 @@ router.post("/reset", async (req, res) => {
         } else if (act == "verify-otp") {
             if (otp == user.otp) {
                 console.log("OTP Verified");
-                user.otp = null;
+                user.otp = undefined;
             }else{
             return res.status(400).send("tuned:Incorrect OTP");}
         } else if (act == "gen-otp") {
@@ -74,6 +74,7 @@ router
             } else {
                 const newHash = bcrypt.hashSync(newPass, 10);
                 req.user!.password = newHash;
+                
                 await req.user!.save();
                 res.send(newPass);
             }

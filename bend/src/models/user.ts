@@ -1,4 +1,4 @@
-import { Schema, InferSchemaType } from "mongoose";
+import { Schema, InferSchemaType, Document } from "mongoose";
 import { UserPermissions } from "../utils/constants";
 import { IAddress } from "@/utils/types";
 
@@ -62,5 +62,7 @@ const UserSchema = new Schema({
     }
 })
 
-export type TUser = InferSchemaType<typeof UserSchema>
+export interface IUser extends Document, InferSchemaType<typeof UserSchema> {
+    
+}
 export { UserSchema}
