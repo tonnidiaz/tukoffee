@@ -108,7 +108,6 @@ class _AddProductFormState extends State<AddProductForm> {
           };
         }
       } else {
-        clog(res.result);
         showToast(res.error!).show(context);
       }
     } catch (e) {
@@ -125,6 +124,10 @@ class _AddProductFormState extends State<AddProductForm> {
   }
 
   void _importImg() async {
+    // Request storage permission
+    if (Platform.isAndroid || Platform.isIOS) {
+      await requestStoragePermission();
+    }
     final file = await importFile(
         dialogTitle: "Import image file", type: FileType.image);
     if (file != null) {
@@ -144,11 +147,6 @@ class _AddProductFormState extends State<AddProductForm> {
       if (widget.mode == "edit") {
         _formCtrl.setTempImgs(formImgs);
       }
-
-      // Request storage permission
-      if (Platform.isAndroid || Platform.isIOS) {
-        requestStoragePermission();
-      }
     });
   }
 
@@ -162,9 +160,7 @@ class _AddProductFormState extends State<AddProductForm> {
             label: "Product name:",
             hint: "Enter product name...",
             value: _formCtrl.form["name"],
-            //height: 30,
             required: true,
-
             onChanged: (val) {
               _formCtrl.setFormField("name", val);
             },
@@ -201,6 +197,7 @@ class _AddProductFormState extends State<AddProductForm> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TuFormField(
                       label: "Quantity:",
@@ -258,6 +255,7 @@ class _AddProductFormState extends State<AddProductForm> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TuFormField(
                       label: "Width:",
@@ -377,6 +375,10 @@ class _AddProductFormState extends State<AddProductForm> {
               /*   showToast("Successs!").show(context);
               return; */
               gpop();
+              if (widget.mode == 'edit') {
+                gpop();
+                return;
+              }
               Get.offAllNamed("/");
               pushNamed("/product", arguments: {"pid": res});
             }

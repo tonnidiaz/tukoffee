@@ -43,9 +43,14 @@ class _PageWithSearchAndListState extends State<PageWithSearchAndList> {
                         child: CircularProgressIndicator(),
                       ),
                     )
-                  : _data!.isEmpty
+                  : _data!.isEmpty || true
                       ? SliverFillRemaining(
-                          child: Center(child: h3("Ohhhwee!")),
+                          hasScrollBody: false,
+                          child: Column(children: [
+                            cont(),
+                            cont(),
+                            cont(),
+                          ]), // Center(child: h3("Ohhhwee!")),
                         )
                       : DecoratedSliver(
                           decoration: BoxDecoration(color: cardBGLight),
@@ -53,7 +58,7 @@ class _PageWithSearchAndListState extends State<PageWithSearchAndList> {
                             padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),
                             sliver: SliverList.builder(
                               itemBuilder: (c, i) => cont(),
-                              itemCount: 20,
+                              itemCount: 2,
                             ),
                           ),
                         )

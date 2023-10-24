@@ -129,12 +129,6 @@ class _AccountsState extends State<Accounts> {
     super.dispose();
   }
 
-  /*  behavior: ScrollConfiguration.of(context).copyWith(
-              dragDevices: {
-                PointerDeviceKind.touch,
-                PointerDeviceKind.mouse,
-              },
-            ), */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,83 +139,77 @@ class _AccountsState extends State<Accounts> {
           onRefresh: () async {
             await _init();
           },
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: SizedBox(
-              height: screenSize(context).height -
-                  statusBarH(context: context) -
-                  (appBarH * 2),
-              // constraints: BoxConstraints(minHeight: c.maxHeight),
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  mY(topMargin),
-                  Obx(
-                    () => Container(
-                      color: cardBGLight,
-                      padding: defaultPadding,
-                      child: TuFormField(
-                        hint: "Name or email",
-                        fill: appBGLight,
-                        height: borderlessInpHeight,
-                        hasBorder: false,
-                        prefixIcon: TuIcon(Icons.search),
-                        value: _ctrl.query.value,
-                        onChanged: (val) {
-                          _ctrl.setQuery(val);
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(child: mY(topMargin)),
+              SliverToBoxAdapter(
+                child: Obx(
+                  () => Container(
+                    color: cardBGLight,
+                    padding: defaultPadding,
+                    child: TuFormField(
+                      hint: "Name or email",
+                      fill: appBGLight,
+                      height: borderlessInpHeight,
+                      hasBorder: false,
+                      prefixIcon: TuIcon(Icons.search),
+                      value: _ctrl.query.value,
+                      onChanged: (val) {
+                        _ctrl.setQuery(val);
 
-                          _ctrl.setFilteredAccounts(
-                              _ctrl.accounts.value!.where((p0) {
-                            var firstLastName =
-                                "${p0["first_name"]} ${p0["last_name"]}";
+                        _ctrl.setFilteredAccounts(
+                            _ctrl.accounts.value!.where((p0) {
+                          var firstLastName =
+                              "${p0["first_name"]} ${p0["last_name"]}";
 
-                            var filter = "${p0["email"]}".contains(
-                                    RegExp(val, caseSensitive: false)) ||
-                                firstLastName.contains(
-                                    RegExp(val, caseSensitive: false)) ||
-                                "${p0["first_name"]}".contains(
-                                    RegExp(val, caseSensitive: false));
-                            return filter;
-                          }).toList());
-                        },
-                      ),
+                          var filter = "${p0["email"]}".contains(
+                                  RegExp(val, caseSensitive: false)) ||
+                              firstLastName.contains(
+                                  RegExp(val, caseSensitive: false)) ||
+                              "${p0["first_name"]}"
+                                  .contains(RegExp(val, caseSensitive: false));
+                          return filter;
+                        }).toList());
+                      },
                     ),
                   ),
-                  Obx(() {
-                    return _ctrl.accounts.value == null
-                        ? const Expanded(
-                            child: Center(child: CircularProgressIndicator()),
-                          )
-                        : Column(
-                            children: [
-                              mY(topMargin),
-                              AccountsSection(
-                                  ctrl: _ctrl,
-                                  title: "Staff",
-                                  accounts: [
-                                    ..._ctrl.filteredAccounts
-                                        .where((it) =>
-                                            it["permissions"] ==
-                                                UserPermissions.write ||
-                                            it["permissions"] ==
-                                                UserPermissions.delete)
-                                        .toList(),
-                                  ]),
-                              mY(5),
-                              AccountsSection(
-                                ctrl: _ctrl,
-                                title: "Customers",
-                                accounts: _ctrl.filteredAccounts
-                                    .where((it) => it["permissions"] == 0)
-                                    .toList(),
-                              ),
-                            ],
-                          );
-                  })
-                ],
+                ),
               ),
-            ),
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Obx(() {
+                  return _ctrl.accounts.value == null
+                      ? const Center(child: CircularProgressIndicator())
+                      : Column(
+                          children: [
+                            mY(topMargin),
+                            AccountsSection(
+                                ctrl: _ctrl,
+                                title: "Staff",
+                                accounts: [
+                                  ..._ctrl.filteredAccounts
+                                      .where((it) =>
+                                          it["permissions"] ==
+                                              UserPermissions.write.index ||
+                                          it["permissions"] ==
+                                              UserPermissions.delete.index)
+                                      .toList(),
+                                ]),
+                            mY(5),
+                            AccountsSection(
+                              ctrl: _ctrl,
+                              title: "Customers",
+                              accounts: _ctrl.filteredAccounts
+                                  .where((it) =>
+                                      it["permissions"] ==
+                                      UserPermissions.read.index)
+                                  .toList(),
+                            ),
+                          ],
+                        );
+                }),
+              )
+            ],
           )),
     );
   }
@@ -375,7 +363,7 @@ class AccountCard extends StatelessWidget {
                                     );
                                   });
                             },
-                            child: Text("Delete"))
+                            child: const Text("Delete"))
                       ];
                     });
               }),

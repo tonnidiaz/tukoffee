@@ -216,7 +216,6 @@ void errorHandler({required e, BuildContext? context, String? msg}) {
 Future<String?> addProduct(BuildContext context, Map<String, dynamic> product,
     {String mode = "add"}) async {
   clog("$mode product...");
-  clog(product);
   try {
     final url = "/products/$mode";
     final res = await apiDio().post(url, data: product);

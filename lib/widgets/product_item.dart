@@ -107,19 +107,11 @@ class ProductItem extends StatelessWidget {
                 return [
                   PopupMenuItem(
                     onTap: () {
-                      _formViewCtrl.setForm({
-                        "name": product["name"],
-                        "description": product["description"],
-                        "price": product["price"],
-                        "quantity": product["quantity"],
-                        "images": product["images"],
-                        "pid": product["pid"]
-                      });
-
+                      _formViewCtrl.setForm({...product});
                       pushTo(const AddProductForm(
                         title: "Edit product",
                         mode: "edit",
-                        btnTxt: "Edit product",
+                        btnTxt: "Save changes",
                       ));
                     },
                     child: const Text(
