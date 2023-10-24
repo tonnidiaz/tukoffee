@@ -1,13 +1,13 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/review_item.dart';
-import 'package:lebzcafe/widgets/views/add_review.dart';
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/review_item.dart";
+import "package:lebzcafe/widgets/views/add_review.dart";
 
 class ProductReviewPage extends StatefulWidget {
   final String id;
@@ -29,7 +29,7 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
     try {
       _setReview(null);
       final res = await apiDio().get("/products/reviews?id=${widget.id}");
-      _setReview(res.data['reviews'][0]);
+      _setReview(res.data["reviews"][0]);
     } catch (e) {
       if (mounted) {
         errorHandler(e: e, context: context, msg: "Failed to fetch reviews");
@@ -49,7 +49,7 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Review'),
+        title: const Text("Review"),
         actions: [
           Visibility(
             visible: false,
@@ -69,14 +69,14 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
                 TuFuncs.showBottomSheet(
                     context: context,
                     widget: AddReviewView(
-                        product: _review!['product'],
+                        product: _review!["product"],
                         rev: _review!,
                         onOk: () {
                           _getReview();
                         }));
               },
               icon: svgIcon(
-                name: 'br-pencil',
+                name: "br-pencil",
                 color: TuColors.text2,
               ) // widget
 
@@ -127,8 +127,8 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
                             ),
                             mY(6),
                             Text(
-                              "${DateTime.parse(_review!['date_created']).toLocal()}"
-                                  .split(' ')
+                              "${DateTime.parse(_review!["date_created"]).toLocal()}"
+                                  .split(" ")
                                   .first,
                               style: const TextStyle(fontSize: 12.5),
                             )
@@ -140,8 +140,8 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
                             ),
                             mY(6),
                             Text(
-                              "${DateTime.parse(_review!['last_modified']).toLocal()}"
-                                  .split(' ')
+                              "${DateTime.parse(_review!["last_modified"]).toLocal()}"
+                                  .split(" ")
                                   .first,
                               style: const TextStyle(fontSize: 12.5),
                             )
@@ -157,16 +157,16 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
                           horizontal: 8, vertical: 14),
                       child: tuColumn(children: [
                         Text(
-                          "${_review!['title']}",
+                          "${_review!["title"]}",
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                         mY(6),
                         Text(
-                          "${_review!['name']}",
+                          "${_review!["name"]}",
                           style: TextStyle(color: TuColors.text2, fontSize: 14),
                         ),
                         mY(10),
-                        Text(_review!['body'])
+                        Text(_review!["body"])
                       ]),
                     )
                   ]),

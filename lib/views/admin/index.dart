@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/views/admin/accounts.dart';
-import 'package:lebzcafe/views/admin/dashboard.dart';
-import 'package:lebzcafe/views/admin/orders.dart';
-import 'package:lebzcafe/views/admin/products.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:get/get.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/views/admin/accounts.dart";
+import "package:lebzcafe/views/admin/dashboard.dart";
+import "package:lebzcafe/views/admin/orders.dart";
+import "package:lebzcafe/views/admin/products.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:get/get.dart";
 
 final Map<String, dynamic> initDashData = {
   "products": [],
@@ -72,10 +72,10 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = <Tab>[
-      const Tab(label: 'Dashboard', icon: 'br-apps'),
-      const Tab(label: 'Products', icon: 'br-box-open-full'),
-      const Tab(label: 'Orders', icon: 'br-person-dolly'),
-      const Tab(label: 'Accounts', icon: 'br-users'),
+      const Tab(label: "Dashboard", icon: "br-apps"),
+      const Tab(label: "Products", icon: "br-box-open-full"),
+      const Tab(label: "Orders", icon: "br-person-dolly"),
+      const Tab(label: "Accounts", icon: "br-users"),
     ];
     return Scaffold(
       bottomNavigationBar: Obx(() {

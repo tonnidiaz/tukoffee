@@ -1,28 +1,28 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:lebzcafe/controllers/products_ctrl.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "package:lebzcafe/controllers/products_ctrl.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import 'package:cloudinary/cloudinary.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/controllers/appbar.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/views/admin/index.dart';
-import 'package:lebzcafe/views/search.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:get/get.dart';
+import "package:cloudinary/cloudinary.dart";
+import "package:dio/dio.dart";
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
+import "package:lebzcafe/controllers/appbar.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/views/admin/index.dart";
+import "package:lebzcafe/views/search.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:get/get.dart";
 
-import '../../widgets/add_product_form.dart';
-import '../../widgets/common2.dart';
-import '../../widgets/product_item.dart';
-import '../../widgets/prompt_modal.dart';
+import "../../widgets/add_product_form.dart";
+import "../../widgets/common2.dart";
+import "../../widgets/product_item.dart";
+import "../../widgets/prompt_modal.dart";
 
 class Products extends StatefulWidget {
   const Products({super.key});
@@ -53,18 +53,18 @@ class _ProductsState extends State<Products> {
                       onOk: () async {
                         try {
                           var pids = _appBarCtrl.selected
-                              .map((element) => element['pid'])
+                              .map((element) => element["pid"])
                               .toList();
                           await apiDio().post("/products/delete?pids=$pids");
                           //Delete images for each product
                           for (var product in _appBarCtrl.selected) {
-                            var imgs = product['images'];
+                            var imgs = product["images"];
                             //Delete the product images
                             for (var img in imgs) {
                               try {
                                 var cloudinaryRes =
                                     await signedCloudinary.destroy(
-                                  img['publicId'],
+                                  img["publicId"],
                                 );
                                 clog(cloudinaryRes.result);
                               } catch (err) {
@@ -108,10 +108,10 @@ class _ProductsState extends State<Products> {
   _getProducts() async {
     try {
       _ctrl.setProducts(null);
-      clog('Getting...');
+      clog("Getting...");
 
       final res = await apiDio().get("/products");
-      _ctrl.setProducts(res.data['data']);
+      _ctrl.setProducts(res.data["data"]);
     } catch (e) {
       clog(e);
       _ctrl.setProducts([]);

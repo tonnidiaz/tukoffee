@@ -1,7 +1,7 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:lebzcafe/mobile.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/views/order/index.dart';
+import "package:awesome_notifications/awesome_notifications.dart";
+import "package:lebzcafe/mobile.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/views/order/index.dart";
 
 class NotificationController {
   /// Use this method to detect when a new notification or a schedule is created
@@ -31,11 +31,11 @@ class NotificationController {
       ReceivedAction receivedAction) async {
     // Your code goes here
     final payload = receivedAction.payload;
-    if (payload != null && payload['orderId'] != null) {
+    if (payload != null && payload["orderId"] != null) {
       // Navigate into pages, avoiding to open the notification details page over another details page already opened
-      MobileApp.navigatorKey.currentState?.pushNamedAndRemoveUntil('/order',
-          (route) => (route.settings.name != '/order') || route.isFirst,
-          arguments: OrderPageArgs(id: payload['orderId']!));
+      MobileApp.navigatorKey.currentState?.pushNamedAndRemoveUntil("/order",
+          (route) => (route.settings.name != "/order") || route.isFirst,
+          arguments: OrderPageArgs(id: payload["orderId"]!));
     }
 
     return;

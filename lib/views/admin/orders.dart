@@ -1,29 +1,29 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions2.dart';
-import 'package:lebzcafe/views/auth/login.dart';
-import 'package:lebzcafe/views/order/checkout.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions2.dart";
+import "package:lebzcafe/views/auth/login.dart";
+import "package:lebzcafe/views/order/checkout.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/controllers/app_ctrl.dart';
-import 'package:lebzcafe/controllers/appbar.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/dialogs/loading_dialog.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/widgets/tu/select.dart';
-import '../../main.dart';
-import '../../widgets/order_item.dart';
-import '../../widgets/prompt_modal.dart';
+import "package:dio/dio.dart";
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
+import "package:lebzcafe/controllers/app_ctrl.dart";
+import "package:lebzcafe/controllers/appbar.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/dialogs/loading_dialog.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/widgets/tu/select.dart";
+import "../../main.dart";
+import "../../widgets/order_item.dart";
+import "../../widgets/prompt_modal.dart";
 
 class OrdersCtrl extends GetxController {
   RxString orderId = "".obs;
@@ -42,10 +42,10 @@ class OrdersCtrl extends GetxController {
     for (var o in val) {
       String status;
       //final
-      if (o['mode'] == OrderMode.deliver.index) {
+      if (o["mode"] == OrderMode.deliver.index) {
         status = await Shiplogic.getOrderStatus(o);
       } else {
-        status = o['status'];
+        status = o["status"];
       }
       orders.add({...o, "status": status});
     }
@@ -78,13 +78,13 @@ class OrdersCtrl extends GetxController {
     var ords = [];
     switch (val) {
       case OrderStatus.pending:
-        ords = orders.where((it) => it['status'] == 'pending').toList();
+        ords = orders.where((it) => it["status"] == "pending").toList();
         break;
       case OrderStatus.completed:
-        ords = orders.where((it) => it['status'] == 'delivered').toList();
+        ords = orders.where((it) => it["status"] == "delivered").toList();
         break;
       case OrderStatus.cancelled:
-        ords = orders.where((it) => it['status'] == 'cancelled').toList();
+        ords = orders.where((it) => it["status"] == "cancelled").toList();
         break;
       default:
         ords = orders;
@@ -108,17 +108,17 @@ class OrdersCtrl extends GetxController {
       switch (sortBy) {
         case SortBy.lastModified:
           s = sortOrder == SortOrder.ascending
-              ? dateInMs(b['last_modified'])
-                  .compareTo(dateInMs(a['last_modified']))
-              : dateInMs(a['last_modified'])
-                  .compareTo(dateInMs(b['last_modified']));
+              ? dateInMs(b["last_modified"])
+                  .compareTo(dateInMs(a["last_modified"]))
+              : dateInMs(a["last_modified"])
+                  .compareTo(dateInMs(b["last_modified"]));
           break;
         case SortBy.dateCreated:
           s = sortOrder == SortOrder.ascending
-              ? dateInMs(b['date_created'])
-                  .compareTo(dateInMs(a['date_created']))
-              : dateInMs(a['date_created'])
-                  .compareTo(dateInMs(b['date_created']));
+              ? dateInMs(b["date_created"])
+                  .compareTo(dateInMs(a["date_created"]))
+              : dateInMs(a["date_created"])
+                  .compareTo(dateInMs(b["date_created"]));
           break;
         default:
           break;
@@ -152,10 +152,10 @@ class _OrdersPageState extends State<OrdersPage> {
 
   _init() async {
     if (_appCtrl.user.isEmpty) {
-      clog('To Login');
+      clog("To Login");
       gpop();
       pushTo(const LoginPage(
-        to: '/orders',
+        to: "/orders",
       ));
       return;
     }
@@ -178,22 +178,22 @@ class _OrdersPageState extends State<OrdersPage> {
             okTxt: "Yes",
             onOk: () async {
               try {
-                showProgressSheet(msg: 'Canceling orders..');
+                showProgressSheet(msg: "Canceling orders..");
                 // Deselect all
                 final List<dynamic> ids =
-                    _appBarCtrl.selected.map((it) => it['_id']).toList();
+                    _appBarCtrl.selected.map((it) => it["_id"]).toList();
                 _appBarCtrl.setSelected([]);
 
                 for (var o in _appBarCtrl.selected
-                    .where((e) => e['mode'] == OrderMode.deliver.index)) {
+                    .where((e) => e["mode"] == OrderMode.deliver.index)) {
                   //cancel from shiplogic first
                   await Shiplogic.cancelOrder(o);
                 }
                 final res = await apiDio().post(
                     "/order/cancel?action=${act.toLowerCase()}",
-                    data: {'ids': ids, "userId": MainApp.appCtrl.user['_id']});
+                    data: {"ids": ids, "userId": MainApp.appCtrl.user["_id"]});
                 gpop();
-                await _ctrl.setOrders(res.data['orders']);
+                await _ctrl.setOrders(res.data["orders"]);
               } catch (e) {
                 gpop();
                 clog(e);
@@ -213,10 +213,10 @@ class _OrdersPageState extends State<OrdersPage> {
       clog("Getting orders");
       _ctrl.setOrdersFetched(false);
       final res = ModalRoute.of(context)?.settings.name == "/orders"
-          ? await apiDio().get("/orders?user=${_appCtrl.user['_id']}")
+          ? await apiDio().get("/orders?user=${_appCtrl.user["_id"]}")
           : await apiDio().get("/orders");
 
-      await _ctrl.setOrders(res.data['orders']);
+      await _ctrl.setOrders(res.data["orders"]);
       _ctrl.setOrdersFetched(true);
     } catch (e) {
       clog(e);
@@ -325,7 +325,7 @@ class _OrdersPageState extends State<OrdersPage> {
         key: _scaffoldKey,
         appBar: childAppbar(
             title: "Orders",
-            showCart: routeName == '/orders',
+            showCart: routeName == "/orders",
             actions: [
               Obx(
                 () => TuPopupBtn(items: [
@@ -388,7 +388,7 @@ class _OrdersPageState extends State<OrdersPage> {
                             onChanged: (val) {
                               _ctrl.setOrderId(val);
                               _ctrl.setsortedOrders(_ctrl.orders
-                                  .where((p0) => "${p0['oid']}".contains(val))
+                                  .where((p0) => "${p0["oid"]}".contains(val))
                                   .toList());
                             },
                           ),
@@ -408,7 +408,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                   child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Image.asset(
-                                  'assets/images/box.png',
+                                  "assets/images/box.png",
                                   color: Colors.black45,
                                   width: screenPercent(context, 35).width,
                                 ),

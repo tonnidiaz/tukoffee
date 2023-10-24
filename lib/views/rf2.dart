@@ -1,24 +1,24 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/dummies.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/functions2.dart';
-import 'package:lebzcafe/views/map.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/tu/browser.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_inappwebview/flutter_inappwebview.dart";
+import "package:geocoding/geocoding.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/dummies.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/functions2.dart";
+import "package:lebzcafe/views/map.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/tu/browser.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
+import "package:socket_io_client/socket_io_client.dart" as IO;
 
 class RFPage2 extends StatefulWidget {
   const RFPage2({super.key});
@@ -31,7 +31,7 @@ class _RFPage2State extends State<RFPage2> {
   void _handleProgress(MyInAppBrowser browser, int progress) async {
     final url = await browser.webViewController.getUrl();
     if (url != null) {
-      clog('The URL IS: ${url.toString()}');
+      clog("The URL IS: ${url.toString()}");
     }
   }
 
@@ -49,8 +49,8 @@ class _RFPage2State extends State<RFPage2> {
     socket?.off("comment");
     //socket?.off("order");
 
-    socket?.on('rf', (data) => {clog("RF: $data")});
-    socket?.on('comment', (data) {
+    socket?.on("rf", (data) => {clog("RF: $data")});
+    socket?.on("comment", (data) {
       createNotif(title: "Anonymous says", msg: data);
       if (context.mounted) {
         setState(() {
@@ -58,7 +58,7 @@ class _RFPage2State extends State<RFPage2> {
         });
       }
     });
-    socket?.onDisconnect((_) => clog('disconnect'));
+    socket?.onDisconnect((_) => clog("disconnect"));
   }
 
   @override
@@ -85,7 +85,7 @@ class _RFPage2State extends State<RFPage2> {
             color: cardBGLight,
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               TuFormField(
-                hint: 'Comment:',
+                hint: "Comment:",
                 value: _comment,
                 onChanged: (val) {
                   setState(() {
@@ -96,7 +96,7 @@ class _RFPage2State extends State<RFPage2> {
                   splashRadius: 20,
                   padding: EdgeInsets.zero,
                   onPressed: () {
-                    socket!.emit('comment', _comment);
+                    socket!.emit("comment", _comment);
                   },
                   icon: Icon(Icons.send),
                 ),
@@ -127,7 +127,7 @@ class _RFPage2State extends State<RFPage2> {
                       height: screenSize(context).height, child: MapPage()));
                   return;
                   showProgressSheet();
-                  String query = '50 davies street';
+                  String query = "50 davies street";
                   final mapboxPlaceRes = await dio.get(
                       "https://api.mapbox.com/geocoding/v5/mapbox.places/$query.json",
                       queryParameters: {
@@ -136,10 +136,10 @@ class _RFPage2State extends State<RFPage2> {
                         "types": "address"
                       });
                   gpop();
-                  clog(jsonEncode(mapboxPlaceRes.data['features']));
+                  clog(jsonEncode(mapboxPlaceRes.data["features"]));
                   return;
-                  final davies = dummyFeatures[0]['center'].reversed.toList();
-                  final daviesBox = dummyFeatures[0]['center'];
+                  final davies = dummyFeatures[0]["center"].reversed.toList();
+                  final daviesBox = dummyFeatures[0]["center"];
                   final placemarks =
                       await placemarkFromCoordinates(davies[0], davies[1]);
                   var addr1 = placemarks[1];
@@ -158,7 +158,7 @@ class _RFPage2State extends State<RFPage2> {
                   gpop();
                   errorHandler(e: e, context: context);
                 }
-                // Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+                // Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
               },
               child: Icon(Icons.home_outlined),
             ),

@@ -1,11 +1,11 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:lebzcafe/controllers/app_ctrl.dart';
-import 'package:get/get.dart';
-import '../utils/colors.dart';
-import '/utils/constants.dart';
-import 'common.dart';
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:lebzcafe/controllers/app_ctrl.dart";
+import "package:get/get.dart";
+import "../utils/colors.dart";
+import "/utils/constants.dart";
+import "common.dart";
 
 class TBottomSheet extends StatefulWidget {
   const TBottomSheet({Key? key}) : super(key: key);
@@ -43,7 +43,7 @@ class _TBottomSheetState extends State<TBottomSheet> {
                             text: "Exit",
                             onClick: () async {
                               SystemChannels.platform
-                                  .invokeMethod('SystemNavigator.pop');
+                                  .invokeMethod("SystemNavigator.pop");
                             }),
                       ],
                     )),

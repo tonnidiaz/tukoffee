@@ -1,28 +1,28 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/views/auth/login.dart';
-import 'package:lebzcafe/widgets/common4.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/form.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/views/auth/login.dart";
+import "package:lebzcafe/widgets/common4.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:lebzcafe/widgets/tu/form.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/controllers/app_ctrl.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/views/auth/verify_email.dart';
-import 'package:lebzcafe/views/map.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:get/get.dart';
+import "package:dio/dio.dart";
+import "package:flutter/material.dart";
+import "package:lebzcafe/controllers/app_ctrl.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/views/auth/verify_email.dart";
+import "package:lebzcafe/views/map.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:get/get.dart";
 
-import '../../utils/constants.dart';
-import '../../utils/styles.dart';
-import '../../widgets/common.dart';
-import '../../widgets/form_view.dart';
-import '../order/index.dart';
+import "../../utils/constants.dart";
+import "../../utils/styles.dart";
+import "../../widgets/common.dart";
+import "../../widgets/form_view.dart";
+import "../order/index.dart";
 
 class ProfilePage extends StatefulWidget {
   final String? id;
@@ -42,9 +42,9 @@ class _ProfilePageState extends State<ProfilePage> {
         _account = null;
       });
       final res =
-          await apiDio().get("/users?id=${widget.id ?? _appCtrl.user['_id']}");
+          await apiDio().get("/users?id=${widget.id ?? _appCtrl.user["_id"]}");
       setState(() {
-        _account = res.data['users'][0];
+        _account = res.data["users"][0];
       });
     } catch (e) {
       clog(e);
@@ -63,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
     if (_appCtrl.user.isEmpty) {
       gpop();
       pushTo(const LoginPage(
-        to: '/account/profile',
+        to: "/account/profile",
       ));
       return;
     }
@@ -86,12 +86,12 @@ class _ProfilePageState extends State<ProfilePage> {
               final res =
                   await apiDio().post("/user/edit?field=address", data: {
                 "value": val,
-                'userId': _account!['_id'],
+                "userId": _account!["_id"],
               });
               setState(() {
                 _account = res.data["user"];
               });
-              if (_account!['_id'] == appCtrl.user['_id']) {
+              if (_account!["_id"] == appCtrl.user["_id"]) {
                 appCtrl.setUser(_account!);
               }
               Get.back();
@@ -112,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     void onEditPermissionsClick() {
-      formCtrl.setForm({'permissions': _account!['permissions']});
+      formCtrl.setForm({"permissions": _account!["permissions"]});
       TuFuncs.showBottomSheet(
           context: context,
           widget: Container(
@@ -133,18 +133,18 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         TuLabeledCheckbox(
                           onChanged: (val) {},
-                          label: 'READ',
-                          value: formCtrl.form['permissions'] !=
+                          label: "READ",
+                          value: formCtrl.form["permissions"] !=
                               UserPermissions.read,
                           radius: 100,
                         ),
                         TuLabeledCheckbox(
                           onChanged: (val) {
                             var perms = val == true ? 1 : 0;
-                            formCtrl.setFormField('permissions', perms);
+                            formCtrl.setFormField("permissions", perms);
                           },
-                          label: 'WRITE',
-                          value: formCtrl.form['permissions'] >= 1,
+                          label: "WRITE",
+                          value: formCtrl.form["permissions"] >= 1,
                           radius: 100,
                         ),
                         TuLabeledCheckbox(
@@ -152,10 +152,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             var perms = val == true
                                 ? UserPermissions.delete
                                 : UserPermissions.read;
-                            formCtrl.setFormField('permissions', perms);
+                            formCtrl.setFormField("permissions", perms);
                           },
-                          label: 'DELETE',
-                          value: formCtrl.form['permissions'] >= 2,
+                          label: "DELETE",
+                          value: formCtrl.form["permissions"] >= 2,
                           radius: 100,
                         ),
                       ],
@@ -169,15 +169,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     onPressed: () async {
                       try {
                         final res = await apiDio().post("/user/edit", data: {
-                          'userId': _account!['_id'],
-                          'value': {
-                            'permissions': formCtrl.form['permissions'],
+                          "userId": _account!["_id"],
+                          "value": {
+                            "permissions": formCtrl.form["permissions"],
                           },
                         });
                         setState(() {
-                          _account = res.data['user'];
+                          _account = res.data["user"];
                         });
-                        if (_account!['_id'] == appCtrl.user['_id']) {
+                        if (_account!["_id"] == appCtrl.user["_id"]) {
                           appCtrl.setUser(_account!);
                         }
                         Navigator.pop(context);
@@ -193,8 +193,8 @@ class _ProfilePageState extends State<ProfilePage> {
     void onEditDetailsBtnClick() {
       final FormViewCtrl ctrl = Get.find();
       ctrl.setForm({
-        "first_name": _account!['first_name'],
-        "last_name": _account!['last_name'],
+        "first_name": _account!["first_name"],
+        "last_name": _account!["last_name"],
       });
       final form = ctrl.form;
       Get.bottomSheet(SingleChildScrollView(
@@ -235,11 +235,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       try {
                         showProgressSheet();
                         final res = await apiDio().post("/user/edit",
-                            data: {'value': form, "userId": _account!['_id']});
+                            data: {"value": form, "userId": _account!["_id"]});
                         setState(() {
-                          _account = res.data['user'];
+                          _account = res.data["user"];
                         });
-                        if (_account!['_id'] == appCtrl.user['_id']) {
+                        if (_account!["_id"] == appCtrl.user["_id"]) {
                           appCtrl.setUser(_account!);
                         }
                         Get.back();
@@ -262,7 +262,7 @@ class _ProfilePageState extends State<ProfilePage> {
         appBar: AppBar(
           title: Text(_account == null
               ? "Profile"
-              : "${_account!['first_name']} ${_account!['last_name']}"),
+              : "${_account!["first_name"]} ${_account!["last_name"]}"),
           actions: [
             Visibility(
               visible: widget.id == null,
@@ -270,7 +270,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 splashRadius: 20,
                 icon: Icon(Icons.settings_outlined),
                 onPressed: () {
-                  pushNamed('/account/settings');
+                  pushNamed("/account/settings");
                 },
               ),
             ),
@@ -315,11 +315,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 TextButton(
                                                     onPressed:
                                                         onEditDetailsBtnClick,
-                                                    child: const Text('Edit')),
+                                                    child: const Text("Edit")),
                                                 my: 0),
                                             mY(8),
                                             Text(
-                                              "${_account!['first_name']} ${_account!['last_name']}",
+                                              "${_account!["first_name"]} ${_account!["last_name"]}",
                                               style: TextStyle(
                                                   color: TuColors.text2),
                                             ),
@@ -347,31 +347,31 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 ),
                                                 mY(8),
                                                 SelectableText(
-                                                  "${_account!['email']}",
+                                                  "${_account!["email"]}",
                                                   maxLines: 1,
                                                   style: TextStyle(
                                                       color: TuColors.text2),
                                                 ),
                                                 Visibility(
                                                     visible: !_account![
-                                                        'email_verified'],
+                                                        "email_verified"],
                                                     child: tuTableRow(
-                                                        const Text(''),
+                                                        const Text(""),
                                                         InkWell(
                                                           onTap: () async {
                                                             try {
                                                               formCtrl.setForm({
-                                                                'email':
+                                                                "email":
                                                                     _account![
-                                                                        'email']
+                                                                        "email"]
                                                               });
                                                               // Generate OTP for email
                                                               await apiDio().post(
-                                                                  '/auth/verify-email',
+                                                                  "/auth/verify-email",
                                                                   data: {
-                                                                    'email': formCtrl
+                                                                    "email": formCtrl
                                                                             .form[
-                                                                        'email'],
+                                                                        "email"],
                                                                   });
                                                               showModalBottomSheet(
                                                                   context:
@@ -407,7 +407,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 ),
                                                 mY(8),
                                                 SelectableText(
-                                                    "${_account!['phone']}",
+                                                    "${_account!["phone"]}",
                                                     style: TextStyle(
                                                         color: TuColors.text2)),
                                               ],
@@ -433,18 +433,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 TextButton(
                                                     onPressed: () {
                                                       if (_account![
-                                                              'address'] !=
+                                                              "address"] !=
                                                           null) {
                                                         formCtrl.setForm({
                                                           "address": _account![
-                                                              'address']
+                                                              "address"]
                                                         });
                                                       }
                                                       addEditAddress(
                                                           title:
                                                               "Edit address");
                                                     },
-                                                    child: const Text('Edit')),
+                                                    child: const Text("Edit")),
                                                 my: 0),
                                             mY(8),
                                             Builder(builder: (context) {
@@ -476,7 +476,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          "${_account!['address']['place_name']}",
+                                                          "${_account!["address"]["place_name"]}",
                                                           style: TextStyle(
                                                               fontSize: 14,
                                                               color: TuColors
@@ -507,7 +507,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       onPressed:
                                                           onEditPermissionsClick,
                                                       child:
-                                                          const Text('Edit')),
+                                                          const Text("Edit")),
                                                   my: 0),
                                               mY(8),
                                               Wrap(
@@ -515,25 +515,25 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 children: [
                                                   TuLabeledCheckbox(
                                                     onChanged: (val) {},
-                                                    label: 'READ',
+                                                    label: "READ",
                                                     value: _account![
-                                                            'permissions'] >=
+                                                            "permissions"] >=
                                                         0,
                                                     radius: 100,
                                                   ),
                                                   TuLabeledCheckbox(
                                                     onChanged: (val) {},
-                                                    label: 'WRITE',
+                                                    label: "WRITE",
                                                     value: _account![
-                                                            'permissions'] >=
+                                                            "permissions"] >=
                                                         1,
                                                     radius: 100,
                                                   ),
                                                   TuLabeledCheckbox(
                                                     onChanged: (val) {},
-                                                    label: 'DELETE',
+                                                    label: "DELETE",
                                                     value: _account![
-                                                            'permissions'] >=
+                                                            "permissions"] >=
                                                         2,
                                                     radius: 100,
                                                   ),

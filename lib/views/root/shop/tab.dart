@@ -1,19 +1,19 @@
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/controllers/store_ctrl.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/views/search.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:get/get.dart';
-import '../../../utils/constants2.dart';
-import '../../../widgets/common.dart';
-import '../../../widgets/product_card.dart';
-import '/utils/constants.dart';
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
+import "package:lebzcafe/controllers/store_ctrl.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/views/search.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:get/get.dart";
+import "../../../utils/constants2.dart";
+import "../../../widgets/common.dart";
+import "../../../widgets/product_card.dart";
+import "/utils/constants.dart";
 
 class HomeTab extends StatefulWidget {
   final String q;
@@ -54,7 +54,7 @@ class _HomeTabState extends State<HomeTab> {
       _storeCtrl.setStatus(ProductStatus.all);
       _storeCtrl.setSortOrder(SortOrder.ascending);
       if (_appCtrl.user.isNotEmpty) {
-        setupCart(_appCtrl.user['_id']);
+        setupCart(_appCtrl.user["_id"]);
       }
 
       getProducts();
@@ -145,8 +145,7 @@ class _HomeTabState extends State<HomeTab> {
       );
     }
 
-    return 
-    RefreshIndicator(
+    return RefreshIndicator(
       onRefresh: () async {
         await getProducts();
       },

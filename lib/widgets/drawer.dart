@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/controllers/app_ctrl.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/controllers/app_ctrl.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:get/get.dart";
+import "package:google_fonts/google_fonts.dart";
 
-import '../utils/colors.dart';
+import "../utils/colors.dart";
 
 class TDrawer extends StatefulWidget {
   const TDrawer({super.key});
@@ -42,7 +42,7 @@ class _TDrawerState extends State<TDrawer> {
                     color: cardBGLight),
                 child: Center(
                   child: Text(
-                    _appCtrl.store['name'],
+                    _appCtrl.store["name"],
                     style: GoogleFonts.poppins(
                         color: Colors.black54,
                         fontSize: 30,
@@ -199,7 +199,7 @@ class _TDrawerState extends State<TDrawer> {
                   IconButton(
                       padding: const EdgeInsets.only(left: 10),
                       onPressed: () {
-                        pushNamed('/app/settings');
+                        pushNamed("/app/settings");
                       },
                       splashRadius: 24,
                       icon: const Icon(

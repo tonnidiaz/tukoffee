@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/views/product/reviews/review.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/review_item.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/views/product/reviews/review.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/review_item.dart";
 
 class ProductsReviews extends StatefulWidget {
   const ProductsReviews({super.key});
@@ -29,9 +29,9 @@ class _ProductsReviewsState extends State<ProductsReviews> {
     _setReviews(null);
     try {
       final res = await apiDio().get("/products/reviews");
-      _setReviews(res.data['reviews']);
+      _setReviews(res.data["reviews"]);
     } catch (e) {
-      errorHandler(e: e, context: context, msg: 'Failed to fetch reviews');
+      errorHandler(e: e, context: context, msg: "Failed to fetch reviews");
       _setReviews([]);
     }
   }
@@ -69,7 +69,7 @@ class _ProductsReviewsState extends State<ProductsReviews> {
                       )
                     : _reviews!.isEmpty
                         ? SliverFillRemaining(
-                            child: Center(child: h3('No reviews yet!')),
+                            child: Center(child: h3("No reviews yet!")),
                           )
                         : SliverPadding(
                             padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),

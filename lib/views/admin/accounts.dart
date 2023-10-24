@@ -1,26 +1,26 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/views/account/profile.dart';
-import 'package:lebzcafe/views/admin/account.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/order_item.dart';
-import 'package:lebzcafe/widgets/prompt_modal.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "package:dio/dio.dart";
+import "package:flutter/material.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/views/account/profile.dart";
+import "package:lebzcafe/views/admin/account.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/order_item.dart";
+import "package:lebzcafe/widgets/prompt_modal.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import '../../controllers/app_ctrl.dart';
-import '../../controllers/appbar.dart';
+import "../../controllers/app_ctrl.dart";
+import "../../controllers/appbar.dart";
 
 class AccountsCtrl extends GetxController {
   Rx<List<dynamic>?> accounts = (null as List<dynamic>?).obs;
@@ -74,12 +74,12 @@ class _AccountsState extends State<Accounts> {
               _appBarCtrl.setSelected([]);
               try {
                 final List<dynamic> ids = _appBarCtrl.selected
-                    .map((element) => element['_id'])
+                    .map((element) => element["_id"])
                     .toList();
                 final res =
-                    await apiDio().post("/users/delete", data: {'ids': ids});
+                    await apiDio().post("/users/delete", data: {"ids": ids});
                 _ctrl.setAccounts(_ctrl.accounts.value!
-                    .where((it) => !ids.contains(it['_id']))
+                    .where((it) => !ids.contains(it["_id"]))
                     .toList());
                 clog(res.data);
                 showToast("Accounts deleted successfully!").show(context);
@@ -89,7 +89,7 @@ class _AccountsState extends State<Accounts> {
                   handleDioException(context: context, exception: e);
                 } else {
                   clog(e);
-                  showToast('Error deleting accounts!', isErr: true)
+                  showToast("Error deleting accounts!", isErr: true)
                       .show(context);
                 }
               }
@@ -108,7 +108,7 @@ class _AccountsState extends State<Accounts> {
   }
 
   _init() async {
-    if (_appCtrl.user['permissions'] == 2) {
+    if (_appCtrl.user["permissions"] == 2) {
       _appBarCtrl.setSelectedActions([
         PopupMenuItem(
             onTap: () async {
@@ -174,13 +174,13 @@ class _AccountsState extends State<Accounts> {
                           _ctrl.setFilteredAccounts(
                               _ctrl.accounts.value!.where((p0) {
                             var firstLastName =
-                                "${p0['first_name']} ${p0['last_name']}";
+                                "${p0["first_name"]} ${p0["last_name"]}";
 
-                            var filter = "${p0['email']}".contains(
+                            var filter = "${p0["email"]}".contains(
                                     RegExp(val, caseSensitive: false)) ||
                                 firstLastName.contains(
                                     RegExp(val, caseSensitive: false)) ||
-                                "${p0['first_name']}".contains(
+                                "${p0["first_name"]}".contains(
                                     RegExp(val, caseSensitive: false));
                             return filter;
                           }).toList());
@@ -202,9 +202,9 @@ class _AccountsState extends State<Accounts> {
                                   accounts: [
                                     ..._ctrl.filteredAccounts
                                         .where((it) =>
-                                            it['permissions'] ==
+                                            it["permissions"] ==
                                                 UserPermissions.write ||
-                                            it['permissions'] ==
+                                            it["permissions"] ==
                                                 UserPermissions.delete)
                                         .toList(),
                                   ]),
@@ -213,7 +213,7 @@ class _AccountsState extends State<Accounts> {
                                 ctrl: _ctrl,
                                 title: "Customers",
                                 accounts: _ctrl.filteredAccounts
-                                    .where((it) => it['permissions'] == 0)
+                                    .where((it) => it["permissions"] == 0)
                                     .toList(),
                               ),
                             ],
@@ -229,8 +229,8 @@ class _AccountsState extends State<Accounts> {
   _getAccounts() async {
     try {
       _ctrl.setAccounts(null);
-      final res = await apiDio().get('/users');
-      _ctrl.setAccounts(res.data['users']);
+      final res = await apiDio().get("/users");
+      _ctrl.setAccounts(res.data["users"]);
     } catch (e) {
       if (e.runtimeType == DioException) {
         e as DioException;
@@ -252,12 +252,12 @@ class AccountCard extends StatelessWidget {
   final AppCtrl _appCtrl = Get.find();
   void _selectItem(Map<String, dynamic> product) {
     var selected = _appBarCtrl.selected
-        .where((it) => it['_id'] == account['_id'])
+        .where((it) => it["_id"] == account["_id"])
         .isNotEmpty;
     !selected
         ? _appBarCtrl.setSelected([..._appBarCtrl.selected, product])
         : _appBarCtrl.setSelected(_appBarCtrl.selected
-            .where((el) => el['_id'] != product['_id'])
+            .where((el) => el["_id"] != product["_id"])
             .toList());
   }
 
@@ -267,7 +267,7 @@ class AccountCard extends StatelessWidget {
       my: 2.5,
       onTap: () {
         if (_appBarCtrl.selected.isEmpty) {
-          pushTo(ProfilePage(id: "${account['_id']}"));
+          pushTo(ProfilePage(id: "${account["_id"]}"));
         } else {
           _selectItem(account);
         }
@@ -283,7 +283,7 @@ class AccountCard extends StatelessWidget {
                 Obx(
                   () {
                     var selected = _appBarCtrl.selected
-                        .where((it) => it['_id'] == account['_id'])
+                        .where((it) => it["_id"] == account["_id"])
                         .isNotEmpty;
                     return _appBarCtrl.selected.isNotEmpty
                         ? SizedBox(
@@ -301,12 +301,12 @@ class AccountCard extends StatelessWidget {
                 ),
                 CircleAvatar(
                   backgroundColor: Colors.black12,
-                  child: svgIcon(name: 'br-user', color: TuColors.text2),
+                  child: svgIcon(name: "br-user", color: TuColors.text2),
                 ),
               ],
             ),
             title: Text(
-              "${account['first_name']} ${account['last_name']}",
+              "${account["first_name"]} ${account["last_name"]}",
               softWrap: false,
               overflow: TextOverflow.ellipsis,
               style: Styles.title(),
@@ -315,7 +315,7 @@ class AccountCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${account['email']}",
+                  "${account["email"]}",
                   style: const TextStyle(fontSize: 14),
                 )
               ],
@@ -323,7 +323,7 @@ class AccountCard extends StatelessWidget {
             trailing: SizedBox(
               width: 25,
               child: Obx(() {
-                int perms = _appCtrl.user['permissions'];
+                int perms = _appCtrl.user["permissions"];
                 bool isAdmin = perms == 2;
                 return PopupMenuButton(
                     icon: Icon(Icons.more_vert, color: TuColors.text2),
@@ -346,12 +346,12 @@ class AccountCard extends StatelessWidget {
                                         try {
                                           final res = await apiDio()
                                               .post("/users/delete", data: {
-                                            'ids': [account['_id']]
+                                            "ids": [account["_id"]]
                                           });
                                           var accs = ctrl.accounts.value!;
                                           ctrl.setAccounts(accs
                                               .where((it) =>
-                                                  it['_id'] != account['_id'])
+                                                  it["_id"] != account["_id"])
                                               .toList());
                                           clog(res.data);
                                           showToast(
@@ -364,9 +364,9 @@ class AccountCard extends StatelessWidget {
                                             handleDioException(
                                                 context: context,
                                                 exception: e,
-                                                msg: 'Error deleting account!');
+                                                msg: "Error deleting account!");
                                           } else {
-                                            showToast('Error deleting account!',
+                                            showToast("Error deleting account!",
                                                     isErr: true)
                                                 .show(context);
                                           }

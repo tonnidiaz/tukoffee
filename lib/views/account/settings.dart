@@ -1,25 +1,25 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/controllers/app_ctrl.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/dialog.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/widgets/dialogs/loading_dialog.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/form.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "package:dio/dio.dart";
+import "package:flutter/material.dart";
+import "package:lebzcafe/controllers/app_ctrl.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/dialog.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/widgets/dialogs/loading_dialog.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:lebzcafe/widgets/tu/form.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import '../../utils/constants.dart';
-import '../../utils/styles.dart';
-import '../../widgets/common.dart';
-import '../../widgets/form_view.dart';
-import '../order/index.dart';
+import "../../utils/constants.dart";
+import "../../utils/styles.dart";
+import "../../widgets/common.dart";
+import "../../widgets/form_view.dart";
+import "../order/index.dart";
 
 class ChangeEmailSheet extends StatefulWidget {
   const ChangeEmailSheet({super.key});
@@ -42,11 +42,11 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
     try {
       showProgressSheet();
       final res = await apiDio().post("/auth/otp/verify", data: {
-        'otp': form['otp'],
-        'new_email': form['email'],
+        "otp": form["otp"],
+        "new_email": form["email"],
       });
 
-      appBox!.put('authToken', res.data['token']);
+      appBox!.put("authToken", res.data["token"]);
       setupUser(full: false);
       gpop();
       gpop(); //HIDE MAIN SHEET
@@ -65,7 +65,7 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            h3('Change email address', isLight: true),
+            h3("Change email address", isLight: true),
             mY(5),
             _step == 0
                 ? TuForm(
@@ -76,9 +76,9 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
                               () => TuFormField(
                                 keyboard: TextInputType.emailAddress,
                                 required: true,
-                                label: 'New email:',
-                                hint: 'Enter your new email address...',
-                                value: _formCtrl.form['email'],
+                                label: "New email:",
+                                hint: "Enter your new email address...",
+                                value: _formCtrl.form["email"],
                                 validator: (val) {
                                   if (val == null || val.isEmpty) {
                                     return "Email is required";
@@ -88,7 +88,7 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
                                   return null;
                                 },
                                 onChanged: (val) {
-                                  _formCtrl.setFormField('email', val);
+                                  _formCtrl.setFormField("email", val);
                                 },
                               ),
                             ),
@@ -96,12 +96,12 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
                               () => TuFormField(
                                 keyboard: TextInputType.emailAddress,
                                 required: true,
-                                label: 'Password:',
+                                label: "Password:",
                                 isPass: true,
-                                hint: 'Enter your current password...',
-                                value: _formCtrl.form['password'],
+                                hint: "Enter your current password...",
+                                value: _formCtrl.form["password"],
                                 onChanged: (val) {
-                                  _formCtrl.setFormField('password', val);
+                                  _formCtrl.setFormField("password", val);
                                 },
                               ),
                             ),
@@ -111,12 +111,12 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
                               width: double.infinity,
                               onPressed: () async {
                                 if (!key.currentState!.validate()) return;
-                                clog('SHow loading');
+                                clog("SHow loading");
                                 //showLoading(context);
                                 showProgressSheet();
                                 try {
-                                  await apiDio().post('/user/edit?field=email',
-                                      data: {'data': _formCtrl.form});
+                                  await apiDio().post("/user/edit?field=email",
+                                      data: {"data": _formCtrl.form});
                                   gpop();
                                   _setStep(1);
                                 } catch (e) {
@@ -138,7 +138,7 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
                                 children: [
                                   const Text("Enter the 4 digit pin sent to:"),
                                   Obx(() => Text(
-                                        "${_formCtrl.form['email']}",
+                                        "${_formCtrl.form["email"]}",
                                         textAlign: TextAlign.center,
                                         style:
                                             TextStyle(color: TuColors.primary),
@@ -156,13 +156,13 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
                                 height: borderlessInpHeight,
 
                                 ///label: "OTP:",
-                                value: _formCtrl.form['otp'],
+                                value: _formCtrl.form["otp"],
                                 keyboard: TextInputType.number,
 
                                 maxLength: 4,
                                 required: true,
                                 onChanged: (val) {
-                                  _formCtrl.setFormField('otp', val);
+                                  _formCtrl.setFormField("otp", val);
                                 },
                               ),
                             ),
@@ -215,9 +215,9 @@ class AccountSettingsPage extends StatelessWidget {
                             ),
                             TextButton(
                                 onPressed: onChangeEmailClick,
-                                child: const Text('Change'))),
+                                child: const Text("Change"))),
                         mY(4),
-                        Obx(() => Text("${appCtrl.user['email']}")),
+                        Obx(() => Text("${appCtrl.user["email"]}")),
                       ])),
               TuCard(
                 my: topMargin / 2,
@@ -241,7 +241,7 @@ class AccountSettingsPage extends StatelessWidget {
                             showProgressSheet();
                             logout();
 
-                            Get.offAllNamed('/');
+                            Get.offAllNamed("/");
                           },
                         ));
                       },
@@ -276,7 +276,7 @@ class ConfirmPassForm extends StatelessWidget {
       onOk: () async {
         try {
           await apiDio().post(url, data: {
-            'password': MainApp.formCtrl.form['password'],
+            "password": MainApp.formCtrl.form["password"],
           });
           if (onOk != null) {
             onOk!();
@@ -303,9 +303,9 @@ class ConfirmPassForm extends StatelessWidget {
               isPass: true,
               hint: "Enter your password...",
               required: true,
-              value: MainApp.formCtrl.form['password'],
+              value: MainApp.formCtrl.form["password"],
               onChanged: (val) {
-                MainApp.formCtrl.setFormField('password', val);
+                MainApp.formCtrl.setFormField("password", val);
               },
             ))
       ],
@@ -333,9 +333,9 @@ class EditPassForm extends StatelessWidget {
                     isPass: true,
                     showEye: false,
                     required: true,
-                    value: ctrl.form['old'],
+                    value: ctrl.form["old"],
                     onChanged: (val) {
-                      ctrl.setFormField('old', val);
+                      ctrl.setFormField("old", val);
                     },
                   )),
               Obx(() => TuFormField(
@@ -343,9 +343,9 @@ class EditPassForm extends StatelessWidget {
                     hint: "Enter your new password...",
                     isPass: true,
                     required: true,
-                    value: ctrl.form['new'],
+                    value: ctrl.form["new"],
                     onChanged: (val) {
-                      ctrl.setFormField('new', val);
+                      ctrl.setFormField("new", val);
                     },
                   )),
               mY(6),
@@ -359,8 +359,8 @@ class EditPassForm extends StatelessWidget {
                   try {
                     showProgressSheet();
                     await apiDio().post("/auth/password/change", data: {
-                      'old': ctrl.form['old'],
-                      'new': ctrl.form['new'],
+                      "old": ctrl.form["old"],
+                      "new": ctrl.form["new"],
                     });
 
                     gpop();

@@ -1,24 +1,24 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:lebzcafe/controllers/appbar.dart';
-import 'package:lebzcafe/controllers/common_ctrls.dart';
-import 'package:lebzcafe/controllers/products_ctrl.dart';
-import 'package:lebzcafe/controllers/store_ctrl.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/views/auth/create.dart';
-import 'package:lebzcafe/widgets/form_view.dart';
-import 'package:lebzcafe/widgets/splash.dart';
-import 'package:get/get.dart';
-import 'controllers/app_ctrl.dart';
-import 'mobile.dart';
-import 'utils/constants.dart';
-import 'utils/functions.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+import "package:device_info_plus/device_info_plus.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_inappwebview/flutter_inappwebview.dart";
+import "package:lebzcafe/controllers/appbar.dart";
+import "package:lebzcafe/controllers/common_ctrls.dart";
+import "package:lebzcafe/controllers/products_ctrl.dart";
+import "package:lebzcafe/controllers/store_ctrl.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/views/auth/create.dart";
+import "package:lebzcafe/widgets/form_view.dart";
+import "package:lebzcafe/widgets/splash.dart";
+import "package:get/get.dart";
+import "controllers/app_ctrl.dart";
+import "mobile.dart";
+import "utils/constants.dart";
+import "utils/functions.dart";
+import "package:flutter_downloader/flutter_downloader.dart";
 
 enableWebviewDebugging() async {
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
@@ -103,7 +103,7 @@ class _MainAppState extends State<MainApp> {
         deviceId = r.machineId ?? "";
       }
 
-      clog('DeviceID: $deviceId');
+      clog("DeviceID: $deviceId");
       appCtrl.setDeviceID(deviceId);
     } catch (e) {
       clog(e);
@@ -115,8 +115,8 @@ class _MainAppState extends State<MainApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Obx(() => MainApp.appCtrl.ready.value &&
-              MainApp.appCtrl.store['name'] != null &&
-              MainApp.appCtrl.store['name'].isNotEmpty
+              MainApp.appCtrl.store["name"] != null &&
+              MainApp.appCtrl.store["name"].isNotEmpty
           ? const MobileApp()
           : const TuSplash()),
     );

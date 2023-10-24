@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 typedef ControlsWidgetBuilder = Widget Function(
     BuildContext context, ControlsDetails details);
@@ -121,7 +121,7 @@ class _TuStepperState extends State<TuStepper> with TickerProviderStateMixin {
       case StepState.indexed:
       case StepState.disabled:
         return Text(
-          '${index + 1}',
+          "${index + 1}",
           style: isDarkActive
               ? _kStepStyle.copyWith(color: Colors.black87)
               : _kStepStyle,
@@ -139,7 +139,7 @@ class _TuStepperState extends State<TuStepper> with TickerProviderStateMixin {
           size: 18.0,
         );
       case StepState.error:
-        return const Text('!', style: _kStepStyle);
+        return const Text("!", style: _kStepStyle);
     }
   }
 
@@ -550,10 +550,10 @@ class _TuStepperState extends State<TuStepper> with TickerProviderStateMixin {
     assert(debugCheckHasMaterialLocalizations(context));
     assert(() {
       if (context.findAncestorWidgetOfExactType<TuStepper>() != null) {
-        throw FlutterError('Steppers must not be nested.\n'
-            'The material specification advises that one should avoid embedding '
-            'steppers within steppers. '
-            'https:');
+        throw FlutterError("Steppers must not be nested.\n"
+            "The material specification advises that one should avoid embedding "
+            "steppers within steppers. "
+            "https:");
       }
       return true;
     }());

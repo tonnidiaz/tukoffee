@@ -1,22 +1,22 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:google_fonts/google_fonts.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/vars.dart';
-import 'package:lebzcafe/views/account/profile.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "package:google_fonts/google_fonts.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/vars.dart";
+import "package:lebzcafe/views/account/profile.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:get/get.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:get/get.dart";
 
 class SignupCtrl extends GetxController {
   RxMap<String, dynamic> user = <String, dynamic>{}.obs;
@@ -51,7 +51,7 @@ class Step1 extends StatelessWidget {
       onSubmit: () async {
         try {
           showProgressSheet();
-          final res = await apiDio().post('/auth/signup', data: ctrl.user);
+          final res = await apiDio().post("/auth/signup", data: ctrl.user);
           Get.back();
           // Proceed to next step
           clog(res.data);
@@ -70,7 +70,7 @@ class Step1 extends StatelessWidget {
               required: true,
               validator: (val) {
                 if (val == null || val.isEmpty) {
-                  return 'Email is required';
+                  return "Email is required";
                 } else if (!val.isEmail) {
                   return "Enter a valid email address";
                 }
@@ -153,8 +153,8 @@ class _Step2State extends State<Step2> {
       onSubmit: () async {
         try {
           showProgressSheet();
-          await apiDio().post('/auth/otp/verify',
-              data: {'email': ctrl.user['email'], 'otp': ctrl.user['otp']});
+          await apiDio().post("/auth/otp/verify",
+              data: {"email": ctrl.user["email"], "otp": ctrl.user["otp"]});
           Get.back();
           pushTo(const Step3());
         } catch (e) {
@@ -172,7 +172,7 @@ class _Step2State extends State<Step2> {
             children: [
               const Text("Enter the 4 digit pin sent to:"),
               Obx(() => Text(
-                    "${ctrl.user['email']}",
+                    "${ctrl.user["email"]}",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: TuColors.primary),
                   )),
@@ -188,13 +188,13 @@ class _Step2State extends State<Step2> {
               height: borderlessInpHeight,
 
               ///label: "OTP:",
-              value: ctrl.user['otp'],
+              value: ctrl.user["otp"],
               keyboard: TextInputType.number,
 
               maxLength: 4,
               required: true,
               onChanged: (val) {
-                ctrl.setuser = {...ctrl.user, 'otp': val};
+                ctrl.setuser = {...ctrl.user, "otp": val};
               },
             )),
         InkWell(
@@ -203,15 +203,15 @@ class _Step2State extends State<Step2> {
               : () async {
                   try {
                     showProgressSheet();
-                    await apiDio().post('/auth/otp/resend',
-                        data: {'email': ctrl.user['email']});
+                    await apiDio().post("/auth/otp/resend",
+                        data: {"email": ctrl.user["email"]});
                     _setSecs(60);
                     _initTimer();
                     Get.back();
                   } catch (e) {
                     Get.back();
                     errorHandler(
-                        e: e, context: context, msg: 'Failed to request OTP');
+                        e: e, context: context, msg: "Failed to request OTP");
                     _setSecs(0);
                   }
                 },
@@ -243,8 +243,8 @@ class Step3 extends StatelessWidget {
           await setupUser(full: false);
           Get.back();
 
-          Get.offAllNamed('/');
-          Get.toNamed('/account/profile');
+          Get.offAllNamed("/");
+          Get.toNamed("/account/profile");
         } catch (e) {
           Get.back();
           errorHandler(e: e, context: context);
@@ -267,7 +267,7 @@ class Step3 extends StatelessWidget {
               hint: "e.g. John",
               keyboard: TextInputType.name,
               required: true,
-              value: ctrl.user['first_name'],
+              value: ctrl.user["first_name"],
               onChanged: (val) {
                 ctrl.setuser = {...ctrl.user, "first_name": val};
               },
@@ -277,7 +277,7 @@ class Step3 extends StatelessWidget {
               keyboard: TextInputType.name,
               hint: "e.g. Doe",
               required: true,
-              value: ctrl.user['last_name'],
+              value: ctrl.user["last_name"],
               onChanged: (val) {
                 ctrl.setuser = {...ctrl.user, "last_name": val};
               },
@@ -286,7 +286,7 @@ class Step3 extends StatelessWidget {
           label: "Phone:",
           hint: "e.g. 0712345678",
           required: true,
-          value: ctrl.user['phone'],
+          value: ctrl.user["phone"],
           keyboard: TextInputType.phone,
           onChanged: (val) {
             ctrl.setuser = {...ctrl.user, "phone": val};
@@ -342,7 +342,7 @@ class _CreateAccountPageWrapperState extends State<CreateAccountPageWrapper> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${MainApp.appCtrl.store['name']}",
+                    "${MainApp.appCtrl.store["name"]}",
                     style: GoogleFonts.montserrat(
                         fontWeight: FontWeight.bold, fontSize: 30),
                   ),
@@ -371,7 +371,7 @@ class _CreateAccountPageWrapperState extends State<CreateAccountPageWrapper> {
                   mY(5),
                   TextButton(
                       onPressed: () {
-                        //pushNamed( '/auth/signup');
+                        //pushNamed( "/auth/signup");
                         Get.back();
                       },
                       child: const Text(

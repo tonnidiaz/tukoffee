@@ -1,21 +1,21 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/controllers/app_ctrl.dart';
-import 'package:lebzcafe/controllers/appbar.dart';
-import 'package:lebzcafe/controllers/store_ctrl.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
+import "package:lebzcafe/controllers/app_ctrl.dart";
+import "package:lebzcafe/controllers/appbar.dart";
+import "package:lebzcafe/controllers/store_ctrl.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:get/get.dart";
+import "package:google_fonts/google_fonts.dart";
 
-import '../utils/constants2.dart';
-import '../utils/styles.dart';
+import "../utils/constants2.dart";
+import "../utils/styles.dart";
 
 class CartBtn extends StatelessWidget {
   final double top;
@@ -27,13 +27,13 @@ class CartBtn extends StatelessWidget {
     return Obx(() {
       int c = false
           ? 100
-          : (storeCtrl.cart.isEmpty ? 0 : storeCtrl.cart['products'].length);
+          : (storeCtrl.cart.isEmpty ? 0 : storeCtrl.cart["products"].length);
       return SizedBox(
         width: c < 100 ? 50 : 65,
         child: IconButton(
             splashRadius: 23,
             onPressed: () {
-              pushNamed('/cart');
+              pushNamed("/cart");
             },
             icon: Badge(
               label: Text(c < 100 ? "$c" : "99+"),
@@ -42,7 +42,7 @@ class CartBtn extends StatelessWidget {
                   const TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
               backgroundColor: TuColors.primary,
               child: svgIcon(
-                name: 'rr-shopping-basket',
+                name: "rr-shopping-basket",
                 color: TuColors.text2,
                 size: 24,
               ),
@@ -172,7 +172,7 @@ PreferredSizeWidget childAppbar(
                 "${appBarCtrl.selected.length} selected",
                 style: GoogleFonts.karla(fontWeight: FontWeight.w500),
               )
-            : Text(title ?? appCtrl.store['name']),
+            : Text(title ?? appCtrl.store["name"]),
         actions: [
           showCart
               ? const CartBtn(
@@ -233,10 +233,10 @@ Container imgCard(
                       try {
                         clog("Deleting from cloudinary...");
                         var res = await signedCloudinary.destroy(
-                          img['publicId'],
+                          img["publicId"],
                         );
-                        clog(formViewCtrl.form['images'].length);
-                        var tempImgs = [...formViewCtrl.form['images']];
+                        clog(formViewCtrl.form["images"].length);
+                        var tempImgs = [...formViewCtrl.form["images"]];
                         tempImgs.removeAt(index);
                         clog(res.result);
                         if (mode == "edit" || res.result == "not found") {
@@ -244,7 +244,7 @@ Container imgCard(
                               context,
                               {
                                 "images": tempImgs,
-                                "pid": formViewCtrl.form['pid']
+                                "pid": formViewCtrl.form["pid"]
                               },
                               mode: mode);
                           if (res2 != null) {

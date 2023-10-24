@@ -1,20 +1,20 @@
-import 'package:flutter/cupertino.dart';
-import 'package:lebzcafe/controllers/store_ctrl.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/views/rf.dart';
-import 'package:lebzcafe/views/search.dart';
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/widgets/common4.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
-import '../../../utils/constants2.dart';
-import '../../../widgets/common.dart';
-import '../../../widgets/product_card.dart';
+import "package:flutter/cupertino.dart";
+import "package:lebzcafe/controllers/store_ctrl.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/views/rf.dart";
+import "package:lebzcafe/views/search.dart";
+import "package:flutter/material.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/widgets/common4.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
+import "../../../utils/constants2.dart";
+import "../../../widgets/common.dart";
+import "../../../widgets/product_card.dart";
 
 class ShopPage extends StatefulWidget {
   const ShopPage({Key? key}) : super(key: key);
@@ -54,7 +54,7 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
       _storeCtrl.setStatus(ProductStatus.all);
       _storeCtrl.setSortOrder(SortOrder.ascending);
       if (_appCtrl.user.isNotEmpty) {
-        setupCart(_appCtrl.user['_id']);
+        setupCart(_appCtrl.user["_id"]);
       }
 
       getProducts();
@@ -148,7 +148,7 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
     return Scaffold(
         appBar: AppBar(
           actions: const [CartBtn()],
-          title: const Text('Shop'),
+          title: const Text("Shop"),
           titleSpacing: 14,
         ),
         body: RefreshIndicator(

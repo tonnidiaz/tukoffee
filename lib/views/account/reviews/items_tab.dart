@@ -1,14 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/review_item.dart';
-import 'package:lebzcafe/widgets/review_item2.dart';
-import 'package:get/get.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/review_item.dart";
+import "package:lebzcafe/widgets/review_item2.dart";
+import "package:get/get.dart";
 
 class ItemsTabCtrl extends GetxController {
   Rxn<List> products = Rxn();
@@ -35,12 +35,12 @@ class _ItemsTabState extends State<ItemsTab> {
       final res = await apiDio().get("/products?q=received");
       List prods = [];
       for (var p in res.data) {
-        final List itemIds = p['items'].map((it) => it['_id']).toList();
+        final List itemIds = p["items"].map((it) => it["_id"]).toList();
 
         // If prods does not contain an item whose id is in itemIds
-        if (prods.firstWhereOrNull((it) => itemIds.contains(it['_id'])) ==
+        if (prods.firstWhereOrNull((it) => itemIds.contains(it["_id"])) ==
             null) {
-          prods = prods + p['items'];
+          prods = prods + p["items"];
         }
       }
 
@@ -51,8 +51,8 @@ class _ItemsTabState extends State<ItemsTab> {
   }
 
   _getReview(product) {
-    return (product['reviews'] as List)
-        .firstWhereOrNull((it) => it['user'] == _appCtrl.user['_id']);
+    return (product["reviews"] as List)
+        .firstWhereOrNull((it) => it["user"] == _appCtrl.user["_id"]);
   }
 
   @override
@@ -87,7 +87,7 @@ class _ItemsTabState extends State<ItemsTab> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'You have not ordered and received any products using this app yet',
+                              "You have not ordered and received any products using this app yet",
                               textAlign: TextAlign.center,
                             )
                           ],

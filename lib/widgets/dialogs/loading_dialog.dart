@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/widgets/common.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/widgets/common.dart";
 
 class LoadingDialog extends StatefulWidget {
   final String? msg;

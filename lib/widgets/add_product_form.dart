@@ -1,24 +1,24 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:io';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "dart:io";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import 'package:cloudinary/cloudinary.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import "package:cloudinary/cloudinary.dart";
+import "package:file_picker/file_picker.dart";
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:get/get.dart";
 
-import '../main.dart';
-import '../utils/constants.dart';
-import '../utils/constants2.dart';
-import '../utils/functions.dart';
-import '../views/order/index.dart';
-import 'common.dart';
+import "../main.dart";
+import "../utils/constants.dart";
+import "../utils/constants2.dart";
+import "../utils/functions.dart";
+import "../views/order/index.dart";
+import "common.dart";
 
-import 'common2.dart';
-import 'form_view.dart';
+import "common2.dart";
+import "form_view.dart";
 
 class AddProductForm extends StatefulWidget {
   final String title;
@@ -59,12 +59,12 @@ class _AddProductFormState extends State<AddProductForm> {
           uploadPreset: uploadPreset,
           file: file.path,
           publicId:
-              "${_appCtrl.store['name']}_-_product_-_epoch-${DateTime.now().millisecondsSinceEpoch}",
+              "${_appCtrl.store["name"]}_-_product_-_epoch-${DateTime.now().millisecondsSinceEpoch}",
           resourceType: CloudinaryResourceType.image,
-          folder: getCloudinaryFolder(storeName: _appCtrl.store['name']),
+          folder: getCloudinaryFolder(storeName: _appCtrl.store["name"]),
           progressCallback: _onUpload);
       if (res.isResultOk) {
-        var existingImgs = _formCtrl.form['images'] ?? [];
+        var existingImgs = _formCtrl.form["images"] ?? [];
         if (widget.mode == "edit") {
           // immediately update product images
 
@@ -74,8 +74,8 @@ class _AddProductFormState extends State<AddProductForm> {
               ...existingImgs,
               {"url": res.secureUrl, "publicId": res.publicId}
             ];
-            await apiDio().post('/products/edit',
-                data: {"pid": _formCtrl.form['pid'], "images": newImgs});
+            await apiDio().post("/products/edit",
+                data: {"pid": _formCtrl.form["pid"], "images": newImgs});
             _formCtrl.setFormField("images", newImgs);
             _formCtrl.tempImgs[index] = {
               ..._formCtrl.tempImgs[index],
@@ -130,7 +130,7 @@ class _AddProductFormState extends State<AddProductForm> {
     if (file != null) {
       _formCtrl.setTempImgs([
         ..._formCtrl.tempImgs,
-        {'file': file, 'loading': true}
+        {"file": file, "loading": true}
       ]);
       _uploadImg(file, _formCtrl.tempImgs.length - 1);
     }
@@ -235,7 +235,7 @@ class _AddProductFormState extends State<AddProductForm> {
                   ],
                 ),
                 Obx(
-                  () => _formCtrl.form['on_sale'] == true
+                  () => _formCtrl.form["on_sale"] == true
                       ? TuFormField(
                           label: "Sale price:",
                           prefix: const Text("R "),
@@ -297,27 +297,27 @@ class _AddProductFormState extends State<AddProductForm> {
                   () => TuLabeledCheckbox(
                       radius: 50,
                       label: "Top selling",
-                      value: _formCtrl.form['top_selling'] == true,
+                      value: _formCtrl.form["top_selling"] == true,
                       onChanged: (val) {
-                        _formCtrl.setFormField('top_selling', val);
+                        _formCtrl.setFormField("top_selling", val);
                       }),
                 ),
                 Obx(
                   () => TuLabeledCheckbox(
                       radius: 50,
                       label: "On special",
-                      value: _formCtrl.form['on_special'] == true,
+                      value: _formCtrl.form["on_special"] == true,
                       onChanged: (val) {
-                        _formCtrl.setFormField('on_special', val);
+                        _formCtrl.setFormField("on_special", val);
                       }),
                 ),
                 Obx(
                   () => TuLabeledCheckbox(
                       radius: 50,
                       label: "On sale",
-                      value: _formCtrl.form['on_sale'] == true,
+                      value: _formCtrl.form["on_sale"] == true,
                       onChanged: (val) {
-                        _formCtrl.setFormField('on_sale', val);
+                        _formCtrl.setFormField("on_sale", val);
                       }),
                 ),
               ],
@@ -354,11 +354,11 @@ class _AddProductFormState extends State<AddProductForm> {
                               index: e.key,
                               mode: widget.mode,
                               child: e.value["url"] != null
-                                  ? Image.network(e.value['url'])
-                                  : Image.file(e.value['file']),
+                                  ? Image.network(e.value["url"])
+                                  : Image.file(e.value["file"]),
                               uploading: e.value["url"] != null
                                   ? false
-                                  : e.value['loading']);
+                                  : e.value["loading"]);
                         }).toList(),
                       )),
                 ),
@@ -374,11 +374,11 @@ class _AddProductFormState extends State<AddProductForm> {
             final res = await addProduct(context, {..._formCtrl.form},
                 mode: widget.mode);
             if (res != null) {
-              /*   showToast('Successs!').show(context);
+              /*   showToast("Successs!").show(context);
               return; */
               gpop();
-              Get.offAllNamed('/');
-              pushNamed('/product', arguments: {"pid": res});
+              Get.offAllNamed("/");
+              pushNamed("/product", arguments: {"pid": res});
             }
           }
         });

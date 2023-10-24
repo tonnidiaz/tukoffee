@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/views/admin/index.dart';
-import 'package:lebzcafe/views/admin/reviews.dart';
-import 'package:lebzcafe/widgets/common3.dart';
+import "package:flutter/material.dart";
+import "package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/views/admin/index.dart";
+import "package:lebzcafe/views/admin/reviews.dart";
+import "package:lebzcafe/widgets/common3.dart";
 
-import 'package:get/get.dart';
+import "package:get/get.dart";
 
-import '../../utils/colors.dart';
+import "../../utils/colors.dart";
 
-import '/widgets/common.dart';
+import "/widgets/common.dart";
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -54,7 +54,7 @@ class _DashboardState extends State<Dashboard> {
             SliverToBoxAdapter(
               child: Obx(
                 () => Visibility(
-                    visible: _ctrl.data['customers'].isEmpty,
+                    visible: _ctrl.data["customers"].isEmpty,
                     child: const LinearProgressIndicator()),
               ),
             ),
@@ -77,7 +77,7 @@ class _DashboardState extends State<Dashboard> {
                             name: "br-box-open-full",
                             color: TuColors.coffee2,
                             size: 24),
-                        subtitle: "${_ctrl.data['products'].length}",
+                        subtitle: "${_ctrl.data["products"].length}",
                       ),
                       ItemCard(
                         title: "Orders",
@@ -85,11 +85,11 @@ class _DashboardState extends State<Dashboard> {
                           _ctrl.tab.value = 2;
                         },
                         icon: svgIcon(
-                          name: 'br-person-dolly',
+                          name: "br-person-dolly",
                           size: 24,
                           color: Colors.orangeAccent,
                         ),
-                        subtitle: "${_ctrl.data['orders'].length}",
+                        subtitle: "${_ctrl.data["orders"].length}",
                       ),
                       ItemCard(
                         title: "Accounts",
@@ -97,11 +97,11 @@ class _DashboardState extends State<Dashboard> {
                           _ctrl.tab.value = 3;
                         },
                         icon: svgIcon(
-                          name: 'br-users',
+                          name: "br-users",
                           size: 24,
                           color: TuColors.text2,
                         ),
-                        subtitle: "${_ctrl.data['customers'].length}",
+                        subtitle: "${_ctrl.data["customers"].length}",
                       ),
                       ItemCard(
                         title: "Product reviews",
@@ -109,16 +109,16 @@ class _DashboardState extends State<Dashboard> {
                           pushTo(const ProductsReviews());
                         },
                         icon: svgIcon(
-                          name: 'br-comment-user',
+                          name: "br-comment-user",
                           size: 24,
                           color: TuColors.success,
                         ),
-                        subtitle: "${_ctrl.data['reviews'].length}",
+                        subtitle: "${_ctrl.data["reviews"].length}",
                       ),
                       ItemCard(
                         title: "Store Info",
                         onTap: () {
-                          pushNamed('/store/info');
+                          pushNamed("/store/info");
                         },
                         icon: Icon(
                           Icons.info_outline,

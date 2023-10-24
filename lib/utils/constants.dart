@@ -1,56 +1,42 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/views/about.dart';
-import 'package:lebzcafe/views/account/index.dart';
-import 'package:lebzcafe/views/account/profile.dart';
-import 'package:lebzcafe/views/account/settings.dart';
-import 'package:lebzcafe/views/admin/orders.dart';
-import 'package:lebzcafe/views/auth/create.dart';
-import 'package:lebzcafe/views/auth/login.dart';
-import 'package:lebzcafe/views/auth/reset_pass.dart';
-import 'package:lebzcafe/views/root/cart.dart';
-import 'package:lebzcafe/views/root/index.dart';
-import 'package:lebzcafe/views/map.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/views/order/checkout.dart';
-import 'package:lebzcafe/views/order/payment.dart';
-import 'package:lebzcafe/views/product.dart';
-import 'package:lebzcafe/views/rf.dart';
-import 'package:lebzcafe/views/search.dart';
-import 'package:geocode/geocode.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:lebzcafe/views/setting.dart';
-import 'package:lebzcafe/views/store/info.dart';
-import '../views/admin/index.dart';
-import '../views/admin/settings.dart';
-import '../views/app/settings.dart';
-import '../views/rf2.dart';
-import '../views/root/shop/index.dart';
+import "package:dio/dio.dart";
+import "package:flutter/cupertino.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/views/about.dart";
+import "package:lebzcafe/views/account/profile.dart";
+import "package:lebzcafe/views/account/settings.dart";
+import "package:lebzcafe/views/admin/orders.dart";
+import "package:lebzcafe/views/auth/create.dart";
+import "package:lebzcafe/views/auth/login.dart";
+import "package:lebzcafe/views/auth/reset_pass.dart";
+import "package:lebzcafe/views/root/cart.dart";
+import "package:lebzcafe/views/root/index.dart";
+import "package:lebzcafe/views/map.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/views/order/checkout.dart";
+import "package:lebzcafe/views/product.dart";
+import "package:lebzcafe/views/rf.dart";
+import "package:lebzcafe/views/search.dart";
+import "package:geocode/geocode.dart";
+import "package:hive_flutter/hive_flutter.dart";
+import "package:lebzcafe/views/setting.dart";
+import "package:lebzcafe/views/store/info.dart";
+import "../views/admin/index.dart";
+import "../views/admin/settings.dart";
+import "../views/app/settings.dart";
+import "../views/rf2.dart";
+import "../views/root/shop/index.dart";
 
-class UserPermissions {
-  static String read = "read";
-  static String write = 'write';
-  static String delete = 'delete';
-}
+enum UserPermissions { read, write, delete }
 
 enum SortBy { name, price, dateCreated, lastModified }
 
 enum SortOrder { ascending, descending }
 
-enum OrderStatus {
-  pending,
-  completed,
-  cancelled,
-  awaitingPickup,
-}
+enum OrderStatus { pending, awaitingPickup, completed, cancelled, all }
 
 class TuPage {
   Widget widget;
@@ -65,7 +51,7 @@ class TuPage {
       {this.icon,
       this.inList = true,
       this.isAction = false,
-      this.label = '',
+      this.label = "",
       this.svg,
       this.ic});
 }
@@ -142,7 +128,7 @@ final List<TuPage> pages = [
       icon: CupertinoIcons.info_circle, isAction: true),
   TuPage("/account/settings", const AccountSettingsPage(),
       icon: CupertinoIcons.info_circle, isAction: true),
-  TuPage('/store/info', const StoreInfoPage())
+  TuPage("/store/info", const StoreInfoPage())
 ];
 
 const String tag = "Tunedbass";
@@ -166,7 +152,7 @@ const bool isMobile = true;
 final dio = Dio();
 
 const String githubURL =
-    'https://raw.githubusercontent.com/tonnidiaz/tunedapps/main/meta.json';
+    "https://raw.githubusercontent.com/tonnidiaz/tunedapps/main/meta.json";
 const localhost = false ? "http://192.168.43.231" : "http://172.16.10.204";
 
 const defaultPadding = EdgeInsets.all(8);
@@ -207,7 +193,7 @@ const paystackPayUrl = "https://paystack.com/pay";
 var paystackDio = Dio(
   BaseOptions(
     headers: {
-      "Authorization": 'Bearer $paystackSecretKeyDemo',
+      "Authorization": "Bearer $paystackSecretKeyDemo",
     },
     contentType: "application/json",
     baseUrl: "https://api.paystack.co",
@@ -218,7 +204,7 @@ const yocoSecretDemo = "sk_test_acf7a241aZWkGV857044259b2c8f";
 var yocoDio = Dio(
   BaseOptions(
     headers: {
-      "Authorization": 'Bearer $yocoSecretDemo',
+      "Authorization": "Bearer $yocoSecretDemo",
     },
     contentType: "application/json",
     baseUrl: "https://payments.yoco.com/api",
@@ -234,7 +220,7 @@ Dio apiDio() => Dio(BaseOptions(
 
 const courierGuyKey = "a601d99c75fc4c64b5a64288f97d52b4";
 Dio shiplogicDio() => Dio(BaseOptions(
-    baseUrl: 'https://api.shiplogic.com/v2',
+    baseUrl: "https://api.shiplogic.com/v2",
     contentType: "application/json",
     headers: {"Authorization": "Bearer $courierGuyKey"}));
 

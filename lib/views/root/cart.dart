@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/controllers/app_ctrl.dart';
-import 'package:lebzcafe/controllers/store_ctrl.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/views/auth/login.dart';
-import 'package:lebzcafe/widgets/cart_item.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/controllers/app_ctrl.dart";
+import "package:lebzcafe/controllers/store_ctrl.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/views/auth/login.dart";
+import "package:lebzcafe/widgets/cart_item.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -40,7 +40,7 @@ class _CartPageState extends State<CartPage> {
     if (_appCtrl.user.isEmpty) {
       gpop();
       pushTo(const LoginPage(
-        to: '/cart',
+        to: "/cart",
       ));
       return;
     }
@@ -74,12 +74,12 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(titleSpacing: 14, title: const Text('Cart'), actions: [
+      appBar: AppBar(titleSpacing: 14, title: const Text("Cart"), actions: [
         PopupMenuButton(
             itemBuilder: (context) => [
                   const PopupMenuItem(
                       padding: EdgeInsets.symmetric(horizontal: 5),
-                      child: Text('Clear cart'))
+                      child: Text("Clear cart"))
                 ])
       ]),
       bottomNavigationBar: TuBottomBar(

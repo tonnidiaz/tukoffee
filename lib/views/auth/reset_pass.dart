@@ -1,20 +1,20 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:async';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "dart:async";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/form_view.dart';
-import 'package:get/get.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/form_view.dart";
+import "package:get/get.dart";
 
 class ResetPassPage extends StatelessWidget {
   const ResetPassPage({super.key});
@@ -38,13 +38,13 @@ class Step1 extends StatelessWidget {
       btnTxt: "Next",
       onSubmit: () async {
         try {
-          final email = formCtrl.form['email'];
+          final email = formCtrl.form["email"];
           showProgressSheet();
           await apiDio()
-              .post('/auth/password/reset?act=gen-otp', data: {'email': email});
+              .post("/auth/password/reset?act=gen-otp", data: {"email": email});
           Get.back();
           pushTo(const Step2());
-          formCtrl.setFormField('email', email);
+          formCtrl.setFormField("email", email);
         } catch (e) {
           Get.back();
           errorHandler(e: e, context: context);
@@ -54,7 +54,7 @@ class Step1 extends StatelessWidget {
         Obx(() => TuFormField(
               label: "Email:",
               hint: "Enter your email address..",
-              value: formCtrl.form['email'],
+              value: formCtrl.form["email"],
               required: true,
               radius: 5,
               validator: (val) {
@@ -68,7 +68,7 @@ class Step1 extends StatelessWidget {
               },
               keyboard: TextInputType.emailAddress,
               onChanged: (val) {
-                formCtrl.setFormField('email', val);
+                formCtrl.setFormField("email", val);
               },
             ))
       ],
@@ -129,7 +129,7 @@ class _Step2State extends State<Step2> {
           final form = formCtrl.form;
           showProgressSheet();
           await apiDio()
-              .post('/auth/password/reset?act=verify-otp', data: formCtrl.form);
+              .post("/auth/password/reset?act=verify-otp", data: formCtrl.form);
 
           gpop();
           pushTo(const Step3());
@@ -145,7 +145,7 @@ class _Step2State extends State<Step2> {
             children: [
               const Text("Enter the 4 digit code sent to:"),
               Obx(() => Text(
-                    " ${formCtrl.form['email']}",
+                    " ${formCtrl.form["email"]}",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: TuColors.primary),
                   )),
@@ -158,12 +158,12 @@ class _Step2State extends State<Step2> {
               labelAlignment: FloatingLabelAlignment.center,
               hint: "* * * * ",
               height: 16,
-              value: formCtrl.form['otp'],
+              value: formCtrl.form["otp"],
               keyboard: TextInputType.number,
               maxLength: 4,
               required: true,
               onChanged: (val) {
-                formCtrl.setFormField('otp', val);
+                formCtrl.setFormField("otp", val);
               },
             )),
         InkWell(
@@ -172,15 +172,15 @@ class _Step2State extends State<Step2> {
               : () async {
                   try {
                     showProgressSheet();
-                    await apiDio().post('/auth/otp/resend',
-                        data: {'email': formCtrl.form['email']});
+                    await apiDio().post("/auth/otp/resend",
+                        data: {"email": formCtrl.form["email"]});
                     _setSecs(60);
                     _initTimer();
                     gpop();
                   } catch (e) {
                     gpop();
                     errorHandler(
-                        e: e, context: context, msg: 'Failed to request OTP');
+                        e: e, context: context, msg: "Failed to request OTP");
                     _setSecs(0);
                   }
                 },
@@ -209,10 +209,10 @@ class Step3 extends StatelessWidget {
         try {
           showProgressSheet();
           await apiDio()
-              .post('/auth/password/reset?act=reset', data: {...formCtrl.form});
+              .post("/auth/password/reset?act=reset", data: {...formCtrl.form});
           gpop();
           Get.offAllNamed("/");
-          pushNamed('/auth/login');
+          pushNamed("/auth/login");
         } catch (e) {
           gpop();
           errorHandler(e: e, context: context);
@@ -233,7 +233,7 @@ class Step3 extends StatelessWidget {
               hint: "Enter new password...",
               isPass: true,
               showEye: false,
-              value: formCtrl.form['password'],
+              value: formCtrl.form["password"],
               required: true,
               validator: (val) {
                 if (val == null || val.isEmpty) {
@@ -246,19 +246,19 @@ class Step3 extends StatelessWidget {
               },
               keyboard: TextInputType.phone,
               onChanged: (val) {
-                formCtrl.setFormField('password', val);
+                formCtrl.setFormField("password", val);
               },
             )),
         Obx(() => TuFormField(
               label: "Comfirm Password:",
               hint: "Confirm your password...",
               isPass: true,
-              value: formCtrl.form['cpassword'],
+              value: formCtrl.form["cpassword"],
               required: true,
               validator: (val) {
                 if (val == null || val.isEmpty) {
                   return "Field is required.";
-                } else if (val != formCtrl.form['password']) {
+                } else if (val != formCtrl.form["password"]) {
                   return "Passwords do not match!";
                 }
 
@@ -266,7 +266,7 @@ class Step3 extends StatelessWidget {
               },
               keyboard: TextInputType.phone,
               onChanged: (val) {
-                formCtrl.setFormField('cpassword', val);
+                formCtrl.setFormField("cpassword", val);
               },
             )),
       ],

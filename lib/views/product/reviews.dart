@@ -1,18 +1,18 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/views/account/reviews/index.dart';
-import 'package:lebzcafe/views/auth/login.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/common4.dart';
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
+import "package:flutter_rating_bar/flutter_rating_bar.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/views/account/reviews/index.dart";
+import "package:lebzcafe/views/auth/login.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/common4.dart";
 
 class ProductReviewsPage extends StatefulWidget {
   final String id;
@@ -33,11 +33,11 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
       });
       final url = "/products?pid=${widget.id}";
       final res = await apiDio().get(url);
-      final List<dynamic> data = res.data['data'];
+      final List<dynamic> data = res.data["data"];
       setState(() {
         _product = data[0];
       });
-      await _getReviews(data[0]['_id']);
+      await _getReviews(data[0]["_id"]);
     } catch (e) {
       errorHandler(e: e, context: context, msg: "Failed to fetch product");
     }
@@ -52,10 +52,10 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
       setState(() {
         //Filter only approved reviews
         _reviews =
-            res.data['reviews'].where((it) => it['status'] == 1).toList();
+            res.data["reviews"].where((it) => it["status"] == 1).toList();
       });
     } catch (e) {
-      errorHandler(e: e, context: context, msg: 'Failed to fetch reviews');
+      errorHandler(e: e, context: context, msg: "Failed to fetch reviews");
       setState(() {
         _reviews = [];
       });
@@ -74,12 +74,12 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_product == null
-            ? 'Product reviews'
-            : "${_product!['name']} reviews"),
+            ? "Product reviews"
+            : "${_product!["name"]} reviews"),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (MainApp.appCtrl.user['_id'] == null) {
+          if (MainApp.appCtrl.user["_id"] == null) {
             pushTo(const LoginPage(
               pop: true,
             ));
@@ -129,7 +129,7 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
                                     color: const Color.fromRGBO(0, 0, 0, 0.05),
                                     borderRadius: BorderRadius.circular(4),
                                   ),
-                                  child: _product!['images'].isEmpty
+                                  child: _product!["images"].isEmpty
                                       ? const Icon(
                                           Icons.coffee_outlined,
                                           size: 45,
@@ -139,7 +139,7 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
                                           borderRadius:
                                               BorderRadius.circular(5),
                                           child: Image.network(
-                                              _product!['images'][0]['url'])),
+                                              _product!["images"][0]["url"])),
                                 ),
                               ),
 
@@ -168,7 +168,7 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
                                   child: tuColumn(children: [
                                     RatingBarIndicator(
                                       itemSize: 20,
-                                      rating: review['rating'].toDouble(),
+                                      rating: review["rating"].toDouble(),
                                       itemBuilder: (context, _) => const Icon(
                                         Icons.star,
                                         color: Colors.amber,
@@ -176,21 +176,21 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
                                     ),
                                     mY(2.5),
                                     Text(
-                                      review['title'],
+                                      review["title"],
                                       style: Styles.h4(),
                                     ),
                                     Text(
-                                      "${DateTime.parse(review['date_created']).toLocal()}",
+                                      "${DateTime.parse(review["date_created"]).toLocal()}",
                                       style: TextStyle(
                                           fontSize: 14, color: TuColors.text2),
                                     ),
                                     mY(3),
                                     Text(
-                                      review['name'],
+                                      review["name"],
                                       style: const TextStyle(fontSize: 14),
                                     ),
                                     mY(10),
-                                    Text(review['body'])
+                                    Text(review["body"])
                                   ]),
                                 );
                               }),

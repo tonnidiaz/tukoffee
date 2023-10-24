@@ -1,30 +1,30 @@
-import 'dart:convert';
-import 'package:intl/intl.dart';
+import "dart:convert";
+import "package:intl/intl.dart";
 
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:dio/dio.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
+import "package:awesome_notifications/awesome_notifications.dart";
+import "package:dio/dio.dart";
+import "package:geocoding/geocoding.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
 
 createOrderNotification(String orderId) {
   AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: 10,
-          channelKey: 'order_channel',
+          channelKey: "order_channel",
           actionType: ActionType.Default,
-          title: 'New order',
-          body: 'A new order has been placed',
-          payload: {'orderId': orderId}));
+          title: "New order",
+          body: "A new order has been placed",
+          payload: {"orderId": orderId}));
 }
 
 createNotif({required String title, required String msg}) {
   AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: 10,
-          channelKey: 'order_channel',
+          channelKey: "order_channel",
           actionType: ActionType.Default,
           title: title,
           body: msg));
@@ -47,10 +47,10 @@ class Shiplogic {
   static Future<String> getOrderStatus(Map order) async {
     try {
       final res = await shiplogicDio()
-          .get('/tracking/shipments', queryParameters: {
-        "tracking_reference": order['shiplogic']['shipment']['tracking_code']
+          .get("/tracking/shipments", queryParameters: {
+        "tracking_reference": order["shiplogic"]["shipment"]["tracking_code"]
       });
-      return res.data['shipments'][0]['status'];
+      return res.data["shipments"][0]["status"];
     } catch (e) {
       if (e.runtimeType == DioException) {
         e as DioException;
@@ -61,23 +61,23 @@ class Shiplogic {
   }
 
   static cancelOrder(Map order) async {
-    clog('CANCELLING ON SHIPLOGIC...');
-    final res = await shiplogicDio().post('/shipments/cancel', data: {
-      "tracking_reference": order['shiplogic']['shipment']['tracking_code']
+    clog("CANCELLING ON SHIPLOGIC...");
+    final res = await shiplogicDio().post("/shipments/cancel", data: {
+      "tracking_reference": order["shiplogic"]["shipment"]["tracking_code"]
     });
     return res.data;
   }
 
   static Map<String, dynamic> parseAddr(Map<String, dynamic> addr) {
     return {
-      "street_address": addr['street'],
-      "local_area": addr['suburb'],
-      "city": addr['city'],
-      "zone": addr['state'],
+      "street_address": addr["street"],
+      "local_area": addr["suburb"],
+      "city": addr["city"],
+      "zone": addr["state"],
       "country": "ZA",
-      "code": "${addr['postcode']}",
-      "lat": addr['center'].first,
-      "lng": addr['center'].last
+      "code": "${addr["postcode"]}",
+      "lat": addr["center"].first,
+      "lng": addr["center"].last
     };
   }
 
@@ -96,28 +96,28 @@ class Shiplogic {
       "collection_min_date": collectionDate,
       "delivery_min_date": collectionDate,
       "collection_address": {
-        "company": appCtrl.store['name'],
+        "company": appCtrl.store["name"],
         "type": "business",
         ...parseAddr(from)
       },
       "collection_contact": {
-        "name": appCtrl.store['name'],
-        "mobile_number": from['phone'] ?? appCtrl.store['phone'],
-        "email": from['email'] ?? appCtrl.store['email'],
+        "name": appCtrl.store["name"],
+        "mobile_number": from["phone"] ?? appCtrl.store["phone"],
+        "email": from["email"] ?? appCtrl.store["email"],
       },
       "declared_value": total,
       "delivery_address": {"type": "residential", ...parseAddr(to)},
       "delivery_contact": {
-        "name": to['name'],
-        "mobile_number": to['phone'],
-        "email": to['email'],
+        "name": to["name"],
+        "mobile_number": to["phone"],
+        "email": to["email"],
       },
       "parcels": items
           .map(
             (e) => {
               "submitted_width_cm": 13.5,
               "submitted_height_cm": 27.5,
-              "submitted_weight_kg": e['weight']
+              "submitted_weight_kg": e["weight"]
             },
           )
           .toList(),
@@ -125,7 +125,7 @@ class Shiplogic {
       "mute_notifications": false,
       "service_level_id": serviceLevelId
     };
-    final res = await shiplogicDio().post('/shipments', data: reqData);
+    final res = await shiplogicDio().post("/shipments", data: reqData);
     return res.data;
   }
 
@@ -141,7 +141,7 @@ class Shiplogic {
         "collection_min_date": collectionDate,
         "delivery_min_date": collectionDate,
         "collection_address": {
-          "company": MainApp.appCtrl.store['name'],
+          "company": MainApp.appCtrl.store["name"],
           "type": "business",
           ...parseAddr(from)
         },
@@ -150,14 +150,14 @@ class Shiplogic {
         "parcels": items
             .map(
               (e) => {
-                "submitted_width_cm": e['width'],
-                "submitted_height_cm": e['height'],
-                "submitted_weight_kg": e['weight']
+                "submitted_width_cm": e["width"],
+                "submitted_height_cm": e["height"],
+                "submitted_weight_kg": e["weight"]
               },
             )
             .toList()
       };
-      final r = await shiplogicDio().post('/rates', data: reqData);
+      final r = await shiplogicDio().post("/rates", data: reqData);
 
       return r.data;
     } catch (e) {
@@ -168,11 +168,11 @@ class Shiplogic {
 }
 
 String formatDate(String dateString) {
-  final DateFormat formatter = DateFormat('yyyy-MM-dd').add_jm();
+  final DateFormat formatter = DateFormat("yyyy-MM-dd").add_jm();
   return formatter.format(DateTime.parse(dateString).toLocal());
 }
 
 String camelToSentence(String text) {
-  return text.replaceAllMapped(RegExp(r'^([a-z])|[A-Z]'),
+  return text.replaceAllMapped(RegExp(r"^([a-z])|[A-Z]"),
       (Match m) => m[1] == null ? " ${m[0]}" : m[1]!.toUpperCase());
 }

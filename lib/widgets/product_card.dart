@@ -1,19 +1,19 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, use_build_context_synchronously
 
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+import "package:dio/dio.dart";
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:get/get.dart";
+import "package:google_fonts/google_fonts.dart";
 
-import '../controllers/app_ctrl.dart';
-import '../controllers/store_ctrl.dart';
-import '../utils/constants.dart';
-import '../utils/functions.dart';
-import 'common.dart';
+import "../controllers/app_ctrl.dart";
+import "../controllers/store_ctrl.dart";
+import "../utils/constants.dart";
+import "../utils/functions.dart";
+import "common.dart";
 
 class ProductCard extends StatelessWidget {
   final Map<String, dynamic> product;
@@ -65,7 +65,7 @@ class ProductCard extends StatelessWidget {
       width: width,
       padding: 0,
       onTap: () async {
-        clog('Tap');
+        clog("Tap");
         storeCtrl.setCurrProduct(product);
         Navigator.of(context)
             .pushNamed("/product", arguments: {"pid": product["pid"]});
@@ -91,11 +91,11 @@ class ProductCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(rad),
                     color: const Color.fromRGBO(0, 0, 0, 0.05),
                   ),
-                  child: product['images'].isNotEmpty
+                  child: product["images"].isNotEmpty
                       ? ClipRRect(
                           //borderRadius: BorderRadius.circular(rad),
                           child: Image.network(
-                            product['images'][0]['url'],
+                            product["images"][0]["url"],
                             errorBuilder: (context, error, stackTrace) {
                               return const Center(
                                 child: Icon(
@@ -124,7 +124,7 @@ class ProductCard extends StatelessWidget {
                           ),
                         ) //"https://loremflickr.com/g/320/240/tea?random=${Random().nextInt(100)}")
                       : svgIcon(
-                          name: 'br-image-slash',
+                          name: "br-image-slash",
                           size: 30,
                           color: Colors.black54,
                         ),
@@ -138,27 +138,27 @@ class ProductCard extends StatelessWidget {
                             .where(
                                 (el) => el["product"]["_id"] == product["_id"])
                             .isNotEmpty;
-                    return product['quantity'] <= 0
+                    return product["quantity"] <= 0
                         ? none()
                         : TuButton(
                             radius: 100,
                             height: 40,
                             width: 40,
                             bgColor: inCart ? TuColors.primary : appBGLight,
-                            onPressed: product['quantity'] <= 0
+                            onPressed: product["quantity"] <= 0
                                 ? null
                                 : () async {
                                     await addRemoveCart();
                                   },
                             child: inCart
                                 ? svgIcon(
-                                    name: 'rr-cart-minus',
+                                    name: "rr-cart-minus",
                                     color:
                                         const Color.fromRGBO(20, 20, 20, 0.7),
                                     size: 20,
                                   )
                                 : svgIcon(
-                                    name: 'rr-cart-add',
+                                    name: "rr-cart-add",
                                     color: Colors.black87,
                                     size: 20,
                                   ),
@@ -175,7 +175,7 @@ class ProductCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "${product['name']}",
+                  "${product["name"]}",
                   softWrap: false,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
@@ -189,7 +189,7 @@ class ProductCard extends StatelessWidget {
                     Chip(
                       backgroundColor: TuColors.primary,
                       label: Text(
-                        product['quantity'] > 0 ? "In stock" : "out of stock",
+                        product["quantity"] > 0 ? "In stock" : "out of stock",
                         style:
                             const TextStyle(fontSize: 10, color: Colors.white),
                       ),
@@ -202,7 +202,7 @@ class ProductCard extends StatelessWidget {
                           size: 14,
                         ),
                         Text(
-                          "${product['rating'] ?? 0}",
+                          "${product["rating"] ?? 0}",
                           style: const TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w600),
                         )
@@ -214,19 +214,19 @@ class ProductCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("R${product['price']}",
+                    Text("R${product["price"]}",
                         style: GoogleFonts.poppins(
-                            color: product['on_sale']
+                            color: product["on_sale"]
                                 ? TuColors.text2
                                 : Colors.black87,
-                            fontSize: product['on_sale'] ? 12 : 14,
-                            decoration: product['on_sale']
+                            fontSize: product["on_sale"] ? 12 : 14,
+                            decoration: product["on_sale"]
                                 ? TextDecoration.lineThrough
                                 : null,
                             fontWeight: FontWeight.w600)),
                     Visibility(
-                      visible: product['on_sale'],
-                      child: Text("R${product['sale_price']}",
+                      visible: product["on_sale"],
+                      child: Text("R${product["sale_price"]}",
                           style: GoogleFonts.poppins(
                               color: Colors.black87,
                               fontSize: 14,

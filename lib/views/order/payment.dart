@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class PaymentPage extends StatelessWidget {
   const PaymentPage({super.key});
@@ -41,12 +41,12 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   _initSocketio() {
-    clog('Socketio init...');
-    socket?.on('payment', (data) {
-      clog('On payment');
-      if (data['gateway'] == 'yoco') {
-        final yocoData = data['data'];
-        if (yocoData['type'] == 'payment.succeeded') {
+    clog("Socketio init...");
+    socket?.on("payment", (data) {
+      clog("On payment");
+      if (data["gateway"] == "yoco") {
+        final yocoData = data["data"];
+        if (yocoData["type"] == "payment.succeeded") {
           _ctrl.createOrder(context: context, yocoData: yocoData);
         } else {
           clog(yocoData);
@@ -76,7 +76,7 @@ class _PaymentPageState extends State<PaymentPage> {
               },
               onWebResourceError: (WebResourceError error) {},
               onNavigationRequest: (NavigationRequest request) {
-                if (request.url.startsWith('https://www.youtube.com/')) {
+                if (request.url.startsWith("https://www.youtube.com/")) {
                   return NavigationDecision.prevent;
                 }
                 return NavigationDecision.navigate;

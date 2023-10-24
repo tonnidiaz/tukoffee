@@ -1,23 +1,23 @@
-import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
+import "dart:io";
+import "dart:isolate";
+import "dart:ui";
 
-import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/common4.dart';
-import 'package:lebzcafe/widgets/dialogs/loading_dialog.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:path_provider/path_provider.dart';
+import "package:flutter/material.dart";
+import "package:flutter_downloader/flutter_downloader.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/common4.dart";
+import "package:lebzcafe/widgets/dialogs/loading_dialog.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:path_provider/path_provider.dart";
 
 class UpdatesView3 extends StatefulWidget {
   final Map<String, dynamic>? update;
@@ -36,7 +36,7 @@ class UpdatesView3State extends State<UpdatesView3> {
 
   _initFlutterDownloader() {
     IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
+        _port.sendPort, "downloader_send_port");
     _port.listen((dynamic data) {
       //This is where you handle the outcome/progress
       int progress = data[2];
@@ -54,10 +54,10 @@ class UpdatesView3State extends State<UpdatesView3> {
     FlutterDownloader.registerCallback(downloadCallback);
   }
 
-  @pragma('vm:entry-point')
+  @pragma("vm:entry-point")
   static void downloadCallback(String id, int status, int progress) {
     final SendPort? send =
-        IsolateNameServer.lookupPortByName('downloader_send_port');
+        IsolateNameServer.lookupPortByName("downloader_send_port");
     send?.send([id, status, progress]);
   }
 
@@ -70,7 +70,7 @@ class UpdatesView3State extends State<UpdatesView3> {
       clog("Has perm: $hasPermission");
       if (hasPermission == null || !hasPermission) {
         if (!context.mounted) return;
-        showToast('Need to have storage permissions', isErr: true)
+        showToast("Need to have storage permissions", isErr: true)
             .show(context);
         return;
       }
@@ -80,7 +80,7 @@ class UpdatesView3State extends State<UpdatesView3> {
 
       final dir = await getExternalStorageDirectory();
 
-      final dirPath = '${dir?.path}/Downloads/APKs';
+      final dirPath = "${dir?.path}/Downloads/APKs";
       final pdir = Directory(dirPath);
       if (!pdir.existsSync()) {
         clog("Creating directory");
@@ -88,10 +88,10 @@ class UpdatesView3State extends State<UpdatesView3> {
       }
       clog(dirPath);
       final fileName =
-          "${_appCtrl.store['name']}-${DateTime.now().millisecondsSinceEpoch}-v${widget.update!['version']}.apk";
+          "${_appCtrl.store["name"]}-${DateTime.now().millisecondsSinceEpoch}-v${widget.update!["version"]}.apk";
 
       final taskId = await FlutterDownloader.enqueue(
-        url: widget.update!['file'],
+        url: widget.update!["file"],
         //"https://github.com/tonnidiaz/tunedapps/releases/download/taudmod-v0.1.0/taudmod-v0.1.0.apk",
         headers: {}, // optional: header send with url (auth token etc)
         savedDir: dirPath,
@@ -121,7 +121,7 @@ class UpdatesView3State extends State<UpdatesView3> {
   void dispose() {
     if (FlutterDownloader.initialized) {
       FlutterDownloader.cancelAll();
-      IsolateNameServer.removePortNameMapping('downloader_send_port');
+      IsolateNameServer.removePortNameMapping("downloader_send_port");
     }
 
     super.dispose();
@@ -143,10 +143,10 @@ class UpdatesView3State extends State<UpdatesView3> {
             )
           : SingleChildScrollView(
               child: tuColumn(min: true, children: [
-                h3('Updates available'),
+                h3("Updates available"),
                 mY(8),
                 tuTableRow(
-                    Text("Version:"), Text("${widget.update!['version']}")),
+                    Text("Version:"), Text("${widget.update!["version"]}")),
                 mY(10),
                 Text(
                   "Release notes",
@@ -155,7 +155,7 @@ class UpdatesView3State extends State<UpdatesView3> {
                 Padding(
                   padding: defaultPadding,
                   child: tuColumn(children: [
-                    ...widget.update!['notes']
+                    ...widget.update!["notes"]
                         .map((e) => bulletItem(e))
                         .toList()
                   ]),

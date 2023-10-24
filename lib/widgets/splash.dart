@@ -1,31 +1,31 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions2.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:get/get.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions2.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:get/get.dart";
+import "package:internet_connection_checker/internet_connection_checker.dart";
 
-import '../utils/functions.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import "../utils/functions.dart";
+import "package:socket_io_client/socket_io_client.dart" as IO;
 
 initSocketio() {
   final appCtrl = MainApp.appCtrl;
   clog("initing socketio...");
   socket = IO.io(
       appCtrl.apiURL.value,
-      IO.OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
-          .setExtraHeaders({'foo': 'bar'}) // optional
+      IO.OptionBuilder().setTransports(["websocket"]) // for Flutter or Dart VM
+          .setExtraHeaders({"foo": "bar"}) // optional
           .build());
   socket?.onConnect((_) {
-    clog('IO connected');
-    socket?.emit('test', 'test');
+    clog("IO connected");
+    socket?.emit("test", "test");
   });
 }
 
@@ -59,8 +59,8 @@ class _TuSplashState extends State<TuSplash> {
 
   void _init() async {
     // Check for internet connection
-    clog('Initi splash...');
-    if (_appCtrl.store['name'] != null) return;
+    clog("Initi splash...");
+    if (_appCtrl.store["name"] != null) return;
     _setConnected(true);
     final isReachable = await InternetConnectionChecker()
         .isHostReachable(AddressCheckOptions(hostname: "1.1.1.1"));

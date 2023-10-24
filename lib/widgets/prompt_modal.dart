@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/utils/styles.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/utils/styles.dart";
 
-import '../utils/colors.dart';
-import '../utils/constants.dart';
+import "../utils/colors.dart";
+import "../utils/constants.dart";
 
 class PromptDialog extends StatelessWidget {
   final void Function()? onOk;

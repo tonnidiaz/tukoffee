@@ -1,18 +1,18 @@
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/dialog.dart';
-import 'package:get/get.dart';
+import "package:flutter/material.dart";
+import "package:flutter_rating_bar/flutter_rating_bar.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/dialog.dart";
+import "package:get/get.dart";
 
 class AddReviewView extends StatefulWidget {
   final Map<String, dynamic> product;
@@ -35,22 +35,22 @@ class _AddReviewViewState extends State<AddReviewView> {
       if (widget.rev != null) {
         //showLoading({})
         showProgressSheet();
-        await apiDio().post('/products/review?act=edit',
-            data: {'id': widget.rev!['_id'], 'review': form});
+        await apiDio().post("/products/review?act=edit",
+            data: {"id": widget.rev!["_id"], "review": form});
         //hideLoader()
         gpop();
         if (mounted) {
-          await showToast('Review edited successfully!').show(context);
+          await showToast("Review edited successfully!").show(context);
         }
         gpop();
         if (widget.onOk != null) {
           widget.onOk!();
         }
       } else {
-        await apiDio().post('/products/review?act=add',
-            data: {'pid': widget.product['pid'], 'review': form});
+        await apiDio().post("/products/review?act=add",
+            data: {"pid": widget.product["pid"], "review": form});
         //  hideLoader()
-        showToast('Review added successfully!');
+        showToast("Review added successfully!");
         gpop();
         if (widget.onOk != null) {
           widget.onOk!();
@@ -58,7 +58,7 @@ class _AddReviewViewState extends State<AddReviewView> {
       }
     } catch (e) {
       if (mounted) {
-        errorHandler(e: e, context: context, msg: 'Failed to add review');
+        errorHandler(e: e, context: context, msg: "Failed to add review");
       }
       // hideLoader()
     }
@@ -70,10 +70,10 @@ class _AddReviewViewState extends State<AddReviewView> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (widget.rev != null) {
         _formCtrl.setForm({
-          "title": widget.rev!['title'],
-          "name": widget.rev!['name'],
-          "body": widget.rev!['body'],
-          "rating": widget.rev!['rating']
+          "title": widget.rev!["title"],
+          "name": widget.rev!["name"],
+          "body": widget.rev!["body"],
+          "rating": widget.rev!["rating"]
         });
       }
     });
@@ -95,7 +95,7 @@ class _AddReviewViewState extends State<AddReviewView> {
       child: SingleChildScrollView(
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text(
-            widget.rev == null ? 'New review' : "Edit review",
+            widget.rev == null ? "New review" : "Edit review",
             style: Styles.h3(),
           ),
           mY(8),
@@ -106,12 +106,12 @@ class _AddReviewViewState extends State<AddReviewView> {
               children: [
                 Obx(
                   () => RatingBar.builder(
-                      initialRating: _formCtrl.form['rating']?.toDouble() ?? 0,
+                      initialRating: _formCtrl.form["rating"]?.toDouble() ?? 0,
                       itemSize: 24,
                       itemBuilder: (context, _) =>
                           const Icon(Icons.star, color: Colors.amber),
                       onRatingUpdate: (val) {
-                        _formCtrl.setFormField('rating', val);
+                        _formCtrl.setFormField("rating", val);
                       }),
                 ),
                 mY(8),
@@ -121,32 +121,32 @@ class _AddReviewViewState extends State<AddReviewView> {
                       child: Column(
                         children: [
                           TuFormField(
-                            label: 'Your name:',
+                            label: "Your name:",
                             required: true,
-                            value: _formCtrl.form['name'],
+                            value: _formCtrl.form["name"],
                             onChanged: (val) {
-                              _formCtrl.setFormField('name', val);
+                              _formCtrl.setFormField("name", val);
                             },
                             hint: "Enter your name...",
                           ),
                           TuFormField(
-                            label: 'Review title:',
+                            label: "Review title:",
                             required: true,
-                            value: _formCtrl.form['title'],
+                            value: _formCtrl.form["title"],
                             onChanged: (val) {
-                              _formCtrl.setFormField('title', val);
+                              _formCtrl.setFormField("title", val);
                             },
                             hint: "Enter title for your review...",
                           ),
                           TuFormField(
-                            label: 'Review:',
+                            label: "Review:",
                             required: true,
                             maxLength: 1000,
                             keyboard: TextInputType.multiline,
-                            value: _formCtrl.form['body'],
+                            value: _formCtrl.form["body"],
                             maxLines: 4,
                             onChanged: (val) {
-                              _formCtrl.setFormField('body', val);
+                              _formCtrl.setFormField("body", val);
                             },
                             hint: "Write your review...",
                           ),

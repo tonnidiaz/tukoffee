@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/widgets/common.dart';
+import "package:flutter/material.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/widgets/common.dart";
 
 class ProgressSheet extends StatefulWidget {
   final Color? color;
@@ -56,7 +56,7 @@ class _ProgressSheetState extends State<ProgressSheet> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [Text(widget.msg ?? 'Hang on...')],
+                      children: [Text(widget.msg ?? "Hang on...")],
                     ),
                   ),
                 )

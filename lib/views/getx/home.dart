@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/widgets/common.dart';
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/widgets/common.dart";
 
 class GetxHomePage extends StatelessWidget {
   const GetxHomePage({super.key});
@@ -20,7 +20,7 @@ class GetxHomePage extends StatelessWidget {
             mY(6),
             ElevatedButton(
               onPressed: () {
-                clog('p');
+                clog("p");
 
                 Get.bottomSheet(const MySheet(),
                     useRootNavigator: false,

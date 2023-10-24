@@ -13,7 +13,7 @@ GridView.builder(
                           scrollDirection: Axis.vertical,
                           itemBuilder: (context, i) => Container(
                                 color: TuColors.primary,
-                                child: Text('ITEM $i'),
+                                child: Text("ITEM $i"),
                               ))
 
 

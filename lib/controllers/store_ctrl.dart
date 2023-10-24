@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/models/store.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/utils/functions.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/models/store.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/utils/functions.dart";
 
-import '../utils/constants.dart';
-import '../utils/constants2.dart';
+import "../utils/constants.dart";
+import "../utils/constants2.dart";
 
 class StoreCtrl extends GetxController {
   final RxBool productsFetched = false.obs;
@@ -55,9 +55,9 @@ class StoreCtrl extends GetxController {
       if (val.isNotEmpty) {
         total.value = 0;
         for (var it in val["products"]) {
-          final prod = it['product'];
+          final prod = it["product"];
           total.value +=
-              ((prod['on_sale'] ? prod['sale_price'] : prod["price"]) *
+              ((prod["on_sale"] ? prod["sale_price"] : prod["price"]) *
                       it["quantity"])
                   .toDouble();
         }
@@ -93,21 +93,21 @@ class StoreCtrl extends GetxController {
         setSortedProducts(prods);
         break;
       case ProductStatus.instock:
-        setSortedProducts(prods.where((it) => it['quantity'] > 0).toList());
+        setSortedProducts(prods.where((it) => it["quantity"] > 0).toList());
         break;
       case ProductStatus.topSelling:
         setSortedProducts(
-            prods.where((it) => it['top_selling'] == true).toList());
+            prods.where((it) => it["top_selling"] == true).toList());
         break;
       case ProductStatus.special:
         setSortedProducts(
-            prods.where((it) => it['on_special'] == true).toList());
+            prods.where((it) => it["on_special"] == true).toList());
         break;
       case ProductStatus.sale:
-        setSortedProducts(prods.where((it) => it['on_sale'] == true).toList());
+        setSortedProducts(prods.where((it) => it["on_sale"] == true).toList());
         break;
       case ProductStatus.out:
-        setSortedProducts(prods.where((it) => it['quantity'] == 0).toList());
+        setSortedProducts(prods.where((it) => it["quantity"] == 0).toList());
         break;
       default:
         break;

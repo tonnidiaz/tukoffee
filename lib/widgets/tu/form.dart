@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/utils/functions.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/utils/functions.dart";
 
-import '../common.dart';
+import "../common.dart";
 
 class TuForm extends StatefulWidget {
   final String btnTxt;

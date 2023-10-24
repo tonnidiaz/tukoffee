@@ -1,23 +1,23 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/controllers/app_ctrl.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/views/map.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/form_view.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
+import "package:lebzcafe/controllers/app_ctrl.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/views/map.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/form_view.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
 class AdminSettingsPage extends StatefulWidget {
   const AdminSettingsPage({super.key});
@@ -39,9 +39,9 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
     try {
       //clog(formCtrl.form);
       final res =
-          await apiDio().post('/store/update', data: {'data': formCtrl.form});
+          await apiDio().post("/store/update", data: {"data": formCtrl.form});
       // clog(res);
-      setupStoreDetails(data: res.data['store']);
+      setupStoreDetails(data: res.data["store"]);
       Navigator.pop(context);
     } catch (e) {
       errorHandler(e: e, context: context);
@@ -62,10 +62,10 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
     try {
       final file = await importFile();
       if (file != null) {
-        if (appCtrl.store['image']['publicId'] != null) {
+        if (appCtrl.store["image"]["publicId"] != null) {
           clog("Deleting old...");
           try {
-            await signedCloudinary.destroy(appCtrl.store['image']['publicId']);
+            await signedCloudinary.destroy(appCtrl.store["image"]["publicId"]);
           } catch (e) {
             errorHandler(
                 e: e, context: context, msg: "Failed to delete old image");
@@ -77,12 +77,12 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
         final res = await uploadImg(file, appCtrl: appCtrl);
         if (res.isResultOk) {
           clog("Updating...");
-          final res2 = await apiDio().post('/store/update', data: {
-            'data': {
-              'image': {'url': res.secureUrl, 'publicId': res.publicId}
+          final res2 = await apiDio().post("/store/update", data: {
+            "data": {
+              "image": {"url": res.secureUrl, "publicId": res.publicId}
             }
           });
-          setupStoreDetails(data: res2.data['store']);
+          setupStoreDetails(data: res2.data["store"]);
         }
       }
     } catch (e) {
@@ -95,7 +95,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:
-          childAppbar(showCart: false, title: "About ${appCtrl.store['name']}"),
+          childAppbar(showCart: false, title: "About ${appCtrl.store["name"]}"),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(topMargin),
@@ -110,14 +110,14 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                     my: .5,
                     child: TuCollapse(
                         title:
-                            '${(e.key == 0 ? 'Store' : e.key == 1 ? 'Owner' : 'Developer')} details',
+                            "${(e.key == 0 ? "Store" : e.key == 1 ? "Owner" : "Developer")} details",
                         child: tuColumn(children: [
                           tuColumn(
                             children: [
                               h4("Name:", isLight: true),
                               mY(8),
                               Obx(() => Text(
-                                    e.value['name'],
+                                    e.value["name"],
                                     style: TextStyle(color: TuColors.text2),
                                   )),
                               mY(4),
@@ -130,7 +130,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                               h4("Phone:", isLight: true),
                               mY(8),
                               Obx(() => SelectableText(
-                                    e.value['phone'],
+                                    e.value["phone"],
                                     style: TextStyle(color: TuColors.text2),
                                   )),
                               mY(4),
@@ -143,7 +143,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                               h4("Email:", isLight: true),
                               mY(8),
                               Obx(() => SelectableText(
-                                    e.value['email'],
+                                    e.value["email"],
                                     style: TextStyle(color: TuColors.text2),
                                   )),
                               mY(4),
@@ -173,7 +173,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                           ),
                           Obx(
                             () => Text(
-                              appCtrl.store['name'],
+                              appCtrl.store["name"],
                               style: Styles.label(isLight: true),
                             ),
                           )),
@@ -184,7 +184,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                           ),
                           Obx(
                             () => SelectableText(
-                              appCtrl.store['phone'],
+                              appCtrl.store["phone"],
                               style: Styles.label(isLight: true),
                             ),
                           )),
@@ -197,7 +197,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                             () => SizedBox(
                               width: 100,
                               child: SelectableText(
-                                appCtrl.store['email'],
+                                appCtrl.store["email"],
                                 maxLines: 1,
                                 style: Styles.label(isLight: true),
                               ),
@@ -212,7 +212,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                             () => SizedBox(
                               width: 100,
                               child: SelectableText(
-                                appCtrl.store['site'],
+                                appCtrl.store["site"],
                                 maxLines: 1,
                                 style: Styles.label(isLight: true),
                               ),
@@ -233,14 +233,14 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                               () => appCtrl.user.isEmpty
                                   ? none()
                                   : Visibility(
-                                      visible: appCtrl.user['permissions'] > 0,
+                                      visible: appCtrl.user["permissions"] > 0,
                                       child: InkWell(
                                         onTap: () {
                                           formCtrl.setFormField("owner", {
-                                            'name': appCtrl.owner['name'],
-                                            'phone': appCtrl.owner['phone'],
-                                            'email': appCtrl.owner['email'],
-                                            'site': appCtrl.owner['site'],
+                                            "name": appCtrl.owner["name"],
+                                            "phone": appCtrl.owner["phone"],
+                                            "email": appCtrl.owner["email"],
+                                            "site": appCtrl.owner["site"],
                                           });
                                           showDialog(
                                               context: context,
@@ -254,15 +254,15 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                       required: true,
                                                       hasBorder: false,
                                                       value:
-                                                          formCtrl.form['owner']
-                                                              ['name'],
+                                                          formCtrl.form["owner"]
+                                                              ["name"],
                                                       onChanged: (val) {
                                                         Map owner = formCtrl
-                                                            .form['owner'];
+                                                            .form["owner"];
                                                         formCtrl.setFormField(
-                                                            'owner', {
+                                                            "owner", {
                                                           ...owner,
-                                                          'name': val
+                                                          "name": val
                                                         });
                                                       },
                                                     ),
@@ -275,15 +275,15 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                           TextInputType.phone,
                                                       required: true,
                                                       value:
-                                                          formCtrl.form['owner']
-                                                              ['phone'],
+                                                          formCtrl.form["owner"]
+                                                              ["phone"],
                                                       onChanged: (val) {
                                                         Map owner = formCtrl
-                                                            .form['owner'];
+                                                            .form["owner"];
                                                         formCtrl.setFormField(
-                                                            'owner', {
+                                                            "owner", {
                                                           ...owner,
-                                                          'phone': val
+                                                          "phone": val
                                                         });
                                                       },
                                                     ),
@@ -296,15 +296,15 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                           .emailAddress,
                                                       required: true,
                                                       value:
-                                                          formCtrl.form['owner']
-                                                              ['email'],
+                                                          formCtrl.form["owner"]
+                                                              ["email"],
                                                       onChanged: (val) {
                                                         Map owner = formCtrl
-                                                            .form['owner'];
+                                                            .form["owner"];
                                                         formCtrl.setFormField(
-                                                            'owner', {
+                                                            "owner", {
                                                           ...owner,
-                                                          'email': val
+                                                          "email": val
                                                         });
                                                       },
                                                     ),
@@ -318,15 +318,15 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                                           TextInputType.url,
                                                       required: true,
                                                       value:
-                                                          formCtrl.form['owner']
-                                                              ['site'],
+                                                          formCtrl.form["owner"]
+                                                              ["site"],
                                                       onChanged: (val) {
                                                         Map owner = formCtrl
-                                                            .form['owner'];
+                                                            .form["owner"];
                                                         formCtrl.setFormField(
-                                                            'owner', {
+                                                            "owner", {
                                                           ...owner,
-                                                          'site': val
+                                                          "site": val
                                                         });
                                                       },
                                                     ),
@@ -350,7 +350,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                             ),
                             Obx(
                               () => Text(
-                                appCtrl.owner['name'],
+                                appCtrl.owner["name"],
                                 style: Styles.label(isLight: true),
                               ),
                             )),
@@ -361,7 +361,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                             ),
                             Obx(
                               () => SelectableText(
-                                appCtrl.owner['phone'],
+                                appCtrl.owner["phone"],
                                 style: Styles.label(isLight: true),
                               ),
                             )),
@@ -374,7 +374,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                               () => SizedBox(
                                 width: 100,
                                 child: SelectableText(
-                                  appCtrl.owner['email'],
+                                  appCtrl.owner["email"],
                                   maxLines: 1,
                                   style: Styles.label(isLight: true),
                                 ),
@@ -389,7 +389,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                               () => SizedBox(
                                 width: 100,
                                 child: SelectableText(
-                                  appCtrl.owner['site'],
+                                  appCtrl.owner["site"],
                                   maxLines: 1,
                                   style: Styles.label(isLight: true),
                                 ),
@@ -414,7 +414,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                             ),
                             Obx(
                               () => Text(
-                                appCtrl.developer['name'],
+                                appCtrl.developer["name"],
                                 style: Styles.label(isLight: true),
                               ),
                             )),
@@ -425,7 +425,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                             ),
                             Obx(
                               () => SelectableText(
-                                appCtrl.developer['phone'],
+                                appCtrl.developer["phone"],
                                 style: Styles.label(isLight: true),
                               ),
                             )),
@@ -438,7 +438,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                               () => SizedBox(
                                 width: 100,
                                 child: SelectableText(
-                                  appCtrl.developer['email'],
+                                  appCtrl.developer["email"],
                                   maxLines: 1,
                                   style: Styles.label(isLight: true),
                                 ),
@@ -453,7 +453,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                               () => SizedBox(
                                 width: 100,
                                 child: SelectableText(
-                                  appCtrl.developer['site'],
+                                  appCtrl.developer["site"],
                                   maxLines: 1,
                                   style: Styles.label(isLight: true),
                                 ),
@@ -477,7 +477,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                     ? none()
                                     : Visibility(
                                         visible:
-                                            appCtrl.user['permissions'] > 0,
+                                            appCtrl.user["permissions"] > 0,
                                         child: InkWell(
                                           onTap: () {
                                             formCtrl.setForm({});
@@ -527,13 +527,13 @@ class AddStoreView extends StatelessWidget {
       onSubmit: () async {
         var form = formCtrl.form;
 
-        if (form['location'] == null) {
+        if (form["location"] == null) {
           return showToast("Valid store location is requred", isErr: true)
               .show(context);
         }
         try {
-          final res = await apiDio().post('/stores/add', data: formCtrl.form);
-          storeCtrl.setStores(res.data['stores']);
+          final res = await apiDio().post("/stores/add", data: formCtrl.form);
+          storeCtrl.setStores(res.data["stores"]);
 
           /// Navigator.pop(context);
           showToast("Store added successfully").show(context);
@@ -543,12 +543,12 @@ class AddStoreView extends StatelessWidget {
       },
       fields: [
         Obx(() {
-          var location = formCtrl.form['location'];
+          var location = formCtrl.form["location"];
           return TuFormField(
             label: "Address:",
             prefixIcon: TuIcon(Icons.location_on),
             readOnly: true,
-            value: location != null ? location['name'] : null,
+            value: location != null ? location["name"] : null,
             required: true,
             onTap: () {
               pushTo(const MapPage());
@@ -570,13 +570,13 @@ class AddStoreView extends StatelessWidget {
                     required: true,
                     width: (c.maxWidth / 2) - 5,
                     // formCtrl.form represents the store
-                    value: formCtrl.form['open_time'],
+                    value: formCtrl.form["open_time"],
                     onTap: () async {
                       final val = await TuFuncs.showTDialog(context,
                           TimePickerDialog(initialTime: TimeOfDay.now()));
                       if (val != null) {
                         formCtrl.setFormField(
-                            'open_time', (val as TimeOfDay).format(context));
+                            "open_time", (val as TimeOfDay).format(context));
                       }
                     },
                   )),
@@ -587,13 +587,13 @@ class AddStoreView extends StatelessWidget {
                     required: true,
                     width: (c.maxWidth / 2) - 5,
                     // formCtrl.form represents the store
-                    value: formCtrl.form['close_time'],
+                    value: formCtrl.form["close_time"],
                     onTap: () async {
                       final val = await TuFuncs.showTDialog(context,
                           TimePickerDialog(initialTime: TimeOfDay.now()));
                       if (val != null) {
                         formCtrl.setFormField(
-                            'close_time', (val as TimeOfDay).format(context));
+                            "close_time", (val as TimeOfDay).format(context));
                       }
                     },
                   )));
@@ -613,12 +613,12 @@ class AddStoreView extends StatelessWidget {
                     required: true,
                     width: (c.maxWidth / 2) - 5,
                     // formCtrl.form represents the store
-                    value: formCtrl.form['open_time_weekends'],
+                    value: formCtrl.form["open_time_weekends"],
                     onTap: () async {
                       final val = await TuFuncs.showTDialog(context,
                           TimePickerDialog(initialTime: TimeOfDay.now()));
                       if (val != null) {
-                        formCtrl.setFormField('open_time_weekends',
+                        formCtrl.setFormField("open_time_weekends",
                             (val as TimeOfDay).format(context));
                       }
                     },
@@ -630,12 +630,12 @@ class AddStoreView extends StatelessWidget {
                     required: true,
                     width: (c.maxWidth / 2) - 5,
                     // formCtrl.form represents the store
-                    value: formCtrl.form['close_time_weekends'],
+                    value: formCtrl.form["close_time_weekends"],
                     onTap: () async {
                       final val = await TuFuncs.showTDialog(context,
                           TimePickerDialog(initialTime: TimeOfDay.now()));
                       if (val != null) {
-                        formCtrl.setFormField('close_time_weekends',
+                        formCtrl.setFormField("close_time_weekends",
                             (val as TimeOfDay).format(context));
                       }
                     },

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import '/utils/constants.dart';
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "/utils/constants.dart";
 
 class DesktopApp extends StatefulWidget {
   static const mChannel = MethodChannel("$package/channel");

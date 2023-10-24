@@ -1,8 +1,8 @@
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/utils/functions.dart';
+import "package:lebzcafe/utils/constants2.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/utils/functions.dart";
 
-import '../utils/constants.dart';
+import "../utils/constants.dart";
 
 class ProductsCtrl extends GetxController {
   Rxn<List> products = Rxn();
@@ -40,21 +40,21 @@ class ProductsCtrl extends GetxController {
         setSortedProducts(prods);
         break;
       case ProductStatus.instock:
-        setSortedProducts(prods!.where((it) => it['quantity'] > 0).toList());
+        setSortedProducts(prods!.where((it) => it["quantity"] > 0).toList());
         break;
       case ProductStatus.topSelling:
         setSortedProducts(
-            prods!.where((it) => it['top_selling'] == true).toList());
+            prods!.where((it) => it["top_selling"] == true).toList());
         break;
       case ProductStatus.special:
         setSortedProducts(
-            prods!.where((it) => it['on_special'] == true).toList());
+            prods!.where((it) => it["on_special"] == true).toList());
         break;
       case ProductStatus.sale:
-        setSortedProducts(prods!.where((it) => it['on_sale'] == true).toList());
+        setSortedProducts(prods!.where((it) => it["on_sale"] == true).toList());
         break;
       case ProductStatus.out:
-        setSortedProducts(prods!.where((it) => it['quantity'] == 0).toList());
+        setSortedProducts(prods!.where((it) => it["quantity"] == 0).toList());
         break;
       default:
         break;
@@ -98,7 +98,7 @@ class ProductsCtrl extends GetxController {
 
     var prods = [...sortedProducts.value!];
     prods.sort(sorter);
-    //clog(prods[0]['name']);
+    //clog(prods[0]["name"]);
     setSortedProducts(prods);
   }
 }

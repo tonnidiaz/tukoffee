@@ -1,20 +1,20 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/controllers/appbar.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/functions2.dart';
-import 'package:lebzcafe/views/order/checkout.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/controllers/appbar.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/functions2.dart";
+import "package:lebzcafe/views/order/checkout.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
 
-import '../utils/colors.dart';
-import '../utils/constants.dart';
-import '../utils/functions.dart';
-import 'common.dart';
-import 'prompt_modal.dart';
+import "../utils/colors.dart";
+import "../utils/constants.dart";
+import "../utils/functions.dart";
+import "common.dart";
+import "prompt_modal.dart";
 
 class OrderItem extends StatelessWidget {
   final Map order;
@@ -47,20 +47,20 @@ class OrderItem extends StatelessWidget {
       okTxt: "Yes",
       onOk: () async {
         try {
-          showProgressSheet(msg: 'Canceling order..');
+          showProgressSheet(msg: "Canceling order..");
 
-          if (order['mode'] == OrderMode.deliver.index) {
+          if (order["mode"] == OrderMode.deliver.index) {
             //cancel from shiplogic first
             await Shiplogic.cancelOrder(order);
           }
 
           final res = await apiDio().post("/order/cancel?action=$act", data: {
-            'ids': [order['_id']],
-            "userId": isAdmin ? null : MainApp.appCtrl.user['_id']
+            "ids": [order["_id"]],
+            "userId": isAdmin ? null : MainApp.appCtrl.user["_id"]
           });
 
           _appBarCtrl.setSelected([]);
-          await ctrl.setOrders(res.data['orders']);
+          await ctrl.setOrders(res.data["orders"]);
           gpop();
         } catch (e) {
           gpop();
@@ -87,7 +87,7 @@ class OrderItem extends StatelessWidget {
                 bottom: BorderSide(color: Color.fromRGBO(10, 10, 10, .05)))),
         child: ListTile(
           title: Text(
-            "#${order['oid']}",
+            "#${order["oid"]}",
             softWrap: false,
             overflow: TextOverflow.fade,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
@@ -103,11 +103,11 @@ class OrderItem extends StatelessWidget {
                     fontSize: 13),
               ),
               Chip(
-                  backgroundColor: order['status'] == 'cancelled'
+                  backgroundColor: order["status"] == "cancelled"
                       ? TuColors.danger
                       : TuColors.medium,
                   label: Text(
-                    '${order['status']}',
+                    "${order["status"]}",
                     style: const TextStyle(fontSize: 12, color: Colors.white),
                   )),
               mY(10),
@@ -116,9 +116,9 @@ class OrderItem extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: order['products'].length,
+                    itemCount: order["products"].length,
                     itemBuilder: (context, index) {
-                      var item = order['products'][index]['product'];
+                      var item = order["products"][index]["product"];
                       return Container(
                         margin: const EdgeInsets.symmetric(horizontal: 2),
                         child: Material(
@@ -130,10 +130,10 @@ class OrderItem extends StatelessWidget {
                             alignment: Alignment.center,
                             child: CircleAvatar(
                               backgroundColor: Colors.black12,
-                              backgroundImage: item['images'].isEmpty
+                              backgroundImage: item["images"].isEmpty
                                   ? null
                                   : Image.network(
-                                      item['images'][0]['url'],
+                                      item["images"][0]["url"],
                                       loadingBuilder:
                                           (context, child, loadingProgress) {
                                         if (loadingProgress == null) {
@@ -157,9 +157,9 @@ class OrderItem extends StatelessWidget {
                                         ));
                                       },
                                     ).image,
-                              child: item['images'].isEmpty
+                              child: item["images"].isEmpty
                                   ? svgIcon(
-                                      name: 'br-image-slash',
+                                      name: "br-image-slash",
                                       size: 20,
                                       color: Colors.black54,
                                     )
@@ -196,7 +196,7 @@ class OrderItem extends StatelessWidget {
           onTap: () async {
             if (_appBarCtrl.selected.isEmpty) {
               pushNamed("/order",
-                  arguments: OrderPageArgs(id: "${order['oid']}"));
+                  arguments: OrderPageArgs(id: "${order["oid"]}"));
             } else {
               _selectItem(order);
             }

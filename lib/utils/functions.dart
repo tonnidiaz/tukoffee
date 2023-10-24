@@ -1,27 +1,27 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
+import "dart:convert";
+import "dart:io";
+import "dart:math";
 
-import 'package:another_flushbar/flushbar.dart';
-import 'package:cloudinary/cloudinary.dart';
-import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/controllers/app_ctrl.dart';
-import 'package:lebzcafe/controllers/store_ctrl.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:get/get.dart' as getx;
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/widgets/prompt_modal.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
-import '/utils/constants.dart';
-import 'package:window_manager/window_manager.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'constants2.dart';
+import "package:another_flushbar/flushbar.dart";
+import "package:cloudinary/cloudinary.dart";
+import "package:dio/dio.dart";
+import "package:file_picker/file_picker.dart";
+import "package:flutter/material.dart";
+import "package:lebzcafe/controllers/app_ctrl.dart";
+import "package:lebzcafe/controllers/store_ctrl.dart";
+import "package:lebzcafe/main.dart";
+import "package:get/get.dart" as getx;
+import "package:hive_flutter/hive_flutter.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/widgets/prompt_modal.dart";
+import "package:package_info_plus/package_info_plus.dart";
+import "package:permission_handler/permission_handler.dart";
+import "/utils/constants.dart";
+import "package:window_manager/window_manager.dart";
+import "package:awesome_notifications/awesome_notifications.dart";
+import "constants2.dart";
 
 void clog(dynamic p) {
   debugPrint("$tag: $p");
@@ -109,11 +109,11 @@ setupStoreDetails({Map<String, dynamic>? data}) async {
       appCtrl.setserverDown(false);
     }
 
-    appCtrl.setStore(details['store']);
-    appCtrl.setOwner(details['owner']);
-    appCtrl.setDeveloper(details['developer']);
-    appCtrl.setSlogan(details['store']['slogan']);
-    appCtrl.setSocials(details['socials']);
+    appCtrl.setStore(details["store"]);
+    appCtrl.setOwner(details["owner"]);
+    appCtrl.setDeveloper(details["developer"]);
+    appCtrl.setSlogan(details["store"]["slogan"]);
+    appCtrl.setSocials(details["socials"]);
   } catch (e) {
     if (e.runtimeType == DioException) {
       e as DioException;
@@ -155,8 +155,8 @@ setupUser({bool full = true}) async {
     try {
       final res = await apiDio().post("/auth/login");
 
-      appCtrl.setUser(res.data['user']);
-      setupCart(res.data['user']["_id"]);
+      appCtrl.setUser(res.data["user"]);
+      setupCart(res.data["user"]["_id"]);
     } catch (e) {
       clog(e);
       appCtrl.setUser({});
@@ -194,7 +194,7 @@ void handleDioException(
   clog("ERROR RESP: ${exception.response}");
   if (exception.response != null &&
       "${exception.response!.data}".startsWith("tuned")) {
-    showToast("${exception.response!.data.split('tuned:').last}", isErr: true)
+    showToast("${exception.response!.data.split("tuned:").last}", isErr: true)
         .show(context ?? appCtx!);
   } else {
     showToast(msg ?? "Something went wrong!", isErr: true)
@@ -290,8 +290,8 @@ Future<Response> searchLocation(String query,
         "lang": "en"
       },
       options: Options(headers: {
-        'X-RapidAPI-Key': '71e962e760mshe177840eb7630a1p1ce7a7jsncff43c280599',
-        'X-RapidAPI-Host': 'geocode-address-to-location.p.rapidapi.com'
+        "X-RapidAPI-Key": "71e962e760mshe177840eb7630a1p1ce7a7jsncff43c280599",
+        "X-RapidAPI-Host": "geocode-address-to-location.p.rapidapi.com"
       }),
       cancelToken: token);
 }
@@ -299,8 +299,8 @@ Future<Response> searchLocation(String query,
 getStores({required StoreCtrl storeCtrl}) async {
   try {
     storeCtrl.setStores(null);
-    final res = await apiDio().get('/stores');
-    storeCtrl.setStores(res.data['stores']);
+    final res = await apiDio().get("/stores");
+    storeCtrl.setStores(res.data["stores"]);
   } catch (e) {
     clog(e);
     storeCtrl.setStores([]);
@@ -313,9 +313,9 @@ Future<CloudinaryResponse> uploadImg(File file,
       uploadPreset: uploadPreset,
       file: file.path,
       publicId:
-          "${appCtrl.store['name']}_-_product_-_epoch-${DateTime.now().millisecondsSinceEpoch}",
+          "${appCtrl.store["name"]}_-_product_-_epoch-${DateTime.now().millisecondsSinceEpoch}",
       resourceType: CloudinaryResourceType.image,
-      folder: getCloudinaryFolder(storeName: appCtrl.store['name']),
+      folder: getCloudinaryFolder(storeName: appCtrl.store["name"]),
       progressCallback: onUpload);
 }
 
@@ -355,7 +355,7 @@ Future<String> tbURL() async {
   final res = await dio.get(
     githubURL,
   );
-  return jsonDecode(res.data)['baseURL'];
+  return jsonDecode(res.data)["baseURL"];
 }
 
 Future<String> getApiURL() async {
@@ -363,7 +363,7 @@ Future<String> getApiURL() async {
   final res = await dio.get(
     githubURL,
   );
-  return jsonDecode(res.data)['lebzcafeURL'];
+  return jsonDecode(res.data)["lebzcafeURL"];
 }
 
 Future<Map<String, dynamic>?> checkUpdates() async {
@@ -377,7 +377,7 @@ Future<Map<String, dynamic>?> checkUpdates() async {
 }
 
 bool autoCheck() {
-  final acu = appBox!.get('AUTO_CHECK_UPDATES');
+  final acu = appBox!.get("AUTO_CHECK_UPDATES");
   final autoCheck = acu == null || acu;
   return autoCheck;
 }
@@ -388,18 +388,18 @@ initNotifs() {
       null,
       [
         NotificationChannel(
-            channelGroupKey: 'order_channel_group',
-            channelKey: 'order_channel',
-            channelName: 'Order notifications',
-            channelDescription: 'Notification channel for order creation',
+            channelGroupKey: "order_channel_group",
+            channelKey: "order_channel",
+            channelName: "Order notifications",
+            channelDescription: "Notification channel for order creation",
             defaultColor: TuColors.primary,
             ledColor: Colors.white)
       ],
       // Channel groups are only visual and are not required
       channelGroups: [
         NotificationChannelGroup(
-            channelGroupKey: 'order_channel_group',
-            channelGroupName: 'Basic group')
+            channelGroupKey: "order_channel_group",
+            channelGroupName: "Basic group")
       ],
       debug: true);
 }
@@ -412,7 +412,7 @@ requestNotifsPermission(BuildContext context) {
       TuFuncs.showTDialog(
           context,
           PromptDialog(
-            title: 'Notifications permission',
+            title: "Notifications permission",
             msg: "The app requires permission to send notifications",
             onOk: () {
               // This is just a basic example. For real apps, you must show some

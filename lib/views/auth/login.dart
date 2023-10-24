@@ -1,19 +1,19 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:google_fonts/google_fonts.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "package:google_fonts/google_fonts.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/tu/form.dart';
-import 'package:get/get.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/tu/form.dart";
+import "package:get/get.dart";
 
-import 'create.dart';
+import "create.dart";
 
 class LoginPage extends StatefulWidget {
   final bool pop;
@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       if (_formKey.currentState!.validate()) {
         showProgressSheet();
-        final res = await apiDio().post('/auth/login', data: _formCtrl.form);
+        final res = await apiDio().post("/auth/login", data: _formCtrl.form);
         // User already exists and password is correct
         appBox!.put("authToken", res.data["token"]);
         await setupUser(full: false);
@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pushNamedAndRemoveUntil(
               context, widget.to!, (route) => route.isFirst);
         } else {
-          Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
         }
       }
     } catch (e) {
@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (DEV) {
         _formCtrl.setForm(
-            {'email': 'clickbait4587@gmail.com', 'password': 'Baseline'});
+            {"email": "clickbait4587@gmail.com", "password": "Baseline"});
       }
     });
   }
@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return PageWrapper(
-      appBar: childAppbar(title: 'Login', showCart: false),
+      appBar: childAppbar(title: "Login", showCart: false),
       child: Container(
         color: cardBGLight,
         height: screenSize(context).height - appBarH - statusBarH() - 4,
@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "${_appCtrl.store['name']}",
+                        "${_appCtrl.store["name"]}",
                         style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.bold, fontSize: 30),
                       ),
@@ -95,26 +95,26 @@ class _LoginPageState extends State<LoginPage> {
                   TuFormField(
                     label: "Email address:",
                     hint: "Enter your email...",
-                    value: _formCtrl.form['email'],
+                    value: _formCtrl.form["email"],
                     required: true,
                     keyboard: TextInputType.emailAddress,
                     onChanged: (val) {
-                      _formCtrl.setFormField('email', val);
+                      _formCtrl.setFormField("email", val);
                     },
                   ),
                   TuFormField(
                     label: "Password:",
                     hint: "Enter your password...",
-                    value: _formCtrl.form['password'],
+                    value: _formCtrl.form["password"],
                     required: true,
                     isPass: true,
                     onChanged: (val) {
-                      _formCtrl.setFormField('password', val);
+                      _formCtrl.setFormField("password", val);
                     },
                   ),
                   TextButton(
                       onPressed: () {
-                        pushNamed('/auth/forgot');
+                        pushNamed("/auth/forgot");
                       },
                       child: const Text(
                         "Forgot password?",
@@ -122,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                       )),
                   mY(2.5),
                   TuButton(
-                    text: 'LOGIN',
+                    text: "LOGIN",
                     width: double.infinity,
                     bgColor: Colors.black87,
                     onPressed: _login,
@@ -132,8 +132,8 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       TextButton(
                           onPressed: () {
-                            //pushNamed( '/auth/signup');
-                            Get.toNamed('/auth/signup');
+                            //pushNamed( "/auth/signup");
+                            Get.toNamed("/auth/signup");
                           },
                           child: const Text(
                             "Create new account",

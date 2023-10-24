@@ -1,14 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import '../../widgets/common2.dart';
+import "../../widgets/common2.dart";
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
@@ -29,7 +29,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
         key: _formKey,
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Obx(() => Text(
-                "Enter the 4 digit pin sent to ${formCtrl.form['email']}",
+                "Enter the 4 digit pin sent to ${formCtrl.form["email"]}",
                 textAlign: TextAlign.center,
               )),
           Obx(() => TuFormField(
@@ -38,13 +38,13 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                 textAlign: TextAlign.center,
                 labelAlignment: FloatingLabelAlignment.center,
                 hint: "* * * * ",
-                value: formCtrl.form['otp'],
+                value: formCtrl.form["otp"],
                 keyboard: TextInputType.number,
                 hasBorder: false,
                 maxLength: 4,
                 required: true,
                 onChanged: (val) {
-                  formCtrl.setFormField('otp', val);
+                  formCtrl.setFormField("otp", val);
                 },
               )),
           mY(4),
@@ -53,12 +53,12 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 try {
-                  final res = await apiDio().post('/auth/verify-email', data: {
-                    'email': formCtrl.form['email'],
-                    'otp': formCtrl.form['otp']
+                  final res = await apiDio().post("/auth/verify-email", data: {
+                    "email": formCtrl.form["email"],
+                    "otp": formCtrl.form["otp"]
                   });
 
-                  appCtrl.setUser(res.data['user']);
+                  appCtrl.setUser(res.data["user"]);
                   Navigator.pop(context);
                 } catch (e) {
                   errorHandler(e: e, context: context);

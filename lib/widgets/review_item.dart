@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/views/product/reviews/review.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/views/add_review.dart';
+import "package:flutter/material.dart";
+import "package:flutter_rating_bar/flutter_rating_bar.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/views/product/reviews/review.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/views/add_review.dart";
 
 class ReviewItem extends StatelessWidget {
   final Map<String, dynamic> item;
@@ -23,13 +23,13 @@ class ReviewItem extends StatelessWidget {
       return Chip(
         //largeSize: 18
 
-        backgroundColor: item['status'] == 0
+        backgroundColor: item["status"] == 0
             ? TuColors.medium
-            : item['status'] == 1
+            : item["status"] == 1
                 ? TuColors.success
                 : TuColors.danger,
         label: Text(
-          reviewStatuses[item['status']],
+          reviewStatuses[item["status"]],
           style: const TextStyle(fontSize: 10, color: Colors.white),
         ),
       );
@@ -45,7 +45,7 @@ class ReviewItem extends StatelessWidget {
           onTap: !hasTap
               ? null
               : () {
-                  pushTo(ProductReviewPage(id: item['_id']));
+                  pushTo(ProductReviewPage(id: item["_id"]));
                 },
           //Checkbox, cover, content, deleteBtn
           tileColor: cardBGLight,
@@ -62,7 +62,7 @@ class ReviewItem extends StatelessWidget {
                 color: const Color.fromRGBO(0, 0, 0, 0.05),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: item['product']['images'].isEmpty
+              child: item["product"]["images"].isEmpty
                   ? svgIcon(
                       name: "br-image-slash",
                       size: 26,
@@ -71,7 +71,7 @@ class ReviewItem extends StatelessWidget {
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(5),
                       child: Image.network(
-                        item['product']['images'][0]['url'],
+                        item["product"]["images"][0]["url"],
                         errorBuilder: ((context, error, stackTrace) {
                           clog(error);
                           return svgIcon(
@@ -87,7 +87,7 @@ class ReviewItem extends StatelessWidget {
           title: Container(
             margin: const EdgeInsets.only(bottom: 5),
             child: Text(
-              hasTap ? "${item['title']}" : item['product']['name'],
+              hasTap ? "${item["title"]}" : item["product"]["name"],
               softWrap: false,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
@@ -99,7 +99,7 @@ class ReviewItem extends StatelessWidget {
                   spacing: 10,
                   children: [
                     RatingBarIndicator(
-                      rating: item['rating'].toDouble(),
+                      rating: item["rating"].toDouble(),
                       itemBuilder: (context, _) => const Icon(
                         Icons.star,
                         color: Colors.amber,
@@ -130,12 +130,12 @@ class ReviewItem extends StatelessWidget {
                     splashRadius: 24,
                     itemBuilder: (context) => [
                       PopupMenuItem(
-                        child: Text('Edit'),
+                        child: Text("Edit"),
                         onTap: () {
                           TuFuncs.showBottomSheet(
                               context: context,
                               widget: AddReviewView(
-                                  product: item['product'],
+                                  product: item["product"],
                                   rev: item,
                                   onOk: () {
                                     // _getReviews();
@@ -144,7 +144,7 @@ class ReviewItem extends StatelessWidget {
                         },
                       ),
                       const PopupMenuItem(
-                        child: Text('Delete'),
+                        child: Text("Delete"),
                         enabled: false,
                       ),
                     ],

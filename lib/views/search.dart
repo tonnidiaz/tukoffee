@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/product_card.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/product_card.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -46,8 +46,8 @@ class _SearchPageState extends State<SearchPage> {
     try {
       _setProducts(null);
       final res = await apiDio()
-          .get('/search', queryParameters: {"q": _query, 'by': _searchBy});
-      _setProducts(res.data['products']);
+          .get("/search", queryParameters: {"q": _query, "by": _searchBy});
+      _setProducts(res.data["products"]);
     } catch (e) {
       _setProducts([]);
       clog(e);

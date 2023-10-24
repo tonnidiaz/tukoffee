@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/common4.dart';
-import 'package:lebzcafe/widgets/dialogs/loading_dialog.dart';
-import 'package:lebzcafe/widgets/tu/updates3.dart';
+import "package:flutter/material.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/common4.dart";
+import "package:lebzcafe/widgets/dialogs/loading_dialog.dart";
+import "package:lebzcafe/widgets/tu/updates3.dart";
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -31,7 +31,7 @@ class SettingsPage extends StatelessWidget {
                   () => Switch(
                       value: appCtrl.autoCheckUpdates.value,
                       onChanged: (val) {
-                        appBox!.put('AUTO_CHECK_UPDATES', val);
+                        appBox!.put("AUTO_CHECK_UPDATES", val);
                         appCtrl.setAutoCheckUpdates(val);
                       }),
                 )),
@@ -45,7 +45,7 @@ class SettingsPage extends StatelessWidget {
                 showLoading(
                   context,
                   widget: const LoadingDialog(
-                    msg: 'Checking updates...',
+                    msg: "Checking updates...",
                   ),
                 );
 

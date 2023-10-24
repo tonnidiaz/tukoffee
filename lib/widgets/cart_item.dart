@@ -1,22 +1,22 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/controllers/store_ctrl.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/dialog.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
-import 'package:lebzcafe/widgets/tu/select.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/controllers/store_ctrl.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/dialog.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
+import "package:lebzcafe/widgets/tu/select.dart";
 
-import '../controllers/products_ctrl.dart';
-import '../utils/colors.dart';
-import '../utils/constants.dart';
-import 'common.dart';
+import "../controllers/products_ctrl.dart";
+import "../utils/colors.dart";
+import "../utils/constants.dart";
+import "common.dart";
 
 class CartItem extends StatelessWidget {
   final Map<String, dynamic> item;
@@ -69,7 +69,7 @@ class CartItem extends StatelessWidget {
                           hasBorder: false,
                           textAlign: TextAlign.center,
                           readOnly: true,
-                          value: formCtrl.form['quantity'],
+                          value: formCtrl.form["quantity"],
                           prefixIcon: IconButton(
                             padding: EdgeInsets.zero,
                             splashRadius: 16,
@@ -78,10 +78,10 @@ class CartItem extends StatelessWidget {
                               color: Colors.black54,
                             ),
                             onPressed: () {
-                              if (formCtrl.form['quantity'] > 0) {
-                                formCtrl.form['quantity']--;
+                              if (formCtrl.form["quantity"] > 0) {
+                                formCtrl.form["quantity"]--;
                               } else {
-                                formCtrl.form['quantity'] = 0;
+                                formCtrl.form["quantity"] = 0;
                               }
                             },
                           ),
@@ -93,7 +93,7 @@ class CartItem extends StatelessWidget {
                               color: Colors.black54,
                             ),
                             onPressed: () {
-                              formCtrl.form['quantity']++;
+                              formCtrl.form["quantity"]++;
                             },
                           ),
                         ),
@@ -101,9 +101,9 @@ class CartItem extends StatelessWidget {
                     : Obx(
                         () => TuSelect(
                           label: "Quantity:",
-                          value: formCtrl.form['quantity'],
+                          value: formCtrl.form["quantity"],
                           onChanged: (val) =>
-                              {formCtrl.setFormField('quantity', val)},
+                              {formCtrl.setFormField("quantity", val)},
                           items: List.generate(prod["quantity"],
                               (index) => SelectItem("${index + 1}", index + 1)),
                         ),
@@ -114,13 +114,13 @@ class CartItem extends StatelessWidget {
                     TuFuncs.showTDialog(
                         context,
                         TuDialogView(
-                          title: 'Delete item',
+                          title: "Delete item",
                           okTxt: "Yes",
                           content: const Text(
-                              'Are you sure you want to remove this item?'),
+                              "Are you sure you want to remove this item?"),
                           onOk: () async {
                             showProgressSheet();
-                            await updateCart('remove', null);
+                            await updateCart("remove", null);
                             gpop();
                           },
                         ));
@@ -133,12 +133,12 @@ class CartItem extends StatelessWidget {
           ),
           mY(4),
           TuButton(
-            text: 'Save changes',
+            text: "Save changes",
             width: double.infinity,
             bgColor: Colors.black87,
             onPressed: () async {
               showProgressSheet();
-              await updateCart('add', formCtrl.form['quantity']);
+              await updateCart("add", formCtrl.form["quantity"]);
               gpop();
             },
           )
@@ -147,7 +147,7 @@ class CartItem extends StatelessWidget {
     }
 
     void showEditSheet() {
-      formCtrl.setForm({'quantity': item['quantity']});
+      formCtrl.setForm({"quantity": item["quantity"]});
       TuFuncs.showBottomSheet(context: context, widget: editSheet());
     }
 
@@ -175,9 +175,9 @@ class CartItem extends StatelessWidget {
                 color: const Color.fromRGBO(0, 0, 0, 0.05),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: item['product']['images'].isEmpty
+              child: item["product"]["images"].isEmpty
                   ? svgIcon(
-                      name: 'br-image-slash',
+                      name: "br-image-slash",
                       size: 25,
                       color: Colors.black54,
                     )
@@ -186,7 +186,7 @@ class CartItem extends StatelessWidget {
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(5),
                           child: Image.network(
-                            item['product']['images'][0]['url'],
+                            item["product"]["images"][0]["url"],
                             loadingBuilder: (context, child, loadingProgress) {
                               if (loadingProgress == null) return child;
                               return Center(
@@ -219,15 +219,15 @@ class CartItem extends StatelessWidget {
           ),
           subtitle: Row(
             children: [
-              Text("R${prod['price']}  ",
+              Text("R${prod["price"]}  ",
                   style: TextStyle(
-                      color: prod['on_sale'] ? TuColors.text2 : Colors.black87,
-                      fontSize: prod['on_sale'] ? 12 : 14,
+                      color: prod["on_sale"] ? TuColors.text2 : Colors.black87,
+                      fontSize: prod["on_sale"] ? 12 : 14,
                       decoration:
-                          prod['on_sale'] ? TextDecoration.lineThrough : null,
+                          prod["on_sale"] ? TextDecoration.lineThrough : null,
                       fontWeight: FontWeight.w600)),
               Visibility(
-                visible: prod['on_sale'],
+                visible: prod["on_sale"],
                 child: Text(
                   "R${prod["sale_price"]}",
                   style: TextStyle(

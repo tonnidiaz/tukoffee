@@ -8,7 +8,7 @@ const OrderSchema = new Schema({
     customer: {
         type: Schema.ObjectId, ref: "User", required: true
     },
-    mode: {type: String, default: OrderMode.delivery},
+    mode: {type: Number, default: OrderMode.delivery},
     store: { type: Schema.ObjectId, ref: "Store"},
     collector: {type: {name: String, phone: String}} ,
     collection_time: {
@@ -27,7 +27,7 @@ const OrderSchema = new Schema({
         }], default: []
     },
     status: {
-        type: String, default: OrderStatus.pending, required: true, enum: OrderStatus
+        type: typeof OrderStatus.pending, default: OrderStatus.pending, required: true, enum: OrderStatus
     },
    delivery_address: {
         type:  <IAddress>{}, required: false

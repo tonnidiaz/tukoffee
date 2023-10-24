@@ -1,21 +1,21 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/dummies.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/searchfield.dart';
-import 'package:latlong2/latlong.dart';
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
+import "package:flutter_map/flutter_map.dart";
+import "package:geocoding/geocoding.dart";
+import "package:geolocator/geolocator.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/dummies.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:lebzcafe/widgets/tu/searchfield.dart";
+import "package:latlong2/latlong.dart";
 
 class MapPageArgs {
   final List center;
@@ -75,7 +75,7 @@ class _MapPageState extends State<MapPage> {
     if (_isGeocoding || query.length < 3) return;
     _setIsGeocoding(true);
     try {
-      clog('setft');
+      clog("setft");
       _setFeatures(dummyFeatures);
       return;
       const baseURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
@@ -84,7 +84,7 @@ class _MapPageState extends State<MapPage> {
         "access_token": mapboxPublicToken,
         "country": "ZA"
       });
-      _setFeatures(res.data['features']);
+      _setFeatures(res.data["features"]);
     } catch (e) {
       clog(e);
     }
@@ -99,7 +99,7 @@ class _MapPageState extends State<MapPage> {
       //Get.back();
       if (context.mounted) {
         await showToast(
-                'Location services are disabled. Please enable the services',
+                "Location services are disabled. Please enable the services",
                 isErr: true)
             .show(context);
       }
@@ -111,7 +111,7 @@ class _MapPageState extends State<MapPage> {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         if (context.mounted) {
-          await showToast('Location permissions are denied', isErr: true)
+          await showToast("Location permissions are denied", isErr: true)
               .show(context);
         }
         return false;
@@ -121,7 +121,7 @@ class _MapPageState extends State<MapPage> {
       Get.back();
       if (context.mounted) {
         await showToast(
-                'Location permissions are permanently denied, we cannot request permissions.',
+                "Location permissions are permanently denied, we cannot request permissions.",
                 isErr: true)
             .show(context);
       }
@@ -190,9 +190,9 @@ class _MapPageState extends State<MapPage> {
           var cent = LatLng(_args!.center.first, _args!.center.last);
           _setCenter(cent);
           _mapController.move(cent, 17.5);
-        } else if (_formCtrl.form['address'] != null) {
-          Map<String, dynamic> formLoc = _formCtrl.form['address'];
-          _setCenter(LatLng(formLoc['center'].first, formLoc['center'].last));
+        } else if (_formCtrl.form["address"] != null) {
+          Map<String, dynamic> formLoc = _formCtrl.form["address"];
+          _setCenter(LatLng(formLoc["center"].first, formLoc["center"].last));
           _mapController.move(_center!, 17.5);
           _setAddress(formLoc);
         }
@@ -212,7 +212,7 @@ class _MapPageState extends State<MapPage> {
         bottomNavigationBar: TuBottomBar(
           child: Container(
             child: iconText(
-                _address['place_name'] ?? "No address", Icons.location_on,
+                _address["place_name"] ?? "No address", Icons.location_on,
                 alignment: MainAxisAlignment.start, iconSize: 23),
           ),
         ),
@@ -242,7 +242,7 @@ class _MapPageState extends State<MapPage> {
                         color: Colors.black87,
                         borderRadius: BorderRadius.circular(100)),
                     child: const Text(
-                      'Re-center',
+                      "Re-center",
                       style:
                           TextStyle(color: Color.fromRGBO(255, 255, 255, .9)),
                     ),
@@ -255,7 +255,7 @@ class _MapPageState extends State<MapPage> {
                   child: const Icon(Icons.check),
                   onPressed: () {
                     /// _setCenter(_currCenter);
-                    _formCtrl.setFormField('address', _address);
+                    _formCtrl.setFormField("address", _address);
                     gpop();
                     if (widget.onSubmit != null) {
                       widget.onSubmit!(_address);
@@ -290,9 +290,9 @@ class _MapPageState extends State<MapPage> {
                       RichAttributionWidget(
                         attributions: [
                           TextSourceAttribution(
-                            'OpenStreetMap contributors',
+                            "OpenStreetMap contributors",
                             onTap: () {
-                              // => launchUrl(Uri.parse('https://openstreetmap.org/copyright')
+                              // => launchUrl(Uri.parse("https://openstreetmap.org/copyright")
                             },
                           ),
                         ],
@@ -301,8 +301,8 @@ class _MapPageState extends State<MapPage> {
                     children: [
                       TileLayer(
                         urlTemplate:
-                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        userAgentPackageName: 'com.example.app',
+                            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                        userAgentPackageName: "com.example.app",
                       ),
                       MarkerLayer(
                         markers: [
@@ -361,7 +361,7 @@ class _MapPageState extends State<MapPage> {
                                               255, 255, 254, 253),
                                           suggestions: _features
                                               .map((it) => TuSuggestion(
-                                                  text: "${it['place_name']}",
+                                                  text: "${it["place_name"]}",
                                                   value: it))
                                               .toList(),
                                           onChanged: (val) {
@@ -369,40 +369,40 @@ class _MapPageState extends State<MapPage> {
                                           },
                                           onSuggestionTap: (val) {
                                             try {
-                                              var center = val.value['center'];
+                                              var center = val.value["center"];
                                               var latlng =
                                                   LatLng(center[1], center[0]);
                                               _mapController.move(latlng, 18.5);
                                               _setCenter(latlng);
 
                                               final List context =
-                                                  val.value['context'];
+                                                  val.value["context"];
 
                                               var addr = {
                                                 "street":
-                                                    "${val.value['address']} ${val.value['text']}",
+                                                    "${val.value["address"]} ${val.value["text"]}",
                                                 "city": context
                                                     .firstWhereOrNull((el) =>
-                                                        el['id'].startsWith(
-                                                            'place'))['text'],
+                                                        el["id"].startsWith(
+                                                            "place"))["text"],
                                                 "state": context
                                                     .firstWhereOrNull((el) =>
-                                                        el['id'].startsWith(
-                                                            'region'))?['text'],
+                                                        el["id"].startsWith(
+                                                            "region"))?["text"],
                                                 "postcode": context
                                                         .firstWhereOrNull((el) =>
-                                                            el['id'].startsWith(
-                                                                'postcode'))?[
-                                                    'text'],
+                                                            el["id"].startsWith(
+                                                                "postcode"))?[
+                                                    "text"],
                                                 "locality": context
                                                         .firstWhereOrNull((el) =>
-                                                            el['id'].startsWith(
-                                                                'locality'))?[
-                                                    'text'],
+                                                            el["id"].startsWith(
+                                                                "locality"))?[
+                                                    "text"],
                                               };
                                               _setAddress({
                                                 "place_name":
-                                                    val.value['place_name'],
+                                                    val.value["place_name"],
                                                 "center": center.reversed
                                                     .toList(), // REVERSING IT TO MAP MODE
 

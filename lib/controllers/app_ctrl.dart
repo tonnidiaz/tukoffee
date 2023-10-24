@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import "package:flutter/material.dart";
+import "package:get/get.dart";
 
 class AppCtrl extends GetxController {
   RxBool darkMode = false.obs;
@@ -85,7 +85,7 @@ class AppCtrl extends GetxController {
   var user = <dynamic, dynamic>{}.obs;
   void setUser(Map<dynamic, dynamic> val) {
     user.value = val;
-    var perms = val['permissions'];
+    var perms = val["permissions"];
     bool isAdmin = perms == 1 || perms == 2;
     this.isAdmin.value = isAdmin;
   }

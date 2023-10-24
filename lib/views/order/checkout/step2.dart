@@ -1,13 +1,13 @@
-import 'package:flutter/cupertino.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/main.dart';
+import "package:flutter/cupertino.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:flutter/material.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/main.dart";
 
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/widgets/common3.dart';
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/widgets/common3.dart";
 
 class CheckoutStep2 extends StatelessWidget {
   const CheckoutStep2({super.key});
@@ -18,7 +18,7 @@ class CheckoutStep2 extends StatelessWidget {
     final storeCtrl = MainApp.storeCtrl;
     return Column(
       children: [
-        storeCtrl.cart['products'].isEmpty
+        storeCtrl.cart["products"].isEmpty
             ? none()
             : Column(
                 //id=ordersummarysec
@@ -34,8 +34,8 @@ class CheckoutStep2 extends StatelessWidget {
                             Obx(
                               () {
                                 num totalItems = 0;
-                                for (var it in storeCtrl.cart['products']) {
-                                  totalItems += 1 * it['quantity'];
+                                for (var it in storeCtrl.cart["products"]) {
+                                  totalItems += 1 * it["quantity"];
                                 }
                                 return Text("$totalItems");
                               },

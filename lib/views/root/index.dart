@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/views/root/account_tab.dart';
-import 'package:lebzcafe/views/root/cart.dart';
-import 'package:lebzcafe/views/root/home.dart';
-import 'package:lebzcafe/views/root/shop/index.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:get/get.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/views/root/account_tab.dart";
+import "package:lebzcafe/views/root/cart.dart";
+import "package:lebzcafe/views/root/home.dart";
+import "package:lebzcafe/views/root/shop/index.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:get/get.dart";
 
 class IndexCtrl extends GetxController {
   RxInt tab = 0.obs;
@@ -44,12 +44,12 @@ class _IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     List<TuPage> indexTabs = [
-      TuPage('/~/home', const HomePage(), label: 'Home', svg: 'br-home'),
-      TuPage('/~/shop', const ShopPage(), label: 'Shop', svg: 'br-shop'),
-      TuPage('/~/cart', const CartPage(),
-          label: 'Cart', svg: 'br-shopping-cart'),
-      TuPage('/~/account', const AccountTab(),
-          label: 'Account', svg: 'br-user'),
+      TuPage("/~/home", const HomePage(), label: "Home", svg: "br-home"),
+      TuPage("/~/shop", const ShopPage(), label: "Shop", svg: "br-shop"),
+      TuPage("/~/cart", const CartPage(),
+          label: "Cart", svg: "br-shopping-cart"),
+      TuPage("/~/account", const AccountTab(),
+          label: "Account", svg: "br-user"),
     ];
     return WillPopScope(
       onWillPop: () async {

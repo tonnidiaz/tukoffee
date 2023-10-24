@@ -27,7 +27,7 @@ const UserSchema = new Schema({
         required: false
     },
     permissions: {
-        type: typeof UserPermissions,
+        type: Number,
         default: UserPermissions.read,
         required: true
     },

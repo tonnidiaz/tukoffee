@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
+import "package:flutter/material.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
 
-import '../utils/colors.dart';
-import '../utils/constants.dart';
-import '../utils/styles.dart';
-import 'common.dart';
+import "../utils/colors.dart";
+import "../utils/constants.dart";
+import "../utils/styles.dart";
+import "common.dart";
 
 class TuDialogView extends StatefulWidget {
   final bool isForm;

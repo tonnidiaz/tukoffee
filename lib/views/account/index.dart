@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/views/account/profile.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common2.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/views/account/profile.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common2.dart";
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
@@ -42,7 +42,7 @@ class AccountPage extends StatelessWidget {
                     radius: 0,
                     borderSize: 0,
                     onTap: () {
-                      pushNamed('/orders');
+                      pushNamed("/orders");
                     },
                     child: const TuListTile(
                         title: Text(
@@ -58,7 +58,7 @@ class AccountPage extends StatelessWidget {
                     borderSize: 0,
                     onTap: () {
                       clog("To settings");
-                      pushNamed('/account/settings');
+                      pushNamed("/account/settings");
                     },
                     child: const TuListTile(
                         title: Text(

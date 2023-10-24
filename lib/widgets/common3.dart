@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:lebzcafe/widgets/prompt_modal.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import '../utils/constants.dart';
-import '../utils/functions.dart';
-import '../utils/styles.dart';
-import '../views/order/index.dart';
-import 'common.dart';
-import 'common2.dart';
+import "package:flutter/material.dart";
+import "package:flutter_svg/flutter_svg.dart";
+import "package:flutter_svg/svg.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:flutter_slidable/flutter_slidable.dart";
+import "package:lebzcafe/widgets/prompt_modal.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "../utils/constants.dart";
+import "../utils/functions.dart";
+import "../utils/styles.dart";
+import "../views/order/index.dart";
+import "common.dart";
+import "common2.dart";
 
 Widget searchResSheet(
     {List<dynamic> features = const [],
@@ -36,19 +36,19 @@ Widget searchResSheet(
                   final props = it["properties"];
                   var addr = {
                     "street": props["street"],
-                    "suburb": props['suburb'],
+                    "suburb": props["suburb"],
                     "postcode": props["postcode"],
-                    "city": props['city'],
+                    "city": props["city"],
                     "state": props["state"],
                     "country": props["country"]
                   };
 
                   var title = [
                     props["street"],
-                    props['suburb'],
-                    props['postcode']
+                    props["suburb"],
+                    props["postcode"]
                   ].where((element) => element != null).join(", ");
-                  var subtitle = [props["city"], props['state']]
+                  var subtitle = [props["city"], props["state"]]
                       .where((element) => element != null)
                       .join(", ");
                   return locationCard(
@@ -148,9 +148,9 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
   bool isOpen() {
     final now = DateTime.now(),
         openTime =
-            store['open_time'].split(':').map((it) => int.parse(it)).toList(),
+            store["open_time"].split(":").map((it) => int.parse(it)).toList(),
         closeTime =
-            store['close_time'].split(':').map((it) => int.parse(it)).toList();
+            store["close_time"].split(":").map((it) => int.parse(it)).toList();
 
     final int h = now.hour, m = now.minute;
     var mIsOpen = false;
@@ -165,7 +165,7 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
 
   return Obx(
     () => Slidable(
-      endActionPane: appCtrl.user.isEmpty || appCtrl.user['permissions'] == 0
+      endActionPane: appCtrl.user.isEmpty || appCtrl.user["permissions"] == 0
           ? null
           : ActionPane(
               motion: const ScrollMotion(),
@@ -177,14 +177,14 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
                     TuFuncs.showTDialog(
                         context,
                         PromptDialog(
-                          title: 'Delete store location',
+                          title: "Delete store location",
                           msg: "Continue to delete store?",
                           onOk: () async {
                             try {
                               showProgressSheet();
-                              final res = await apiDio().post('/stores/del',
-                                  queryParameters: {'id': store['_id']});
-                              storeCtrl.setStores(res.data['stores']);
+                              final res = await apiDio().post("/stores/del",
+                                  queryParameters: {"id": store["_id"]});
+                              storeCtrl.setStores(res.data["stores"]);
                               gpop();
 
                               /// Navigator.pop(context);
@@ -217,7 +217,7 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
             //formCtrl.clear();
             formCtrl.setForm(store);
             pushNamed(
-              '/map',
+              "/map",
             );
           },
           child: TuListTile(
@@ -227,7 +227,7 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
                 size: 30,
               ),
               title: Text(
-                "${store['address']?['place_name']}",
+                "${store["address"]?["place_name"]}",
                 softWrap: false,
                 style:
                     const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
@@ -243,7 +243,7 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
                                 fontWeight: FontWeight.w600, fontSize: 12),
                           ),
                           Text(
-                            "Closes at ${store['close_time']}",
+                            "Closes at ${store["close_time"]}",
                             softWrap: false,
                             style: const TextStyle(
                                 fontWeight: FontWeight.w500, fontSize: 12),
@@ -257,7 +257,7 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
                                 fontWeight: FontWeight.w600, fontSize: 12),
                           ),
                           Text(
-                            "Opens at ${store['open_time']}",
+                            "Opens at ${store["open_time"]}",
                             softWrap: false,
                             style: const TextStyle(
                                 fontWeight: FontWeight.w500, fontSize: 12),
@@ -340,7 +340,7 @@ Widget svgIcon(
     SvgPicture.asset(
       "assets/icons/$name.svg",
       color: color,
-      semanticsLabel: 'icon',
+      semanticsLabel: "icon",
       width: width ?? size,
       height: height ?? size,
       colorBlendMode: BlendMode.srcIn,

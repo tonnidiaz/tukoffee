@@ -1,26 +1,26 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions2.dart';
-import 'package:lebzcafe/views/order/checkout.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/prompt_modal.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions2.dart";
+import "package:lebzcafe/views/order/checkout.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/prompt_modal.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/views/account/settings.dart';
-import 'package:lebzcafe/views/map.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/form_view.dart';
-import 'package:lebzcafe/widgets/tu/select.dart';
-import 'package:get/get.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/views/account/settings.dart";
+import "package:lebzcafe/views/map.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/form_view.dart";
+import "package:lebzcafe/widgets/tu/select.dart";
+import "package:get/get.dart";
 
-import '../../utils/functions.dart';
+import "../../utils/functions.dart";
 
 class OrderPageArgs {
   final String id;
@@ -65,8 +65,8 @@ class _OrderPageState extends State<OrderPage> {
       final res = await apiDio().get("/orders?oid=${_args!.id}");
       if (res.data["orders"].isNotEmpty) {
         var order = res.data["orders"][0];
-        order['status'] = order['mode'] == OrderMode.collect.index
-            ? order['status']
+        order["status"] = order["mode"] == OrderMode.collect.index
+            ? order["status"]
             : await Shiplogic.getOrderStatus(order);
         _setOrder(order);
       } else {
@@ -82,9 +82,9 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   _onEditRecipientBtnPress() async {
-    var mode = _order!['mode'];
+    var mode = _order!["mode"];
     Map<String, dynamic> form =
-        mode == 1 ? _order!['collector'] : _order!['delivery_address'];
+        mode == 1 ? _order!["collector"] : _order!["delivery_address"];
 
     TuFuncs.showBottomSheet(
         context: context,
@@ -96,7 +96,7 @@ class _OrderPageState extends State<OrderPage> {
                 required: true,
                 label: "Name:",
                 hint: "e.g. John Doe",
-                value: form['name'],
+                value: form["name"],
                 onChanged: (val) {
                   form["name"] = val;
                 },
@@ -105,7 +105,7 @@ class _OrderPageState extends State<OrderPage> {
                 required: true,
                 label: "Phone:",
                 hint: "e.g. 0712345678",
-                value: form['phone'],
+                value: form["phone"],
                 onChanged: (val) {
                   form["phone"] = val;
                 },
@@ -116,11 +116,11 @@ class _OrderPageState extends State<OrderPage> {
               try {
                 var field = mode == 1 ? "collector" : "delivery_address";
                 Map<String, dynamic> val = mode == 1
-                    ? _order!['collector']
-                    : _order!['delivery_address'];
+                    ? _order!["collector"]
+                    : _order!["delivery_address"];
                 showProgressSheet();
                 final res = await apiDio()
-                    .post('/order/edit?id=${_order!['_id']}', data: {
+                    .post("/order/edit?id=${_order!["_id"]}", data: {
                   field: {...val, ...form}
                 });
                 gpop(); //POP SHEET
@@ -134,8 +134,8 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   _onEditAddressPress() async {
-    _formCtrl.setForm({"delivery_address": _order!['delivery_address']});
-    _formCtrl.setForm({"address": _order!['delivery_address']});
+    _formCtrl.setForm({"delivery_address": _order!["delivery_address"]});
+    _formCtrl.setForm({"address": _order!["delivery_address"]});
 
     TuFuncs.showBottomSheet(
         context: context,
@@ -144,8 +144,8 @@ class _OrderPageState extends State<OrderPage> {
           try {
             showProgressSheet();
             final res =
-                await apiDio().post('/order/edit?id=${_order!['_id']}', data: {
-              "delivery_address": {..._order!['delivery_address'], ...val}
+                await apiDio().post("/order/edit?id=${_order!["_id"]}", data: {
+              "delivery_address": {..._order!["delivery_address"], ...val}
             });
             gpop();
             _reload(res);
@@ -157,8 +157,8 @@ class _OrderPageState extends State<OrderPage> {
 
   _reload(res) async {
     //Get.offAllNamed("/");
-    Navigator.popAndPushNamed(context, '/order',
-        arguments: OrderPageArgs(id: "${res.data['id']}"));
+    Navigator.popAndPushNamed(context, "/order",
+        arguments: OrderPageArgs(id: "${res.data["id"]}"));
   }
 
   _cancelOrder({bool del = false}) async {
@@ -169,15 +169,15 @@ class _OrderPageState extends State<OrderPage> {
       okTxt: "Yes",
       onOk: () async {
         try {
-          showProgressSheet(msg: 'Canceling order..');
+          showProgressSheet(msg: "Canceling order..");
 
-          if (_order!['mode'] == OrderMode.deliver.index) {
+          if (_order!["mode"] == OrderMode.deliver.index) {
             //cancel from shiplogic first
             await Shiplogic.cancelOrder(_order!);
           }
 
           await apiDio().post("/order/cancel?action=$act", data: {
-            'ids': [_order!['_id']],
+            "ids": [_order!["_id"]],
           });
 
           gpop();
@@ -192,9 +192,9 @@ class _OrderPageState extends State<OrderPage> {
 
   _getTotal(Map order) {
     double total = 0;
-    for (var it in order['products']) {
-      final prod = it['product'];
-      total += ((prod['on_sale'] ? prod['sale_price'] : prod["price"]) *
+    for (var it in order["products"]) {
+      final prod = it["product"];
+      total += ((prod["on_sale"] ? prod["sale_price"] : prod["price"]) *
               it["quantity"])
           .toDouble();
     }
@@ -209,16 +209,16 @@ class _OrderPageState extends State<OrderPage> {
         actions: [
           TuPopupBtn(
             items: [
-              (_appCtrl.user['permissions'] > 0 &&
-                      _order?['mode'] == OrderMode.collect.index)
+              (_appCtrl.user["permissions"] > 0 &&
+                      _order?["mode"] == OrderMode.collect.index)
                   ? PopupMenuItem(
                       onTap: _cancelOrder,
-                      child: const Text('Update status'),
+                      child: const Text("Update status"),
                     )
                   : null,
               PopupMenuItem(
                 onTap: _cancelOrder,
-                child: const Text('Cancel order'),
+                child: const Text("Cancel order"),
               ),
             ],
           )
@@ -231,7 +231,7 @@ class _OrderPageState extends State<OrderPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   tuTableRow(h4("SUBTOTAL:"), Text("R${_getTotal(_order!)}")),
-                  tuTableRow(h4("DELIVERY FEE:"), Text("R${_order!['fee']}")),
+                  tuTableRow(h4("DELIVERY FEE:"), Text("R${_order!["fee"]}")),
                 ],
               ),
             ),
@@ -286,13 +286,13 @@ class _OrderPageState extends State<OrderPage> {
                                         ),
                                         mY(6),
                                         Chip(
-                                            backgroundColor: _order!['status']
+                                            backgroundColor: _order!["status"]
                                                         .toLowerCase() ==
-                                                    'cancelled'
+                                                    "cancelled"
                                                 ? TuColors.danger
                                                 : TuColors.medium,
                                             label: Text(
-                                              "${_order!['status']}",
+                                              "${_order!["status"]}",
                                               style: const TextStyle(
                                                   color: Colors.white),
                                             ))
@@ -396,8 +396,8 @@ class _OrderPageState extends State<OrderPage> {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600)),
                                           Text(
-                                            _order!['mode'] == 0
-                                                ? "${_order!['delivery_address']['name']}"
+                                            _order!["mode"] == 0
+                                                ? "${_order!["delivery_address"]["name"]}"
                                                 : "${_order!["collector"]["name"]}",
                                           ),
                                           my: 10),
@@ -406,8 +406,8 @@ class _OrderPageState extends State<OrderPage> {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600)),
                                           Text(
-                                            _order!['mode'] == 0
-                                                ? "${_order!['delivery_address']['phone']}"
+                                            _order!["mode"] == 0
+                                                ? "${_order!["delivery_address"]["phone"]}"
                                                 : "${_order!["collector"]["phone"]}",
                                           ),
                                           my: 10),
@@ -417,7 +417,7 @@ class _OrderPageState extends State<OrderPage> {
                               ),
                             )),
                         mY(6),
-                        _order!['mode'] == OrderMode.collect.index
+                        _order!["mode"] == OrderMode.collect.index
                             ? TuCard(
                                 child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -427,23 +427,23 @@ class _OrderPageState extends State<OrderPage> {
                                         ? none()
                                         : TuSelect(
                                             label: "Store:",
-                                            value: _order!['store']?['_id'],
+                                            value: _order!["store"]?["_id"],
                                             items: _storeCtrl.stores.value!
                                                 .map((e) {
                                               return SelectItem(
-                                                  "${e['address']['place_name']}",
-                                                  e['_id']);
+                                                  "${e["address"]["place_name"]}",
+                                                  e["_id"]);
                                             }).toList(),
                                             onChanged: (val) async {
                                               var store = _storeCtrl
                                                   .stores.value!
                                                   .where((element) =>
-                                                      element['_id'] == val)
+                                                      element["_id"] == val)
                                                   .first;
                                               showProgressSheet(); //_ctrl.setStore(store);
                                               final res = await apiDio().post(
-                                                  '/order/edit?id=${_order!['_id']}',
-                                                  data: {'store': store});
+                                                  "/order/edit?id=${_order!["_id"]}",
+                                                  data: {"store": store});
                                               gpop();
                                               _reload(res);
                                             },
@@ -483,7 +483,7 @@ class _OrderPageState extends State<OrderPage> {
                                               return addr == null
                                                   ? const Text("No address")
                                                   : Text(
-                                                      addr['place_name'],
+                                                      addr["place_name"],
                                                     );
                                             }),
                                           ],
@@ -505,9 +505,9 @@ class _OrderPageState extends State<OrderPage> {
                                             devider(),
                                             mY(10),
                                             Text(
-                                              formatDate(_order!['shiplogic']
-                                                      ['service_level']
-                                                  ['collection_date']),
+                                              formatDate(_order!["shiplogic"]
+                                                      ["service_level"]
+                                                  ["collection_date"]),
                                             )
                                           ],
                                         ),
@@ -533,9 +533,9 @@ class _OrderPageState extends State<OrderPage> {
                                             ),
                                             mY(2.5),
                                             Text(
-                                              formatDate(_order!['shiplogic']
-                                                      ['service_level']
-                                                  ['delivery_date_from']),
+                                              formatDate(_order!["shiplogic"]
+                                                      ["service_level"]
+                                                  ["delivery_date_from"]),
                                             ),
                                             mY(10),
                                             const Text(
@@ -545,9 +545,9 @@ class _OrderPageState extends State<OrderPage> {
                                             ),
                                             mY(2.5),
                                             Text(
-                                              formatDate(_order!['shiplogic']
-                                                      ['service_level']
-                                                  ['delivery_date_to']),
+                                              formatDate(_order!["shiplogic"]
+                                                      ["service_level"]
+                                                  ["delivery_date_to"]),
                                             )
                                           ],
                                         ),
@@ -571,17 +571,17 @@ class _OrderPageState extends State<OrderPage> {
                                                 children: [
                                                   TuListTile(
                                                       title: Text(
-                                                          "${it['product']['name']}",
+                                                          "${it["product"]["name"]}",
                                                           style: const TextStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w600)),
                                                       subtitle: Text(
-                                                        "R${it['product']['price']}",
+                                                        "R${it["product"]["price"]}",
                                                         style: Styles.subtitle,
                                                       ),
                                                       trailing: Text(
-                                                          "x${it['quantity']}")),
+                                                          "x${it["quantity"]}")),
                                                   devider()
                                                 ],
                                               ))

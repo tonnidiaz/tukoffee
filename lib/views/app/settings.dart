@@ -1,15 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/dialog.dart';
-import 'package:lebzcafe/widgets/feedback_form.dart';
-import 'package:get/get.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/dialog.dart";
+import "package:lebzcafe/widgets/feedback_form.dart";
+import "package:get/get.dart";
 
 class OldSettingsPage extends StatelessWidget {
   const OldSettingsPage({super.key});
@@ -28,10 +28,10 @@ class OldSettingsPage extends StatelessWidget {
             children: [
               InfoItem(
                   onTap: () {
-                    pushNamed('/admin/settings');
+                    pushNamed("/admin/settings");
                   },
                   child: Obx(
-                      () => Text("About ${MainApp.appCtrl.store['name']}"))),
+                      () => Text("About ${MainApp.appCtrl.store["name"]}"))),
               InfoItem(
                   onTap: () {
                     TuFuncs.showTDialog(context, const FeedbackForm());
@@ -59,7 +59,7 @@ class OldSettingsPage extends StatelessWidget {
                 child: const Text("Licences"),
                 onTap: () async {
                   pushTo(LicensePage(
-                    applicationName: appCtrl.store['name'],
+                    applicationName: appCtrl.store["name"],
                     applicationVersion: await getAppVersion(),
                   ));
                 },

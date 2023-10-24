@@ -1,16 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/dialog.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/dialog.dart";
 
 class FeedbackForm extends StatefulWidget {
   const FeedbackForm({super.key});
@@ -64,9 +64,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     hint: "e.g. John Doe ",
                     required: true,
                     onChanged: (val) {
-                      _setFormKey('name', val);
+                      _setFormKey("name", val);
                     },
-                    value: _form['name'],
+                    value: _form["name"],
                     keyboard: TextInputType.name,
                   ),
                   TuFormField(
@@ -74,9 +74,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     hint: "Your email here... ",
                     required: true,
                     onChanged: (val) {
-                      _setFormKey('email', val);
+                      _setFormKey("email", val);
                     },
-                    value: _form['email'],
+                    value: _form["email"],
                     keyboard: TextInputType.emailAddress,
                   ),
                   TuFormField(
@@ -86,9 +86,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     required: true,
                     keyboard: TextInputType.multiline,
                     onChanged: (val) {
-                      _setFormKey('msg', val);
+                      _setFormKey("msg", val);
                     },
-                    value: _form['msg'],
+                    value: _form["msg"],
                   ),
                   mY(6),
                   TuButton(
@@ -97,9 +97,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     onPressed: () async {
                       try {
                         if (_formKey.currentState!.validate()) {
-                          showProgressSheet(msg: 'Sending feedback...');
-                          await apiDio().post('/message/send', data: {
-                            "app": MainApp.appCtrl.store['name'],
+                          showProgressSheet(msg: "Sending feedback...");
+                          await apiDio().post("/message/send", data: {
+                            "app": MainApp.appCtrl.store["name"],
                             ..._form
                           });
 

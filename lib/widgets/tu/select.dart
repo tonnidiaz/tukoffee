@@ -1,8 +1,8 @@
-import 'dart:core';
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
+import "dart:core";
+import "package:flutter/material.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
 
 class TuSelect extends StatelessWidget {
   final dynamic value;
@@ -47,37 +47,36 @@ class TuSelect extends StatelessWidget {
         child: ButtonTheme(
           alignedDropdown: true,
           child: DropdownButtonFormField(
-              value: value, // ?? formats[0],
-              dropdownColor: bgColor ?? appBGLight,
-              focusColor: bgColor ?? appBGLight,
-              isExpanded: true,
-              isDense: true,
-              icon: const Icon(
-                Icons.expand_more_outlined,
-                color: Colors.black54,
-              ),
-              decoration: InputDecoration(
-                label: label == null
-                    ? null
-                    : Padding(
-                        padding: EdgeInsets.only(left: 22.0),
-                        child: Text(label!),
-                      ),
-              ),
-              items: items.map((e) {
-                return DropdownMenuItem(
-                  value: e.value,
-                  child: Text(
-                    e.label,
-                    softWrap: false,
-                    overflow: TextOverflow.ellipsis,
-                    style: tuTextTheme(context).labelLarge,
-                  ),
-                );
-              }).toList(),
-              onChanged: disabled ? null : onChanged,
-
-              ),
+            value: value, // ?? formats[0],
+            dropdownColor: bgColor ?? appBGLight,
+            focusColor: bgColor ?? appBGLight,
+            isExpanded: true,
+            isDense: true,
+            icon: const Icon(
+              Icons.expand_more_outlined,
+              color: Colors.black54,
+            ),
+            decoration: InputDecoration(
+              label: label == null
+                  ? null
+                  : Padding(
+                      padding: EdgeInsets.only(left: 22.0),
+                      child: Text(label!),
+                    ),
+            ),
+            items: items.map((e) {
+              return DropdownMenuItem(
+                value: e.value,
+                child: Text(
+                  e.label,
+                  softWrap: false,
+                  overflow: TextOverflow.ellipsis,
+                  style: tuTextTheme(context).labelLarge,
+                ),
+              );
+            }).toList(),
+            onChanged: disabled ? null : onChanged,
+          ),
         ),
       ),
     );

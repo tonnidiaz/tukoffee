@@ -1,20 +1,20 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/views/map.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import "package:dio/dio.dart";
+import "package:flutter/material.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/views/map.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import '../../widgets/common2.dart';
-import '../../widgets/form_view.dart';
-import '../order/index.dart';
+import "../../widgets/common2.dart";
+import "../../widgets/form_view.dart";
+import "../order/index.dart";
 
 class DashAccountPage extends StatefulWidget {
   final String id;
@@ -54,7 +54,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: childAppbar(title: _user != null ? _user!['first_name'] : null),
+        appBar: childAppbar(title: _user != null ? _user!["first_name"] : null),
         body: RefreshIndicator(
           onRefresh: () async {
             await _getAccount();
@@ -101,9 +101,9 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                                       Get.find();
                                                   ctrl.setForm({
                                                     "first_name":
-                                                        _user!['first_name'],
+                                                        _user!["first_name"],
                                                     "last_name":
-                                                        _user!['last_name'],
+                                                        _user!["last_name"],
                                                   });
                                                   final form = ctrl.form;
                                                   TuFuncs.showBottomSheet(
@@ -148,7 +148,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                                           onSubmit: () async {
                                                             await _editFields(
                                                               data: {
-                                                                'value': form
+                                                                "value": form
                                                               },
                                                             );
                                                             Navigator.pop(
@@ -171,7 +171,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                                 style: Styles.h3(),
                                               ),
                                               Text(
-                                                "${_user!['first_name']}",
+                                                "${_user!["first_name"]}",
                                                 style: Styles.h3(isLight: true),
                                               ),
                                             ),
@@ -181,7 +181,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                                 style: Styles.h3(),
                                               ),
                                               Text(
-                                                "${_user!['last_name']}",
+                                                "${_user!["last_name"]}",
                                                 style: Styles.h3(isLight: true),
                                               ),
                                             ),
@@ -219,7 +219,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                                 style: Styles.h3(),
                                               ),
                                               Text(
-                                                "${_user!['email']}",
+                                                "${_user!["email"]}",
                                                 style: Styles.h3(isLight: true),
                                               ),
                                             ),
@@ -229,7 +229,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                                 style: Styles.h3(),
                                               ),
                                               Text(
-                                                "${_user!['phone']}",
+                                                "${_user!["phone"]}",
                                                 style: Styles.h3(isLight: true),
                                               ),
                                             ),
@@ -252,7 +252,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                                 padding: EdgeInsets.zero,
                                                 onPressed: () {
                                                   formViewCtrl.setForm(
-                                                      _user!['address'] ?? {});
+                                                      _user!["address"] ?? {});
                                                   addEditAddress(
                                                       title: "Edit address");
                                                 },
@@ -282,7 +282,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                                   ),
                                                 ))
                                               : Text(
-                                                  "${address['location']['name']}",
+                                                  "${address["location"]["name"]}",
                                                   style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.w600,
@@ -303,7 +303,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                         ),
                                         mY(5),
                                         Builder(builder: (context) {
-                                          final perms = _user!['permissions'];
+                                          final perms = _user!["permissions"];
                                           return TuDropdownButton(
                                             label: "Permissions",
                                             value: perms,
@@ -312,12 +312,12 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                             onChanged: (val) async {
                                               try {
                                                 await _editFields(data: {
-                                                  'value': {'permissions': val}
+                                                  "value": {"permissions": val}
                                                 });
                                                 showToast("Done!")
                                                     .show(context);
                                                 /* _setUser(
-                                                          res.data['user']); */
+                                                          res.data["user"]); */
                                               } catch (e) {
                                                 errorHandler(
                                                     e: e,
@@ -380,8 +380,8 @@ class _DashAccountPageState extends State<DashAccountPage> {
 
   _getAccount() async {
     try {
-      final res = await apiDio().get('/users?id=${widget.id}');
-      _setUser(res.data['users'][0]);
+      final res = await apiDio().get("/users?id=${widget.id}");
+      _setUser(res.data["users"][0]);
     } catch (e) {
       errorHandler(e: e, context: context);
     }

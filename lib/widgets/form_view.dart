@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:get/get.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:get/get.dart";
 
-import '../utils/constants.dart';
-import '../utils/styles.dart';
-import 'common.dart';
-import 'common2.dart';
+import "../utils/constants.dart";
+import "../utils/styles.dart";
+import "common.dart";
+import "common2.dart";
 
 class FormViewCtrl extends GetxController {
   RxMap<String, dynamic> form = <String, dynamic>{}.obs;

@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/views/auth/login.dart';
-import 'package:lebzcafe/views/auth/logout.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/feedback_form.dart';
-import 'package:get/get.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/views/auth/login.dart";
+import "package:lebzcafe/views/auth/logout.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/feedback_form.dart";
+import "package:get/get.dart";
 
 class AccountTab extends StatelessWidget {
   const AccountTab({super.key});
@@ -20,7 +20,7 @@ class AccountTab extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "${appCtrl.store['name']}",
+          "${appCtrl.store["name"]}",
         ),
         titleSpacing: 14,
         actions: const [CartBtn()],
@@ -39,29 +39,29 @@ class AccountTab extends StatelessWidget {
                     children: [
                       InfoItem(
                           onTap: () {
-                            pushNamed('/account/profile');
+                            pushNamed("/account/profile");
                           },
                           child: const Text("Profile")),
                       InfoItem(
                           onTap: () {
-                            pushNamed('/cart');
+                            pushNamed("/cart");
                           },
                           child: const Text("Cart")),
                       InfoItem(
                           onTap: () {
-                            pushNamed('/orders');
+                            pushNamed("/orders");
                           },
                           child: const Text("Orders")),
                       InfoItem(
                           onTap: () {
-                            pushNamed('/store/info');
+                            pushNamed("/store/info");
                           },
                           child: const Text("About store")),
                       Visibility(
                         visible: DEV,
                         child: InfoItem(
                             onTap: () {
-                              pushNamed('/rf');
+                              pushNamed("/rf");
                             },
                             child: const Text("RF")),
                       ),
@@ -69,15 +69,15 @@ class AccountTab extends StatelessWidget {
                   ),
                 ),
                 Obx(() => Visibility(
-                      visible: appCtrl.user['_id'] != null &&
-                          appCtrl.user['permissions'] > 0,
+                      visible: appCtrl.user["_id"] != null &&
+                          appCtrl.user["permissions"] > 0,
                       child: Container(
                           color: cardBGLight,
                           margin: const EdgeInsets.symmetric(vertical: 2),
                           child: Column(children: [
                             InfoItem(
                                 onTap: () {
-                                  pushNamed('/admin/dashboard');
+                                  pushNamed("/admin/dashboard");
                                 },
                                 child: const Text("Admin dashboard")),
                           ])),
@@ -88,7 +88,7 @@ class AccountTab extends StatelessWidget {
                   child: Column(children: [
                     InfoItem(
                         onTap: () {
-                          pushNamed('/settings');
+                          pushNamed("/settings");
                         },
                         child: const Text("Settings")),
                     InfoItem(
@@ -105,7 +105,7 @@ class AccountTab extends StatelessWidget {
                   padding: defaultPadding,
                   child: Obx(
                     () {
-                      bool logged = appCtrl.user['_id'] != null;
+                      bool logged = appCtrl.user["_id"] != null;
                       return TuButton(
                         text: !logged ? "Login" : "Logout",
                         bgColor: Colors.black87,
@@ -114,7 +114,7 @@ class AccountTab extends StatelessWidget {
                           if (logged) {
                             pushTo(const LogoutPage());
                           } else {
-                            pushNamed('/auth/login');
+                            pushNamed("/auth/login");
                           }
                         },
                       );

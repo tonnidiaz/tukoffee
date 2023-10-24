@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/views/rf.dart';
-import 'package:lebzcafe/views/rf2.dart';
-import 'package:lebzcafe/widgets/common.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/views/rf.dart";
+import "package:lebzcafe/views/rf2.dart";
+import "package:lebzcafe/widgets/common.dart";
 
 class PageWithSearchAndList extends StatefulWidget {
   const PageWithSearchAndList({super.key});
@@ -15,11 +15,11 @@ class PageWithSearchAndList extends StatefulWidget {
 }
 
 class _PageWithSearchAndListState extends State<PageWithSearchAndList> {
-  List? _data = ['d', 'd'];
+  List? _data = ["d", "d"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('TUNEDBASS')),
+      appBar: AppBar(title: const Text("TUNEDBASS")),
       body: RefreshIndicator(
           onRefresh: () async {
             await sleep(1500);
@@ -45,7 +45,7 @@ class _PageWithSearchAndListState extends State<PageWithSearchAndList> {
                     )
                   : _data!.isEmpty
                       ? SliverFillRemaining(
-                          child: Center(child: h3('Ohhhwee!')),
+                          child: Center(child: h3("Ohhhwee!")),
                         )
                       : DecoratedSliver(
                           decoration: BoxDecoration(color: cardBGLight),

@@ -1,28 +1,28 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:lebzcafe/controllers/store_ctrl.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/views/product/reviews.dart';
-import 'package:lebzcafe/widgets/add_product_form.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/common4.dart';
-import 'package:lebzcafe/widgets/form_view.dart';
-import 'package:lebzcafe/widgets/product_card.dart';
-import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import '../controllers/app_ctrl.dart';
-import '../utils/colors.dart';
-import '/utils/constants.dart';
-import '/widgets/common.dart';
+import "package:dio/dio.dart";
+import "package:flutter/material.dart";
+import "package:flutter_rating_bar/flutter_rating_bar.dart";
+import "package:lebzcafe/controllers/store_ctrl.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/views/product/reviews.dart";
+import "package:lebzcafe/widgets/add_product_form.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/common4.dart";
+import "package:lebzcafe/widgets/form_view.dart";
+import "package:lebzcafe/widgets/product_card.dart";
+import "package:get/get.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "../controllers/app_ctrl.dart";
+import "../utils/colors.dart";
+import "/utils/constants.dart";
+import "/widgets/common.dart";
 
 class ProductPage extends StatefulWidget {
   const ProductPage({Key? key}) : super(key: key);
@@ -86,7 +86,7 @@ class _ProductPageState extends State<ProductPage> {
     try {
       final url = "/products?pid=$pid";
       final res = await apiDio().get(url);
-      final List<dynamic> data = res.data['data'];
+      final List<dynamic> data = res.data["data"];
       return data.isNotEmpty ? data[0] : null;
     } catch (e) {
       errorHandler(e: e, context: context, msg: "Failed to fetch product");
@@ -99,8 +99,8 @@ class _ProductPageState extends State<ProductPage> {
     try {
       _setRelated(null);
       final res =
-          await apiDio().get("/products?q=related&pid=${_product!['pid']}");
-      _setRelated(res.data['data']);
+          await apiDio().get("/products?q=related&pid=${_product!["pid"]}");
+      _setRelated(res.data["data"]);
     } catch (error) {
       clog(error);
       _setRelated([]);
@@ -112,7 +112,7 @@ class _ProductPageState extends State<ProductPage> {
     return Scaffold(
       appBar: AppBar(
         title: _product == null
-            ? const Text('Product')
+            ? const Text("Product")
             : Text("${_product!["name"]}"),
         actions: [
           const CartBtn(),
@@ -148,8 +148,8 @@ class _ProductPageState extends State<ProductPage> {
                           labelPadding: const EdgeInsets.symmetric(
                               horizontal: 5, vertical: -2),
                           label: Text(
-                            _product!['quantity'] > 0
-                                ? "${_product!['quantity']} In stock"
+                            _product!["quantity"] > 0
+                                ? "${_product!["quantity"]} In stock"
                                 : "out of stock",
                             style: const TextStyle(
                                 fontSize: 14, color: Colors.white),
@@ -172,7 +172,7 @@ class _ProductPageState extends State<ProductPage> {
                       return TuButton(
                           width: double.infinity,
                           onPressed:
-                              _product!['quantity'] < 1 ? null : addRemoveCart,
+                              _product!["quantity"] < 1 ? null : addRemoveCart,
                           bgColor: inCart ? TuColors.danger : TuColors.success,
                           // radius: 100,
                           child: Row(
@@ -186,7 +186,7 @@ class _ProductPageState extends State<ProductPage> {
                                 color: Colors.black,
                               ),
                               mX(2),
-                              Text(inCart ? 'REMOVE FROM CART' : 'ADD TO CART',
+                              Text(inCart ? "REMOVE FROM CART" : "ADD TO CART",
                                   style: const TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))
@@ -223,10 +223,10 @@ class _ProductPageState extends State<ProductPage> {
                                 padding: const EdgeInsets.only(
                                     left: 5, right: 5, top: 5),
 
-                                child: _product!['images'].isNotEmpty
-                                    ? Image.network(_product!['images']
+                                child: _product!["images"].isNotEmpty
+                                    ? Image.network(_product!["images"]
                                             [_currImgIndex][
-                                        'url']) //"https://loremflickr.com/g/320/240/tea?random=${Random().nextInt(100)}")
+                                        "url"]) //"https://loremflickr.com/g/320/240/tea?random=${Random().nextInt(100)}")
                                     : const Icon(
                                         Icons.coffee_outlined,
                                         size: 50,
@@ -235,7 +235,7 @@ class _ProductPageState extends State<ProductPage> {
                               );
                             }),
                             Visibility(
-                              visible: _product!['images'].isNotEmpty,
+                              visible: _product!["images"].isNotEmpty,
                               child: Positioned(
                                   bottom: 0,
                                   left: 0,
@@ -246,7 +246,7 @@ class _ProductPageState extends State<ProductPage> {
                                         horizontal: 5, vertical: 2),
                                     color: Colors.black54,
                                     child: Row(
-                                        children: (_product!['images'] as List)
+                                        children: (_product!["images"] as List)
                                             .asMap()
                                             .entries
                                             .map((e) {
@@ -254,11 +254,11 @@ class _ProductPageState extends State<ProductPage> {
                                         onTap: () {
                                           _setCurrImgIndex(e.key);
                                         },
-                                        mode: 'add',
+                                        mode: "add",
                                         context: context,
                                         canRemove: false,
                                         index: e.key,
-                                        child: Image.network(e.value['url']),
+                                        child: Image.network(e.value["url"]),
                                       );
                                     }).toList()),
                                   )),
@@ -276,7 +276,7 @@ class _ProductPageState extends State<ProductPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "${_product!['name']}",
+                                      "${_product!["name"]}",
                                       style: Styles.h3(),
                                     ),
                                     mY(5),
@@ -284,7 +284,7 @@ class _ProductPageState extends State<ProductPage> {
                                       color: Colors.transparent,
                                       width: double.infinity,
                                       child: Text(
-                                        "${_product!['description']}",
+                                        "${_product!["description"]}",
                                         softWrap: true,
 
                                         //style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
@@ -313,7 +313,7 @@ class _ProductPageState extends State<ProductPage> {
                                           .amber //Color.fromARGB(108, 255, 255, 0),
                                       ),
                                   Text(
-                                    " ${_product!['rating'] ?? 0}",
+                                    " ${_product!["rating"] ?? 0}",
                                     style: const TextStyle(
                                         fontSize: 14,
                                         color: Colors.black87,
@@ -324,10 +324,10 @@ class _ProductPageState extends State<ProductPage> {
                               TextButton(
                                   onPressed: () {
                                     pushTo(ProductReviewsPage(
-                                        id: "${_product!['pid']}"));
+                                        id: "${_product!["pid"]}"));
                                   },
                                   child: Text(
-                                    '${_product!['reviews'].length} REVIEW(S)',
+                                    "${_product!["reviews"].length} REVIEW(S)",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w600),
                                   ))
@@ -341,27 +341,27 @@ class _ProductPageState extends State<ProductPage> {
                           padding: const EdgeInsets.all(10.0),
                           child: tuColumn(children: [
                             Text(
-                              'EXTRA INFORMATION',
+                              "EXTRA INFORMATION",
                               style: Styles.h4(),
                             ),
                             mY(10),
                             tuTableRow(
                                 const Text(
-                                  'Weight',
+                                  "Weight",
                                 ),
-                                Text('${_product!['weight']} KG'),
+                                Text("${_product!["weight"]} KG"),
                                 my: 5),
                             tuTableRow(
                                 const Text(
-                                  'Width',
+                                  "Width",
                                 ),
-                                Text('${_product!['width']} cm'),
+                                Text("${_product!["width"]} cm"),
                                 my: 5),
                             tuTableRow(
                                 const Text(
-                                  'Height',
+                                  "Height",
                                 ),
-                                Text('${_product!['height']} cm'),
+                                Text("${_product!["height"]} cm"),
                                 my: 5),
                           ]),
                         ),
@@ -373,7 +373,7 @@ class _ProductPageState extends State<ProductPage> {
                             child: tuColumn(children: [
                               TuCard(
                                 child: Text(
-                                  'You may also like',
+                                  "You may also like",
                                   style: Styles.h4(),
                                 ),
                               ),
@@ -411,7 +411,7 @@ class _ProductPageState extends State<ProductPage> {
         return showToast("Please login to rate products", isErr: true)
             .show(context);
       final rating = {"value": val};
-      final res = await rateProduct(_product!['pid'], rating);
+      final res = await rateProduct(_product!["pid"], rating);
       final err = res[0];
       final succ = res[1];
 

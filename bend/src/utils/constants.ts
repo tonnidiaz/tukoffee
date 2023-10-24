@@ -1,20 +1,19 @@
 import multer from "multer"
 
-enum OrderStatus {
-    Pending = 'pending',
-    Completed = 'completed',
-    Cancelled = 'cancelled',
-    AwaitingPickup = 'awaitingPickup'
+enum OrderStatus  {
+    pending,
+    awaitingPickup,
+    completed,
+    cancelled,
 }
-
 enum OrderMode   {
-    delivery = 'delivery',
-    collect = 'collect'
+    delivery,
+    collect
 }
 enum UserPermissions  {
-    read = 'read',
-    write = 'write',
-    delete = 'delete'
+    read,
+    write,
+    delete
 }
 
 

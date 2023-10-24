@@ -1,21 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:lebzcafe/controllers/store_ctrl.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/constants2.dart';
-import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/functions2.dart';
-import 'package:lebzcafe/views/order/checkout.dart';
-import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/views/rf.dart';
-import 'package:lebzcafe/widgets/common.dart';
-import 'package:lebzcafe/widgets/common2.dart';
-import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/select.dart';
+import "package:flutter/material.dart";
+import "package:get/get.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:lebzcafe/controllers/store_ctrl.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
+import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/functions2.dart";
+import "package:lebzcafe/views/order/checkout.dart";
+import "package:lebzcafe/views/order/index.dart";
+import "package:lebzcafe/views/rf.dart";
+import "package:lebzcafe/widgets/common.dart";
+import "package:lebzcafe/widgets/common2.dart";
+import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
+import "package:lebzcafe/widgets/tu/select.dart";
 
 class CheckoutStep1 extends StatelessWidget {
   final CheckoutCtrl ctrl;
@@ -36,11 +36,11 @@ class CheckoutStep1 extends StatelessWidget {
               TuCard(
                   child: Obx(
                 () => TuSelect(
-                  label: 'Method:',
+                  label: "Method:",
                   value: ctrl.mode.value,
                   items: [
-                    SelectItem('Collect', OrderMode.collect),
-                    SelectItem('Delivery', OrderMode.deliver),
+                    SelectItem("Collect", OrderMode.collect),
+                    SelectItem("Delivery", OrderMode.deliver),
                   ],
                   onChanged: (v) {
                     ctrl.setOrderMode(v);
@@ -61,16 +61,16 @@ class CheckoutStep1 extends StatelessWidget {
                                     ? none()
                                     : TuSelect(
                                         label: "Store:",
-                                        value: ctrl.store['_id'],
+                                        value: ctrl.store["_id"],
                                         items: storeCtrl.stores.value!.map((e) {
                                           return SelectItem(
-                                              "${e['address']?['place_name']}",
-                                              e['_id']);
+                                              "${e["address"]?["place_name"]}",
+                                              e["_id"]);
                                         }).toList(),
                                         onChanged: (val) {
                                           var store = storeCtrl.stores.value!
                                               .where((element) =>
-                                                  element['_id'] == val)
+                                                  element["_id"] == val)
                                               .first;
                                           ctrl.setStore(store);
                                         },
@@ -84,15 +84,15 @@ class CheckoutStep1 extends StatelessWidget {
                                   leading: CircleAvatar(
                                     backgroundColor: Colors.black12,
                                     child: svgIcon(
-                                        name: 'br-user', color: TuColors.text2),
+                                        name: "br-user", color: TuColors.text2),
                                   ),
                                   title: Text(
-                                    ctrl.collector['name'] ?? "",
+                                    ctrl.collector["name"] ?? "",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
                                   subtitle: Text(
-                                    ctrl.collector['phone'] ?? "",
+                                    ctrl.collector["phone"] ?? "",
                                     style: const TextStyle(fontSize: 12),
                                   ),
                                   trailing: SizedBox(
@@ -137,10 +137,10 @@ class CheckoutStep1 extends StatelessWidget {
                               ),
                               my: 0),
                           Obx(
-                            () => appCtrl.user['delivery_addresses'].isNotEmpty
+                            () => appCtrl.user["delivery_addresses"].isNotEmpty
                                 ? Column(
                                     children: (appCtrl
-                                            .user['delivery_addresses'] as List)
+                                            .user["delivery_addresses"] as List)
                                         .map((e) {
                                     return addressCard(
                                         context: context, address: e);
@@ -191,21 +191,21 @@ class CheckoutStep1 extends StatelessWidget {
                               }
                               showProgressSheet(msg: "Calculating total...");
                               List items = [];
-                              for (var item in storeCtrl.cart['products']) {
+                              for (var item in storeCtrl.cart["products"]) {
                                 for (var pr
-                                    in List.filled(item['quantity'], 0)) {
-                                  items.add(item['product']);
+                                    in List.filled(item["quantity"], 0)) {
+                                  items.add(item["product"]);
                                 }
                               }
                               final res = await Shiplogic.getRates(
                                   items: items,
                                   total: storeCtrl.total.value,
-                                  from: storeCtrl.stores.value?[0]['address'],
+                                  from: storeCtrl.stores.value?[0]["address"],
                                   to: ctrl.selectedAddr);
                               gpop();
                               if (res == null) return;
                               Get.bottomSheet(DatesRatesSheet(
-                                rates: res['rates'],
+                                rates: res["rates"],
                               ));
                               // ctrl.step++;
                             },
@@ -237,7 +237,7 @@ class DatesRatesSheet extends StatelessWidget {
               h3("Dates & Delivery Fees"),
               mY(10),
               Text(
-                'When would you like your order delivered?',
+                "When would you like your order delivered?",
                 style: GoogleFonts.poppins(fontSize: 14),
               ),
               mY(6),
@@ -250,9 +250,9 @@ class DatesRatesSheet extends StatelessWidget {
               itemBuilder: (context, i) {
                 var rate = rates.elementAt(i);
                 final String deliveryDateFrom =
-                    rate['service_level']['delivery_date_from'];
+                    rate["service_level"]["delivery_date_from"];
                 final String deliveryDateTo =
-                    rate['service_level']['delivery_date_to'];
+                    rate["service_level"]["delivery_date_to"];
                 //final String date1
                 return Container(
                   margin: const EdgeInsets.symmetric(vertical: 1.5),
@@ -260,15 +260,15 @@ class DatesRatesSheet extends StatelessWidget {
                   child: ListTile(
                     isThreeLine: true,
                     onTap: () {
-                      ctrl.form['shiplogic'] = {
-                        "service_level": rate['service_level']
+                      ctrl.form["shiplogic"] = {
+                        "service_level": rate["service_level"]
                       };
 
-                      storeCtrl.setDeliveryFee(rate['rate'].toDouble());
+                      storeCtrl.setDeliveryFee(rate["rate"].toDouble());
                       gpop();
                       ctrl.step++;
                     },
-                    title: Text("${rate['service_level']['name']} delivery"),
+                    title: Text("${rate["service_level"]["name"]} delivery"),
                     subtitle: tuColumn(
                       min: true,
                       children: [
@@ -288,7 +288,7 @@ class DatesRatesSheet extends StatelessWidget {
                     ),
                     trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                       Text(
-                        "R${rate['rate']}",
+                        "R${rate["rate"]}",
                         style: TextStyle(
                             fontWeight: FontWeight.w600, color: TuColors.text2),
                       ),

@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/controllers/app_ctrl.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:get/get.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/controllers/app_ctrl.dart";
+import "package:lebzcafe/utils/constants.dart";
+import "package:get/get.dart";
 
 class Footer extends StatelessWidget {
   const Footer({super.key});
@@ -22,7 +22,7 @@ class Footer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "Copyright © ${DateTime.now().year} | ${appCtrl.store['name']}",
+              "Copyright © ${DateTime.now().year} | ${appCtrl.store["name"]}",
               style: const TextStyle(fontSize: 14, color: Colors.white70),
             )
           ],

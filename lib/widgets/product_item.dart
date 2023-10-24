@@ -1,16 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/material.dart';
-import 'package:lebzcafe/controllers/products_ctrl.dart';
-import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/styles.dart';
-import 'package:get/get.dart';
-import 'package:lebzcafe/widgets/common3.dart';
+import "package:flutter/material.dart";
+import "package:lebzcafe/controllers/products_ctrl.dart";
+import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/styles.dart";
+import "package:get/get.dart";
+import "package:lebzcafe/widgets/common3.dart";
 
-import '../controllers/appbar.dart';
-import '../utils/colors.dart';
-import '../utils/functions.dart';
-import 'add_product_form.dart';
+import "../controllers/appbar.dart";
+import "../utils/colors.dart";
+import "../utils/functions.dart";
+import "add_product_form.dart";
 
 class ProductItem extends StatelessWidget {
   final Map<String, dynamic> product;
@@ -56,9 +56,9 @@ class ProductItem extends StatelessWidget {
                 color: const Color.fromRGBO(0, 0, 0, 0.05),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: product['images'].isEmpty
+              child: product["images"].isEmpty
                   ? svgIcon(
-                      name: 'br-image-slash',
+                      name: "br-image-slash",
                       size: 25,
                       color: Colors.black54,
                     )
@@ -67,7 +67,7 @@ class ProductItem extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(5),
                         child: Image.network(
-                          product['images'][0]['url'],
+                          product["images"][0]["url"],
                           loadingBuilder: (context, child, loadingProgress) {
                             if (loadingProgress == null) return child;
                             return Center(
@@ -90,7 +90,7 @@ class ProductItem extends StatelessWidget {
             ),
           ),
           title: Text(
-            product['name'],
+            product["name"],
             style: Styles.h4(),
           ),
           subtitle: Text(
@@ -108,10 +108,10 @@ class ProductItem extends StatelessWidget {
                   PopupMenuItem(
                     onTap: () {
                       _formViewCtrl.setForm({
-                        "name": product['name'],
-                        "description": product['description'],
-                        "price": product['price'],
-                        "quantity": product['quantity'],
+                        "name": product["name"],
+                        "description": product["description"],
+                        "price": product["price"],
+                        "quantity": product["quantity"],
                         "images": product["images"],
                         "pid": product["pid"]
                       });
