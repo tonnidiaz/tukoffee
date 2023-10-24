@@ -68,10 +68,9 @@ class _MobileAppState extends State<MobileApp> {
       requestNotifsPermission(context);
       socket?.on('order', (data) {
         clog("ON ORDER");
-        clog("PERMS: ${MainApp.appCtrl.user['permissions']}");
         //CREATE NOTIF IF USER IS ADMIN
         if (MainApp.appCtrl.user.isNotEmpty &&
-            MainApp.appCtrl.user['permissions'] > 0) {
+            MainApp.appCtrl.user['permissions'] != UserPermissions.read) {
           createOrderNotification("$data");
         }
       });

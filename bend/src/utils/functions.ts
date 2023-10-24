@@ -1,10 +1,10 @@
-const { OTP } = require("../models/otp");
-const jwt = require("jsonwebtoken");
+import { OTP } from "../models/otp";
+import jwt from "jsonwebtoken";
 const cloudinary = require('cloudinary').v2
-const nodemailer = require('nodemailer')
-const fs = require('fs')
+import nodemailer from 'nodemailer';
+import fs from 'fs';
 const { env } = process
-
+import {Response} from 'express'
 function configCloudinary(){
     cloudinary.config({
     api_secret: env.CLOUDINARY_SECRET_KEY,
@@ -13,37 +13,24 @@ function configCloudinary(){
 })
 }
 
-function randomInRange(min, max) {
+function randomInRange(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-const onGetGenToken = async (req, res) => {
-    const purchase_units = [
-        {
-            amount: {
-                value: 40,
-                currency_code: "USD",
-            },
-        },
-    ];
-    const data = { purchase_units };
-    const tkn = genToken(data);
-    res.send(tkn);
-};
 
-const genToken = (data, exp) => {
+const genToken = (data: Obj, exp? : string | number | undefined) => {
     const { PRIVATE_KEY } = process.env;
     return exp
         ? jwt.sign(
               {
                   data,
               },
-              PRIVATE_KEY,
+              PRIVATE_KEY!,
               { expiresIn: exp }
           )
-        : jwt.sign({ payload: data }, PRIVATE_KEY);
+        : jwt.sign({ payload: data }, PRIVATE_KEY!);
 };
-const genOTP = async (phone, email) => {
+const genOTP = async (phone?: string, email?: string) => {
     const pin = randomInRange(1000, 9999);
     const otp = new OTP();
     otp.pin = pin;
@@ -52,12 +39,12 @@ const genOTP = async (phone, email) => {
     await otp.save();
     return otp;
 };
-const parseProducts = async (products) => {
-    let data = [];
+const parseProducts = async (products: Obj[]) => {
+    let data = <Obj>[];
     
     for (let prod of products){
         
-        let rating = 0
+        let rating : string | number = 0
 
         let revs = prod.reviews
 
@@ -66,7 +53,7 @@ const parseProducts = async (products) => {
         prod.reviews = []
       for (let revId of revs){
         
-        const rev = await Review.findOne({_id: revId, status: ReviewStatus.approved}).exec()
+        const rev = await Review.findOne({_id: revId, status: EReviewStatus.approved}).exec()
         if (rev){
             rating += rev.rating;
             prod.reviews.push(rev._id)
@@ -81,9 +68,10 @@ const parseProducts = async (products) => {
 
     return data;
 };
-const axios = require("axios");
-const { Review } = require("../models");
-const { ReviewStatus } = require("../models/review");
+import axios from "axios";
+import { Review } from "../models";
+import { EReviewStatus } from "../models/review";
+import { Obj } from "./types";
 const sendSMS = async (number, message)=>{
     const encodedParams = new URLSearchParams();
     encodedParams.set("sms", number);
@@ -105,22 +93,23 @@ const sendSMS = async (number, message)=>{
     return await axios.request(options)
 }
 
-const tunedErr = (res, status, msg) => {
+const tunedErr = (res: Response, status: number, msg: string) => {
     return res.status(status).send(`tuned:${msg}`)
 }
 
-const delCloudinary = async (publicId)=>{
+const delCloudinary = async (publicId: string)=>{
     configCloudinary()
     return await cloudinary.uploader.destroy(publicId)
 }
 
-const sendMail = async (subject, body, clients, sender) => {
+const sendMail = async (subject: string, body: string, clients: string | string[], sender? : string) => {
     try {
       
       // create reusable transporter object using the default SMTP transport
       let transporter = nodemailer.createTransport({
+        
         host: process.env.GMAIL_HOST, //"smtp.ethereal.email",
-        port: process.env.GMAIL_PORT,
+        port: Number(process.env.GMAIL_PORT),
         secure: false, // true for 465, false for other ports
         auth: {
           user: process.env.EMAIL, //testAccount.user, // generated ethereal user
@@ -261,4 +250,4 @@ const sendMail = async (subject, body, clients, sender) => {
     const buff = fs.readFileSync(jsonPath, { encoding: "utf-8" });
     return JSON.parse(buff)
   }
-module.exports = { sendMail,getStoreDetails, genToken, delCloudinary, onGetGenToken, sendSMS, parseProducts, genOTP, randomInRange, tunedErr };
+  export { sendMail,getStoreDetails, genToken, delCloudinary, sendSMS, parseProducts, genOTP, randomInRange, tunedErr };

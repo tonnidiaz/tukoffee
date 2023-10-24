@@ -1,27 +1,26 @@
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+import createError from 'http-errors';
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
 
-const indexRouter = require('./routes/index');
-const orderRouter = require('./routes/order');
-const adminRouter = require('./routes/admin');
-const usersRouter = require('./routes/users');
-const messageRouter = require('./routes/message');
-const ordersRouter = require('./routes/orders');
-const productsRouter = require('./routes/products');
-const authRouter = require('./routes/auth');
-const searchRouter = require('./routes/search');
-const storesRouter = require('./routes/stores');
-const userRouter = require('./routes/user');
-const hooksRouter = require('./routes/hooks');
-const { onGetGenToken } = require("./utils/functions")
+import indexRouter from './routes/index';
+import orderRouter from './routes/order';
+import adminRouter from './routes/admin';
+import usersRouter from './routes/users';
+import messageRouter from './routes/message';
+import ordersRouter from './routes/orders';
+import productsRouter from './routes/products';
+import authRouter from './routes/auth';
+import searchRouter from './routes/search';
+import storesRouter from './routes/stores';
+import userRouter from './routes/user';
+import hooksRouter from './routes/hooks';
 const app = express();
-const { default: mongoose } = require('mongoose');
-const multer = require('multer');
-const cors = require('cors');
-const { DEV } = require('./utils/constants');
+import { default as mongoose } from 'mongoose';
+import multer from 'multer';
+import cors from 'cors';
+import { DEV } from './utils/constants';
 
 const envPath = DEV ? path.resolve(process.cwd(), '.env') : '/etc/secrets/prod.env'
 require("dotenv").config({path: envPath});
@@ -41,7 +40,7 @@ async function connectMongo(){
     try {
         console.log(mongoURL);
       await mongoose.connect(mongoURL);
-      console.log('Connection established');
+      console.log('Connection established'); 
     }
     catch(e) {
       console.log('Could not establish connection')
@@ -69,7 +68,6 @@ app.use('/search', parser, searchRouter);
 app.use('/user', parser, userRouter);
 app.use('/stores', parser, storesRouter);
 app.use('/message', parser, messageRouter);
-app.get("/gen-token", onGetGenToken)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -86,4 +84,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+export default app;

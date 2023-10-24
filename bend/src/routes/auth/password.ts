@@ -1,9 +1,11 @@
-const { User } = require("../../models");
-const { DEV } = require("../../utils/constants");
-const { genOTP, randomInRange, sendMail, getStoreDetails } = require("../../utils/functions");
-const { auth, lightAuth } = require("../../utils/middleware");
-const bcrypt = require("bcrypt");
-const router = require("express").Router();
+import { User } from "../../models";
+import { DEV } from "../../utils/constants";
+import { genOTP, randomInRange, sendMail, getStoreDetails } from "../../utils/functions";
+import { auth, lightAuth } from "../../utils/middleware";
+import bcrypt from "bcrypt";
+import express from "express";
+
+const router = express.Router();
 
 router.post("/reset", async (req, res) => {
     try {
@@ -50,7 +52,7 @@ router.post("/reset", async (req, res) => {
 router.post("/verify", lightAuth, async (req, res) => {
     try {
         const { password } = req.body;
-        const oldPassValid = bcrypt.compareSync(password, req.user.password);
+        const oldPassValid = bcrypt.compareSync(password, req.user!.password);
         if (!oldPassValid) {
             return res.status(401).send("tuned:Incorrect password!");
         }
@@ -66,13 +68,13 @@ router
     .post(auth, async (req, res) => {
         try {
             const { old: oldPass, new: newPass } = req.body;
-            const oldPassValid = bcrypt.compareSync(oldPass, req.user.password);
+            const oldPassValid = bcrypt.compareSync(oldPass, req.user!.password);
             if (!oldPassValid) {
                 res.status(401).send("tuned:Incorrect password!");
             } else {
                 const newHash = bcrypt.hashSync(newPass, 10);
-                req.user.password = newHash;
-                await req.user.save();
+                req.user!.password = newHash;
+                await req.user!.save();
                 res.send(newPass);
             }
         } catch (e) {
@@ -81,4 +83,4 @@ router
         }
     });
 
-module.exports = router;
+export default router;

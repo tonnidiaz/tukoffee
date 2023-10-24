@@ -1,4 +1,4 @@
-const { Schema } = require("mongoose")
+import { Schema } from "mongoose"
 
 const CartSchema = new Schema({
     customer: {
@@ -13,4 +13,4 @@ const CartSchema = new Schema({
     }
 })
 
-module.exports = {CartSchema}
+export {CartSchema}

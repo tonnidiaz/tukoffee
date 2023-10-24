@@ -1,9 +1,9 @@
-const { Schema } = require("mongoose");
-const { AddressSchema } = require("../utils/constants");
+import { IAddress } from "@/utils/types";
+import { Schema } from "mongoose";
 
 const StoreSchema = new Schema({
     address: {
-        type: AddressSchema,
+        type: <IAddress>{},
         required: true
     },
    
@@ -26,4 +26,6 @@ const StoreSchema = new Schema({
     },
 })
 
-module.exports = {StoreSchema}
+
+
+export {StoreSchema}

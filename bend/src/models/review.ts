@@ -1,9 +1,9 @@
-const { Schema, Model } = require("mongoose");
+import { Schema, Model } from "mongoose";
 
-const ReviewStatus = {
-    pending: 0,
-    approved: 1,
-    rejected: 2,
+enum EReviewStatus {
+    pending = 'pending',
+    approved = 'approved',
+    rejected = 'rejected',
     
 }
 
@@ -12,7 +12,9 @@ const ReviewSchema = new Schema( {
     name: {type: String, required: true},
     body: {type: String, required: true},
     reject_reason: {type: String},
-    status: {type: Number, default: ReviewStatus.pending},
+    status: {type: String, default: EReviewStatus.pending, enum: [
+        "pending", "approved", "rejected"
+    ]},
     rating: {type: Number, required: true, default: 0},
     user: {type: Schema.ObjectId, ref: 'User', required: true},
     product: {type: Schema.ObjectId, ref: 'Product', required: true},
@@ -20,4 +22,4 @@ const ReviewSchema = new Schema( {
     last_modified: {type: Date, default: new Date(), required: false},
 })
 
-module.exports = { ReviewSchema, ReviewStatus}
+export { ReviewSchema, EReviewStatus}

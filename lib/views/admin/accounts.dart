@@ -202,8 +202,10 @@ class _AccountsState extends State<Accounts> {
                                   accounts: [
                                     ..._ctrl.filteredAccounts
                                         .where((it) =>
-                                            it['permissions'] == 1 ||
-                                            it['permissions'] == 2)
+                                            it['permissions'] ==
+                                                UserPermissions.write ||
+                                            it['permissions'] ==
+                                                UserPermissions.delete)
                                         .toList(),
                                   ]),
                               mY(5),

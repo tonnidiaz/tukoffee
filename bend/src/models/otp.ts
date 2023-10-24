@@ -1,6 +1,7 @@
-const { Schema, model } = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const OTPSchema = new Schema({
+
+const OTPSchema: Schema = new Schema({
     phone: {
         type: String,
         unique: true
@@ -15,4 +16,4 @@ const OTPSchema = new Schema({
     }
 })
 const OTP = model("OTP", OTPSchema)
-module.exports = {OTPSchema, OTP}
+export {OTPSchema, OTP}

@@ -1,11 +1,12 @@
-const express = require("express");
-const { Cart, Order, User, Product } = require("../models");
-const { auth } = require("../utils/middleware");
-const { OrderStatus } = require("../utils/constants");
-const { tunedErr } = require("../utils/functions");
-const io = require("../utils/io");
+import express from "express";
+import { Cart, Order, User, Product } from "../models";
+import { auth } from "../utils/middleware";
+import { OrderStatus } from "../utils/constants";
+import { tunedErr } from "../utils/functions";
+import io from "../utils/io";
+import { Obj } from "@/utils/types";
 const router = express.Router();
-
+ 
 const genOID = async () => {
     const oid = Math.floor(Math.random() * 999999) + 1;
     const exists = await Order.findOne({ oid }).exec();
@@ -23,7 +24,7 @@ router.post("/cancel", auth, async (req, res) => {
                     // Remove order from user document
                     const order = await Order.findById(id).exec();
 
-                    const user = await User.findById(order.customer).exec();
+                    const user = await User.findById(order?.customer).exec();
                     await Order.findByIdAndDelete(id).exec();
                     if (user) {
                         user.orders = user.orders.filter((o) => o != id);
@@ -37,7 +38,7 @@ router.post("/cancel", auth, async (req, res) => {
                     }).exec();
                     console.log(`Order #${id} cancelled!`);
                      //Update inventory
-            for (let item of order.products){
+            for (let item of order!.products){
                 await Product.findByIdAndUpdate(item.product._id, {$inc: {
                     quantity:  item.quantity
                 }}).exec()
@@ -52,7 +53,7 @@ router.post("/cancel", auth, async (req, res) => {
         const orders = userId
             ? await Order.find({ customer: userId }).exec()
             : await Order.find().exec();
-        let populatedOrders = [];
+        let populatedOrders = <Obj>[];
         for (let o of orders) {
             let ord = await (
                 await o.populate("customer")
@@ -86,7 +87,7 @@ router.post("/create", auth, async (req, res) => {
             order.customer = user;
             order.products = cart.products;
             order.delivery_address = address;
-            order.mode = mode;
+            order.mode = mode as string;
             order.store = store;
             order.collector = collector;
             order.yocoData = yocoData
@@ -145,4 +146,4 @@ router.post('/edit', auth, async (req, res)=>{
         res.status(500).send("tuned:Something went wrong!")
     }
 })
-module.exports = router;
+export default router;

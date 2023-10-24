@@ -134,7 +134,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         TuLabeledCheckbox(
                           onChanged: (val) {},
                           label: 'READ',
-                          value: formCtrl.form['permissions'] >= 0,
+                          value: formCtrl.form['permissions'] !=
+                              UserPermissions.read,
                           radius: 100,
                         ),
                         TuLabeledCheckbox(
@@ -148,7 +149,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         TuLabeledCheckbox(
                           onChanged: (val) {
-                            var perms = val == true ? 2 : 1;
+                            var perms = val == true
+                                ? UserPermissions.delete
+                                : UserPermissions.read;
                             formCtrl.setFormField('permissions', perms);
                           },
                           label: 'DELETE',

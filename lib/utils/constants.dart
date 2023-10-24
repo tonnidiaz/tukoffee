@@ -35,14 +35,22 @@ import '../views/app/settings.dart';
 import '../views/rf2.dart';
 import '../views/root/shop/index.dart';
 
+class UserPermissions {
+  static String read = "read";
+  static String write = 'write';
+  static String delete = 'delete';
+}
+
 enum SortBy { name, price, dateCreated, lastModified }
 
 enum SortOrder { ascending, descending }
 
-Type OrderStatus {"pending": "pending",
-    "completed": "completed",
-    "cancelled": "cancelled",
-    "awaitingPickup": "Awaiting pickup",}
+enum OrderStatus {
+  pending,
+  completed,
+  cancelled,
+  awaitingPickup,
+}
 
 class TuPage {
   Widget widget;

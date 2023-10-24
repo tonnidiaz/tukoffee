@@ -1,14 +1,12 @@
-const express = require("express");
-const multer = require("multer");
-const { Order, Cart, User, Product, Review, Store } = require("../models");
-const { AddressSchema } = require("../models/user");
-const { genToken, tunedErr, delCloudinary } = require("../utils/functions");
+import express from "express";
+import multer from "multer";
+import { Order, Cart, User, Product, Review, Store } from "../models";
+import { genToken, tunedErr, delCloudinary } from "../utils/functions";
 var router = express.Router();
-const fs = require("fs");
-const path = require("path");
-const os = require("os");
-const { parser, OrderStatus } = require("../utils/constants");
-const { auth } = require("../utils/middleware");
+import fs from "fs";
+import os from "os";
+import { parser, OrderStatus } from "../utils/constants";
+import { auth } from "../utils/middleware";
 
 
 
@@ -50,6 +48,7 @@ router.get("/clean", async (req, res) => {
             if (cancelled && order.status == OrderStatus.cancelled){
                 //console.log(order._id)
                 const u = await User.findById(order.customer).exec()
+                if (!u) continue;
                 const newOrders = u.orders?.filter(o=> {return o.toString() != order._id.toString()})
                 await Order.findByIdAndDelete(order._id).exec()
                 u.orders = newOrders
@@ -99,7 +98,6 @@ router.post("/update-field", multer().none(), async (req, res) => {
                 db = User;
                 break;
             case "address":
-                db = Address;
                 break;
             case "product":
                 db = Product;
@@ -160,8 +158,9 @@ router.post("/encode", parser, async (req, res) => {
     }
 });
 
-const axios = require("axios");
-const { Schema, Types } = require("mongoose");
+import axios from "axios";
+import { Schema, Types } from "mongoose";
+import { Car, CarColor } from "@/models/car";
 
 router.get("/send-sms", async (req, res) => {
     try {
@@ -202,8 +201,8 @@ router.post('/cloudinary', auth, async (req, res)=>{
            console.log(r)
            if (product){
             const _product = await Product.findById(product).exec()
-            _product.images = _product.images.filter(it=> it.publicId != publicId)
-            await _product.save()
+            _product!.images = _product!.images.filter(it=> it.publicId != publicId)
+            await _product!.save()
            }
         }
         res.send('Ok')
@@ -232,4 +231,28 @@ router.get('/migrate', async (req, res)=>{
         return tunedErr(res, 500, 'Failed to migrate')
     }
 })
-module.exports = router;
+
+router.get('/cars', async (req, res)=>{
+    const cars = await Car.find().exec()
+   res.json({cars: cars.map(c=>c.toJSON())})
+})
+router.post('/car', async (req, res)=>{
+    try{
+
+        const car =  new Car()
+        for (let key of Object.keys(req.body)){
+            car[key] = req.body[key]
+        }
+    await car.save()
+    res.send("CAR GOT")
+    }
+    catch(e){
+        console.log(e)
+        return tunedErr(res, 500, 'Failed to migrate')
+    }
+})
+
+
+export default router;
+
+

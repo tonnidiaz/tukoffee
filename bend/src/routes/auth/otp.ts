@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const { User } = require("../../models");
-const { DEV } = require("../../utils/constants");
-const { tunedErr, randomInRange, genToken, sendMail, getStoreDetails } = require("../../utils/functions");
+import { User } from "@/models";
+import { DEV } from "@/utils/constants";
+import { tunedErr, randomInRange, genToken, sendMail, getStoreDetails } from "@/utils/functions";
 router.post("/resend", async (req, res) => {
     try {
         const {phone, email} = req.body
@@ -71,4 +71,4 @@ router.post("/verify", async (req, res) => {
     const token = genToken({ id: user._id });
                 res.json({ user: { ...user.toJSON() }, token });
 });
-module.exports = router;
+export default router;

@@ -1,18 +1,14 @@
-const router = require("express").Router();
-const bcrypt = require("bcrypt");
-const { User } = require("../../models");
-const {
-    genToken,
-    genOTP,
-    randomInRange,
-    sendSMS,
-    tunedErr,
-    sendMail,
-} = require("../../utils/functions");
-const { auth, lightAuth } = require("../../utils/middleware");
-const { UserPermissions } = require("../../utils/constants");
-const otpRouter = require("./otp");
-const passwordRouter = require("./password");
+import express, { Request } from 'express';
+
+const router = express.Router();
+
+import bcrypt from "bcrypt";
+import { User } from "@/models";
+import { genToken, genOTP, randomInRange, sendSMS, tunedErr, sendMail } from "@/utils/functions";
+import { auth, lightAuth } from "@/utils/middleware";
+import { UserPermissions } from "@/utils/constants";
+import otpRouter from "./otp";
+import passwordRouter from "./password";
 const importantEmails = ["tonnidiazed@gmail.com", "clickbait4587@gmail.com", "openbytes@yahoo.com"];
 
 router.post("/signup", async (req, res) => {
@@ -25,10 +21,10 @@ router.post("/signup", async (req, res) => {
         if (query.act == 'complete'){
             const user = await User.findOne({email: body.email}).exec()
             for (let k of Object.keys(body)){
-                user.set(k, body[k])
+                user!.set(k, body[k])
             }
-            await user.save();
-            const token = genToken({ id: user._id });
+            await user!.save();
+            const token = genToken({ id: user!._id });
             return res.json({token})
         }
         // Delete existing user with unverified number
@@ -64,7 +60,7 @@ router.post("/signup", async (req, res) => {
         // Send the otp && save user
         if (body.phone){
              const number = body.phone.startsWith("+")
-            ? phone
+            ? body.phone
             : "+27" + body.phone.slice(1);
         }
        
@@ -85,10 +81,9 @@ router.post("/signup", async (req, res) => {
     }
 });
 
-router.post("/login", lightAuth, async (req, res) => {
+router.post("/login", lightAuth, async (req  : Request, res, next) => {
     try {
         const { email, password, phone } = req.body;
-
         if (req.user && !password) {
             //Loging in with token
             res.json({ user: { ...req.user.toJSON() } });
@@ -130,6 +125,8 @@ router.post("/verify-email", async (req, res) => {
 
     try {
         const user = await User.findOne({ email }).exec();
+        if (!user) return tunedErr(res, 400, "Restart the signup process")
+
         if (!otp) {
             const pin = randomInRange(1000, 9999);
             //TODO: Send real pin
@@ -154,4 +151,4 @@ router.post("/verify-email", async (req, res) => {
 router.use("/password", passwordRouter);
 
 router.use("/otp", otpRouter);
-module.exports = router;
+export default router;

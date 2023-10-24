@@ -1,5 +1,6 @@
-const { Schema } = require("mongoose")
-const { OrderStatus, AddressSchema, OrderMode } = require("../utils/constants")
+import { Schema } from "mongoose"
+import { OrderStatus, OrderMode } from "../utils/constants"
+import { IAddress } from "@/utils/types"
 
 
 const OrderSchema = new Schema({
@@ -7,7 +8,7 @@ const OrderSchema = new Schema({
     customer: {
         type: Schema.ObjectId, ref: "User", required: true
     },
-    mode: {type: Number, default: OrderMode.deliver},
+    mode: {type: String, default: OrderMode.delivery},
     store: { type: Schema.ObjectId, ref: "Store"},
     collector: {type: {name: String, phone: String}} ,
     collection_time: {
@@ -26,10 +27,10 @@ const OrderSchema = new Schema({
         }], default: []
     },
     status: {
-        type: String, default: OrderStatus.pending, required: true
+        type: String, default: OrderStatus.pending, required: true, enum: OrderStatus
     },
    delivery_address: {
-        type: AddressSchema, required: false
+        type:  <IAddress>{}, required: false
     },
     fee: {
         type: Number, 
@@ -51,4 +52,4 @@ const OrderSchema = new Schema({
     },
 })
 
-module.exports = {OrderSchema}
+export {OrderSchema}

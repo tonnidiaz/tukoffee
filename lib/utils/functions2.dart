@@ -171,3 +171,8 @@ String formatDate(String dateString) {
   final DateFormat formatter = DateFormat('yyyy-MM-dd').add_jm();
   return formatter.format(DateTime.parse(dateString).toLocal());
 }
+
+String camelToSentence(String text) {
+  return text.replaceAllMapped(RegExp(r'^([a-z])|[A-Z]'),
+      (Match m) => m[1] == null ? " ${m[0]}" : m[1]!.toUpperCase());
+}
