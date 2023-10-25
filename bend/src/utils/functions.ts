@@ -41,7 +41,7 @@ const genOTP = async (phone?: string, email?: string) => {
 };
 
 export function clog(message?: any, ...params: any[]){
-        console.log(message, ...params)
+        console.log(message, ...params);
     }
 const parseProducts = async (products: Obj[]) => {
     let data : Obj[]= [];
@@ -52,7 +52,6 @@ const parseProducts = async (products: Obj[]) => {
         let rating : string | number = 0
 
         let revs = prod.reviews
-    clog("REVS:", prod)
         // Clear    the reviews
 
         prod.reviews = []
