@@ -24,7 +24,8 @@ class MapPageArgs {
 
 class MapPage extends StatefulWidget {
   final Function(Map<String, dynamic> val)? onSubmit;
-  const MapPage({super.key, this.onSubmit});
+  final bool canEdit;
+  const MapPage({super.key, this.onSubmit, this.canEdit = true});
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -220,13 +221,16 @@ class _MapPageState extends State<MapPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            FloatingActionButton.small(
-                heroTag: "My location",
-                backgroundColor: Colors.black,
-                child: const Icon(Icons.my_location),
-                onPressed: () {
-                  _getCurrentPosition();
-                }),
+            Visibility(
+              visible: widget.canEdit,
+              child: FloatingActionButton.small(
+                  heroTag: "My location",
+                  backgroundColor: Colors.black,
+                  child: const Icon(Icons.my_location),
+                  onPressed: () {
+                    _getCurrentPosition();
+                  }),
+            ),
             mY(10),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -248,19 +252,22 @@ class _MapPageState extends State<MapPage> {
                     ),
                   ),
                 ),
-                mX(10),
-                FloatingActionButton.small(
-                  heroTag: "Use location",
-                  backgroundColor: Colors.black,
-                  child: const Icon(Icons.check),
-                  onPressed: () {
-                    /// _setCenter(_currCenter);
-                    _formCtrl.setFormField("address", _address);
-                    gpop();
-                    if (widget.onSubmit != null) {
-                      widget.onSubmit!(_address);
-                    }
-                  },
+                mX(widget.canEdit ? 10 : 0),
+                Visibility(
+                  visible: widget.canEdit,
+                  child: FloatingActionButton.small(
+                    heroTag: "Use location",
+                    backgroundColor: Colors.black,
+                    child: const Icon(Icons.check),
+                    onPressed: () {
+                      /// _setCenter(_currCenter);
+                      _formCtrl.setFormField("address", _address);
+                      gpop();
+                      if (widget.onSubmit != null) {
+                        widget.onSubmit!(_address);
+                      }
+                    },
+                  ),
                 ),
               ],
             ),
@@ -352,6 +359,7 @@ class _MapPageState extends State<MapPage> {
                                     const BackButton(),
                                     Expanded(
                                       child: TuSearchField(
+                                          enabled: widget.canEdit,
                                           hint: "Search location...",
                                           prefix: const Icon(
                                             Icons.location_on,

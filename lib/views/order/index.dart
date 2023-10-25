@@ -117,7 +117,7 @@ class _OrderPageState extends State<OrderPage> {
                 });
                 gpop(); //POP SHEET
                 gpop(); //POP MAP
-                _reload(res);
+                _reload(data: res.data);
               } catch (e) {
                 errorHandler(
                     e: e, context: context, msg: "Error editing fields!");
@@ -140,18 +140,22 @@ class _OrderPageState extends State<OrderPage> {
               "delivery_address": {..._order!["delivery_address"], ...val}
             });
             gpop();
-            _reload(res);
+            _reload(data: res.data);
           } catch (e) {
             errorHandler(e: e, context: context, msg: "Error editing fields!");
           }
         }));
   }
 
-  _reload(res) async {
-    Get.off(OrderPage(
-      id: widget.id,
-      fromDash: widget.fromDash,
-    ));
+  _reload({Map? data}) async {
+    if (data?.containsKey('order') == true) {
+      _setOrder(data!['order']);
+    } else {
+      Get.off(OrderPage(
+        id: widget.id,
+        fromDash: widget.fromDash,
+      ));
+    }
   }
 
   _cancelOrder({bool del = false}) async {
@@ -421,9 +425,10 @@ class _OrderPageState extends State<OrderPage> {
                                       IconButton(
                                           padding: EdgeInsets.zero,
                                           onPressed: _onEditRecipientBtnPress,
-                                          icon: const Icon(
+                                          icon: Icon(
                                             Icons.edit,
                                             size: 20,
+                                            color: TuColors.text2,
                                           )),
                                       my: 0),
                                   devider(),
@@ -458,38 +463,92 @@ class _OrderPageState extends State<OrderPage> {
                         mY(6),
                         _order!["mode"] == OrderMode.collect.index
                             ? TuCard(
-                                child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Obx(
-                                    () => _storeCtrl.stores.value == null
-                                        ? none()
-                                        : TuSelect(
-                                            label: "Store:",
-                                            value: _order!["store"]?["_id"],
-                                            items: _storeCtrl.stores.value!
-                                                .map((e) {
-                                              return SelectItem(
-                                                  "${e["address"]["place_name"]}",
-                                                  e["_id"]);
-                                            }).toList(),
-                                            onChanged: (val) async {
-                                              var store = _storeCtrl
-                                                  .stores.value!
-                                                  .where((element) =>
-                                                      element["_id"] == val)
-                                                  .first;
-                                              showProgressSheet(); //_ctrl.setStore(store);
-                                              final res = await apiDio().post(
-                                                  "/order/edit?id=${_order!["_id"]}",
-                                                  data: {"store": store});
-                                              gpop();
-                                              _reload(res);
+                                child: true
+                                    ? TuCard(
+                                        color: appBGLight,
+                                        child: Column(children: [
+                                          tuTableRow(
+                                              Text("Collection store",
+                                                  style: Styles.h3()),
+                                              IconButton(
+                                                  padding: EdgeInsets.zero,
+                                                  onPressed:
+                                                      _onEditStoreAddrClick,
+                                                  icon: Icon(
+                                                    Icons.edit,
+                                                    size: 20,
+                                                    color: TuColors.text2,
+                                                  )),
+                                              my: 0),
+                                          devider(),
+                                          mY(10),
+                                          InkWell(
+                                            onTap: () {
+                                              _formCtrl.setForm({
+                                                "address": _order!['store']
+                                                    ['address']
+                                              });
+                                              pushTo(const MapPage(
+                                                  canEdit: false));
                                             },
-                                          ),
-                                  )
-                                ],
-                              ))
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    "${_order!["store"]["address"]["place_name"]}",
+                                                    softWrap: true,
+                                                  ),
+                                                ),
+                                                const Icon(Icons
+                                                    .chevron_right_outlined)
+                                              ],
+                                            ),
+                                          )
+                                        ]),
+                                      )
+                                    : Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Obx(
+                                            () => _storeCtrl.stores.value ==
+                                                    null
+                                                ? none()
+                                                : TuSelect(
+                                                    label: "Store:",
+                                                    value: _order!["store"]
+                                                        ?["_id"],
+                                                    items: _storeCtrl
+                                                        .stores.value!
+                                                        .map((e) {
+                                                      return SelectItem(
+                                                          "${e["address"]["place_name"]}",
+                                                          e["_id"]);
+                                                    }).toList(),
+                                                    onChanged: (val) async {
+                                                      var store = _storeCtrl
+                                                          .stores.value!
+                                                          .where((element) =>
+                                                              element["_id"] ==
+                                                              val)
+                                                          .first;
+                                                      showProgressSheet(); //_ctrl.setStore(store);
+                                                      final res = await apiDio()
+                                                          .post(
+                                                              "/order/edit?id=${_order!["_id"]}",
+                                                              data: {
+                                                            "store": store
+                                                          });
+                                                      gpop();
+                                                      //_reload(res);
+                                                    },
+                                                  ),
+                                          )
+                                        ],
+                                      ))
                             : tuColumn(
                                 children: [
                                   TuCard(
@@ -616,7 +675,7 @@ class _OrderPageState extends State<OrderPage> {
                                                                   FontWeight
                                                                       .w600)),
                                                       subtitle: Text(
-                                                        "R${it["product"]["price"]}",
+                                                        "R${it['product']['on_sale'] ? it['product']['sale_price'] : it["product"]["price"]}",
                                                         style: Styles.subtitle,
                                                       ),
                                                       trailing: Text(
@@ -636,6 +695,45 @@ class _OrderPageState extends State<OrderPage> {
         ),
       ),
     );
+  }
+
+  void _onEditStoreAddrClick() async {
+    Get.bottomSheet(TuCard(
+      child: tuColumn(min: true, children: [
+        Obx(() => TuSelect(
+              label: "Store:",
+              value: _order!["store"]?["_id"],
+              items: _storeCtrl.stores.value!.map((e) {
+                return SelectItem("${e["address"]["place_name"]}", e["_id"]);
+              }).toList(),
+              onChanged: (val) {
+                _formCtrl.setForm({'store': val});
+              },
+            )),
+        mY(6),
+        TuButton(
+          text: "Save changes",
+          width: double.infinity,
+          onPressed: () async {
+            try {
+              var store = _storeCtrl.stores.value!
+                  .where((element) => element["_id"] == _formCtrl.form['store'])
+                  .first;
+              showProgressSheet(); //_ctrl.setStore(store);
+              final res = await apiDio().post(
+                  "/order/edit?id=${_order!["_id"]}",
+                  data: {"store": store});
+              gpop();
+              gpop();
+              _reload(data: res.data);
+            } catch (e) {
+              gpop();
+              errorHandler(e: e, msg: "Failed to change store");
+            }
+          },
+        )
+      ]),
+    ));
   }
 }
 

@@ -1,5 +1,6 @@
 # TODO
 
+- READ THROUGH  THE SHIPLOGIC API
 
 ## TO IMPL
 
@@ -12,6 +13,6 @@
 - Get orders bit by bit
 ## TO FIX
 
-- Chande/add order statuses
+- Change/add order statuses
 - Send the feedback email to owner / Notifs categories: Orders/Feedback
 - Change review statuses

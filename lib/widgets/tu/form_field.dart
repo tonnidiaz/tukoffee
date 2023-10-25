@@ -21,6 +21,7 @@ class TuFormField extends StatefulWidget {
   final bool isPass;
   final bool showEye;
   final bool hasBorder;
+  final bool enabled;
   final TextInputType keyboard;
   final double radius;
   final double elevation;
@@ -42,6 +43,7 @@ class TuFormField extends StatefulWidget {
       this.label,
       this.my = 2.5,
       this.focusNode,
+      this.enabled = true,
       this.suffixIcon,
       this.suffix,
       this.onSubmitted,
@@ -156,6 +158,7 @@ class _TuFormFieldState extends State<TuFormField> {
                 fontSize: 16,
               ),
               decoration: InputDecoration(
+                enabled: widget.enabled,
                 prefixIconColor:
                     _focusNode.hasFocus ? TuColors.note : Colors.black45,
                 suffixIconColor:

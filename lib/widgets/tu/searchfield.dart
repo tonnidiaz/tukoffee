@@ -16,6 +16,8 @@ class TuSearchField extends StatefulWidget {
   final String? label;
   final String hint;
   final Widget? prefix;
+  final bool enabled;
+  final bool readOnly;
   final Color? fill;
   const TuSearchField(
       {super.key,
@@ -24,6 +26,8 @@ class TuSearchField extends StatefulWidget {
       this.fill,
       required this.onChanged,
       this.prefix,
+      this.enabled = true,
+      this.readOnly = false,
       this.suggestions = const [],
       required this.onSuggestionTap,
       this.suggestionIcon});
@@ -114,6 +118,8 @@ class _TuSearchFieldState extends State<TuSearchField> {
       link: _layerLink,
       child: TuFormField(
         fill: widget.fill,
+        readOnly: widget.readOnly,
+        enabled: widget.enabled,
         prefixIcon: widget.prefix,
         focusNode: _focusNode,
         hint: widget.hint,
