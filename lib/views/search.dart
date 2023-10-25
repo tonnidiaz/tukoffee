@@ -10,6 +10,7 @@ import "package:lebzcafe/widgets/common.dart";
 import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/product_card.dart";
 import "package:lebzcafe/widgets/tu/form_field.dart";
+import "package:lebzcafe/widgets/tu/select.dart";
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -70,6 +71,7 @@ class _SearchPageState extends State<SearchPage> {
           leadingWidth: appBarH - 8,
           backgroundColor: cardBGLight,
           elevation: .5,
+          titleSpacing: 0,
           title: TuFormField(
             hint: "Search",
             hasBorder: false,
@@ -112,7 +114,7 @@ class _SearchPageState extends State<SearchPage> {
           SliverToBoxAdapter(child: mY(topMargin)),
           SliverToBoxAdapter(
             child: TuCard(
-              child: TuDropdownButton(
+              child: TuSelect(
                 label: "Search by:",
                 value: _searchBy,
                 onChanged: (val) {
@@ -138,7 +140,7 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                     Text(
                       _query,
-                      style: Styles.title(color: Colors.orange),
+                      style: Styles.title(color: TuColors.primary),
                     )
                   ],
                 ),
@@ -170,11 +172,12 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                     )
                   : SliverFillRemaining(
+                      hasScrollBody: false,
                       child: Center(
                           child: Text(
-                      "No results",
-                      style: Styles.h3(isLight: true),
-                    )))
+                        "No results",
+                        style: Styles.h3(isLight: true),
+                      )))
         ]));
   }
 }

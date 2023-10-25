@@ -42,13 +42,16 @@ const genOTP = async (phone?: string, email?: string) => {
 const parseProducts = async (products: Obj[]) => {
     let data : Obj[]= [];
  
+    function clog(message?: any, ...params: any[]){
+        console.log(message, params)
+    }
     for (let prod of products){
         
         let rating : string | number = 0
 
         let revs = prod.reviews
-
-        // Clear the reviews
+    clog(revs)
+        // Clear    the reviews
 
         prod.reviews = []
       for (let revId of revs){
