@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "npx tsc",
-    "start": "ts-node -r ./tsconfig-paths-bootstrap.js dist/index.js",
+    "start": "ts-node -r ./tsconfig-paths-bootstrap.js index.js",
     "dev": "tsx watch index.ts",
     "ngrok": "ngrok http 8000 --domain=arriving-repeatedly-raccoon.ngrok-free.app"
   },
