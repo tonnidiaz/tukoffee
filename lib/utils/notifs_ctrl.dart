@@ -37,7 +37,8 @@ class NotificationController {
       /* MobileApp.navigatorKey.currentState?.pushAndRemoveUntil("/order",
           (route) => (route.settings.name != "/order") || route.isFirst,
           arguments: OrderPageArgs(id: payload["orderId"]!)); */
-      Get.offAll(OrderPage(id: '${payload['orderId']}'));
+      Get.offAllNamed('/');
+      Get.to(OrderPage(id: '${payload['orderId']}'));
     }
 
     return;
