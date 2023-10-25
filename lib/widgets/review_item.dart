@@ -11,10 +11,12 @@ class ReviewItem extends StatelessWidget {
   final Map<String, dynamic> item;
   final bool hasStars;
   final bool hasTap;
+  final bool isAdmin;
   const ReviewItem(
       {super.key,
       required this.item,
       this.hasStars = false,
+      this.isAdmin = false,
       this.hasTap = true});
 
   @override
@@ -23,13 +25,13 @@ class ReviewItem extends StatelessWidget {
       return Chip(
         //largeSize: 18
 
-        backgroundColor: item["status"] == 0
+        backgroundColor: item["status"] == "pending"
             ? TuColors.medium
-            : item["status"] == 1
+            : item["status"] == "approved"
                 ? TuColors.success
                 : TuColors.danger,
         label: Text(
-          reviewStatuses[item["status"]],
+          item["status"],
           style: const TextStyle(fontSize: 10, color: Colors.white),
         ),
       );
@@ -45,9 +47,8 @@ class ReviewItem extends StatelessWidget {
           onTap: !hasTap
               ? null
               : () {
-                  pushTo(ProductReviewPage(id: item["_id"]));
+                  pushTo(ProductReviewPage(id: item["_id"], isAdmin: isAdmin));
                 },
-          //Checkbox, cover, content, deleteBtn
           tileColor: cardBGLight,
           isThreeLine: !hasStars,
           contentPadding: const EdgeInsets.symmetric(horizontal: 10),
@@ -83,7 +84,6 @@ class ReviewItem extends StatelessWidget {
                       )),
             ),
           ),
-
           title: Container(
             margin: const EdgeInsets.only(bottom: 5),
             child: Text(
@@ -137,15 +137,12 @@ class ReviewItem extends StatelessWidget {
                               widget: AddReviewView(
                                   product: item["product"],
                                   rev: item,
+                                  isAdmin: isAdmin,
                                   onOk: () {
                                     // _getReviews();
                                     //TODO: RELOAD
                                   }));
                         },
-                      ),
-                      const PopupMenuItem(
-                        child: Text("Delete"),
-                        enabled: false,
                       ),
                     ],
                   ),

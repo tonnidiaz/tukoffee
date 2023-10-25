@@ -132,7 +132,8 @@ router.post("/review", auth, async (req, res) => {
             for (let key of Object.keys(review)) {
                 rev.set(key, review[key]);
             }
-        rev.status = EReviewStatus.pending
+            if (!review.status)
+        {rev.status = EReviewStatus.pending}
             rev.last_modified = new Date();
             await rev.save();
            

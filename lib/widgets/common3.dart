@@ -5,6 +5,7 @@ import "package:get/get.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:flutter_slidable/flutter_slidable.dart";
+import "package:lebzcafe/views/map.dart";
 import "package:lebzcafe/widgets/prompt_modal.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
 import "../utils/constants.dart";
@@ -165,7 +166,8 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
 
   return Obx(
     () => Slidable(
-      endActionPane: appCtrl.user.isEmpty || appCtrl.user["permissions"] == 0
+      endActionPane: appCtrl.user.isEmpty ||
+              appCtrl.user["permissions"] == UserPermissions.read.index
           ? null
           : ActionPane(
               motion: const ScrollMotion(),
@@ -215,10 +217,10 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
           radius: 0,
           onTap: () {
             //formCtrl.clear();
-            formCtrl.setForm(store);
-            pushNamed(
-              "/map",
-            );
+            formCtrl.setForm({"address": store['address']});
+            pushTo(const MapPage(
+              canEdit: false,
+            ));
           },
           child: TuListTile(
               leading: Icon(
@@ -228,7 +230,7 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
               ),
               title: Text(
                 "${store["address"]?["place_name"]}",
-                softWrap: false,
+                softWrap: true,
                 style:
                     const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
               ),

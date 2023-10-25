@@ -1,13 +1,9 @@
 import "package:flutter/material.dart";
-import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/constants2.dart";
 import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/views/order/index.dart";
-import "package:lebzcafe/views/product/reviews/review.dart";
 import "package:lebzcafe/widgets/common.dart";
-import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/review_item.dart";
 
 class ProductsReviews extends StatefulWidget {
@@ -74,9 +70,8 @@ class _ProductsReviewsState extends State<ProductsReviews> {
                         : SliverPadding(
                             padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),
                             sliver: SliverList.builder(
-                              itemBuilder: (c, i) => ReviewItem(
-                                item: _reviews![i],
-                              ),
+                              itemBuilder: (c, i) =>
+                                  ReviewItem(item: _reviews![i], isAdmin: true),
                               itemCount: _reviews!.length,
                             ),
                           ),

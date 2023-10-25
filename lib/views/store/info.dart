@@ -207,7 +207,7 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
                                         ),
                                       ),
                               )),
-                          mY(5),
+                          mY(10),
                           storeCtrl.stores.value == null
                               ? const CircularProgressIndicator()
                               : Column(

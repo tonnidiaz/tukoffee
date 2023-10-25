@@ -1,3 +1,4 @@
+import "package:lebzcafe/utils/types.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
 import "package:lebzcafe/widgets/tu/form_field.dart";
 
@@ -9,16 +10,20 @@ import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/widgets/common.dart";
-import "package:lebzcafe/widgets/common2.dart";
-import "package:lebzcafe/widgets/common3.dart";
-import "package:lebzcafe/widgets/dialog.dart";
 import "package:get/get.dart";
+import "package:lebzcafe/widgets/tu/select.dart";
 
 class AddReviewView extends StatefulWidget {
   final Map<String, dynamic> product;
   final Map<String, dynamic>? rev;
   final Function? onOk;
-  const AddReviewView({super.key, this.rev, required this.product, this.onOk});
+  final bool isAdmin;
+  const AddReviewView(
+      {super.key,
+      this.rev,
+      required this.product,
+      this.onOk,
+      this.isAdmin = false});
 
   @override
   State<AddReviewView> createState() => _AddReviewViewState();
@@ -73,7 +78,8 @@ class _AddReviewViewState extends State<AddReviewView> {
           "title": widget.rev!["title"],
           "name": widget.rev!["name"],
           "body": widget.rev!["body"],
-          "rating": widget.rev!["rating"]
+          "rating": widget.rev!["rating"],
+          "status": widget.rev!["status"],
         });
       }
     });
@@ -150,6 +156,19 @@ class _AddReviewViewState extends State<AddReviewView> {
                             },
                             hint: "Write your review...",
                           ),
+                          widget.isAdmin
+                              ? TuSelect(
+                                  label: "Status:",
+                                  value: _formCtrl.form['status'],
+                                  items: EReviewStatus.values
+                                      .map((e) => SelectItem(
+                                          e.name.toUpperCase(), e.name))
+                                      .toList(),
+                                  onChanged: (val) {
+                                    _formCtrl.setFormField('status', val);
+                                  },
+                                )
+                              : none(),
                           mY(8),
                           TuButton(
                             text: widget.rev != null

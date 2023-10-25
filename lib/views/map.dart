@@ -76,9 +76,9 @@ class _MapPageState extends State<MapPage> {
     if (_isGeocoding || query.length < 3) return;
     _setIsGeocoding(true);
     try {
-      clog("setft");
+      /* clog("setft");
       _setFeatures(dummyFeatures);
-      return;
+      return; */
       const baseURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
       final res = await dio.get("$baseURL/$query.json", queryParameters: {
         "proximity": "28.0534776,-26.1974939",

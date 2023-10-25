@@ -40,8 +40,8 @@ const genOTP = async (phone?: string, email?: string) => {
     return otp;
 };
 const parseProducts = async (products: Obj[]) => {
-    let data = <Obj>[];
-    
+    let data : Obj[]= [];
+ 
     for (let prod of products){
         
         let rating : string | number = 0
@@ -52,7 +52,7 @@ const parseProducts = async (products: Obj[]) => {
 
         prod.reviews = []
       for (let revId of revs){
-        
+        console.log(revId)
         const rev = await Review.findOne({_id: revId, status: EReviewStatus.approved}).exec()
         if (rev){
             rating += rev.rating;

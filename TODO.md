@@ -16,3 +16,4 @@
 - Change/add order statuses
 - Send the feedback email to owner / Notifs categories: Orders/Feedback
 - Change review statuses
+- Open and close times

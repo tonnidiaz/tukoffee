@@ -9,6 +9,7 @@ import { parser, OrderStatus } from "../utils/constants";
 import { auth } from "../utils/middleware";
 import axios from "axios";
 import { Car, CarColor } from "../models/car";
+import { EReviewStatus } from "@/models/review";
 
 
 /* GET home page. */
@@ -76,6 +77,22 @@ router.get("/clean", async (req, res) => {
             }
 
             await prod.save()
+        }
+
+        //Clean reviews
+        for (let rev of await Review.find().exec()){
+            if (rev.status == '0'){
+                rev.status = EReviewStatus.pending
+            }
+            else if (rev.status == '1'){
+                rev.status = EReviewStatus.approved
+            }
+            else if (rev.status == '2'){
+                rev.status = EReviewStatus.rejected
+            }
+
+
+            await rev.save()
         }
         res.send("cleanup complete!");
     } catch (e) {

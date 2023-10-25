@@ -12,7 +12,7 @@ const ReviewSchema = new Schema( {
     name: {type: String, required: true},
     body: {type: String, required: true},
     reject_reason: {type: String},
-    status: {type: String, default: EReviewStatus.pending, enum: EReviewStatus},
+    status: {type: typeof EReviewStatus.pending, default: EReviewStatus.pending, enum: EReviewStatus},
     rating: {type: Number, required: true, default: 0},
     user: {type: Schema.ObjectId, ref: 'User', required: true},
     product: {type: Schema.ObjectId, ref: 'Product', required: true},

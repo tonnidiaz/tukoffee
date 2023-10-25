@@ -11,7 +11,8 @@ import "package:lebzcafe/widgets/views/add_review.dart";
 
 class ProductReviewPage extends StatefulWidget {
   final String id;
-  const ProductReviewPage({super.key, required this.id});
+  final bool isAdmin;
+  const ProductReviewPage({super.key, required this.id, this.isAdmin = false});
 
   @override
   State<ProductReviewPage> createState() => _ProductReviewPageState();
@@ -71,6 +72,7 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
                     widget: AddReviewView(
                         product: _review!["product"],
                         rev: _review!,
+                        isAdmin: widget.isAdmin,
                         onOk: () {
                           _getReview();
                         }));
