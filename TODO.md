@@ -14,3 +14,7 @@
 ## TO FIX
 - Open and close times
 - Editing delivery address also edits in shiplogic
+
+## TEST
+
+- order:deliver -> deliveryaddress tap
