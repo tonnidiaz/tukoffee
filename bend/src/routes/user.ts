@@ -60,7 +60,7 @@ router.get("/cart", async (req, res) => {
                     console.log("Adding");
                     //add product to cart if the cart does not have the product
                     console.log(product)
-                    //cart.products.push({ product: product });
+                    cart.products.push({ product: product, quantity: 1 });
                 } else if (prod && quantity) {
                     // Increase the product's quantiry
                     prod.quantity = quantity;
