@@ -463,92 +463,46 @@ class _OrderPageState extends State<OrderPage> {
                         mY(6),
                         _order!["mode"] == OrderMode.collect.index
                             ? TuCard(
-                                child: true
-                                    ? TuCard(
-                                        color: appBGLight,
-                                        child: Column(children: [
-                                          tuTableRow(
-                                              Text("Collection store",
-                                                  style: Styles.h3()),
-                                              IconButton(
-                                                  padding: EdgeInsets.zero,
-                                                  onPressed:
-                                                      _onEditStoreAddrClick,
-                                                  icon: Icon(
-                                                    Icons.edit,
-                                                    size: 20,
-                                                    color: TuColors.text2,
-                                                  )),
-                                              my: 0),
-                                          devider(),
-                                          mY(10),
-                                          InkWell(
-                                            onTap: () {
-                                              _formCtrl.setForm({
-                                                "address": _order!['store']
-                                                    ['address']
-                                              });
-                                              pushTo(const MapPage(
-                                                  canEdit: false));
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    "${_order!["store"]["address"]["place_name"]}",
-                                                    softWrap: true,
-                                                  ),
-                                                ),
-                                                const Icon(Icons
-                                                    .chevron_right_outlined)
-                                              ],
-                                            ),
-                                          )
-                                        ]),
-                                      )
-                                    : Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Obx(
-                                            () => _storeCtrl.stores.value ==
-                                                    null
-                                                ? none()
-                                                : TuSelect(
-                                                    label: "Store:",
-                                                    value: _order!["store"]
-                                                        ?["_id"],
-                                                    items: _storeCtrl
-                                                        .stores.value!
-                                                        .map((e) {
-                                                      return SelectItem(
-                                                          "${e["address"]["place_name"]}",
-                                                          e["_id"]);
-                                                    }).toList(),
-                                                    onChanged: (val) async {
-                                                      var store = _storeCtrl
-                                                          .stores.value!
-                                                          .where((element) =>
-                                                              element["_id"] ==
-                                                              val)
-                                                          .first;
-                                                      showProgressSheet(); //_ctrl.setStore(store);
-                                                      final res = await apiDio()
-                                                          .post(
-                                                              "/order/edit?id=${_order!["_id"]}",
-                                                              data: {
-                                                            "store": store
-                                                          });
-                                                      gpop();
-                                                      //_reload(res);
-                                                    },
-                                                  ),
-                                          )
-                                        ],
-                                      ))
+                                child: TuCard(
+                                color: appBGLight,
+                                child: Column(children: [
+                                  tuTableRow(
+                                      Text("Collection store",
+                                          style: Styles.h3()),
+                                      IconButton(
+                                          padding: EdgeInsets.zero,
+                                          onPressed: _onEditStoreAddrClick,
+                                          icon: Icon(
+                                            Icons.edit,
+                                            size: 20,
+                                            color: TuColors.text2,
+                                          )),
+                                      my: 0),
+                                  devider(),
+                                  mY(10),
+                                  InkWell(
+                                    onTap: () {
+                                      _formCtrl.setForm({
+                                        "address": _order!['store']['address']
+                                      });
+                                      pushTo(const MapPage(canEdit: false));
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "${_order!["store"]["address"]["place_name"]}",
+                                            softWrap: true,
+                                          ),
+                                        ),
+                                        const Icon(Icons.chevron_right_outlined)
+                                      ],
+                                    ),
+                                  )
+                                ]),
+                              ))
                             : tuColumn(
                                 children: [
                                   TuCard(
@@ -564,14 +518,17 @@ class _OrderPageState extends State<OrderPage> {
                                                   "Delivery address",
                                                   style: Styles.h3(),
                                                 ),
-                                                IconButton(
-                                                    padding: EdgeInsets.zero,
-                                                    onPressed:
-                                                        _onEditAddressPress,
-                                                    icon: const Icon(
-                                                      Icons.edit,
-                                                      size: 20,
-                                                    )),
+                                                Visibility(
+                                                  visible: false,
+                                                  child: IconButton(
+                                                      padding: EdgeInsets.zero,
+                                                      onPressed:
+                                                          _onEditAddressPress,
+                                                      icon: const Icon(
+                                                        Icons.edit,
+                                                        size: 20,
+                                                      )),
+                                                ),
                                                 my: 0),
                                             devider(),
                                             mY(10),
@@ -580,8 +537,22 @@ class _OrderPageState extends State<OrderPage> {
                                                   _order!["delivery_address"];
                                               return addr == null
                                                   ? const Text("No address")
-                                                  : Text(
-                                                      addr["place_name"],
+                                                  : InkWell(
+                                                      onTap: () {
+                                                        _formCtrl.setForm({
+                                                          "address": _order![
+                                                              "delivery_address"]
+                                                        });
+                                                        Get.bottomSheet(
+                                                            const MapPage(
+                                                              canEdit: false,
+                                                            ),
+                                                            isScrollControlled:
+                                                                true);
+                                                      },
+                                                      child: Text(
+                                                        addr["place_name"],
+                                                      ),
                                                     );
                                             }),
                                           ],

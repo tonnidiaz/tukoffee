@@ -1,10 +1,6 @@
-import "dart:convert";
 import "package:intl/intl.dart";
-
 import "package:awesome_notifications/awesome_notifications.dart";
 import "package:dio/dio.dart";
-import "package:geocoding/geocoding.dart";
-import "package:get/get.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/functions.dart";
@@ -29,19 +25,6 @@ createNotif({required String title, required String msg}) {
           title: title,
           body: msg));
 }
-
-/* Future<Address?> getAddressFromLatLng(List center) async {
-  try {
-    Coordinate coordinate =
-        Coordinate(latitude: center.first, longitude: center.last);
-    Geocoding geocoding =
-        await NominatimGeocoding.to.reverseGeoCoding(coordinate);
-    return geocoding.address;
-  } catch (e) {
-    clog(e);
-    return null;
-  }
-} */
 
 class Shiplogic {
   static Future<String> getOrderStatus(Map order) async {

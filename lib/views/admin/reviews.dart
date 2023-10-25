@@ -25,7 +25,7 @@ class _ProductsReviewsState extends State<ProductsReviews> {
     _setReviews(null);
     try {
       final res = await apiDio().get("/products/reviews");
-      _setReviews(res.data["reviews"]);
+      _setReviews(res.data["reviews"].reversed.toList());
     } catch (e) {
       errorHandler(e: e, context: context, msg: "Failed to fetch reviews");
       _setReviews([]);

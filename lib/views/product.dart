@@ -2,10 +2,7 @@
 
 import "package:dio/dio.dart";
 import "package:flutter/material.dart";
-import "package:flutter_rating_bar/flutter_rating_bar.dart";
 import "package:lebzcafe/controllers/store_ctrl.dart";
-import "package:lebzcafe/main.dart";
-import "package:lebzcafe/utils/constants2.dart";
 import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/views/order/index.dart";
@@ -13,11 +10,9 @@ import "package:lebzcafe/views/product/reviews.dart";
 import "package:lebzcafe/widgets/add_product_form.dart";
 import "package:lebzcafe/widgets/common2.dart";
 import "package:lebzcafe/widgets/common3.dart";
-import "package:lebzcafe/widgets/common4.dart";
 import "package:lebzcafe/widgets/form_view.dart";
 import "package:lebzcafe/widgets/product_card.dart";
 import "package:get/get.dart";
-import "package:google_fonts/google_fonts.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
 import "../controllers/app_ctrl.dart";
 import "../utils/colors.dart";

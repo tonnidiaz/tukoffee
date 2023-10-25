@@ -147,15 +147,22 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
   final storeCtrl = MainApp.storeCtrl;
 
   bool isOpen() {
-    final now = DateTime.now(),
-        openTime =
-            store["open_time"].split(":").map((it) => int.parse(it)).toList(),
-        closeTime =
-            store["close_time"].split(":").map((it) => int.parse(it)).toList();
-
+    final now = DateTime.now().toLocal(),
+        timeSuffix = now.weekday == 6 || now.weekday == 7 ? "_weekend" : "",
+        openTime = store["open_time$timeSuffix"]
+            .split(":")
+            .map((it) => int.parse(it))
+            .toList(),
+        closeTime = store["close_time$timeSuffix"]
+            .split(":")
+            .map((it) => int.parse(it))
+            .toList();
     final int h = now.hour, m = now.minute;
+
     var mIsOpen = false;
-    if (h >= openTime[0] && m >= openTime[1] && h <= closeTime[0]) {
+    if (h > openTime[0] && h <= closeTime[0]) {
+      mIsOpen = true;
+    } else if (h == openTime[0] && m >= openTime[1] && h <= closeTime[0]) {
       mIsOpen =
           h < closeTime[0] ? true : (h == closeTime[0] && m <= closeTime[1]);
     } else {

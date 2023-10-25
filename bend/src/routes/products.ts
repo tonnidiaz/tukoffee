@@ -1,6 +1,6 @@
 import express, { response } from "express";
 import { Product, Order, Review } from "../models";
-import { parseProducts, tunedErr } from "../utils/functions";
+import { clog, parseProducts, tunedErr } from "../utils/functions";
 import { auth, lightAuth } from "../utils/middleware";
 import { OrderStatus } from "../utils/constants";
 import { EReviewStatus, IReview } from "../models/review";
@@ -39,12 +39,21 @@ router.get("/", lightAuth, async (req, res, next) => {
                     customer: req.user!._id,
                     status:OrderStatus.completed,
                 }).exec();
-                orders = await Promise.all(
+
+                const data = await Promise.all(
+                    orders.map(async (o)=>{
+                        return {
+                            date: o.last_modified,
+                            items: await Promise.all(o.products.map(async (pr)=> await (await Product.findById(pr.product._id).exec())?.populate('reviews') ))
+                        }
+                    })
+                )               ;
+                 orders = await Promise.all(
                     orders.map(
                         async (it) => (await it.populate("products.product")).populate('products.product.reviews')
                     )
                 ); //
-
+            return res.json(data)
                 return res.json(
                     orders.map((it) => {
                         return {
@@ -87,13 +96,14 @@ router.get("/reviews", lightAuth, async (req, res) => {
     try {
         const { id, pid, user, ids } = req.query;
         let reviews : IReview[]= [];
+        
         if (pid) reviews = await Review.find({ product: pid }).exec();
+        
         else if (id) reviews = [(await Review.findById(id).exec())!];
         else if (user) reviews = await Review.find({ user }).exec();
         else {
             reviews = await Review.find().exec();
         }
-
         reviews = await Promise.all(
             reviews.map(async (it) => (await it.populate("product")).toJSON())
         );

@@ -2,11 +2,8 @@
 
 import "package:flutter/material.dart";
 import "package:lebzcafe/main.dart";
-import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/widgets/common.dart";
-import "package:lebzcafe/widgets/review_item.dart";
 import "package:lebzcafe/widgets/review_item2.dart";
 import "package:get/get.dart";
 
@@ -51,8 +48,8 @@ class _ItemsTabState extends State<ItemsTab> {
   }
 
   _getReview(product) {
-    return (product["reviews"] as List)
-        .firstWhereOrNull((it) => it["user"] == _appCtrl.user["_id"]);
+    final revs = product["reviews"] as List;
+    return revs.firstWhereOrNull((it) => it["user"] == _appCtrl.user["_id"]);
   }
 
   @override

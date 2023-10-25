@@ -166,11 +166,15 @@ class _MapPageState extends State<MapPage> {
         place.administrativeArea,
         place.postalCode
       ].where((element) => element != null).toList();
-/* TODO: ALSO INCLUDE ADDRESS */
       String placeAsTxt = placeAsList.join(", ");
       _setAddress({
         "place_name": placeAsTxt,
-        "center": [position.latitude, position.longitude]
+        "center": [position.latitude, position.longitude],
+        "city": place.locality,
+        "postcode": place.postalCode,
+        "state": place.administrativeArea,
+        "street": place.street,
+        "suburb": place.subLocality
       });
       final cent = LatLng(position.latitude, position.longitude);
       _setCenter(cent);

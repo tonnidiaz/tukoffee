@@ -1,3 +1,4 @@
+import "package:lebzcafe/utils/constants2.dart";
 import "package:lebzcafe/utils/types.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
 import "package:lebzcafe/widgets/tu/form_field.dart";
@@ -159,6 +160,8 @@ class _AddReviewViewState extends State<AddReviewView> {
                           widget.isAdmin
                               ? TuSelect(
                                   label: "Status:",
+                                  bgColor: mFieldBG,
+                                  borderColor: mFieldBG2,
                                   value: _formCtrl.form['status'],
                                   items: EReviewStatus.values
                                       .map((e) => SelectItem(

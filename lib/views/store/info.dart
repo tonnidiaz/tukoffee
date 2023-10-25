@@ -16,6 +16,7 @@ import "package:lebzcafe/views/order/index.dart";
 import "package:lebzcafe/widgets/common.dart";
 import "package:lebzcafe/widgets/common2.dart";
 import "package:lebzcafe/widgets/common3.dart";
+import "package:lebzcafe/widgets/common4.dart";
 import "package:lebzcafe/widgets/form_view.dart";
 import "package:get/get.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
@@ -98,70 +99,33 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
     return Scaffold(
       appBar:
           childAppbar(showCart: false, title: "About ${appCtrl.store["name"]}"),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(topMargin),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            ...[appCtrl.store, appCtrl.owner, appCtrl.developer]
-                .asMap()
-                .entries
-                .map((e) => TuCard(
-                    padding: 4,
-                    radius: 0,
-                    my: .5,
-                    child: TuCollapse(
-                        expanded: e.key == 0,
-                        title:
-                            "${(e.key == 0 ? "Store" : e.key == 1 ? "Owner" : "Developer")} details",
-                        child: tuColumn(children: [
-                          tuColumn(
-                            children: [
-                              h4("Name:", isLight: true),
-                              mY(8),
-                              Obx(() => Text(
-                                    e.value["name"],
-                                    style: TextStyle(color: TuColors.text2),
-                                  )),
-                              mY(4),
-                              devider(),
-                              mY(7)
-                            ],
-                          ),
-                          tuColumn(
-                            children: [
-                              h4("Phone:", isLight: true),
-                              mY(8),
-                              Obx(() => SelectableText(
-                                    e.value["phone"],
-                                    style: TextStyle(color: TuColors.text2),
-                                  )),
-                              mY(4),
-                              devider(),
-                              mY(7)
-                            ],
-                          ),
-                          tuColumn(
-                            children: [
-                              h4("Email:", isLight: true),
-                              mY(8),
-                              Obx(() => SelectableText(
-                                    e.value["email"],
-                                    style: TextStyle(color: TuColors.text2),
-                                  )),
-                              mY(4),
-                              devider(),
-                              mY(7)
-                            ],
-                          ),
-                          Visibility(
-                            visible: e.value["site"] != null,
-                            child: tuColumn(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await _init();
+        },
+        child: TuScrollview(
+          child: Container(
+            padding: EdgeInsets.all(topMargin),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              ...[appCtrl.store, appCtrl.owner, appCtrl.developer]
+                  .asMap()
+                  .entries
+                  .map((e) => TuCard(
+                      padding: 4,
+                      radius: 0,
+                      my: .5,
+                      child: TuCollapse(
+                          expanded: e.key == 0,
+                          title:
+                              "${(e.key == 0 ? "Store" : e.key == 1 ? "Owner" : "Developer")} details",
+                          child: tuColumn(children: [
+                            tuColumn(
                               children: [
-                                h4("Website:", isLight: true),
+                                h4("Name:", isLight: true),
                                 mY(8),
-                                Obx(() => SelectableText(
-                                      e.value["site"],
+                                Obx(() => Text(
+                                      e.value["name"],
                                       style: TextStyle(color: TuColors.text2),
                                     )),
                                 mY(4),
@@ -169,61 +133,103 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
                                 mY(7)
                               ],
                             ),
-                          ),
-                        ]))))
-                .toList(),
-            mY(topMargin),
-            Visibility(
-              visible: true,
-              child: TuCard(
-                  child: Column(
-                children: [
-                  TuCard(child: Obx(
-                    () {
-                      return Column(
-                        children: [
-                          tuTableRow(
-                              Text(
-                                "Locations & times",
-                                style: Styles.h3(),
+                            tuColumn(
+                              children: [
+                                h4("Phone:", isLight: true),
+                                mY(8),
+                                Obx(() => SelectableText(
+                                      e.value["phone"],
+                                      style: TextStyle(color: TuColors.text2),
+                                    )),
+                                mY(4),
+                                devider(),
+                                mY(7)
+                              ],
+                            ),
+                            tuColumn(
+                              children: [
+                                h4("Email:", isLight: true),
+                                mY(8),
+                                Obx(() => SelectableText(
+                                      e.value["email"],
+                                      style: TextStyle(color: TuColors.text2),
+                                    )),
+                                mY(4),
+                                devider(),
+                                mY(7)
+                              ],
+                            ),
+                            Visibility(
+                              visible: e.value["site"] != null,
+                              child: tuColumn(
+                                children: [
+                                  h4("Website:", isLight: true),
+                                  mY(8),
+                                  Obx(() => SelectableText(
+                                        e.value["site"],
+                                        style: TextStyle(color: TuColors.text2),
+                                      )),
+                                  mY(4),
+                                  devider(),
+                                  mY(7)
+                                ],
                               ),
-                              Obx(
-                                () => appCtrl.user.isEmpty
-                                    ? none()
-                                    : Visibility(
-                                        visible:
-                                            appCtrl.user["permissions"] > 0,
-                                        child: InkWell(
-                                          onTap: () {
-                                            formCtrl.setForm({});
-                                            TuFuncs.showBottomSheet(
-                                                context: context,
-                                                widget: const AddStoreView());
-                                          },
-                                          child: const Icon(
-                                            CupertinoIcons.add,
-                                            size: 27,
+                            ),
+                          ]))))
+                  .toList(),
+              mY(topMargin),
+              Visibility(
+                visible: true,
+                child: TuCard(
+                    child: Column(
+                  children: [
+                    TuCard(child: Obx(
+                      () {
+                        return Column(
+                          children: [
+                            tuTableRow(
+                                Text(
+                                  "Locations & times",
+                                  style: Styles.h3(),
+                                ),
+                                Obx(
+                                  () => appCtrl.user.isEmpty
+                                      ? none()
+                                      : Visibility(
+                                          visible:
+                                              appCtrl.user["permissions"] > 0,
+                                          child: InkWell(
+                                            onTap: () {
+                                              formCtrl.setForm({});
+                                              TuFuncs.showBottomSheet(
+                                                  context: context,
+                                                  widget: const AddStoreView());
+                                            },
+                                            child: const Icon(
+                                              CupertinoIcons.add,
+                                              size: 27,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                              )),
-                          mY(10),
-                          storeCtrl.stores.value == null
-                              ? const CircularProgressIndicator()
-                              : Column(
-                                  children: storeCtrl.stores.value!.reversed
-                                      .map((it) {
-                                    return storeCard(context, it);
-                                  }).toList(),
-                                )
-                        ],
-                      );
-                    },
-                  ))
-                ],
-              )),
-            )
-          ]),
+                                )),
+                            mY(10),
+                            storeCtrl.stores.value == null
+                                ? const CircularProgressIndicator()
+                                : Column(
+                                    children: storeCtrl.stores.value!.reversed
+                                        .map((it) {
+                                      return storeCard(context, it);
+                                    }).toList(),
+                                  )
+                          ],
+                        );
+                      },
+                    ))
+                  ],
+                )),
+              )
+            ]),
+          ),
         ),
       ),
     );

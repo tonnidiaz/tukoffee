@@ -79,6 +79,15 @@ router.get("/clean", async (req, res) => {
             await prod.save()
         }
 
+        for (let rev of await Review.find().exec()){
+            const  prod = await Product.findById(rev.product).exec()
+            console.log(prod?.name, prod?.reviews)
+            if (prod && !prod.reviews.includes(rev._id)){
+                prod.reviews.push(rev._id);
+                await prod.save()
+            }
+        }
+
         //Clean reviews
         for (let rev of await Review.find().exec()){
             if (rev.status == '0'){

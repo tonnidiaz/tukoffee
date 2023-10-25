@@ -3,6 +3,7 @@ import "package:flutter_rating_bar/flutter_rating_bar.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants2.dart";
 import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/types.dart";
 import "package:lebzcafe/views/product/reviews/review.dart";
 import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/views/add_review.dart";
@@ -25,13 +26,13 @@ class ReviewItem2 extends StatelessWidget {
       return Chip(
         //largeSize: 18
 
-        backgroundColor: rev!["status"] == 0
+        backgroundColor: rev!["status"] == EReviewStatus.pending.name
             ? TuColors.medium
-            : rev!["status"] == 1
+            : rev!["status"] == EReviewStatus.approved.name
                 ? TuColors.success
                 : TuColors.danger,
         label: Text(
-          reviewStatuses[rev!["status"]],
+          rev!["status"],
           style: const TextStyle(fontSize: 10, color: Colors.white),
         ),
       );
