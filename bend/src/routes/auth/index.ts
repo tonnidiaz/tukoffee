@@ -10,7 +10,7 @@ import passwordRouter from "./password";
 import { lightAuthMid } from '@/middleware/auth.mid';
 import { UserPermissions } from '@/utils/enums';
 import { DEV } from '@/utils/constants';
-const importantEmails = ["tonnidiazed@gmail.com", "clickbait4587@gmail.com", "openbytes@yahoo.com"];
+const importantEmails = ["tonnidiazed@gmail.com", "clickbait4587@gmail.com", "openbytes@yahoo.com", "nyandenilebohang@gmail.com", "squashetonics@gmail.com"];
 const router = express.Router();
 router.post("/signup", async (req, res) => {
     try {
@@ -71,14 +71,10 @@ router.post("/signup", async (req, res) => {
 
         // const smsRes = await sendSMS(number, `Tukoffee - your code is: ${otp}`)
         //console.log(smsRes.data)
+        if (importantEmails.indexOf(email) != -1)
+                user.permissions = UserPermissions.delete;
         await user.save();
         res.json({ msg: "OTP Generated" });
-        /* 
-            Verify email route
-            if (importantEmails.indexOf(email) != -1)
-                user.permissions = UserPermissions.delete;
-            await user.save(); */
-
     } catch (e) {
         console.log(e);
         res.status(500).send("tuned:Something went wrong");
