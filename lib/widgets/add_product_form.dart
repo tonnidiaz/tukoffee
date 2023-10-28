@@ -24,10 +24,12 @@ class AddProductForm extends StatefulWidget {
   final String title;
   final String btnTxt;
   final String mode;
+  final Function(dynamic res)? onDone;
   const AddProductForm(
       {super.key,
       this.title = "Add product",
       this.btnTxt = "Add product",
+      this.onDone,
       this.mode = "add"});
 
   @override
@@ -369,18 +371,22 @@ class _AddProductFormState extends State<AddProductForm> {
         onSubmit: () async {
           if (true) {
             showProgressSheet();
-            final res = await addProduct(context, {..._formCtrl.form},
+            final res = await addEditProduct(context, {..._formCtrl.form},
                 mode: widget.mode);
             if (res != null) {
               /*   showToast("Successs!").show(context);
               return; */
               gpop();
               if (widget.mode == 'edit') {
+                if (widget.onDone != null) {
+                  await widget.onDone!(res);
+                }
                 gpop();
+
                 return;
               }
               Get.offAllNamed("/");
-              pushNamed("/product", arguments: {"pid": res});
+              pushNamed("/product", arguments: {"pid": res['pid']});
             }
           }
         });

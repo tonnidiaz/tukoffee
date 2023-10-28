@@ -213,13 +213,14 @@ void errorHandler({required e, BuildContext? context, String? msg}) {
   }
 }
 
-Future<String?> addProduct(BuildContext context, Map<String, dynamic> product,
+Future<Map?> addEditProduct(BuildContext context, Map<String, dynamic> product,
     {String mode = "add"}) async {
   Logger.info("$mode product...");
   try {
     final url = "/products/$mode";
     final res = await apiDio().post(url, data: product);
-    return "${res.data["pid"]}";
+    Logger.info(res.data);
+    return res.data;
   } catch (e) {
     gpop();
     Logger.info(e);

@@ -29,111 +29,113 @@ class AccountTab extends StatelessWidget {
       body: SingleChildScrollView(
         child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-            child: Column(
-              children: [
-                Container(
-                  color: cardBGLight,
-                  margin: const EdgeInsets.symmetric(vertical: 2),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      InfoItem(
-                          onTap: () {
-                            pushNamed("/account/profile");
-                          },
-                          child: const Text("Profile")),
-                      InfoItem(
-                          onTap: () {
-                            pushNamed("/cart");
-                          },
-                          child: const Text("Cart")),
-                      Visibility(
-                        visible: appCtrl.user.isNotEmpty,
-                        child: InfoItem(
+            child: Obx(
+              () => Column(
+                children: [
+                  Container(
+                    color: cardBGLight,
+                    margin: const EdgeInsets.symmetric(vertical: 2),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        InfoItem(
                             onTap: () {
-                              pushNamed("/orders");
+                              pushNamed("/account/profile");
                             },
-                            child: const Text("Orders")),
-                      ),
-                      Visibility(
-                        visible: appCtrl.user.isNotEmpty,
-                        child: InfoItem(
+                            child: const Text("Profile")),
+                        InfoItem(
                             onTap: () {
-                              pushTo(const RefundsPage());
+                              pushNamed("/cart");
                             },
-                            child: const Text("Refunds")),
-                      ),
-                      InfoItem(
-                          onTap: () {
-                            pushNamed("/store/info");
-                          },
-                          child: const Text("About store")),
-                      Visibility(
-                        visible: DEV,
-                        child: InfoItem(
+                            child: const Text("Cart")),
+                        Visibility(
+                          visible: appCtrl.user.isNotEmpty,
+                          child: InfoItem(
+                              onTap: () {
+                                pushNamed("/orders");
+                              },
+                              child: const Text("Orders")),
+                        ),
+                        Visibility(
+                          visible: appCtrl.user.isNotEmpty,
+                          child: InfoItem(
+                              onTap: () {
+                                pushTo(const RefundsPage());
+                              },
+                              child: const Text("Refunds")),
+                        ),
+                        InfoItem(
                             onTap: () {
-                              pushNamed("/rf");
+                              pushNamed("/store/info");
                             },
-                            child: const Text("RF")),
-                      ),
-                    ],
+                            child: const Text("About store")),
+                        Visibility(
+                          visible: DEV,
+                          child: InfoItem(
+                              onTap: () {
+                                pushNamed("/rf");
+                              },
+                              child: const Text("RF")),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Obx(() => Visibility(
-                      visible: appCtrl.user["_id"] != null &&
-                          appCtrl.user["permissions"] > 0,
-                      child: Container(
-                          color: cardBGLight,
-                          margin: const EdgeInsets.symmetric(vertical: 2),
-                          child: Column(children: [
-                            InfoItem(
-                                onTap: () {
-                                  pushNamed("/admin/dashboard");
-                                },
-                                child: const Text("Admin dashboard")),
-                          ])),
-                    )),
-                Container(
-                  color: cardBGLight,
-                  margin: const EdgeInsets.symmetric(vertical: 2),
-                  child: Column(children: [
-                    InfoItem(
-                        onTap: () {
-                          pushNamed("/settings");
-                        },
-                        child: const Text("Settings")),
-                    InfoItem(
-                        onTap: () {
-                          TuFuncs.showBottomSheet(
-                              context: context, widget: const FeedbackForm());
-                        },
-                        child: const Text("Help/Feedback")),
-                  ]),
-                ),
-                Container(
-                  color: cardBGLight,
-                  margin: const EdgeInsets.symmetric(vertical: 2),
-                  padding: defaultPadding,
-                  child: Obx(
-                    () {
-                      bool logged = appCtrl.user["_id"] != null;
-                      return TuButton(
-                        text: !logged ? "Login" : "Logout",
-                        bgColor: Colors.black87,
-                        width: double.infinity,
-                        onPressed: () {
-                          if (logged) {
-                            pushTo(const LogoutPage());
-                          } else {
-                            pushNamed("/auth/login");
-                          }
-                        },
-                      );
-                    },
+                  Obx(() => Visibility(
+                        visible: appCtrl.user["_id"] != null &&
+                            appCtrl.user["permissions"] > 0,
+                        child: Container(
+                            color: cardBGLight,
+                            margin: const EdgeInsets.symmetric(vertical: 2),
+                            child: Column(children: [
+                              InfoItem(
+                                  onTap: () {
+                                    pushNamed("/admin/dashboard");
+                                  },
+                                  child: const Text("Admin dashboard")),
+                            ])),
+                      )),
+                  Container(
+                    color: cardBGLight,
+                    margin: const EdgeInsets.symmetric(vertical: 2),
+                    child: Column(children: [
+                      InfoItem(
+                          onTap: () {
+                            pushNamed("/settings");
+                          },
+                          child: const Text("Settings")),
+                      InfoItem(
+                          onTap: () {
+                            TuFuncs.showBottomSheet(
+                                context: context, widget: const FeedbackForm());
+                          },
+                          child: const Text("Help/Feedback")),
+                    ]),
                   ),
-                ),
-              ],
+                  Container(
+                    color: cardBGLight,
+                    margin: const EdgeInsets.symmetric(vertical: 2),
+                    padding: defaultPadding,
+                    child: Obx(
+                      () {
+                        bool logged = appCtrl.user["_id"] != null;
+                        return TuButton(
+                          text: !logged ? "Login" : "Logout",
+                          bgColor: Colors.black87,
+                          width: double.infinity,
+                          onPressed: () {
+                            if (logged) {
+                              pushTo(const LogoutPage());
+                            } else {
+                              pushNamed("/auth/login");
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             )),
       ),
     );

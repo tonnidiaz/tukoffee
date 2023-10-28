@@ -15,6 +15,7 @@
 ## TO FIX
 - Open and close times
 - Editing delivery address also edits in shiplogic
+- SOmethig goes wrong when upfating product
 
 ## TEST
 

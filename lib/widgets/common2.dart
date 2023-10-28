@@ -240,7 +240,7 @@ Container imgCard(
                         tempImgs.removeAt(index);
                         Logger.info(res.result);
                         if (mode == "edit" || res.result == "not found") {
-                          final res2 = await addProduct(
+                          final res2 = await addEditProduct(
                               context,
                               {
                                 "images": tempImgs,

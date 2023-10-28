@@ -213,7 +213,7 @@ class _OrderPageState extends State<OrderPage> {
                 SelectItem("Pending", OrderStatus.pending.name),
                 SelectItem("Awaiting pickup", OrderStatus.awaitingPickup.name),
                 SelectItem("Completed", OrderStatus.completed.name),
-                SelectItem("Cancelled", OrderStatus.cancelled.name),
+               
               ],
               onChanged: (val) {
                 _formCtrl.setFormField('status', val);
@@ -254,13 +254,13 @@ class _OrderPageState extends State<OrderPage> {
             items: [
               (_appCtrl.user["permissions"] > 0 &&
                       _order?["mode"] == OrderMode.collect.index &&
-                      widget.fromDash)
+                      widget.fromDash && _order?['status'] != "cancelled")
                   ? PopupMenuItem(
                       onTap: _showUpdateStatusSheet,
                       child: const Text("Update status"),
                     )
                   : null,
-              PopupMenuItem(
+            _order?['status'] == 'cancelled' ? null :  PopupMenuItem(
                 onTap: _cancelOrder,
                 child: const Text("Cancel order"),
               ),

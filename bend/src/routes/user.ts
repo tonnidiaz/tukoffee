@@ -2,7 +2,7 @@
 import { Cart, User } from "../models";
 import bcrypt from "bcrypt";
 import {  DEV } from "../utils/constants";
-import { randomInRange, tunedErr, sendMail } from "../utils/functions";
+import { randomInRange, tunedErr, sendMail, getStoreDetails } from "../utils/functions";
 import { IUser } from "../models/user";
 import { Router } from "express";
 import { ICart } from "../models/cart";
@@ -152,7 +152,8 @@ router.post("/edit", authMid, async (req, res) => {
                 const otp =  randomInRange(1000,9999)
                 _user!.otp = otp
                 if (DEV) console.log(otp);
-               await sendMail("Tukoffee Verification Email",
+                const meta = getStoreDetails()
+               await sendMail(meta.store.name + " Verification Email",
                 `<h2 style="font-weight: 500">Here is your Email verification One-Time-PIN:</h2>
                     <p style="font-size: 20px; font-weight: 600">${_user!.otp}</p>
                 ` , _user!.new_email!

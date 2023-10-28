@@ -168,13 +168,15 @@ router.post("/edit", authMid, async (req, res) => {
             (await Product.findOne({ pid: body.pid }).exec()) ??
             (await Product.findById(body.id).exec());
         if (!prod) return res.status(404).json({ msg: "Product not found" });
-
+     
         for (let key of Object.keys(body)) {
             prod[key] = body[key];
         }
+
         await prod.save();
         console.log("Product edited!");
-        res.json({ pid: prod.pid });
+        const data = await parseProducts([prod])
+        res.json({...data[0]});
     } catch (err) {
         console.log(err);
         res.status(500).send("tuned:Something went wrong");

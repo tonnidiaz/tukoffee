@@ -460,10 +460,16 @@ class _ProductPageState extends State<ProductPage> {
 
     TuFuncs.showBottomSheet(
         context: context,
-        widget: const AddProductForm(
+        widget: AddProductForm(
           title: "Edit product",
           mode: "edit",
           btnTxt: "Save changes",
+          onDone: (res) {
+            Logger.info(res);
+            setState(() {
+              _product = res;
+            });
+          },
         ));
     /*  editProductForm(
             context: context, formViewCtrl: _formViewCtrl, product: _product!)); */

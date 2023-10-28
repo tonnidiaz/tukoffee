@@ -191,7 +191,7 @@ class AccountSettingsPage extends StatelessWidget {
 
     void onChangeEmailClick() {
       formCtrl.clear();
-      Get.bottomSheet(const ChangeEmailSheet());
+      Get.bottomSheet(const ChangeEmailSheet(), isDismissible: false);
     }
 
     return Scaffold(
@@ -225,7 +225,8 @@ class AccountSettingsPage extends StatelessWidget {
                     bgColor: Colors.black,
                     onPressed: () {
                       // show edit pass dialog
-                      Get.bottomSheet(const EditPassForm());
+                      Get.bottomSheet(const EditPassForm(),
+                          isDismissible: false);
                     },
                     text: "Change password"),
               ),

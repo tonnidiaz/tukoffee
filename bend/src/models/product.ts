@@ -12,10 +12,7 @@ const ProductSchema = new Schema({
         required: true
     },
     images: {
-        type: [{
-            url: String,
-            publicId: String
-        }]
+        type: [Object]
     },
     price: {
         type: Number,

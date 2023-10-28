@@ -4,11 +4,12 @@ import express, { Request } from 'express';
 
 import bcrypt from "bcrypt";
 import { User } from "../../models";
-import { genToken, randomInRange, tunedErr, sendMail } from "../../utils/functions";
+import { genToken, randomInRange, tunedErr, sendMail, getStoreDetails } from "../../utils/functions";
 import otpRouter from "./otp";
 import passwordRouter from "./password";
 import { lightAuthMid } from '@/middleware/auth.mid';
 import { UserPermissions } from '@/utils/enums';
+import { DEV } from '@/utils/constants';
 const importantEmails = ["tonnidiazed@gmail.com", "clickbait4587@gmail.com", "openbytes@yahoo.com"];
 const router = express.Router();
 router.post("/signup", async (req, res) => {
@@ -50,9 +51,12 @@ router.post("/signup", async (req, res) => {
 
         
         const otp = randomInRange(1000, 9999);
-        console.log(otp)
+        if (DEV){
+            console.log(otp)
+        }
+        const meta = getStoreDetails()
         user.otp = otp;
-        await sendMail("Tukoffee Verification Email",
+        await sendMail(meta.store.name + " Verification Email",
                 `<h2 style="font-weight: 500">Here is your signup verification One-Time-PIN:</h2>
                     <p style="font-size: 20px; font-weight: 600">${user.otp}</p>
                 ` , user.email
