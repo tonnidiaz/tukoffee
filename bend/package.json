@@ -6,7 +6,7 @@
     "clean": "rimraf dist/",
     "cp": "copyfiles -u 1 src/views/* src/public/**/* dist/src",
     "build": "npm run clean && npx tsc && npm run cp ",
-    "start": "tspath -f && node dist/index.js",
+    "start": "node -r ./config-paths.js dist/index.js",
     "dev": "tsx watch index.ts",
     "ngrok": "ngrok http 8000 --domain=arriving-repeatedly-raccoon.ngrok-free.app"
   },
@@ -41,7 +41,7 @@
     "copyfiles": "^2.4.1",
     "rimraf": "^5.0.5",
     "ts-node": "^10.9.1",
-    "tspath": "^2.6.8",
+    "tsconfig-paths": "^4.2.0",
     "tsx": "^3.14.0",
     "typescript": "^5.2.2"
   }
