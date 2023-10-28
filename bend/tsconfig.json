@@ -1,17 +1,18 @@
 {
     "compilerOptions": {
-        "target": "ES6",
+        "target": "es2022",
         "module": "commonjs",
         "rootDir": "./",
         "moduleResolution": "node",
         "baseUrl": "./",
+        "outDir": "dist",
         "paths": { "@/*": ["src/*"] },
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "strict": true,
         "noImplicitAny": false,
         "skipLibCheck": true
-    },
+    }, 
     "exclude": ["node_modules"]
 }
  

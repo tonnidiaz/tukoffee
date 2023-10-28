@@ -1,6 +1,6 @@
 import { Schema, InferSchemaType, Document } from "mongoose";
-import { UserPermissions } from "../utils/constants";
-import { IAddress } from "../utils/types";
+import { IAddress } from "../utils/interfaces";
+import { UserPermissions } from "@/utils/enums";
 
 const UserSchema = new Schema({
     first_name: {
@@ -59,6 +59,9 @@ const UserSchema = new Schema({
     },
     orders: {
         type: [Schema.ObjectId], ref: "Order"
+    },
+    refunds: {
+        type: [Schema.ObjectId], ref: "Refund"
     }
 })
 

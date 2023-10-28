@@ -5,27 +5,6 @@ import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/functions.dart";
 
-createOrderNotification(String orderId) {
-  AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: 10,
-          channelKey: "order_channel",
-          actionType: ActionType.Default,
-          title: "New order",
-          body: "A new order has been placed",
-          payload: {"orderId": orderId}));
-}
-
-createNotif({required String title, required String msg}) {
-  AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: 10,
-          channelKey: "order_channel",
-          actionType: ActionType.Default,
-          title: title,
-          body: msg));
-}
-
 class Shiplogic {
   static Future<String> getOrderStatus(Map order) async {
     try {

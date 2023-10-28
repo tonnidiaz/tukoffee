@@ -485,7 +485,10 @@ class _OrderPageState extends State<OrderPage> {
                                       _formCtrl.setForm({
                                         "address": _order!['store']['address']
                                       });
-                                      pushTo(const MapPage(canEdit: false));
+                                      TuFuncs.showBottomSheet(
+                                          context: context,
+                                          widget:
+                                              const MapPage(canEdit: false));
                                     },
                                     child: Row(
                                       mainAxisAlignment:
@@ -543,12 +546,12 @@ class _OrderPageState extends State<OrderPage> {
                                                           "address": _order![
                                                               "delivery_address"]
                                                         });
-                                                        Get.bottomSheet(
-                                                            const MapPage(
-                                                              canEdit: false,
-                                                            ),
-                                                            isScrollControlled:
-                                                                true);
+                                                        TuFuncs.showBottomSheet(
+                                                          context: context,
+                                                          widget: const MapPage(
+                                                            canEdit: false,
+                                                          ),
+                                                        );
                                                       },
                                                       child: Text(
                                                         addr["place_name"],

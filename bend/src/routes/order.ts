@@ -1,10 +1,11 @@
-import express from "express";
-import { Cart, Order, User, Product } from "../models";
-import { auth } from "../utils/middleware";
-import { OrderStatus } from "../utils/constants";
-import { tunedErr } from "../utils/functions";
+import express, { Request } from "express";
+import { Cart, Order, User, Product, Refund } from "../models";
+import { paystackAxios, tunedErr } from "../utils/functions";
 import io from "../utils/io";
-import { Obj } from "../utils/types";
+import { IObj } from "../utils/interfaces";
+import { authMid } from "@/middleware/auth.mid";
+import { OrderStatus } from "@/utils/enums";
+import auth from "./auth";
 const router = express.Router();
  
 const genOID = async () => {
@@ -14,7 +15,7 @@ const genOID = async () => {
     return oid;
 };
 
-router.post("/cancel", auth, async (req, res) => {
+router.post("/cancel", authMid, async (req: Request, res) => {
     const { ids, userId } = req.body;
     const { action } = req.query;
     try {
@@ -32,10 +33,35 @@ router.post("/cancel", auth, async (req, res) => {
                         console.log(`Order #${id} deleted!`);
                     }
                 } else {
-                    const order = await Order.findByIdAndUpdate(id, {
-                        status: OrderStatus.cancelled,
-                        last_modified: new Date(),
-                    }).exec();
+
+                    //Apply for refund first
+                    const order = await Order.findById(id).exec()
+                    if (!order) return tunedErr(res, 400, 'Order not found');
+                    try{
+                        if (order.paystackData){
+                            console.log("REQUESTING PAYSTACK REFUND...")
+                            const refundRes = await paystackAxios().post('/refund', {transaction: order.paystackData.reference});
+                            if (refundRes.data.status == true){
+                                const refund = new Refund()
+                                refund.userId = order.customer;
+                                refund.paystackId = refundRes.data.data.id
+                                await refund.save()
+                                await User.findByIdAndUpdate(order.customer, {$push: {
+                                    refunds: refund._id
+                                }}).exec()
+                            }
+     
+                        }
+                        
+                    }catch(e: any){
+                        const msg = e?.response?.data?.message
+                        return tunedErr(res, 500, msg ?? 'Failed to request refund order')
+                    }
+                   
+           
+                    order.status = OrderStatus.cancelled
+                    order.last_modified = new Date()
+                    await order?.save()
                     console.log(`Order #${id} cancelled!`);
                      //Update inventory
             for (let item of order!.products){
@@ -53,7 +79,7 @@ router.post("/cancel", auth, async (req, res) => {
         const orders = userId
             ? await Order.find({ customer: userId }).exec()
             : await Order.find().exec();
-        let populatedOrders = <Obj>[];
+        let populatedOrders = <IObj>[];
         for (let o of orders) {
             let ord = await (
                 await o.populate("customer")
@@ -117,7 +143,8 @@ router.post("/create", auth, async (req, res) => {
             //user.cart = null
             //await user.save()
             console.log("Cart deleted");
-            io.emit('order', order.oid)
+            io.emit('order', {
+                orderId: order.oid, userId: order.customer})
             console.log("On order emitted")
             res.json({ order: { ...order.toJSON(), customer: null } });
         } else {

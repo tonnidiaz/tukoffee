@@ -8,6 +8,7 @@ import indexRouter from './routes/index';
 import orderRouter from './routes/order';
 import adminRouter from './routes/admin';
 import usersRouter from './routes/users';
+import testRouter from './routes/test';
 import messageRouter from './routes/message';
 import ordersRouter from './routes/orders';
 import productsRouter from './routes/products';
@@ -31,7 +32,7 @@ app.set('view engine', 'pug');
 
 
 app.use(cors()) 
- app.use(cors({
+ app.use(cors({ 
   origin: '*'
 }))
 /*------------------ mongodb ----------------------- */
@@ -58,6 +59,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const parser = multer().none();
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/test', testRouter);
 app.use('/admin', adminRouter);
 app.use('/order', orderRouter);
 app.use('/orders', ordersRouter);

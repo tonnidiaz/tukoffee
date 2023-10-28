@@ -49,6 +49,7 @@ class OrderItem extends StatelessWidget {
         try {
           showProgressSheet(msg: "Canceling order..");
 
+          //Apply for refund first
           if (order["mode"] == OrderMode.deliver.index) {
             //cancel from shiplogic first
             await Shiplogic.cancelOrder(order);

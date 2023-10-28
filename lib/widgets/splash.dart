@@ -75,11 +75,13 @@ class _TuSplashState extends State<TuSplash> {
         //GET APIURL
         final apiURL = await getApiURL();
         _appCtrl.setApiURL(apiURL);
+        clog(apiURL);
         initSocketio();
       } catch (e) {
         clog(e);
         return;
       }
+      return;
       clog("await seupStoreDetails...");
       await setupStoreDetails();
       // If server is still down

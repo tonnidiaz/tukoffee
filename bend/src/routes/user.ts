@@ -1,13 +1,13 @@
 
 import { Cart, User } from "../models";
-import { auth, lightAuth } from "../utils/middleware";
 import bcrypt from "bcrypt";
-import { parser, DEV } from "../utils/constants";
+import {  DEV } from "../utils/constants";
 import { randomInRange, tunedErr, sendMail } from "../utils/functions";
 import { IUser } from "../models/user";
 import { Router } from "express";
-import { Obj } from "../utils/types";
 import { ICart } from "../models/cart";
+import { authMid } from "@/middleware/auth.mid";
+import { IObj } from "@/utils/interfaces";
 const router = Router();
 
 /* GET users listing. */
@@ -31,7 +31,7 @@ router.get("/cart", async (req, res) => {
             let c = await cart.populate("products.product");
             c = {
                 ...c.toJSON(),
-                products: c.products.filter((it) => it.product != null && (it.product as Obj).quantity > 0),
+                products: c.products.filter((it) => it.product != null && (it.product as IObj).quantity > 0),
             };
             res.json({ cart: c });
         } catch (e) {
@@ -39,7 +39,7 @@ router.get("/cart", async (req, res) => {
             res.status(500).send("tuned:Something went wrong");
         }
     })
-    router.post("/cart", auth, async (req, res) => {
+    router.post("/cart", authMid, async (req, res) => {
         try {
             const { action } = req.query;
             const { product, quantity } = req.body;
@@ -70,7 +70,7 @@ router.get("/cart", async (req, res) => {
                 await _user.save();
 
                 //let c = await cart.populate("products.product")
-                let c : Obj = await cart.populate("products.product");
+                let c : IObj = await cart.populate("products.product");
                 c = {
                     ...c.toJSON(),
                     products: c.products.filter((it) => it.product != null && it.product.quantity > 0),
@@ -83,7 +83,7 @@ router.get("/cart", async (req, res) => {
                         (it) => it.product != product
                     );
                     await cart.save();
-                    let c : Obj = await cart.populate("products.product");
+                    let c : IObj = await cart.populate("products.product");
 
                     c = {
                         ...c.toJSON(),
@@ -96,7 +96,7 @@ router.get("/cart", async (req, res) => {
             else if (action == 'clear'){
                 cart.products = []
                 await cart.save()
-                let c : Obj= await cart.populate("products.product");
+                let c : IObj= await cart.populate("products.product");
 
                     c = {
                         ...c.toJSON(),
@@ -111,7 +111,7 @@ router.get("/cart", async (req, res) => {
         }
     }); 
 
-router.post("/delivery-address", auth, async (req, res) => {
+router.post("/delivery-address", authMid, async (req, res) => {
     try {
         const { action } = req.query;
         const { address } = req.body;
@@ -131,7 +131,7 @@ router.post("/delivery-address", auth, async (req, res) => {
         res.status(500).send("tuned:Something went wrong");
     }
 });
-router.post("/edit", auth, async (req, res) => {
+router.post("/edit", authMid, async (req, res) => {
     try {
         const { field } = req.query;
         const { value, userId, data } = req.body;
@@ -170,7 +170,7 @@ router.post("/edit", auth, async (req, res) => {
     }
 });
 
-router.post("/delete", auth, async (req, res) => {
+router.post("/delete", authMid, async (req, res) => {
     try {
         const { password } = req.body;
         const passValid = bcrypt.compareSync(password, req.user!.password);

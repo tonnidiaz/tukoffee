@@ -17,8 +17,14 @@ function randomInRange(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-
-const genToken = (data: Obj, exp? : string | number | undefined) => {
+export const paystackAxios = () => axios.create(
+    {baseURL: "https://api.paystack.co",
+        headers: {
+    Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY_DEMO}`, //TODO: Use live key
+    
+        }
+})
+const genToken = (data: IObj, exp? : string | number | undefined) => {
     const { PRIVATE_KEY } = process.env;
     return exp
         ? jwt.sign(
@@ -43,8 +49,8 @@ const genOTP = async (phone?: string, email?: string) => {
 export function clog(message?: any, ...params: any[]){
         console.log(message, ...params);
     }
-const parseProducts = async (products: Obj[]) => {
-    let data : Obj[]= [];
+const parseProducts = async (products: IObj[]) => {
+    let data : IObj[]= [];
  
    
     for (let prod of products){
@@ -75,7 +81,7 @@ const parseProducts = async (products: Obj[]) => {
 import axios from "axios";
 import { Review } from "../models";
 import { EReviewStatus } from "../models/review";
-import { Obj } from "./types";
+import { IObj } from "./interfaces";
 const sendSMS = async (number, message)=>{
     const encodedParams = new URLSearchParams();
     encodedParams.set("sms", number);

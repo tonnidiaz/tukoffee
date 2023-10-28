@@ -2,11 +2,12 @@ import "package:awesome_notifications/awesome_notifications.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lebzcafe/main.dart";
+import "package:lebzcafe/services/notifications.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants2.dart";
 import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/utils/functions2.dart";
-import "package:lebzcafe/utils/notifs_ctrl.dart";
+import 'package:lebzcafe/controllers/notifs_ctrl.dart';
 import "package:lebzcafe/utils/theme.dart";
 import "package:get/get.dart";
 import "package:lebzcafe/views/getx/home.dart";
@@ -23,6 +24,7 @@ class MobileApp extends StatefulWidget {
 }
 
 class _MobileAppState extends State<MobileApp> {
+  final _appCtrl = MainApp.appCtrl;
   bool _darkMode = false;
   _setDarkMode(bool val) {
     setState(() {
@@ -61,17 +63,19 @@ class _MobileAppState extends State<MobileApp> {
     super.initState();
 
     _setNotifsListeners();
-    ever(MainApp.appCtrl.darkMode, (val) {
+    ever(_appCtrl.darkMode, (val) {
       _setDarkMode(val);
     });
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      requestNotifsPermission(context);
+      NotifsService.requestNotifsPermission(context);
       socket?.on("order", (data) {
         clog("ON ORDER");
         //CREATE NOTIF IF USER IS ADMIN
-        if (MainApp.appCtrl.user.isNotEmpty &&
-            MainApp.appCtrl.user["permissions"] != UserPermissions.read) {
-          createOrderNotification("$data");
+        if (_appCtrl.user.isNotEmpty &&
+            _appCtrl.user["permissions"] != UserPermissions.read) {
+          if (data['userId'] != _appCtrl.user['_id']) {
+            NotifsService.createOrderNotification("${data['orderId']}");
+          }
         }
       });
       _checkUpdates();

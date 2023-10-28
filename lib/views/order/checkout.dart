@@ -2,12 +2,14 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lebzcafe/utils/functions2.dart';
+import 'package:lebzcafe/utils/types.dart';
 import 'package:lebzcafe/utils/vars.dart';
 import 'package:lebzcafe/views/order/checkout/step1.dart';
 import 'package:lebzcafe/views/order/checkout/step2.dart';
 import 'package:lebzcafe/widgets/tu/browser.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'dart:io';
 
@@ -86,7 +88,10 @@ class CheckoutCtrl extends GetxController {
     //create the order
 
     try {
-      await browser?.close();
+      if (browser?.isOpened() == true) {
+        await browser?.close();
+      }
+
       showProgressSheet(msg: "Creating order...");
       if (mode.value == OrderMode.deliver) {
         // Create shiplogic shipment
@@ -116,9 +121,9 @@ class CheckoutCtrl extends GetxController {
             "address": selectedAddr,
             'store': store['_id'],
             'collector': collector,
-            "form": {...form, "fee": storeCtrl.deliveryFee.value},
             'yocoData': yocoData,
             'paystackData': paystackData,
+            "form": {...form, "fee": storeCtrl.deliveryFee.value},
           });
       var oid = res.data["order"]["oid"];
 
@@ -152,15 +157,19 @@ class _CheckoutPageState extends State<CheckoutPage> {
     clog('Socketio init...');
     socket?.off("payment");
     socket?.on('payment', (data) {
-      clog('On payment');
-      if (data['gateway'] == 'yoco') {
-        final yocoData = data['data'];
-        if (yocoData['type'] == 'payment.succeeded') {
+      clog('On payment: $data');
+      final gateway = data['gateway'];
+      final mData = data['data'];
+      if (gateway == EGateway.yoco.index) {
+        if (mData['type'] == 'payment.succeeded') {
           _ctrl.createOrder(
-              context: context, yocoData: yocoData, browser: _browser);
+              context: context, yocoData: mData, browser: _browser);
         } else {
-          clog(yocoData);
+          clog(mData);
         }
+      } else if (gateway == EGateway.paystack.index) {
+        _ctrl.createOrder(
+            context: context, paystackData: mData, browser: _browser);
       }
     });
   }
@@ -567,17 +576,18 @@ class GatewaysSheet extends StatelessWidget {
 
     createPaystackURL() async {
       var body = {
+        "email": "${appCtrl.user['email']}",
         "name":
             "${appCtrl.user['first_name']} ${appCtrl.user['last_name']}'s ${appCtrl.store['name']} Order",
         "amount": total * 100,
         "description": "Checkout your ${appCtrl.store['name']} order.",
-        "redirect_url": "${MainApp.appCtrl.apiURL}/payment"
+        "callback_url": "${MainApp.appCtrl.apiURL}/hooks/paystack"
       };
-      final res = await paystackDio.post("/page", data: body);
+      final res = await paystackDio.post("/transaction/initialize", data: body);
       final resData = res.data["data"];
-      final checkoutUrl = "$paystackPayUrl/${resData['slug']}";
+
       // Navigate to payment page and pass checkoutUrl as arg to be used in webview
-      return checkoutUrl;
+      return resData['authorization_url'];
     }
 
     createYocoURL() async {
@@ -604,12 +614,14 @@ class GatewaysSheet extends StatelessWidget {
           TuButton(
             onPressed: () async {
               try {
-                if (Platform.isLinux) {
-                  ctrl.createOrder(context: context);
-                  return;
-                }
                 showProgressSheet();
                 final url = await createPaystackURL();
+                if (Platform.isLinux) {
+                  await launchUrl(Uri.parse(url));
+                  gpop();
+                  //gpop();
+                  return;
+                }
 
                 //pushTo(PaymentPage(url: url));
                 await browser.openUrlRequest(

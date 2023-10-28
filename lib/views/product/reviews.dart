@@ -99,7 +99,7 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
           slivers: [
             _reviews == null
                 ? const SliverFillRemaining(
-                    child: Center(child: LinearProgressIndicator()),
+                    child: Center(child: CircularProgressIndicator()),
                   )
                 : _reviews == null || _product == null
                     ? const SliverFillRemaining()

@@ -1,7 +1,8 @@
+import { authMid } from '@/middleware/auth.mid';
 import { Store } from '../models';
 import { tunedErr } from '../utils/functions';
-import { auth } from '../utils/middleware';
-const router = require('express').Router()
+import { Router } from 'express';
+const router = Router()
 
 router.get('/', async (req, res)=>{
     let stores = await Store.find().exec()
@@ -9,7 +10,7 @@ router.get('/', async (req, res)=>{
         res.json({stores})
 })
 
-router.post('/add',  auth, async (req, res)=>{
+router.post('/add',  authMid, async (req, res)=>{
     try {
         const { body} = req;
         const store = new Store()
@@ -26,7 +27,7 @@ router.post('/add',  auth, async (req, res)=>{
         tunedErr(res, 500, "Something went wrong")
     }
 })
-router.post('/del',  auth, async (req, res)=>{
+router.post('/del',  authMid, async (req, res)=>{
     try {
         const { id} = req.query;
         const store = await  Store.findByIdAndDelete(id).exec()

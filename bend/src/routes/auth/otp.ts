@@ -1,4 +1,5 @@
-const router = require("express").Router();
+const router = Router();
+import { Router } from "express";
 import { User } from "../../models";
 import { DEV } from "../../utils/constants";
 import { tunedErr, randomInRange, genToken, sendMail, getStoreDetails } from "../../utils/functions";

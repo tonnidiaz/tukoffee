@@ -48,7 +48,7 @@ paypal_sdk.Buttons({
 
  }
 
- var socket = io('https://tukoffee.vercel.app');
+ var socket = io();
  socket.on('connect', ()=>{
     console.log('CONNECTED')
  })

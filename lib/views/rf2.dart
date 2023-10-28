@@ -5,6 +5,7 @@ import "package:flutter/services.dart";
 import "package:flutter_inappwebview/flutter_inappwebview.dart";
 import "package:geocoding/geocoding.dart";
 import "package:get/get.dart";
+import "package:lebzcafe/services/notifications.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/constants2.dart";
@@ -51,7 +52,7 @@ class _RFPage2State extends State<RFPage2> {
 
     socket?.on("rf", (data) => {clog("RF: $data")});
     socket?.on("comment", (data) {
-      createNotif(title: "Anonymous says", msg: data);
+      NotifsService.createNotif(title: "Anonymous says", msg: data);
       if (context.mounted) {
         setState(() {
           _comments.add(data);

@@ -1,7 +1,7 @@
+import { authMid, lightAuthMid } from "@/middleware/auth.mid";
 import { User } from "../../models";
 import { DEV } from "../../utils/constants";
 import { genOTP, randomInRange, sendMail, getStoreDetails } from "../../utils/functions";
-import { auth, lightAuth } from "../../utils/middleware";
 import bcrypt from "bcrypt";
 import express from "express";
 
@@ -49,7 +49,7 @@ router.post("/reset", async (req, res) => {
         res.status(500).send("Something went wrong!");
     }
 });
-router.post("/verify", lightAuth, async (req, res) => {
+router.post("/verify", lightAuthMid, async (req, res) => {
     try {
         const { password } = req.body;
         const oldPassValid = bcrypt.compareSync(password, req.user!.password);
@@ -65,7 +65,7 @@ router.post("/verify", lightAuth, async (req, res) => {
 router
     .route("/change")
 
-    .post(auth, async (req, res) => {
+    .post(authMid, async (req, res) => {
         try {
             const { old: oldPass, new: newPass } = req.body;
             const oldPassValid = bcrypt.compareSync(oldPass, req.user!.password);

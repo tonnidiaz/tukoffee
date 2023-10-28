@@ -405,6 +405,7 @@ class _OrdersPageState extends State<OrdersPage> {
                         )
                       : _ctrl.sortedOrders.isEmpty
                           ? SliverFillRemaining(
+                              hasScrollBody: false,
                               child: Center(
                                   child: Padding(
                                 padding: const EdgeInsets.all(8.0),

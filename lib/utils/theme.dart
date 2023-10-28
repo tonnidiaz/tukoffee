@@ -41,9 +41,13 @@ ThemeData tuTheme(bool dark) {
 
         //shape: RoundedRectangleBorder(borderRadius: mFieldRadius),
       ),
-      chipTheme: const ChipThemeData(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-        labelPadding: EdgeInsets.only(top: -6, bottom: -4),
+      chipTheme: ChipThemeData(
+        backgroundColor: TuColors.medium,
+        labelStyle: const TextStyle(
+          color: Colors.white,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+        labelPadding: const EdgeInsets.only(top: -6, bottom: -4),
       ),
       textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
@@ -57,9 +61,9 @@ ThemeData tuTheme(bool dark) {
           selectedItemColor: TuColors.primary,
           showUnselectedLabels: true,
           unselectedItemColor: TuColors.text2,
-          unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600)),
-      listTileTheme: ListTileThemeData(
-        contentPadding: const EdgeInsets.only(right: 0, left: 14),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600)),
+      listTileTheme: const ListTileThemeData(
+        contentPadding: EdgeInsets.only(right: 0, left: 14),
       ));
 }
 

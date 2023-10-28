@@ -1,9 +1,9 @@
 import express, { response } from "express";
 import { Product, Order, Review } from "../models";
 import { clog, parseProducts, tunedErr } from "../utils/functions";
-import { auth, lightAuth } from "../utils/middleware";
-import { OrderStatus } from "../utils/constants";
 import { EReviewStatus, IReview } from "../models/review";
+import { lightAuthMid, authMid } from "@/middleware/auth.mid";
+import { OrderStatus } from "@/utils/enums";
 const router = express.Router();
 
 const genPID = async () => {
@@ -13,7 +13,7 @@ const genPID = async () => {
     return pid;
 };
 
-router.get("/", lightAuth, async (req, res, next) => {
+router.get("/", lightAuthMid, async (req, res, next) => {
     const args = req.query;
     const { pid, q } = args;
 
@@ -74,7 +74,7 @@ router.get("/", lightAuth, async (req, res, next) => {
     }
 });
 
-router.post("/add", auth, async (req, res) => {
+router.post("/add", authMid, async (req, res) => {
     try {
         const body = req.body;
         const prod = new Product();
@@ -92,7 +92,7 @@ router.post("/add", auth, async (req, res) => {
     }
 });
 
-router.get("/reviews", lightAuth, async (req, res) => {
+router.get("/reviews", lightAuthMid, async (req, res) => {
     try {
         const { id, pid, user, ids } = req.query;
         let reviews : IReview[]= [];
@@ -114,7 +114,7 @@ router.get("/reviews", lightAuth, async (req, res) => {
     }
 });
 
-router.post("/review", auth, async (req, res) => {
+router.post("/review", authMid, async (req, res) => {
     try {
         const { act } = req.query;
         const { pid, id, review, ids } = req.body;
@@ -170,7 +170,7 @@ router.post("/review", auth, async (req, res) => {
         tunedErr(res, 500, "Something went wrong");
     }
 });
-router.post("/edit", auth, async (req, res) => {
+router.post("/edit", authMid, async (req, res) => {
     try {
         const { body } = req;
 
@@ -192,7 +192,7 @@ router.post("/edit", auth, async (req, res) => {
     }
 });
 
-router.post("/delete", auth, async (req, res) => {
+router.post("/delete", authMid, async (req, res) => {
     try {
         const { pid } = req.query;
         const { pids } = req.body;

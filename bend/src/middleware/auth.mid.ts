@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models";
 import { NextFunction, Response, Request } from "express";
-import {Obj } from "./types";
+import { IObj } from "@/utils/interfaces";
 
-const auth = async (req: Request, res: Response, next: NextFunction) => {
+const authMid = async (req: Request, res: Response, next: NextFunction) => {
     return await authenticator(req, res, next, true)
 };
-const lightAuth = async (req: Request, res: Response, next: NextFunction) => {
+const lightAuthMid = async (req: Request, res: Response, next: NextFunction) => {
     return await authenticator(req, res, next, false)
 }; 
  
@@ -16,8 +16,8 @@ const authenticator = async (req : Request, res: Response, next: NextFunction, i
         const tkn = authorization.split(" ")[1];      
      if (tkn){
          try {
-            const {payload} = jwt.verify(tkn, process.env.PRIVATE_KEY!) as Obj;
-            if (payload && payload.id){
+            const {payload} = jwt.verify(tkn, process.env.PRIVATE_KEY!) as IObj;
+            if (payload?.id){
                 const user =  await User.findById(payload.id).exec()
                     req.user = user
             }
@@ -33,4 +33,4 @@ const authenticator = async (req : Request, res: Response, next: NextFunction, i
     next()
 }
 
-export { auth, lightAuth };
+export { authMid, lightAuthMid };

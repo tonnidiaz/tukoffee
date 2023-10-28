@@ -14,13 +14,10 @@ import "package:lebzcafe/controllers/store_ctrl.dart";
 import "package:lebzcafe/main.dart";
 import "package:get/get.dart" as getx;
 import "package:hive_flutter/hive_flutter.dart";
-import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/widgets/prompt_modal.dart";
 import "package:package_info_plus/package_info_plus.dart";
 import "package:permission_handler/permission_handler.dart";
 import "/utils/constants.dart";
 import "package:window_manager/window_manager.dart";
-import "package:awesome_notifications/awesome_notifications.dart";
 import "constants2.dart";
 
 void clog(dynamic p) {
@@ -272,7 +269,7 @@ class TuFuncs {
     return showDialog(
         useRootNavigator: false,
         context: context,
-        barrierColor: const Color.fromRGBO(0, 0, 0, 0.03),
+        //barrierColor: const Color.fromRGBO(0, 0, 0, 0.03),
         builder: (context) => widget);
   }
 }
@@ -379,47 +376,4 @@ bool autoCheck() {
   final acu = appBox!.get("AUTO_CHECK_UPDATES");
   final autoCheck = acu == null || acu;
   return autoCheck;
-}
-
-initNotifs() {
-  AwesomeNotifications().initialize(
-      // set the icon to null if you want to use the default app icon
-      null,
-      [
-        NotificationChannel(
-            channelGroupKey: "order_channel_group",
-            channelKey: "order_channel",
-            channelName: "Order notifications",
-            channelDescription: "Notification channel for order creation",
-            defaultColor: TuColors.primary,
-            ledColor: Colors.white)
-      ],
-      // Channel groups are only visual and are not required
-      channelGroups: [
-        NotificationChannelGroup(
-            channelGroupKey: "order_channel_group",
-            channelGroupName: "Basic group")
-      ],
-      debug: true);
-}
-
-requestNotifsPermission(BuildContext context) {
-  AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-    clog("Allowed: $isAllowed");
-    if (Platform.isLinux) return;
-    if (!isAllowed) {
-      TuFuncs.showTDialog(
-          context,
-          PromptDialog(
-            title: "Notifications permission",
-            msg: "The app requires permission to send notifications",
-            onOk: () {
-              // This is just a basic example. For real apps, you must show some
-              // friendly dialog box before call the request method.
-              // This is very important to not harm the user experience
-              AwesomeNotifications().requestPermissionToSendNotifications();
-            },
-          ));
-    }
-  });
 }

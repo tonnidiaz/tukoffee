@@ -15,9 +15,11 @@ class TuDialogView extends StatefulWidget {
   final String title;
   final List<Widget> fields;
   final String okTxt;
+  final bool hasActions;
   const TuDialogView(
       {super.key,
       this.isForm = false,
+      this.hasActions = true,
       this.onOk,
       this.content,
       this.okTxt = "CONTINUE",
@@ -54,40 +56,42 @@ class _TuDialogViewState extends State<TuDialogView> {
                 ],
               ))
           : widget.content,
-      actions: [
-        TuButton(
-          text: "CANCEL",
-          height: 35,
-          bgColor: TuColors.medium,
-          radius: 5,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        TuButton(
-          text: widget.okTxt,
-          height: 35,
+      actions: !widget.hasActions
+          ? null
+          : [
+              TuButton(
+                text: "CANCEL",
+                height: 35,
+                bgColor: TuColors.medium,
+                radius: 5,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              TuButton(
+                text: widget.okTxt,
+                height: 35,
 
-          radius: 5,
-          bgColor: Colors.blue,
-          //bgColor: Colors.black87,
-          // height: 35,
-          onPressed: () async {
-            if (widget.isForm) {
-              if (_formKey.currentState!.validate()) {
-                // Validate form first
-                if (widget.onOk != null) {
-                  await widget.onOk!();
-                }
-              }
-            } else {
-              if (widget.onOk != null) {
-                await widget.onOk!();
-              }
-            }
-          },
-        )
-      ],
+                radius: 5,
+                bgColor: Colors.blue,
+                //bgColor: Colors.black87,
+                // height: 35,
+                onPressed: () async {
+                  if (widget.isForm) {
+                    if (_formKey.currentState!.validate()) {
+                      // Validate form first
+                      if (widget.onOk != null) {
+                        await widget.onOk!();
+                      }
+                    }
+                  } else {
+                    if (widget.onOk != null) {
+                      await widget.onOk!();
+                    }
+                  }
+                },
+              )
+            ],
     );
   }
 }

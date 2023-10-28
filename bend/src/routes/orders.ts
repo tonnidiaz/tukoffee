@@ -1,6 +1,6 @@
 import express from 'express';
 import { Cart, Order, User } from '../models';
-import { Obj } from '../utils/types';
+import { IObj } from '@/utils/interfaces';
 const router = express.Router();
 
 
@@ -20,7 +20,7 @@ router.get("/", async (req, res)=>{
         else{
             orders = await Order.find().exec()
         }
-        let populatedOrders = <Obj>[]
+        let populatedOrders = <IObj>[]
         for (let o of orders){
             if (oid){
                  let ord = await  (await o.populate("customer")).populate('store')

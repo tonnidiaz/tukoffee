@@ -1,6 +1,6 @@
 import { Schema } from "mongoose"
-import { OrderStatus, OrderMode } from "../utils/constants"
-import { IAddress } from "../utils/types"
+import { IAddress } from "../utils/interfaces"
+import { OrderMode, OrderStatus } from "@/utils/enums"
 
 
 const OrderSchema = new Schema({

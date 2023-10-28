@@ -4,11 +4,11 @@ const router = express.Router();
 
 import bcrypt from "bcrypt";
 import { User } from "../../models";
-import { genToken, genOTP, randomInRange, sendSMS, tunedErr, sendMail } from "../../utils/functions";
-import { auth, lightAuth } from "../../utils/middleware";
-import { UserPermissions } from "../../utils/constants";
+import { genToken, randomInRange, tunedErr, sendMail } from "../../utils/functions";
 import otpRouter from "./otp";
 import passwordRouter from "./password";
+import { lightAuthMid } from '@/middleware/auth.mid';
+import { UserPermissions } from '@/utils/enums';
 const importantEmails = ["tonnidiazed@gmail.com", "clickbait4587@gmail.com", "openbytes@yahoo.com"];
 
 router.post("/signup", async (req, res) => {
@@ -81,12 +81,12 @@ router.post("/signup", async (req, res) => {
     }
 });
 
-router.post("/login", lightAuth, async (req  : Request, res, next) => {
+router.post("/login", lightAuthMid, async (req  : Request, res, next) => {
     try {
         const { email, password, phone } = req.body;
         if (req.user && !password) {
             //Loging in with token
-            res.json({ user: { ...req.user.toJSON() } });
+            res.json({ user: { ...(await req.user.populate("refunds")).toJSON() } });
             return;
         } else if (phone && password) {
             let user = await User.findOne({ phone }).exec();

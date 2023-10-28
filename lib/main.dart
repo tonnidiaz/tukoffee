@@ -9,6 +9,7 @@ import "package:lebzcafe/controllers/appbar.dart";
 import "package:lebzcafe/controllers/common_ctrls.dart";
 import "package:lebzcafe/controllers/products_ctrl.dart";
 import "package:lebzcafe/controllers/store_ctrl.dart";
+import "package:lebzcafe/services/notifications.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/views/auth/create.dart";
 import "package:lebzcafe/widgets/form_view.dart";
@@ -28,7 +29,7 @@ enableWebviewDebugging() async {
 
 void main() async {
   await initHive();
-  initNotifs();
+  NotifsService.initNotifs();
   WidgetsFlutterBinding.ensureInitialized();
 
   if (Platform.isAndroid) {

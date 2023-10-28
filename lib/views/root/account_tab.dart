@@ -3,6 +3,7 @@ import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/views/admin/refunds.dart";
 import "package:lebzcafe/views/auth/login.dart";
 import "package:lebzcafe/views/auth/logout.dart";
 import "package:lebzcafe/widgets/common.dart";
@@ -47,11 +48,22 @@ class AccountTab extends StatelessWidget {
                             pushNamed("/cart");
                           },
                           child: const Text("Cart")),
-                      InfoItem(
-                          onTap: () {
-                            pushNamed("/orders");
-                          },
-                          child: const Text("Orders")),
+                      Visibility(
+                        visible: appCtrl.user.isNotEmpty,
+                        child: InfoItem(
+                            onTap: () {
+                              pushNamed("/orders");
+                            },
+                            child: const Text("Orders")),
+                      ),
+                      Visibility(
+                        visible: appCtrl.user.isNotEmpty,
+                        child: InfoItem(
+                            onTap: () {
+                              pushTo(const RefundsPage());
+                            },
+                            child: const Text("Refunds")),
+                      ),
                       InfoItem(
                           onTap: () {
                             pushNamed("/store/info");

@@ -1,13 +1,13 @@
 import express from 'express';
 const router = express.Router();
 import { User, Cart, Order, Review } from "../models/index";
-import { Obj } from '../utils/types';
+import { IObj } from '@/utils/interfaces';
 /* GET users listing. */
 router.get('/', async function(req, res, next) {
 
     const { id } = req.query
 
-    let users : Obj[]= []
+    let users : IObj[]= []
     try{
     if (id){
 

@@ -3,3 +3,5 @@ enum EReviewStatus {
   approved,
   rejected,
 }
+
+enum EGateway { yoco, paystack }

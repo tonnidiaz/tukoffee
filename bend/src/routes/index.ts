@@ -5,11 +5,11 @@ import { genToken, tunedErr, delCloudinary } from "../utils/functions";
 var router = express.Router();
 import fs from "fs";
 import os from "os";
-import { parser, OrderStatus } from "../utils/constants";
-import { auth } from "../utils/middleware";
 import axios from "axios";
 import { Car, CarColor } from "../models/car";
 import { EReviewStatus } from "@/models/review";
+import { OrderStatus } from "@/utils/enums";
+import auth from "./auth";
 
 
 /* GET home page. */
@@ -173,7 +173,7 @@ router.post("/store/update", auth, async (req, res) => {
     }
 });
 
-router.post("/encode", parser, async (req, res) => {
+router.post("/encode", async (req, res) => {
     try {
         const data = req.body;
         console.log(data);

@@ -1,7 +1,5 @@
 import "package:awesome_notifications/awesome_notifications.dart";
 import "package:get/get.dart";
-import "package:lebzcafe/mobile.dart";
-import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/views/order/index.dart";
 
 class NotificationController {
