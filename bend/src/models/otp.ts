@@ -14,6 +14,6 @@ const OTPSchema: Schema = new Schema({
         type: Number,
         required: true
     }
-})
+},{timestamps: true})
 const OTP = model("OTP", OTPSchema)
 export {OTPSchema, OTP}

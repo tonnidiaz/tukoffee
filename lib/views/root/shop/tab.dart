@@ -112,7 +112,7 @@ class _HomeTabState extends State<HomeTab> {
                         items: [
                           SelectItem("name", SortBy.name),
                           SelectItem("price", SortBy.price),
-                          SelectItem("date", SortBy.dateCreated),
+                          SelectItem("date", SortBy.createdAt),
                         ],
                         onChanged: (p0) {
                           _storeCtrl.setSortBy(p0);

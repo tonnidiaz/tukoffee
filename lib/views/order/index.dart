@@ -348,7 +348,7 @@ class _OrderPageState extends State<OrderPage> {
                                           ),
                                           Text(
                                             DateTime.parse(
-                                                    "${_order!["date_created"]}")
+                                                    "${_order!["createdAt"] ?? _order!['date_created']}")
                                                 .toLocal()
                                                 .toString()
                                                 .split(" ")
@@ -363,7 +363,7 @@ class _OrderPageState extends State<OrderPage> {
                                           ),
                                           Text(
                                             DateTime.parse(
-                                                    "${_order!["last_modified"]}")
+                                                    "${_order!["updatedAt"]}")
                                                 .toLocal()
                                                 .toString()
                                                 .split(" ")

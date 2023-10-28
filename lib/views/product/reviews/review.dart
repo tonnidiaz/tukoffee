@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/functions2.dart";
 import "package:lebzcafe/views/order/index.dart";
 import "package:lebzcafe/widgets/common.dart";
 import "package:lebzcafe/widgets/common3.dart";
@@ -129,9 +130,8 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
                             ),
                             mY(6),
                             Text(
-                              "${DateTime.parse(_review!["date_created"]).toLocal()}"
-                                  .split(" ")
-                                  .first,
+                              formatDate(_review!['createdAt'] ??
+                                  _review!['date_created']),
                               style: const TextStyle(fontSize: 12.5),
                             )
                           ]),
@@ -142,9 +142,7 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
                             ),
                             mY(6),
                             Text(
-                              "${DateTime.parse(_review!["last_modified"]).toLocal()}"
-                                  .split(" ")
-                                  .first,
+                              formatDate(_review!['updatedAt']),
                               style: const TextStyle(fontSize: 12.5),
                             )
                           ]),

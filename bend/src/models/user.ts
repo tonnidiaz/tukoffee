@@ -48,7 +48,9 @@ const UserSchema = new Schema({
         required: false
     },
     delivery_addresses: {
-        type:  [<IAddress>{}]
+        type:  [
+            <IAddress>{}
+        ]
     },
     address: {
         type: <IAddress>{}
@@ -63,7 +65,7 @@ const UserSchema = new Schema({
     refunds: {
         type: [Schema.ObjectId], ref: "Refund"
     }
-})
+}, {timestamps: true})
 
 export interface IUser extends Document, InferSchemaType<typeof UserSchema> {
 }

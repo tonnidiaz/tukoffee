@@ -63,19 +63,8 @@ const ProductSchema = new Schema({
         required: false
     },
 
-    date_created: {
-        type: Date,
-        required: true,
-        default: new Date()
-    },
-
-    last_modified: {
-        type: Date,
-        required: true,
-        default: new Date()
-    }
     
-})
+},{timestamps: true})
 
 export interface IProduct extends Document, InferSchemaType<typeof ProductSchema>{}
 export { ProductSchema }

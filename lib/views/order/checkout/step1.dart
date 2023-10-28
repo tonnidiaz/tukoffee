@@ -146,24 +146,18 @@ class CheckoutStep1 extends StatelessWidget {
                                         context: context, address: e);
                                   }).toList())
                                 : Center(
-                                    child: SizedBox(
-                                    width: double.infinity,
-                                    height: 70,
-                                    child: InkWell(
-                                      onTap: () {
-                                        TuFuncs.showBottomSheet(
-                                            context: context,
-                                            widget: const EditAddressForm());
-                                      },
-                                      child: const Card(
-                                          elevation: .5,
-                                          child: Icon(
-                                            Icons.add,
-                                            color: Colors.black87,
-                                            // size: 50,
-                                          )),
-                                    ),
-                                  )),
+                                    child: TuCard(
+                                        height: 70,
+                                        onTap: () {
+                                          TuFuncs.showBottomSheet(
+                                              context: context,
+                                              widget: const EditAddressForm());
+                                        },
+                                        child: const Icon(
+                                          Icons.add,
+                                          color: Colors.black87,
+                                          // size: 50,
+                                        ))),
                           ),
                         ],
                       ),
@@ -172,8 +166,8 @@ class CheckoutStep1 extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Obx(
-                    () => TuButton(
+                  Obx(() {
+                    return TuButton(
                       text: "next",
                       width: screenSize(context).width - 20,
                       bgColor: TuColors.primary,
@@ -209,8 +203,8 @@ class CheckoutStep1 extends StatelessWidget {
                               ));
                               // ctrl.step++;
                             },
-                    ),
-                  ),
+                    );
+                  }),
                 ],
               )
             ],

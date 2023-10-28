@@ -43,7 +43,7 @@ router.get("/", lightAuthMid, async (req, res, next) => {
                 const data = await Promise.all(
                     orders.map(async (o)=>{
                         return {
-                            date: o.last_modified,
+                            date: o.updatedAt,
                             items: await Promise.all(o.products.map(async (pr)=> await (await Product.findById(pr.product._id).exec())?.populate('reviews') ))
                         }
                     })
@@ -54,16 +54,7 @@ router.get("/", lightAuthMid, async (req, res, next) => {
                     )
                 ); //
             return res.json(data)
-                return res.json(
-                    orders.map((it) => {
-                        return {
-                            date: it.last_modified,
-                            items: it.products
-                                .map((p) => p.product)
-                                .filter((it) => it),
-                        };
-                    })
-                );
+           
         }
         let data = await parseProducts(prods);
 
@@ -144,7 +135,6 @@ router.post("/review", authMid, async (req, res) => {
             }
             if (!review.status)
         {rev.status = EReviewStatus.pending}
-            rev.last_modified = new Date();
             await rev.save();
            
         }
@@ -182,7 +172,6 @@ router.post("/edit", authMid, async (req, res) => {
         for (let key of Object.keys(body)) {
             prod[key] = body[key];
         }
-        prod.last_modified = new Date();
         await prod.save();
         console.log("Product edited!");
         res.json({ pid: prod.pid });

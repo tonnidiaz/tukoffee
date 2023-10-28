@@ -26,6 +26,11 @@ router.get("/payment", async (req, res) => {
 });
 router.get("/clean", async (req, res) => {
     try {
+
+        for (let rev of await Review.find().exec()){
+            rev.updatedAt = rev.last_modified;
+            await rev.save()
+        }
         const { cancelled } = req.query
         
         // clean carts
@@ -45,6 +50,8 @@ router.get("/clean", async (req, res) => {
         console.log("Cleaning orders");
         const orders = await Order.find().exec();
         for (let order of orders) {
+            
+            order.updatedAt = order.last_modified;
             const user = await User.findById(order.customer).exec();
             if (!user) await Order.findByIdAndDelete(order._id).exec();
             if (cancelled && order.status == OrderStatus.cancelled){
@@ -57,6 +64,7 @@ router.get("/clean", async (req, res) => {
                 await u.save()
                
             }
+           
             else {
                 order.products = (
                     await order.populate("products")

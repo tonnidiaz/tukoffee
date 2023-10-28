@@ -37,11 +37,14 @@ router.post("/cancel", authMid, async (req: Request, res) => {
                     //Apply for refund first
                     const order = await Order.findById(id).exec()
                     if (!order) return tunedErr(res, 400, 'Order not found');
+                    if (order.status == OrderStatus.cancelled){
+                        continue;
+                    }
                     try{
-                        if (order.paystackData){
+                        if (order.paystackData?.reference){
                             console.log("REQUESTING PAYSTACK REFUND...")
                             const refundRes = await paystackAxios().post('/refund', {transaction: order.paystackData.reference});
-                            if (refundRes.data.status == true){
+                            if (refundRes.data.status){
                                 const refund = new Refund()
                                 refund.userId = order.customer;
                                 refund.paystackId = refundRes.data.data.id
@@ -55,16 +58,19 @@ router.post("/cancel", authMid, async (req: Request, res) => {
                         
                     }catch(e: any){
                         const msg = e?.response?.data?.message
-                        return tunedErr(res, 500, msg ?? 'Failed to request refund order')
+                        console.log(msg)
+                        order.status = OrderStatus.cancelled
+                        await order.save()
+                        continue
+                     
                     }
                    
            
                     order.status = OrderStatus.cancelled
-                    order.last_modified = new Date()
                     await order?.save()
                     console.log(`Order #${id} cancelled!`);
                      //Update inventory
-            for (let item of order!.products){
+            for (let item of order.products){
                 await Product.findByIdAndUpdate(item.product._id, {$inc: {
                     quantity:  item.quantity
                 }}).exec()
@@ -165,7 +171,6 @@ router.post('/edit', auth, async (req, res)=>{
         for (let key of Object.keys(body)){
             order[key] = body[key]
         }  
-        order.last_modified = new Date()
         await order.save()
         res.json({id: order.oid, order: await  (await order.populate("customer")).populate('store')}) 
     }

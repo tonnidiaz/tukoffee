@@ -62,7 +62,6 @@ const parseProducts = async (products: IObj[]) => {
 
         prod.reviews = []
       for (let revId of revs){
-        console.log(revId)
         const rev = await Review.findOne({_id: revId, status: EReviewStatus.approved}).exec()
         if (rev){
             rating += rev.rating;

@@ -32,7 +32,7 @@ import "../views/root/shop/index.dart";
 
 enum UserPermissions { read, write, delete }
 
-enum SortBy { name, price, dateCreated, lastModified }
+enum SortBy { name, price, createdAt, lastModified }
 
 enum SortOrder { ascending, descending }
 

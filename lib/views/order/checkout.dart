@@ -379,7 +379,7 @@ Widget addressCard(
     },
     child: TuListTile(
         leading: Radio(
-            value: checkoutCtrl.selectedAddr['_id'] == address['_id'],
+            value: checkoutCtrl.selectedAddr == address,
             groupValue: true,
             onChanged: (val) {
               if (val == false) checkoutCtrl.setSelectedAddr(address);

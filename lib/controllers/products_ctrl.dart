@@ -65,7 +65,7 @@ class ProductsCtrl extends GetxController {
   void _sortProducts() {
     clog("SORTING");
     int dateInMs(dynamic prod) {
-      var date = DateTime.parse(prod["date_created"]);
+      var date = DateTime.parse(prod["createdAt"]);
       return date.millisecondsSinceEpoch;
     }
 
@@ -85,7 +85,7 @@ class ProductsCtrl extends GetxController {
               ? a["price"].compareTo(b["price"])
               : b["price"].compareTo(a["price"]);
           break;
-        case SortBy.dateCreated:
+        case SortBy.createdAt:
           s = sortOrder == SortOrder.ascending
               ? dateInMs(a).compareTo(dateInMs(b))
               : dateInMs(b).compareTo(dateInMs(a));

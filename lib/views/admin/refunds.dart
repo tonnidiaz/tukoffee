@@ -33,10 +33,16 @@ class RefundsPage extends HookWidget {
         _refunds.value = null;
         final res1 = await apiDio()
             .get('/refunds', queryParameters: {'userId': _appCtrl.user['_id']});
-        clog(res1.data);
+        final List userRefundIds = (res1.data['refunds'] as List)
+            .map((e) => e['paystackId'])
+            .where((e) => e != null)
+            .toList();
+
         final res = await RefundsService.getRefunds();
 
-        _refunds.value = res.data['data'];
+        _refunds.value = res.data['data']
+            .where((element) => userRefundIds.contains(element['id']))
+            .toList();
       } catch (e) {
         _refunds.value = [];
         errorHandler(e: e, msg: "Failed to fetch refunds");
@@ -49,6 +55,7 @@ class RefundsPage extends HookWidget {
         clog("Dispose");
       };
     }, []);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Refunds"),
@@ -114,7 +121,7 @@ class RefundsPage extends HookWidget {
                               ),
                               mY(4),
                               Text(
-                                refund['initiated_by'],
+                                refund['customer']['email'],
                                 style: TextStyle(
                                     color: TuColors.note,
                                     fontWeight: FontWeight.w500,

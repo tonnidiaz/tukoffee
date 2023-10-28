@@ -55,7 +55,7 @@ class OrdersCtrl extends GetxController {
     _sortOrders(orders);
   }
 
-  Rx<SortBy> sortBy = SortBy.dateCreated.obs;
+  Rx<SortBy> sortBy = SortBy.createdAt.obs;
   void setSortBy(SortBy val) {
     sortBy.value = val;
     _sortOrders(orders);
@@ -109,17 +109,13 @@ class OrdersCtrl extends GetxController {
       switch (sortBy) {
         case SortBy.lastModified:
           s = sortOrder == SortOrder.ascending
-              ? dateInMs(b["last_modified"])
-                  .compareTo(dateInMs(a["last_modified"]))
-              : dateInMs(a["last_modified"])
-                  .compareTo(dateInMs(b["last_modified"]));
+              ? dateInMs(b["updatedAt"]).compareTo(dateInMs(a["updatedAt"]))
+              : dateInMs(a["updatedAt"]).compareTo(dateInMs(b["updatedAt"]));
           break;
-        case SortBy.dateCreated:
+        case SortBy.createdAt:
           s = sortOrder == SortOrder.ascending
-              ? dateInMs(b["date_created"])
-                  .compareTo(dateInMs(a["date_created"]))
-              : dateInMs(a["date_created"])
-                  .compareTo(dateInMs(b["date_created"]));
+              ? dateInMs(b["createdAt"]).compareTo(dateInMs(a["createdAt"]))
+              : dateInMs(a["createdAt"]).compareTo(dateInMs(b["createdAt"]));
           break;
         default:
           break;
@@ -187,13 +183,19 @@ class _OrdersPageState extends State<OrdersPage> {
 
                 for (var o in _appBarCtrl.selected
                     .where((e) => e["mode"] == OrderMode.deliver.index)) {
-                  //cancel from shiplogic first
-                  await Shiplogic.cancelOrder(o);
+                  try {
+                    //cancel from shiplogic first
+                    await Shiplogic.cancelOrder(o);
+                  } catch (e) {
+                    clog("SHIPLOGIC ERROR");
+                    clog(e);
+                    continue;
+                  }
                 }
                 final res = await apiDio().post(
                     "/order/cancel?action=${act.toLowerCase()}",
                     data: {"ids": ids, "userId": MainApp.appCtrl.user["_id"]});
-                gpop();
+                //gpop();
                 await _ctrl.setOrders(res.data["orders"]);
               } catch (e) {
                 gpop();
@@ -283,7 +285,7 @@ class _OrdersPageState extends State<OrdersPage> {
                         value: _ctrl.sortBy.value,
                         radius: 1,
                         items: [
-                          SelectItem("Date created", SortBy.dateCreated),
+                          SelectItem("Date created", SortBy.createdAt),
                           SelectItem("Last modified", SortBy.lastModified),
                         ],
                         onChanged: (p0) {

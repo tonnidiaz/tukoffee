@@ -16,9 +16,11 @@ const ReviewSchema = new Schema( {
     rating: {type: Number, required: true, default: 0},
     user: {type: Schema.ObjectId, ref: 'User', required: true},
     product: {type: Schema.ObjectId, ref: 'Product', required: true},
-    date_created: {type: Date, default: new Date(), required: false},
-    last_modified: {type: Date, default: new Date(), required: false},
-})
+    last_modified: {
+        type: Object,
+         required: true
+    }
+}, {timestamps: true})
 export interface IReview extends Document, InferSchemaType<typeof ReviewSchema> {
 }
 export { ReviewSchema, EReviewStatus}

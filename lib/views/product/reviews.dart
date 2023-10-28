@@ -6,6 +6,7 @@ import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/functions2.dart";
 import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/utils/types.dart";
 import "package:lebzcafe/views/account/profile.dart";
@@ -185,7 +186,8 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
                                           style: Styles.h4(),
                                         ),
                                         Text(
-                                          "${DateTime.parse(review["date_created"]).toLocal()}",
+                                          formatDate(review['createdAt'] ??
+                                              review['date_created']),
                                           style: TextStyle(
                                               fontSize: 14,
                                               color: TuColors.text2),

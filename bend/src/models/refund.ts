@@ -12,14 +12,7 @@ export const RefundSchema = new Schema({
         type: Schema.ObjectId, ref: "User",
         required: true
     },
-    date_created: {
-        type: Date,
-        default: new Date()
-    },
-    last_modified: {
-        type: Date,
-        default: new Date()
-    },
-})
+
+} ,{timestamps: true})
 
 export type TRefund = Document<InferSchemaType<typeof RefundSchema>>

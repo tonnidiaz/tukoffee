@@ -97,7 +97,7 @@ class OrderItem extends StatelessWidget {
             children: [
               mY(5),
               Text(
-                formatDate(order["date_created"]),
+                formatDate(order["createdAt"] ?? order['date_created']),
                 style: TextStyle(
                     color: TuColors.note,
                     fontWeight: FontWeight.w500,

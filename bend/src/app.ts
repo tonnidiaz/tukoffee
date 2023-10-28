@@ -16,6 +16,8 @@ import authRouter from './routes/auth';
 import searchRouter from './routes/search';
 import storesRouter from './routes/stores';
 import userRouter from './routes/user';
+import refundsRouter from './routes/refunds/refunds.route';
+
 import hooksRouter from './routes/hooks';
 const app = express();
 import { default as mongoose } from 'mongoose';
@@ -68,6 +70,7 @@ app.use('/products', parser, productsRouter);
 app.use('/auth', parser, authRouter);
 app.use('/search', parser, searchRouter);
 app.use('/user', parser, userRouter);
+app.use('/refunds', parser, refundsRouter);
 app.use('/stores', parser, storesRouter);
 app.use('/message', parser, messageRouter);
 // catch 404 and forward to error handler

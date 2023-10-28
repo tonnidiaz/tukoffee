@@ -169,7 +169,7 @@ class _ProductsState extends State<Products> {
                       items: [
                         SelectItem("name", SortBy.name),
                         SelectItem("price", SortBy.price),
-                        SelectItem("date", SortBy.dateCreated),
+                        SelectItem("date", SortBy.createdAt),
                       ],
                       onChanged: (p0) {
                         _ctrl.setSortBy(p0);
