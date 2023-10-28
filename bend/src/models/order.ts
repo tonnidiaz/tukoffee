@@ -36,14 +36,14 @@ const OrderSchema = new Schema({
         type: Number, 
         default: 0
     },
-    date_delivered: {
+    /* date_delivered: {
         type: Date,
         required: false,
     },
     last_modified: {
         type: Object,
          required: true
-    }
+    } */
 }, {timestamps: true})
 
 export {OrderSchema}

@@ -5,7 +5,6 @@
 ## TO IMPL
 
 - YOCO refunds
-- Refund option
 - While selected, back no go back but unselects
 - top selling products page
 
@@ -19,4 +18,8 @@
 
 ## TEST
 
-- order:deliver -> deliveryaddress tap
+
+## HEIST
+
+- PLAYSTORE ACCOUNT
+- YOCO REFERALS

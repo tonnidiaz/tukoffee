@@ -8,6 +8,7 @@ import 'package:lebzcafe/utils/types.dart';
 import 'package:lebzcafe/utils/vars.dart';
 import 'package:lebzcafe/views/order/checkout/step1.dart';
 import 'package:lebzcafe/views/order/checkout/step2.dart';
+import 'package:lebzcafe/widgets/dialog.dart';
 import 'package:lebzcafe/widgets/tu/browser.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
@@ -95,6 +96,7 @@ class CheckoutCtrl extends GetxController {
       }
 
       showProgressSheet(msg: "Creating order...");
+
       if (mode.value == OrderMode.deliver) {
         // Create shiplogic shipment
         List items = [];
@@ -141,13 +143,13 @@ class CheckoutCtrl extends GetxController {
         }
         TuFuncs.showTDialog(
             context,
-            const AlertDialog(
-              title: Text("Failed to create order"),
-              content: Center(
-                  child: Text(
+            const TuDialogView(
+              hasActions: false,
+              title: "Failed to create order",
+              content: Text(
                 "An email has been sent to support with your transaction ID. We will be in touch ASAP!",
                 textAlign: TextAlign.center,
-              )),
+              ),
             ));
       }
     } catch (e) {
@@ -173,25 +175,28 @@ class _CheckoutPageState extends State<CheckoutPage> {
   final AppCtrl _appCtrl = Get.find();
   final CheckoutCtrl _ctrl = Get.put(CheckoutCtrl());
 
+  _onPayment(data) {
+    Logger.info('On payment: $data');
+    final gateway = data['gateway'];
+    final user = data['user'];
+    final mData = data['data'];
+    if (user != _appCtrl.user['_id']) return;
+    if (gateway == EGateway.yoco.index) {
+      if (mData['type'] == 'payment.succeeded') {
+        _ctrl.createOrder(context: context, yocoData: mData, browser: _browser);
+      } else {
+        Logger.info(mData);
+      }
+    } else if (gateway == EGateway.paystack.index) {
+      _ctrl.createOrder(
+          context: context, paystackData: mData, browser: _browser);
+    }
+  }
+
   _initSocketio() {
     Logger.info('Socketio init...');
     socket?.off("payment");
-    socket?.on('payment', (data) {
-      Logger.info('On payment: $data');
-      final gateway = data['gateway'];
-      final mData = data['data'];
-      if (gateway == EGateway.yoco.index) {
-        if (mData['type'] == 'payment.succeeded') {
-          _ctrl.createOrder(
-              context: context, yocoData: mData, browser: _browser);
-        } else {
-          Logger.info(mData);
-        }
-      } else if (gateway == EGateway.paystack.index) {
-        _ctrl.createOrder(
-            context: context, paystackData: mData, browser: _browser);
-      }
-    });
+    socket?.on('payment', _onPayment);
   }
 
   late MyInAppBrowser _browser;
@@ -204,9 +209,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   void _onWebviewLoad(Uri? uri) async {
     if (uri != null) {
       final url = uri.toString();
-      if (url.contains("${MainApp.appCtrl.apiURL}/payment")) {
-        _ctrl.createOrder(context: context, browser: _browser);
-      }
+      if (url.contains("${MainApp.appCtrl.apiURL}/payment")) {}
     }
   }
 
@@ -601,7 +604,9 @@ class GatewaysSheet extends StatelessWidget {
             "${appCtrl.user['first_name']} ${appCtrl.user['last_name']}'s ${appCtrl.store['name']} Order",
         "amount": total * 100,
         "description": "Checkout your ${appCtrl.store['name']} order.",
-        "callback_url": "${MainApp.appCtrl.apiURL}/hooks/paystack"
+        "callback_url":
+            "${MainApp.appCtrl.apiURL}/hooks/paystack/${appCtrl.user['_id']}",
+        "metadata": jsonEncode({"customerId": appCtrl.user['_id']})
       };
       final res = await paystackDio.post("/transaction/initialize", data: body);
       final resData = res.data["data"];
@@ -611,10 +616,34 @@ class GatewaysSheet extends StatelessWidget {
     }
 
     createYocoURL() async {
-      final res = await yocoDio
-          .post('/checkouts', data: {"amount": total * 100, 'currency': "ZAR"});
+      final res = await yocoDio.post('/checkouts', data: {
+        "amount": total * 100,
+        'currency': "ZAR",
+        "metadata": {"user": appCtrl.user['_id']}
+      });
 
       return res.data['redirectUrl'];
+    }
+
+    dynamic onPayBtnClick({required String uri}) async {
+      checkServer(context).then((v) async {
+        try {
+          if (Platform.isLinux) {
+            await launchUrl(Uri.parse(uri));
+            gpop();
+            //gpop();
+            return;
+          }
+
+          //pushTo(PaymentPage(url: url));
+          await browser.openUrlRequest(
+              urlRequest: URLRequest(url: Uri.parse(uri)), options: options);
+          gpop();
+          gpop();
+        } catch (e) {
+          errorHandler(e: e, context: context);
+        }
+      }).catchError((e) {});
     }
 
     return Container(
@@ -633,25 +662,8 @@ class GatewaysSheet extends StatelessWidget {
           mY(16),
           TuButton(
             onPressed: () async {
-              try {
-                showProgressSheet();
-                final url = await createPaystackURL();
-                if (Platform.isLinux) {
-                  await launchUrl(Uri.parse(url));
-                  gpop();
-                  //gpop();
-                  return;
-                }
-
-                //pushTo(PaymentPage(url: url));
-                await browser.openUrlRequest(
-                    urlRequest: URLRequest(url: Uri.parse(url)),
-                    options: options);
-                gpop();
-                gpop();
-              } catch (e) {
-                errorHandler(e: e, context: context);
-              }
+              final uri = await createPaystackURL();
+              onPayBtnClick(uri: uri);
             },
             radius: 100,
             bgColor: cardBGLight,
@@ -676,18 +688,8 @@ class GatewaysSheet extends StatelessWidget {
             bgColor: cardBGLight,
             radius: 100,
             onPressed: () async {
-              try {
-                showProgressSheet();
-                final url = await createYocoURL();
-                // pushTo(PaymentPage(url: url));
-                await browser.openUrlRequest(
-                    urlRequest: URLRequest(url: Uri.parse(url)),
-                    options: options);
-                gpop();
-                gpop();
-              } catch (e) {
-                errorHandler(e: e, context: context);
-              }
+              final uri = await createYocoURL();
+              onPayBtnClick(uri: uri);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

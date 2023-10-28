@@ -1,3 +1,4 @@
+import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 import "package:awesome_notifications/awesome_notifications.dart";
 import "package:dio/dio.dart";
@@ -5,6 +6,8 @@ import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/constants2.dart";
 import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/widgets/dialog.dart";
+import "package:lebzcafe/widgets/tu/common.dart";
 import "package:via_logger/logger.dart";
 import "package:via_logger/output.dart";
 
@@ -145,4 +148,26 @@ String camelToSentence(String text) {
 setupLogger() {
   final List<Output> engines = [Console()];
   Logger.setEngines(engines);
+}
+
+Future<void> checkServer(BuildContext context) async {
+  try {
+    showProgressSheet();
+    await apiDio().get("/hello");
+  } catch (e) {
+    gpop();
+    if (!context.mounted) return;
+    TuFuncs.showTDialog(
+        context,
+        const TuDialogView(
+          title: "Server down",
+          hasActions: false,
+          content: Text(
+            "Unable to create order at this moment. Please try again later.",
+            textAlign: TextAlign.center,
+          ),
+        ));
+
+    throw Error();
+  }
 }

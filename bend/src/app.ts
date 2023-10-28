@@ -24,6 +24,7 @@ import { default as mongoose } from 'mongoose';
 import multer from 'multer';
 import cors from 'cors';
 import { DEV } from './utils/constants';
+import { helloRouter } from './routes/hello.route';
 
 const envPath = DEV ? path.resolve(process.cwd(), '.env') : '/etc/secrets/prod.env'
 require("dotenv").config({path: envPath});
@@ -71,6 +72,7 @@ app.use('/auth', parser, authRouter);
 app.use('/search', parser, searchRouter);
 app.use('/user', parser, userRouter);
 app.use('/refunds', parser, refundsRouter);
+app.use('/hello', helloRouter);
 app.use('/stores', parser, storesRouter);
 app.use('/message', parser, messageRouter);
 // catch 404 and forward to error handler

@@ -36,7 +36,8 @@ class _TuDialogViewState extends State<TuDialogView> {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: cardBGLight,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+      contentPadding:
+          EdgeInsets.fromLTRB(15, 0, 15, widget.hasActions ? 0 : 20),
       titlePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       insetPadding: const EdgeInsets.all(15),
       actionsPadding: const EdgeInsets.fromLTRB(6, 10, 15, 16),

@@ -84,8 +84,19 @@ router.post("/paystack/transaction", async (req, res)=>{
     }
 })
 
-router.get('/paystack', (req, res)=>{
-    console.log(req.query)
+router.get('/paystack/transactions', async (req, res)=>{
+    const {id} = (req.query)
+    if (id){
+        try{
+            const r = await paystackAxios().get(`/transaction/verify/${id}`)
+            console.log(r.data.data.metadata.customerId)
+        }
+        catch(e){
+            console.log(e)
+            return res.status(500).send("OOPS")
+        }
+
+    }
     res.send( "OK")
 })
 
