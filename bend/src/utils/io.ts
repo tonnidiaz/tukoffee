@@ -3,7 +3,7 @@ import {Server } from "socket.io";
 const io = new Server(); // yes, no server arg here; it's not required
 // attach stuff to io
 io.on("connection", (client) => {
-    console.log("IO CONNECTED");
+    console.log(`${client.id} CONNECTED`);
     
     io.emit("event", "This is event");
     client.on('event', (d)=>{

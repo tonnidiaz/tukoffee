@@ -81,7 +81,6 @@ class _TuSplashState extends State<TuSplash> {
         clog(e);
         return;
       }
-      return;
       clog("await seupStoreDetails...");
       await setupStoreDetails();
       // If server is still down
