@@ -1,8 +1,10 @@
-const router = Router();
+
 import { Router } from "express";
 import { User } from "../../models";
 import { DEV } from "../../utils/constants";
 import { tunedErr, randomInRange, genToken, sendMail, getStoreDetails } from "../../utils/functions";
+
+const router = Router();
 router.post("/resend", async (req, res) => {
     try {
         const {phone, email} = req.body

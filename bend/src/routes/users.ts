@@ -1,7 +1,8 @@
 import express from 'express';
-const router = express.Router();
+
 import { User, Cart, Order, Review } from "../models/index";
 import { IObj } from '@/utils/interfaces';
+const router = express.Router();
 /* GET users listing. */
 router.get('/', async function(req, res, next) {
 

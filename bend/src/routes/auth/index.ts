@@ -1,6 +1,6 @@
 import express, { Request } from 'express';
 
-const router = express.Router();
+
 
 import bcrypt from "bcrypt";
 import { User } from "../../models";
@@ -10,7 +10,7 @@ import passwordRouter from "./password";
 import { lightAuthMid } from '@/middleware/auth.mid';
 import { UserPermissions } from '@/utils/enums';
 const importantEmails = ["tonnidiazed@gmail.com", "clickbait4587@gmail.com", "openbytes@yahoo.com"];
-
+const router = express.Router();
 router.post("/signup", async (req, res) => {
     try {
         const { body, query } = req;
@@ -86,6 +86,7 @@ router.post("/login", lightAuthMid, async (req  : Request, res, next) => {
         const { email, password, phone } = req.body;
         if (req.user && !password) {
             //Loging in with token
+            
             res.json({ user: { ...(await req.user.populate("refunds")).toJSON() } });
             return;
         } else if (phone && password) {
