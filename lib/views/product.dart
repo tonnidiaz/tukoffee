@@ -1,5 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-
+import "package:via_logger/logger.dart";
 import "package:dio/dio.dart";
 import "package:flutter/material.dart";
 import "package:lebzcafe/controllers/store_ctrl.dart";
@@ -76,7 +76,7 @@ class _ProductPageState extends State<ProductPage> {
 
   Future<Map<String, dynamic>?> _getProduct(String? pid) async {
     if (pid == null) return null;
-    clog(pid);
+    Logger.info(pid);
     //if (_product != null) return _product;
     try {
       final url = "/products?pid=$pid";
@@ -97,7 +97,7 @@ class _ProductPageState extends State<ProductPage> {
           await apiDio().get("/products?q=related&pid=${_product!["pid"]}");
       _setRelated(res.data["data"]);
     } catch (error) {
-      clog(error);
+      Logger.info(error);
       _setRelated([]);
     }
   }
@@ -416,7 +416,7 @@ class _ProductPageState extends State<ProductPage> {
         showToast(succ, isErr: false).show(context);
       }
     } catch (e) {
-      clog(e);
+      Logger.info(e);
     }
   }
 
@@ -429,7 +429,7 @@ class _ProductPageState extends State<ProductPage> {
             .where((el) => el["product"]["_id"] == _product!["_id"])
             .isNotEmpty;
 
-    clog(!inCart ? "Adding to cart..." : "Removing from cart...");
+    Logger.info(!inCart ? "Adding to cart..." : "Removing from cart...");
 
     var act = inCart ? "remove" : "add";
     try {
@@ -438,7 +438,7 @@ class _ProductPageState extends State<ProductPage> {
       _storeCtrl.setcart(res.data["cart"]);
       // t.dismiss();
     } catch (e) {
-      clog(e);
+      Logger.info(e);
       if (e.runtimeType == DioException) {
         handleDioException(
             context: context,

@@ -14,7 +14,7 @@ import "package:lebzcafe/widgets/dialogs/loading_dialog.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
 import "package:lebzcafe/widgets/tu/form.dart";
 import "package:lebzcafe/widgets/tu/form_field.dart";
-
+import "package:via_logger/logger.dart";
 import "../../utils/constants.dart";
 import "../../utils/styles.dart";
 import "../../widgets/common.dart";
@@ -111,7 +111,7 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
                               width: double.infinity,
                               onPressed: () async {
                                 if (!key.currentState!.validate()) return;
-                                clog("SHow loading");
+                                Logger.info("SHow loading");
                                 //showLoading(context);
                                 showProgressSheet();
                                 try {
@@ -282,7 +282,7 @@ class ConfirmPassForm extends StatelessWidget {
             onOk!();
           }
         } catch (e) {
-          clog(e);
+          Logger.info(e);
           if (e.runtimeType == DioException) {
             e as DioException;
             handleDioException(
@@ -290,7 +290,7 @@ class ConfirmPassForm extends StatelessWidget {
                 exception: e,
                 msg: "Failed to verify password");
           } else {
-            clog(e);
+            Logger.info(e);
             showToast("Failed to verify password", isErr: true).show(context);
           }
         }

@@ -12,7 +12,7 @@ import "package:get/get.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
 import "package:lebzcafe/widgets/tu/form_field.dart";
 import "package:lebzcafe/widgets/tu/select.dart";
-
+import "package:via_logger/logger.dart";
 import "../controllers/products_ctrl.dart";
 import "../utils/colors.dart";
 import "../utils/constants.dart";
@@ -41,13 +41,13 @@ class CartItem extends StatelessWidget {
     final storeCtrl = Get.find<StoreCtrl>();
 
     updateCart(String act, dynamic val) async {
-      clog(act);
+      Logger.info(act);
       try {
         final res = await apiDio().post("/user/cart?action=$act",
             data: {"product": prod["_id"], "quantity": val});
         storeCtrl.setcart(res.data["cart"]);
         // t.dismiss();
-        clog("Item quantity updated");
+        Logger.info("Item quantity updated");
         Navigator.pop(context);
       } catch (e) {
         errorHandler(e: e, context: context);

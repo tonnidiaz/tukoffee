@@ -1,7 +1,7 @@
 import "package:lebzcafe/utils/constants2.dart";
 import "package:get/get.dart";
 import "package:lebzcafe/utils/functions.dart";
-
+import "package:via_logger/logger.dart";
 import "../utils/constants.dart";
 
 class ProductsCtrl extends GetxController {
@@ -63,7 +63,7 @@ class ProductsCtrl extends GetxController {
   }
 
   void _sortProducts() {
-    clog("SORTING");
+    Logger.info("SORTING");
     int dateInMs(dynamic prod) {
       var date = DateTime.parse(prod["createdAt"]);
       return date.millisecondsSinceEpoch;
@@ -75,7 +75,7 @@ class ProductsCtrl extends GetxController {
       final sortOrder = this.sortOrder.value;
       switch (sortBy) {
         case SortBy.name:
-          clog("bY  NAME");
+          Logger.info("bY  NAME");
           s = sortOrder == SortOrder.ascending
               ? a["name"].compareTo(b["name"])
               : b["name"].compareTo(a["name"]);
@@ -98,7 +98,7 @@ class ProductsCtrl extends GetxController {
 
     var prods = [...sortedProducts.value!];
     prods.sort(sorter);
-    //clog(prods[0]["name"]);
+    //Logger.info(prods[0]["name"]);
     setSortedProducts(prods);
   }
 }

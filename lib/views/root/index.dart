@@ -8,6 +8,7 @@ import "package:lebzcafe/views/root/home.dart";
 import "package:lebzcafe/views/root/shop/index.dart";
 import "package:lebzcafe/widgets/common3.dart";
 import "package:get/get.dart";
+import "package:via_logger/logger.dart";
 
 class IndexCtrl extends GetxController {
   RxInt tab = 0.obs;
@@ -33,7 +34,7 @@ class _IndexPageState extends State<IndexPage> {
   @override
   void initState() {
     super.initState();
-    clog("ROOT MOUNTED");
+    Logger.info("ROOT MOUNTED");
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (context.mounted) {
         _onTabTap(0);

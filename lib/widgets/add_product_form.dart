@@ -9,7 +9,7 @@ import "package:file_picker/file_picker.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
-
+import "package:via_logger/logger.dart";
 import "../main.dart";
 import "../utils/constants.dart";
 import "../utils/constants2.dart";
@@ -50,7 +50,7 @@ class _AddProductFormState extends State<AddProductForm> {
 
   void _onUpload(int p0, int p1) {
     var percentage = (p0 / p1) * 100;
-    clog("Percentage: $percentage%");
+    Logger.info("Percentage: $percentage%");
   }
 
   void _uploadImg(File file, int index) async {
@@ -69,7 +69,7 @@ class _AddProductFormState extends State<AddProductForm> {
           // immediately update product images
 
           try {
-            clog("Adding image to backend...");
+            Logger.info("Adding image to backend...");
             var newImgs = [
               ...existingImgs,
               {"url": res.secureUrl, "publicId": res.publicId}
@@ -91,7 +91,7 @@ class _AddProductFormState extends State<AddProductForm> {
                   exception: e as DioException,
                   msg: "Failed to add image to database");
             } else {
-              clog(e);
+              Logger.info(e);
               showToast("Failed to add image to database", isErr: true)
                   .show(context);
             }
@@ -117,7 +117,7 @@ class _AddProductFormState extends State<AddProductForm> {
             exception: e as DioException,
             msg: "Failed to upload image");
       } else {
-        clog(e);
+        Logger.info(e);
         showToast("Failed to upload image", isErr: true).show(context);
       }
     }

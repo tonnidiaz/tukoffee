@@ -1,5 +1,5 @@
 import "dart:io";
-
+import "package:via_logger/logger.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lebzcafe/main.dart";
@@ -17,14 +17,14 @@ import "package:socket_io_client/socket_io_client.dart" as IO;
 
 initSocketio() {
   final appCtrl = MainApp.appCtrl;
-  clog("initing socketio...");
+  Logger.info("initing socketio...");
   socket = IO.io(
       appCtrl.apiURL.value,
       IO.OptionBuilder().setTransports(["websocket"]) // for Flutter or Dart VM
           .setExtraHeaders({"foo": "bar"}) // optional
           .build());
   socket?.onConnect((_) {
-    clog("IO connected");
+    Logger.info("IO connected");
     socket?.emit("test", "test");
   });
 }
@@ -40,7 +40,7 @@ class _TuSplashState extends State<TuSplash> {
   final _appCtrl = MainApp.appCtrl;
   bool _connected = true;
   _setConnected(bool val) {
-    clog("Set connected");
+    Logger.info("Set connected");
     setState(() {
       _connected = val;
     });
@@ -59,32 +59,32 @@ class _TuSplashState extends State<TuSplash> {
 
   void _init() async {
     // Check for internet connection
-    clog("Initi splash...");
+    Logger.info("Initi splash...");
     if (_appCtrl.store["name"] != null) return;
     _setConnected(true);
     final isReachable = await InternetConnectionChecker()
         .isHostReachable(AddressCheckOptions(hostname: "1.1.1.1"));
-    //clog(isReachable.isSuccess);
+    //Logger.info(isReachable.isSuccess);
     bool result = isReachable
         .isSuccess; // await InternetConnectionChecker().hasConnection;
     await Future.delayed(const Duration(milliseconds: 100));
-    clog("Connected: $result");
+    Logger.info("Connected: $result");
     _setConnected(result);
     if (result) {
       try {
         //GET APIURL
         final apiURL = await getApiURL();
         _appCtrl.setApiURL(apiURL);
-        clog(apiURL);
+        Logger.info(apiURL);
         initSocketio();
       } catch (e) {
-        clog(e);
+        Logger.info(e);
         return;
       }
-      clog("await seupStoreDetails...");
+      Logger.info("await seupStoreDetails...");
       await setupStoreDetails();
       // If server is still down
-      clog("Server down: ${_appCtrl.serverDown.value}");
+      Logger.info("Server down: ${_appCtrl.serverDown.value}");
       if (!_appCtrl.serverDown.value || DEV) {
         setupUser();
         setupStoreDetails();
@@ -103,7 +103,7 @@ class _TuSplashState extends State<TuSplash> {
                 side: const BorderSide(width: 1.5, color: Colors.white38),
                 borderRadius: BorderRadius.circular(5))),
         onPressed: () async {
-          clog("REFRESHING");
+          Logger.info("REFRESHING");
           _init();
         },
         child: const Text("REFRESH"));

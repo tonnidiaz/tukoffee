@@ -8,7 +8,7 @@ import "package:lebzcafe/widgets/tu/common.dart";
 import "package:lebzcafe/widgets/tu/form_field.dart";
 
 import "dart:async";
-
+import "package:via_logger/logger.dart";
 import "package:flutter/material.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/constants.dart";
@@ -54,7 +54,7 @@ class Step1 extends StatelessWidget {
           final res = await apiDio().post("/auth/signup", data: ctrl.user);
           Get.back();
           // Proceed to next step
-          clog(res.data);
+          Logger.info(res.data);
           pushTo(const Step2());
         } catch (e) {
           Get.back();

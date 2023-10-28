@@ -18,7 +18,7 @@ import "package:lebzcafe/views/search.dart";
 import "package:lebzcafe/widgets/common.dart";
 import "package:lebzcafe/widgets/common3.dart";
 import "package:get/get.dart";
-
+import "package:via_logger/logger.dart";
 import "../../widgets/add_product_form.dart";
 import "../../widgets/common2.dart";
 import "../../widgets/product_item.dart";
@@ -66,9 +66,9 @@ class _ProductsState extends State<Products> {
                                     await signedCloudinary.destroy(
                                   img["publicId"],
                                 );
-                                clog(cloudinaryRes.result);
+                                Logger.info(cloudinaryRes.result);
                               } catch (err) {
-                                clog(err);
+                                Logger.info(err);
                               }
                             }
                           }
@@ -84,7 +84,7 @@ class _ProductsState extends State<Products> {
                                 exception: e as DioException,
                                 msg: "Error deleting products!");
                           } else {
-                            clog(e);
+                            Logger.info(e);
                             showToast("Error deleting products!", isErr: true)
                                 .show(context);
                           }
@@ -108,12 +108,12 @@ class _ProductsState extends State<Products> {
   _getProducts() async {
     try {
       _ctrl.setProducts(null);
-      clog("Getting...");
+      Logger.info("Getting...");
 
       final res = await apiDio().get("/products");
       _ctrl.setProducts(res.data["data"]);
     } catch (e) {
-      clog(e);
+      Logger.info(e);
       _ctrl.setProducts([]);
     }
   }

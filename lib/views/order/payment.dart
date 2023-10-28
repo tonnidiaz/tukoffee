@@ -28,7 +28,7 @@ class _PaymentPageState extends State<PaymentPage> {
       _progress = val;
     });
     final url = await _controller.currentUrl();
-    clog(_isLoading);
+    Logger.info(_isLoading);
     if (url != null && url.contains("${MainApp.appCtrl.apiURL}/payment")) {
       if (_isLoading) {
         _ctrl.createOrder(context: context);
@@ -41,15 +41,15 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   _initSocketio() {
-    clog("Socketio init...");
+    Logger.info("Socketio init...");
     socket?.on("payment", (data) {
-      clog("On payment");
+      Logger.info("On payment");
       if (data["gateway"] == "yoco") {
         final yocoData = data["data"];
         if (yocoData["type"] == "payment.succeeded") {
           _ctrl.createOrder(context: context, yocoData: yocoData);
         } else {
-          clog(yocoData);
+          Logger.info(yocoData);
         }
       }
     });
@@ -72,7 +72,7 @@ class _PaymentPageState extends State<PaymentPage> {
               },
               onPageStarted: (String url) {},
               onPageFinished: (String url) {
-                clog("URL changed to: $url");
+                Logger.info("URL changed to: $url");
               },
               onWebResourceError: (WebResourceError error) {},
               onNavigationRequest: (NavigationRequest request) {

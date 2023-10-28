@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import "dart:convert";
-
+import "package:via_logger/logger.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:lebzcafe/controllers/app_ctrl.dart";
@@ -40,10 +40,10 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
 
   editFields() async {
     try {
-      //clog(formCtrl.form);
+      //Logger.info(formCtrl.form);
       final res =
           await apiDio().post("/store/update", data: {"data": formCtrl.form});
-      // clog(res);
+      // Logger.info(res);
       setupStoreDetails(data: res.data["store"]);
       Navigator.pop(context);
     } catch (e) {
@@ -66,7 +66,7 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
       final file = await importFile();
       if (file != null) {
         if (appCtrl.store["image"]["publicId"] != null) {
-          clog("Deleting old...");
+          Logger.info("Deleting old...");
           try {
             await signedCloudinary.destroy(appCtrl.store["image"]["publicId"]);
           } catch (e) {
@@ -75,11 +75,11 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
           }
         }
 
-        clog("Uploading...");
+        Logger.info("Uploading...");
         showToast("Uploading image...").show(context);
         final res = await uploadImg(file, appCtrl: appCtrl);
         if (res.isResultOk) {
-          clog("Updating...");
+          Logger.info("Updating...");
           final res2 = await apiDio().post("/store/update", data: {
             "data": {
               "image": {"url": res.secureUrl, "publicId": res.publicId}
@@ -89,7 +89,7 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
         }
       }
     } catch (e) {
-      clog(e);
+      Logger.info(e);
       errorHandler(e: e, context: context, msg: "Failed to upload image");
     }
   }

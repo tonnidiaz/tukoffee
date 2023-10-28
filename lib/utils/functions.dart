@@ -16,14 +16,16 @@ import "package:get/get.dart" as getx;
 import "package:hive_flutter/hive_flutter.dart";
 import "package:package_info_plus/package_info_plus.dart";
 import "package:permission_handler/permission_handler.dart";
+import "package:via_logger/via_logger.dart";
 import "/utils/constants.dart";
 import "package:window_manager/window_manager.dart";
 import "constants2.dart";
 
-void clog(dynamic p) {
-  debugPrint("$tag: $p");
+/* void cclog(dynamic p) {
+  //debugPrint("$tag: $p");
+  Logger.info(p);
 }
-
+ */
 void setupWindowManager() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Must add this line.
@@ -115,7 +117,7 @@ setupStoreDetails({Map<String, dynamic>? data}) async {
     if (e.runtimeType == DioException) {
       e as DioException;
       appCtrl.setserverDown(true);
-      clog(e.response);
+      Logger.info(e.response);
     }
   }
 }
@@ -128,9 +130,9 @@ Future<void> initHive() async {
     await Hive.initFlutter(hivePath);
     var box = await Hive.openBox("app");
     appBox = box;
-    clog("Hive initialized");
+    Logger.info("Hive initialized");
   } catch (e) {
-    clog(e);
+    Logger.info(e);
   }
 }
 
@@ -147,7 +149,7 @@ setupUser({bool full = true}) async {
     return;
   }
   var authToken = appBox!.get("authToken");
-  clog(authToken);
+  Logger.info(authToken);
   if (authToken != null) {
     try {
       final res = await apiDio().post("/auth/login");
@@ -155,7 +157,7 @@ setupUser({bool full = true}) async {
       appCtrl.setUser(res.data["user"]);
       setupCart(res.data["user"]["_id"]);
     } catch (e) {
-      clog(e);
+      Logger.info(e);
       appCtrl.setUser({});
       storeCtrl.setcart({});
       appCtrl.setReady(true);
@@ -165,7 +167,7 @@ setupUser({bool full = true}) async {
     storeCtrl.setcart({});
     appCtrl.setReady(true);
   }
-  clog("User setup");
+  Logger.info("User setup");
 }
 
 void setupCart(String id) async {
@@ -176,7 +178,7 @@ void setupCart(String id) async {
     storeCtrl.setcart(res.data["cart"]);
     appCtrl.setReady(true);
   } catch (e) {
-    clog(e);
+    Logger.info(e);
     appCtrl.setReady(true);
   }
 }
@@ -188,7 +190,7 @@ logout() async {
 
 void handleDioException(
     {BuildContext? context, required DioException exception, String? msg}) {
-  clog("ERROR RESP: ${exception.response}");
+  Logger.info("ERROR RESP: ${exception.response}");
   if (exception.response != null &&
       "${exception.response!.data}".startsWith("tuned")) {
     showToast("${exception.response!.data.split("tuned:").last}", isErr: true)
@@ -205,7 +207,7 @@ void errorHandler({required e, BuildContext? context, String? msg}) {
     handleDioException(
         context: context, exception: e as DioException, msg: msg);
   } else {
-    clog(e);
+    Logger.info(e);
     showToast(msg ?? "Something went wrong!", isErr: true)
         .show(context ?? appCtx!);
   }
@@ -213,14 +215,14 @@ void errorHandler({required e, BuildContext? context, String? msg}) {
 
 Future<String?> addProduct(BuildContext context, Map<String, dynamic> product,
     {String mode = "add"}) async {
-  clog("$mode product...");
+  Logger.info("$mode product...");
   try {
     final url = "/products/$mode";
     final res = await apiDio().post(url, data: product);
     return "${res.data["pid"]}";
   } catch (e) {
     gpop();
-    clog(e);
+    Logger.info(e);
     if (e.runtimeType == DioException) {
       e as DioException;
       handleDioException(
@@ -249,7 +251,7 @@ Future<File?> importFile(
       return null;
     }
   } catch (e) {
-    clog(e);
+    Logger.info(e);
   }
   return null;
 }
@@ -299,7 +301,7 @@ getStores({required StoreCtrl storeCtrl}) async {
     final res = await apiDio().get("/stores");
     storeCtrl.setStores(res.data["stores"]);
   } catch (e) {
-    clog(e);
+    Logger.info(e);
     storeCtrl.setStores([]);
   }
 }
@@ -326,7 +328,7 @@ Future<String> getAppVersion() async {
 }
 
 Future requestStoragePermission() async {
-  clog("Requesting...");
+  Logger.info("Requesting...");
 
   return await Permission.storage.request().isGranted;
 }

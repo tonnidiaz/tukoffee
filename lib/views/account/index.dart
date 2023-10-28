@@ -6,6 +6,7 @@ import "package:lebzcafe/views/account/profile.dart";
 import "package:lebzcafe/views/order/index.dart";
 import "package:lebzcafe/widgets/common.dart";
 import "package:lebzcafe/widgets/common2.dart";
+import "package:via_logger/logger.dart";
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
@@ -57,7 +58,7 @@ class AccountPage extends StatelessWidget {
                     radius: 0,
                     borderSize: 0,
                     onTap: () {
-                      clog("To settings");
+                      Logger.info("To settings");
                       pushNamed("/account/settings");
                     },
                     child: const TuListTile(

@@ -1,6 +1,7 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/functions.dart';
+import "package:via_logger/logger.dart";
 
 class MyInAppBrowser extends InAppBrowser {
   final Function(MyInAppBrowser browser, int progress)? onProgress;
@@ -10,12 +11,12 @@ class MyInAppBrowser extends InAppBrowser {
 
   @override
   Future onBrowserCreated() async {
-    clog("Browser Created!");
+    Logger.info("Browser Created!");
   }
 
   @override
   Future onLoadStart(url) async {
-    clog("Started $url");
+    Logger.info("Started $url");
     if (onLoad != null) {
       onLoad!(url);
     }
@@ -23,7 +24,7 @@ class MyInAppBrowser extends InAppBrowser {
 
   @override
   Future onLoadStop(url) async {
-    clog("Stopped $url");
+    Logger.info("Stopped $url");
     //if (onLoad != null) {
     //  onLoad!(url);
     //}
@@ -31,12 +32,12 @@ class MyInAppBrowser extends InAppBrowser {
 
   @override
   void onLoadError(url, code, message) {
-    clog("Can't load $url.. Error: $message");
+    Logger.info("Can't load $url.. Error: $message");
   }
 
   @override
   void onProgressChanged(progress) {
-    clog("Progress: $progress");
+    Logger.info("Progress: $progress");
     if (onProgress != null) {
       onProgress!(this, progress);
     }
@@ -44,6 +45,6 @@ class MyInAppBrowser extends InAppBrowser {
 
   @override
   void onExit() {
-    clog("Browser closed!");
+    Logger.info("Browser closed!");
   }
 }

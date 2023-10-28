@@ -3,7 +3,7 @@ import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/widgets/common2.dart";
 import "package:lebzcafe/widgets/tu/form_field.dart";
-
+import "package:via_logger/logger.dart";
 import "../../../utils/functions.dart";
 
 class TuMultiselect extends StatefulWidget {
@@ -118,7 +118,7 @@ class _TuMultiselectDialogState extends State<TuMultiselectDialog> {
             itemCount: widget.items.length,
             itemBuilder: (context, index) {
               var item = widget.items[index];
-              clog(item.subtitle);
+              Logger.info(item.subtitle);
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 4),
                 child: TuListTile(

@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:lebzcafe/models/store.dart";
 import "package:get/get.dart";
 import "package:lebzcafe/utils/functions.dart";
-
+import "package:via_logger/logger.dart";
 import "../utils/constants.dart";
 import "../utils/constants2.dart";
 
@@ -67,7 +67,7 @@ class StoreCtrl extends GetxController {
 
   @override
   void dispose() {
-    clog("STORECTRL DISPOSE");
+    Logger.info("STORECTRL DISPOSE");
     cartWorker?.dispose();
     super.dispose();
   }

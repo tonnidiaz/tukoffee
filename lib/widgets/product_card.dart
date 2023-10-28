@@ -8,7 +8,7 @@ import "package:lebzcafe/views/order/index.dart";
 import "package:lebzcafe/widgets/common3.dart";
 import "package:get/get.dart";
 import "package:google_fonts/google_fonts.dart";
-
+import "package:via_logger/logger.dart";
 import "../controllers/app_ctrl.dart";
 import "../controllers/store_ctrl.dart";
 import "../utils/constants.dart";
@@ -37,7 +37,7 @@ class ProductCard extends StatelessWidget {
               .where((el) => el["product"]["_id"] == product["_id"])
               .isNotEmpty;
 
-      clog(!inCart ? "Adding to cart..." : "Removing from cart...");
+      Logger.info(!inCart ? "Adding to cart..." : "Removing from cart...");
 
       var act = inCart ? "remove" : "add";
       try {
@@ -45,7 +45,7 @@ class ProductCard extends StatelessWidget {
             data: {"user": appCtrl.user["email"], "product": product["_id"]});
         storeCtrl.setcart(res.data["cart"]);
       } catch (e) {
-        clog(e);
+        Logger.info(e);
         if (e.runtimeType == DioException) {
           handleDioException(
               context: context,
@@ -65,7 +65,7 @@ class ProductCard extends StatelessWidget {
       width: width,
       padding: 0,
       onTap: () async {
-        clog("Tap");
+        Logger.info("Tap");
         storeCtrl.setCurrProduct(product);
         Navigator.of(context)
             .pushNamed("/product", arguments: {"pid": product["pid"]});

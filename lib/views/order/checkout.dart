@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:convert';
+
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lebzcafe/utils/functions2.dart';
@@ -10,7 +12,7 @@ import 'package:lebzcafe/widgets/tu/browser.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:lebzcafe/widgets/tu/form_field.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import "package:via_logger/logger.dart";
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -115,21 +117,39 @@ class CheckoutCtrl extends GetxController {
         };
       }
 
-      final res = await apiDio().post(
-          "/order/create?mode=${mode.value == OrderMode.deliver ? 0 : 1}&cartId=${MainApp.storeCtrl.cart["_id"]}",
-          data: {
-            "address": selectedAddr,
-            'store': store['_id'],
-            'collector': collector,
-            'yocoData': yocoData,
-            'paystackData': paystackData,
-            "form": {...form, "fee": storeCtrl.deliveryFee.value},
-          });
-      var oid = res.data["order"]["oid"];
+      try {
+        final res = await apiDio().post(
+            "/order/create?mode=${mode.value == OrderMode.deliver ? 0 : 1}&cartId=${MainApp.storeCtrl.cart["_id"]}",
+            data: {
+              "address": selectedAddr,
+              'store': store['_id'],
+              'collector': collector,
+              'yocoData': yocoData,
+              'paystackData': paystackData,
+              "form": {...form, "fee": storeCtrl.deliveryFee.value},
+            });
+        var oid = res.data["order"]["oid"];
 
-      Get.offAllNamed("/");
-      pushTo(OrderPage(id: "$oid"));
-      storeCtrl.cart['products'] = [];
+        Get.offAllNamed("/");
+        pushTo(OrderPage(id: "$oid"));
+        storeCtrl.cart['products'] = [];
+      } catch (e) {
+        gpop();
+        //PROBLEM WITH BACKEND
+        if (paystackData != null) {
+          Logger.info(jsonEncode(paystackData));
+        }
+        TuFuncs.showTDialog(
+            context,
+            const AlertDialog(
+              title: Text("Failed to create order"),
+              content: Center(
+                  child: Text(
+                "An email has been sent to support with your transaction ID. We will be in touch ASAP!",
+                textAlign: TextAlign.center,
+              )),
+            ));
+      }
     } catch (e) {
       gpop();
       if (browser?.isOpened() == true) {
@@ -154,10 +174,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
   final CheckoutCtrl _ctrl = Get.put(CheckoutCtrl());
 
   _initSocketio() {
-    clog('Socketio init...');
+    Logger.info('Socketio init...');
     socket?.off("payment");
     socket?.on('payment', (data) {
-      clog('On payment: $data');
+      Logger.info('On payment: $data');
       final gateway = data['gateway'];
       final mData = data['data'];
       if (gateway == EGateway.yoco.index) {
@@ -165,7 +185,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           _ctrl.createOrder(
               context: context, yocoData: mData, browser: _browser);
         } else {
-          clog(mData);
+          Logger.info(mData);
         }
       } else if (gateway == EGateway.paystack.index) {
         _ctrl.createOrder(
@@ -219,7 +239,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   void dispose() {
-    clog('Disposing');
+    Logger.info('Disposing');
     Get.delete<CheckoutCtrl>();
     super.dispose();
   }
@@ -353,10 +373,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
         options: _webviewOptions,
       ));
     } catch (e) {
-      clog(e);
+      Logger.info(e);
       if (e.runtimeType == DioException) {
         e as DioException;
-        clog(e.response);
+        Logger.info(e.response);
         if (e.response != null) {
           var msg = e.response!.data.runtimeType == String
               ? "Something went wrong"
@@ -479,7 +499,7 @@ class _EditAddressFormState extends State<EditAddressForm> {
                   context: context,
                   widget: MapPage(
                     onSubmit: (val) {
-                      clog(val);
+                      Logger.info(val);
                       setState(() {
                         _deliveryAddress = {..._deliveryAddress, ...val};
                       });

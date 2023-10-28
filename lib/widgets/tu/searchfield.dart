@@ -1,5 +1,5 @@
 import "dart:io";
-
+import "package:via_logger/logger.dart";
 import "package:flutter/material.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/constants2.dart";
@@ -52,14 +52,14 @@ class _TuSearchFieldState extends State<TuSearchField> {
 
   _hideOverlay() async {
     try {
-      //clog(_entry == null);
+      //Logger.info(_entry == null);
       if (_entry != null) {
         await sleep(200);
         _entry?.remove();
         _entry = null;
       }
     } catch (e) {
-      //clog(e);
+      //Logger.info(e);
     }
   }
 
@@ -85,7 +85,7 @@ class _TuSearchFieldState extends State<TuSearchField> {
     if (_focusNode.hasFocus && widget.suggestions.isNotEmpty) {
       _showOverlay();
     } else {
-      //clog("Unfocused");
+      //Logger.info("Unfocused");
       if (Platform.isAndroid || Platform.isIOS || true) {
         _hideOverlay();
       }
@@ -129,7 +129,7 @@ class _TuSearchFieldState extends State<TuSearchField> {
           _hideOverlay();
         },
         onChanged: (val) {
-          clog(widget.suggestions.length);
+          Logger.info(widget.suggestions.length);
 
           _setValue(val);
           _debouncer.run(() {

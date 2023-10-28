@@ -16,6 +16,7 @@ import "package:lebzcafe/widgets/common2.dart";
 import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
 import "package:lebzcafe/widgets/tu/select.dart";
+import "package:via_logger/logger.dart";
 
 class CheckoutStep1 extends StatelessWidget {
   final CheckoutCtrl ctrl;
@@ -177,7 +178,7 @@ class CheckoutStep1 extends StatelessWidget {
                                   ctrl.selectedAddr.isEmpty)
                           ? null
                           : () async {
-                              clog("Next up");
+                              Logger.info("Next up");
 
                               if (ctrl.mode.value == OrderMode.collect) {
                                 ctrl.step++;

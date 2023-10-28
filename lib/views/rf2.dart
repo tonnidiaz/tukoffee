@@ -1,5 +1,5 @@
 import "dart:convert";
-
+import "package:via_logger/logger.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_inappwebview/flutter_inappwebview.dart";
@@ -32,7 +32,7 @@ class _RFPage2State extends State<RFPage2> {
   void _handleProgress(MyInAppBrowser browser, int progress) async {
     final url = await browser.webViewController.getUrl();
     if (url != null) {
-      clog("The URL IS: ${url.toString()}");
+      Logger.info("The URL IS: ${url.toString()}");
     }
   }
 
@@ -50,7 +50,7 @@ class _RFPage2State extends State<RFPage2> {
     socket?.off("comment");
     //socket?.off("order");
 
-    socket?.on("rf", (data) => {clog("RF: $data")});
+    socket?.on("rf", (data) => {Logger.info("RF: $data")});
     socket?.on("comment", (data) {
       NotifsService.createNotif(title: "Anonymous says", msg: data);
       if (context.mounted) {
@@ -59,7 +59,7 @@ class _RFPage2State extends State<RFPage2> {
         });
       }
     });
-    socket?.onDisconnect((_) => clog("disconnect"));
+    socket?.onDisconnect((_) => Logger.info("disconnect"));
   }
 
   @override
@@ -137,7 +137,7 @@ class _RFPage2State extends State<RFPage2> {
                         "types": "address"
                       });
                   gpop();
-                  clog(jsonEncode(mapboxPlaceRes.data["features"]));
+                  Logger.info(jsonEncode(mapboxPlaceRes.data["features"]));
                   return;
                   final davies = dummyFeatures[0]["center"].reversed.toList();
                   final daviesBox = dummyFeatures[0]["center"];
@@ -152,8 +152,8 @@ class _RFPage2State extends State<RFPage2> {
                         "proximity": "28.0534776,-26.1974939",
                       });
 
-                  clog(addr1.postalCode);
-                  clog(mapboxres.data);
+                  Logger.info(addr1.postalCode);
+                  Logger.info(mapboxres.data);
                   gpop();
                 } catch (e) {
                   gpop();

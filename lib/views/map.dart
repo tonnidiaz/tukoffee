@@ -1,5 +1,5 @@
 import "dart:convert";
-
+import "package:via_logger/logger.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter_map/flutter_map.dart";
@@ -76,7 +76,7 @@ class _MapPageState extends State<MapPage> {
     if (_isGeocoding || query.length < 3) return;
     _setIsGeocoding(true);
     try {
-      /* clog("setft");
+      /* Logger.info("setft");
       _setFeatures(dummyFeatures);
       return; */
       const baseURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
@@ -87,7 +87,7 @@ class _MapPageState extends State<MapPage> {
       });
       _setFeatures(res.data["features"]);
     } catch (e) {
-      clog(e);
+      Logger.info(e);
     }
     _setIsGeocoding(false);
   }
@@ -148,17 +148,17 @@ class _MapPageState extends State<MapPage> {
       if (context.mounted) {
         await showToast("Something went wrong", isErr: true).show(context);
       }
-      clog(e);
+      Logger.info(e);
       Get.back();
     }
   }
 
   Future<void> _getAddressFromLatLng(Position position) async {
-    clog("GETTING...");
+    Logger.info("GETTING...");
     await placemarkFromCoordinates(position.latitude, position.longitude)
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
-      clog("${place.administrativeArea}");
+      Logger.info("${place.administrativeArea}");
       List<String?> placeAsList = [
         place.street,
         place.subLocality,
@@ -180,7 +180,7 @@ class _MapPageState extends State<MapPage> {
       _setCenter(cent);
       _mapController.move(cent, 17.5);
     }).catchError((e) {
-      clog(e);
+      Logger.info(e);
     });
   }
 
@@ -421,7 +421,7 @@ class _MapPageState extends State<MapPage> {
                                                 ...addr
                                               });
                                             } catch (e) {
-                                              clog(e);
+                                              Logger.info(e);
                                             }
                                           }),
                                     )

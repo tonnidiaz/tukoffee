@@ -1,11 +1,11 @@
 import "dart:async";
 import "dart:math";
 import "package:cloudinary/cloudinary.dart";
-import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:google_fonts/google_fonts.dart";
-import "package:socket_io_client/socket_io_client.dart" as IO;
-
+import "package:socket_io_client/socket_io_client.dart" as io;
+import "package:via_logger/log_record.dart";
+import "package:via_logger/output.dart";
 import "colors.dart";
 import "constants.dart";
 
@@ -138,6 +138,14 @@ const sheetRadius = BorderRadius.only(
 
 double topMargin = 4;
 
-IO.Socket? socket;
+io.Socket? socket;
 
 bool backEnabled = true;
+
+class Console extends Output {
+  @override
+  void output(LogRecord record) {
+    ///Custom print style
+    debugPrint('[${record.path}:${record.lineNumber}] ${record.message}');
+  }
+}

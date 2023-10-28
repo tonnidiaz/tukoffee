@@ -6,6 +6,7 @@ import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/views/product/reviews/review.dart";
 import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/views/add_review.dart";
+import "package:via_logger/logger.dart";
 
 class ReviewItem extends StatelessWidget {
   final Map<String, dynamic> item;
@@ -74,7 +75,7 @@ class ReviewItem extends StatelessWidget {
                       child: Image.network(
                         item["product"]["images"][0]["url"],
                         errorBuilder: ((context, error, stackTrace) {
-                          clog(error);
+                          Logger.info(error);
                           return svgIcon(
                             name: "br-image-slash",
                             size: 26,

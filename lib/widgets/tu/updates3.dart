@@ -1,7 +1,7 @@
 import "dart:io";
 import "dart:isolate";
 import "dart:ui";
-
+import "package:via_logger/logger.dart";
 import "package:flutter/material.dart";
 import "package:flutter_downloader/flutter_downloader.dart";
 import "package:get/get.dart";
@@ -40,12 +40,12 @@ class UpdatesView3State extends State<UpdatesView3> {
     _port.listen((dynamic data) {
       //This is where you handle the outcome/progress
       int progress = data[2];
-      clog(progress);
+      Logger.info(progress);
       _ctrl.setProgress(progress / 100);
       if (progress == 100) {
         //Finished downloading
         gpop(); //HIDE DOWNLOADER PROGRESS SHEET
-        clog("Opening file");
+        Logger.info("Opening file");
         FlutterDownloader.open(taskId: _taskId!);
         // HIDE MAIN SHEET
       }
@@ -67,7 +67,7 @@ class UpdatesView3State extends State<UpdatesView3> {
 
     try {
       final hasPermission = await requestStoragePermission();
-      clog("Has perm: $hasPermission");
+      Logger.info("Has perm: $hasPermission");
       if (hasPermission == null || !hasPermission) {
         if (!context.mounted) return;
         showToast("Need to have storage permissions", isErr: true)
@@ -83,10 +83,10 @@ class UpdatesView3State extends State<UpdatesView3> {
       final dirPath = "${dir?.path}/Downloads/APKs";
       final pdir = Directory(dirPath);
       if (!pdir.existsSync()) {
-        clog("Creating directory");
+        Logger.info("Creating directory");
         pdir.createSync(recursive: true);
       }
-      clog(dirPath);
+      Logger.info(dirPath);
       final fileName =
           "${_appCtrl.store["name"]}-${DateTime.now().millisecondsSinceEpoch}-v${widget.update!["version"]}.apk";
 
@@ -106,7 +106,7 @@ class UpdatesView3State extends State<UpdatesView3> {
         _taskId = taskId;
       });
     } catch (e) {
-      clog(e);
+      Logger.info(e);
     }
   }
 

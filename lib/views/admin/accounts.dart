@@ -18,7 +18,7 @@ import "package:lebzcafe/widgets/order_item.dart";
 import "package:lebzcafe/widgets/prompt_modal.dart";
 import "package:get/get.dart";
 import "package:lebzcafe/widgets/tu/form_field.dart";
-
+import "package:via_logger/logger.dart";
 import "../../controllers/app_ctrl.dart";
 import "../../controllers/appbar.dart";
 
@@ -81,14 +81,14 @@ class _AccountsState extends State<Accounts> {
                 _ctrl.setAccounts(_ctrl.accounts.value!
                     .where((it) => !ids.contains(it["_id"]))
                     .toList());
-                clog(res.data);
+                Logger.info(res.data);
                 showToast("Accounts deleted successfully!").show(context);
               } catch (e) {
                 if (e.runtimeType == DioException) {
                   e as DioException;
                   handleDioException(context: context, exception: e);
                 } else {
-                  clog(e);
+                  Logger.info(e);
                   showToast("Error deleting accounts!", isErr: true)
                       .show(context);
                 }
@@ -222,9 +222,9 @@ class _AccountsState extends State<Accounts> {
     } catch (e) {
       if (e.runtimeType == DioException) {
         e as DioException;
-        clog(e.response);
+        Logger.info(e.response);
       } else {
-        clog(e);
+        Logger.info(e);
       }
       _ctrl.setAccounts([]);
     }
@@ -341,12 +341,12 @@ class AccountCard extends StatelessWidget {
                                               .where((it) =>
                                                   it["_id"] != account["_id"])
                                               .toList());
-                                          clog(res.data);
+                                          Logger.info(res.data);
                                           showToast(
                                                   "Account deleted successfully!")
                                               .show(context);
                                         } catch (e) {
-                                          clog(e);
+                                          Logger.info(e);
                                           if (e.runtimeType == DioException) {
                                             e as DioException;
                                             handleDioException(

@@ -11,6 +11,7 @@ import "package:lebzcafe/controllers/products_ctrl.dart";
 import "package:lebzcafe/controllers/store_ctrl.dart";
 import "package:lebzcafe/services/notifications.dart";
 import "package:lebzcafe/utils/colors.dart";
+import "package:lebzcafe/utils/functions2.dart";
 import "package:lebzcafe/views/auth/create.dart";
 import "package:lebzcafe/widgets/form_view.dart";
 import "package:lebzcafe/widgets/splash.dart";
@@ -20,6 +21,7 @@ import "mobile.dart";
 import "utils/constants.dart";
 import "utils/functions.dart";
 import "package:flutter_downloader/flutter_downloader.dart";
+import "package:via_logger/logger.dart";
 
 enableWebviewDebugging() async {
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
@@ -28,6 +30,7 @@ enableWebviewDebugging() async {
 }
 
 void main() async {
+  setupLogger();
   await initHive();
   NotifsService.initNotifs();
   WidgetsFlutterBinding.ensureInitialized();
@@ -104,10 +107,10 @@ class _MainAppState extends State<MainApp> {
         deviceId = r.machineId ?? "";
       }
 
-      clog("DeviceID: $deviceId");
+      Logger.info("DeviceID: $deviceId");
       appCtrl.setDeviceID(deviceId);
     } catch (e) {
-      clog(e);
+      Logger.info(e);
     }
   }
 
@@ -162,7 +165,7 @@ class _PageWrapperState extends State<PageWrapper> {
       appBar: widget.appBar,
       body: RefreshIndicator(
         onRefresh: () async {
-          clog("Refreshing...");
+          Logger.info("Refreshing...");
           if (widget.onRefresh != null) {
             await widget.onRefresh!();
           }

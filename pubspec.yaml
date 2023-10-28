@@ -68,6 +68,7 @@ dependencies:
   flutter_inappwebview: ^5.8.0
   flutter_hooks: ^0.20.3
   sliver_tools: ^0.2.12
+  via_logger: ^1.0.4
 
 dev_dependencies:
   flutter_test:

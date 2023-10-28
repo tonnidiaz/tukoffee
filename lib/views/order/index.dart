@@ -19,6 +19,7 @@ import "package:lebzcafe/widgets/common2.dart";
 import "package:lebzcafe/widgets/form_view.dart";
 import "package:lebzcafe/widgets/tu/select.dart";
 import "package:get/get.dart";
+import "package:via_logger/logger.dart";
 
 import "../../utils/functions.dart";
 
@@ -66,7 +67,7 @@ class _OrderPageState extends State<OrderPage> {
       }
       getStores(storeCtrl: _storeCtrl);
     } catch (e) {
-      clog(e);
+      Logger.info(e);
       setState(() {
         _setOrder({});
       });

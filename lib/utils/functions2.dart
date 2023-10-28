@@ -3,7 +3,10 @@ import "package:awesome_notifications/awesome_notifications.dart";
 import "package:dio/dio.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/constants2.dart";
 import "package:lebzcafe/utils/functions.dart";
+import "package:via_logger/logger.dart";
+import "package:via_logger/output.dart";
 
 class Shiplogic {
   static Future<String> getOrderStatus(Map order) async {
@@ -16,14 +19,14 @@ class Shiplogic {
     } catch (e) {
       if (e.runtimeType == DioException) {
         e as DioException;
-        clog(e.response);
+        Logger.info(e.response);
       }
       return "cancelled";
     }
   }
 
   static cancelOrder(Map order) async {
-    clog("CANCELLING ON SHIPLOGIC...");
+    Logger.info("CANCELLING ON SHIPLOGIC...");
     final res = await shiplogicDio().post("/shipments/cancel", data: {
       "tracking_reference": order["shiplogic"]["shipment"]["tracking_code"]
     });
@@ -137,4 +140,9 @@ String formatDate(String dateString) {
 String camelToSentence(String text) {
   return text.replaceAllMapped(RegExp(r"^([a-z])|[A-Z]"),
       (Match m) => m[1] == null ? " ${m[0]}" : m[1]!.toUpperCase());
+}
+
+setupLogger() {
+  final List<Output> engines = [Console()];
+  Logger.setEngines(engines);
 }

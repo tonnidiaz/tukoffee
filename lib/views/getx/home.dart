@@ -5,6 +5,7 @@ import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/widgets/common.dart";
+import "package:via_logger/logger.dart";
 
 class GetxHomePage extends StatelessWidget {
   const GetxHomePage({super.key});
@@ -20,7 +21,7 @@ class GetxHomePage extends StatelessWidget {
             mY(6),
             ElevatedButton(
               onPressed: () {
-                clog("p");
+                Logger.info("p");
 
                 Get.bottomSheet(const MySheet(),
                     useRootNavigator: false,

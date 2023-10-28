@@ -5,7 +5,7 @@ import "package:lebzcafe/widgets/common4.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
 import "package:lebzcafe/widgets/tu/form.dart";
 import "package:lebzcafe/widgets/tu/form_field.dart";
-
+import "package:via_logger/logger.dart";
 import "package:dio/dio.dart";
 import "package:flutter/material.dart";
 import "package:lebzcafe/controllers/app_ctrl.dart";
@@ -47,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
         _account = res.data["users"][0];
       });
     } catch (e) {
-      clog(e);
+      Logger.info(e);
     }
   }
 
@@ -98,7 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
               // Navigator.pop(context);
             } catch (e) {
               Get.back();
-              clog(e);
+              Logger.info(e);
               if (e.runtimeType == DioException) {
                 handleDioException(
                     context: context,

@@ -15,6 +15,7 @@ import "package:lebzcafe/widgets/tu/form_field.dart";
 import "../../../utils/constants2.dart";
 import "../../../widgets/common.dart";
 import "../../../widgets/product_card.dart";
+import "package:via_logger/logger.dart";
 
 class ShopPage extends StatefulWidget {
   const ShopPage({Key? key}) : super(key: key);
@@ -30,12 +31,12 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
     //if (_storeCtrl.products.isNotEmpty) return;
     _storeCtrl.setProductsFetched(false);
     try {
-      clog("Fetching products...");
+      Logger.info("Fetching products...");
       final res = await apiDio().get("/products");
       _storeCtrl.setProducts(res.data["data"]);
       _storeCtrl.setProductsFetched(true);
     } catch (e) {
-      clog(e);
+      Logger.info(e);
       _storeCtrl.setProductsFetched(true);
     }
   }

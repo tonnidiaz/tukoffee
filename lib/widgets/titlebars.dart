@@ -6,6 +6,7 @@ import "package:get/get.dart";
 import "package:google_fonts/google_fonts.dart";
 import "../utils/constants.dart";
 import "/utils/functions.dart";
+import "package:via_logger/logger.dart";
 
 PreferredSizeWidget mobileTitleBar(
     {required BuildContext context,
@@ -32,7 +33,7 @@ Widget ActionBtn(IconData icon, {Color? color, void Function()? onClick}) {
       enableFeedback: true,
       onTap: onClick,
       onTapDown: (e) {
-        clog("ontap");
+        Logger.info("ontap");
       },
       child: Icon(
         icon,

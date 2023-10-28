@@ -21,6 +21,7 @@ import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/dialogs/loading_dialog.dart";
 import "package:get/get.dart";
 import "package:lebzcafe/widgets/tu/select.dart";
+import "package:via_logger/logger.dart";
 import "../../main.dart";
 import "../../widgets/order_item.dart";
 import "../../widgets/prompt_modal.dart";
@@ -96,7 +97,7 @@ class OrdersCtrl extends GetxController {
 
   void _sortOrders(List<dynamic> orders) {
     // clear selected
-    clog("Sorting...");
+    Logger.info("Sorting...");
     int dateInMs(String strDate) {
       var date = DateTime.parse(strDate);
       return date.millisecondsSinceEpoch;
@@ -149,7 +150,7 @@ class _OrdersPageState extends State<OrdersPage> {
 
   _init() async {
     if (_appCtrl.user.isEmpty) {
-      clog("To Login");
+      Logger.info("To Login");
       gpop();
       pushTo(const LoginPage(
         to: "/orders",
@@ -187,8 +188,8 @@ class _OrdersPageState extends State<OrdersPage> {
                     //cancel from shiplogic first
                     await Shiplogic.cancelOrder(o);
                   } catch (e) {
-                    clog("SHIPLOGIC ERROR");
-                    clog(e);
+                    Logger.info("SHIPLOGIC ERROR");
+                    Logger.info(e);
                     continue;
                   }
                 }
@@ -199,7 +200,7 @@ class _OrdersPageState extends State<OrdersPage> {
                 await _ctrl.setOrders(res.data["orders"]);
               } catch (e) {
                 gpop();
-                clog(e);
+                Logger.info(e);
                 errorHandler(
                     context: context, e: e, msg: "Failed to cancel orders!");
               }
@@ -213,7 +214,7 @@ class _OrdersPageState extends State<OrdersPage> {
       if (_appCtrl.user.isEmpty) {
         return;
       }
-      clog("Getting orders");
+      Logger.info("Getting orders");
       _ctrl.setOrdersFetched(false);
       final res = ModalRoute.of(context)?.settings.name == "/orders"
           ? await apiDio().get("/orders?user=${_appCtrl.user["_id"]}")
@@ -221,11 +222,11 @@ class _OrdersPageState extends State<OrdersPage> {
       await _ctrl.setOrders(res.data["orders"]);
       _ctrl.setOrdersFetched(true);
     } catch (e) {
-      clog("FETCH ORDER ERR");
-      clog(e);
+      Logger.info("FETCH ORDER ERR");
+      Logger.info(e);
       if (e.runtimeType == DioException) {
         e as DioException;
-        clog(e.response);
+        Logger.info(e.response);
       }
       _ctrl.setOrdersFetched(true);
     }

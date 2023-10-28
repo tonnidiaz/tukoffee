@@ -12,6 +12,7 @@ import "package:lebzcafe/widgets/cart_item.dart";
 import "package:lebzcafe/widgets/common.dart";
 import "package:get/get.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
+import "package:via_logger/logger.dart";
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -65,8 +66,8 @@ class _CartPageState extends State<CartPage> {
         _storeCtrl.setcart(res.data["cart"]);
       }
     } catch (e) {
-      clog("FETCH CART ERR");
-      clog(e);
+      Logger.info("FETCH CART ERR");
+      Logger.info(e);
     }
     _storeCtrl.setcartFetched(true);
   }

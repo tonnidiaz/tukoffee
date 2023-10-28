@@ -13,7 +13,7 @@ import "package:lebzcafe/widgets/common.dart";
 import "package:lebzcafe/widgets/common3.dart";
 import "package:get/get.dart";
 import "package:google_fonts/google_fonts.dart";
-
+import "package:via_logger/logger.dart";
 import "../utils/constants2.dart";
 import "../utils/styles.dart";
 
@@ -231,14 +231,14 @@ Container imgCard(
                           formViewCtrl.form["images"][index]; // {url, publicId}
                       toast.show(context);
                       try {
-                        clog("Deleting from cloudinary...");
+                        Logger.info("Deleting from cloudinary...");
                         var res = await signedCloudinary.destroy(
                           img["publicId"],
                         );
-                        clog(formViewCtrl.form["images"].length);
+                        Logger.info(formViewCtrl.form["images"].length);
                         var tempImgs = [...formViewCtrl.form["images"]];
                         tempImgs.removeAt(index);
-                        clog(res.result);
+                        Logger.info(res.result);
                         if (mode == "edit" || res.result == "not found") {
                           final res2 = await addProduct(
                               context,
@@ -252,11 +252,11 @@ Container imgCard(
                           }
                         }
                         if (res.isSuccessful) {
-                          clog("Image deleted successfully!");
+                          Logger.info("Image deleted successfully!");
                         }
                         toast.dismiss();
                       } catch (e) {
-                        clog(e);
+                        Logger.info(e);
                         toast.dismiss();
                         showToast("Failed to delete image").show(context);
                       }

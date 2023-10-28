@@ -12,7 +12,7 @@ import "package:lebzcafe/utils/theme.dart";
 import "package:get/get.dart";
 import "package:lebzcafe/views/getx/home.dart";
 import "package:lebzcafe/widgets/tu/updates3.dart";
-
+import "package:via_logger/logger.dart";
 import "/utils/constants.dart";
 
 class MobileApp extends StatefulWidget {
@@ -37,7 +37,7 @@ class _MobileAppState extends State<MobileApp> {
   _checkUpdates() async {
     final _autoCheck = autoCheck();
     MainApp.appCtrl.setAutoCheckUpdates(_autoCheck);
-    clog("AUTO CHECK: $_autoCheck");
+    Logger.info("AUTO CHECK: $_autoCheck");
     if (_autoCheck && !DEV) {
       final res = await checkUpdates();
       if (res != null) {
@@ -69,7 +69,7 @@ class _MobileAppState extends State<MobileApp> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       NotifsService.requestNotifsPermission(context);
       socket?.on("order", (data) {
-        clog("ON ORDER");
+        Logger.info("ON ORDER");
         //CREATE NOTIF IF USER IS ADMIN
         if (_appCtrl.user.isNotEmpty &&
             _appCtrl.user["permissions"] != UserPermissions.read) {
@@ -79,7 +79,7 @@ class _MobileAppState extends State<MobileApp> {
         }
       });
       _checkUpdates();
-      clog("SETTING STATUSBAR COLOR");
+      Logger.info("SETTING STATUSBAR COLOR");
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: appBGLight,
       ));
@@ -105,13 +105,13 @@ class _MobileAppState extends State<MobileApp> {
         return CallbackShortcuts(
           bindings: <ShortcutActivator, VoidCallback>{
             const SingleActivator(LogicalKeyboardKey.escape): () {
-              clog("Popping");
+              Logger.info("Popping");
               gpop();
             },
           },
           child: WillPopScope(
             onWillPop: () async {
-              clog("BACK ENABLED: $backEnabled");
+              Logger.info("BACK ENABLED: $backEnabled");
               return backEnabled;
             },
             child: child!,

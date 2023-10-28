@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "clean": "rimraf dist/",
-    "cp": "copyfiles -u 1 src/views/* src/public/**/* dist/src",
+    "cp": "copyfiles -u 1 src/views/**/* src/public/**/* src/assets/**/* dist/src",
     "build": "npm run clean && npx tsc && npm run cp ",
     "start": "node -r ./config-paths.js dist/index.js",
     "dev": "tsx watch index.ts",

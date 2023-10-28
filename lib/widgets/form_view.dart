@@ -8,6 +8,7 @@ import "../utils/constants.dart";
 import "../utils/styles.dart";
 import "common.dart";
 import "common2.dart";
+import "package:via_logger/logger.dart";
 
 class FormViewCtrl extends GetxController {
   RxMap<String, dynamic> form = <String, dynamic>{}.obs;
@@ -17,7 +18,7 @@ class FormViewCtrl extends GetxController {
 
   clear() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      clog("Clear form");
+      Logger.info("Clear form");
       form.value = {};
       setTempImgs([]);
     });
