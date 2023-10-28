@@ -244,7 +244,6 @@ class Step3 extends StatelessWidget {
 
                 return null;
               },
-              keyboard: TextInputType.phone,
               onChanged: (val) {
                 formCtrl.setFormField("password", val);
               },
@@ -264,7 +263,6 @@ class Step3 extends StatelessWidget {
 
                 return null;
               },
-              keyboard: TextInputType.phone,
               onChanged: (val) {
                 formCtrl.setFormField("cpassword", val);
               },

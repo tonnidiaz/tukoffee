@@ -276,13 +276,16 @@ class ConfirmPassForm extends StatelessWidget {
     return TuDialogView(
       onOk: () async {
         try {
+          showProgressSheet();
           await apiDio().post(url, data: {
             "password": MainApp.formCtrl.form["password"],
           });
+          gpop();
           if (onOk != null) {
             onOk!();
           }
         } catch (e) {
+          gpop();
           Logger.info(e);
           if (e.runtimeType == DioException) {
             e as DioException;

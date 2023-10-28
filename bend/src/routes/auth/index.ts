@@ -71,7 +71,7 @@ router.post("/signup", async (req, res) => {
 
         // const smsRes = await sendSMS(number, `Tukoffee - your code is: ${otp}`)
         //console.log(smsRes.data)
-        if (importantEmails.indexOf(email) != -1)
+        if (importantEmails.indexOf(user.email) != -1)
                 user.permissions = UserPermissions.delete;
         await user.save();
         res.json({ msg: "OTP Generated" });
