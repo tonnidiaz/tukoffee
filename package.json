@@ -1,0 +1,7 @@
+{
+    "scripts": {
+        "droid": "flutter run --debug",
+        "linux": "flutter run --debug -d linux",
+        "build": "flutter build apk --target-platform android-arm --split-per-abi"
+    }
+}

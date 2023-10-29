@@ -73,7 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final AppCtrl appCtrl = Get.find();
-    final FormViewCtrl formCtrl = Get.find();
+    final FormCtrl formCtrl = Get.find();
 
     addEditAddress({String? title}) async {
       TuFuncs.showBottomSheet(
@@ -193,7 +193,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     void onEditDetailsBtnClick() {
-      final FormViewCtrl ctrl = Get.find();
+      final FormCtrl ctrl = Get.find();
       ctrl.setForm({
         "first_name": _account!["first_name"],
         "last_name": _account!["last_name"],
@@ -270,7 +270,7 @@ class _ProfilePageState extends State<ProfilePage> {
               visible: widget.id == null,
               child: IconButton(
                 splashRadius: 20,
-                icon: Icon(Icons.settings_outlined),
+                icon: const Icon(Icons.settings_outlined),
                 onPressed: () {
                   pushNamed("/account/settings");
                 },
@@ -454,23 +454,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   _account!["address"];
                                               return address == null
                                                   ? Center(
-                                                      child: SizedBox(
-                                                      width: double.infinity,
-                                                      height: 70,
-                                                      child: InkWell(
-                                                        onTap: () {
-                                                          addEditAddress();
-                                                        },
-                                                        child: const Card(
-                                                            elevation: .5,
-                                                            child: Icon(
-                                                              Icons.add,
-                                                              color: Colors
-                                                                  .black87,
-                                                              // size: 50,
-                                                            )),
-                                                      ),
-                                                    ))
+                                                      child: TuCard(
+                                                          onTap: () {
+                                                            addEditAddress();
+                                                          },
+                                                          height: 70,
+                                                          child: const Icon(
+                                                            Icons.add,
+                                                            color:
+                                                                Colors.black87,
+                                                            // size: 50,
+                                                          )))
                                                   : Column(
                                                       //id=address-details
                                                       crossAxisAlignment:
@@ -478,7 +472,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          "${_account!["address"]["place_name"]}",
+                                                          "${_account!["address"]["place_name"] ?? ""}",
                                                           style: TextStyle(
                                                               fontSize: 14,
                                                               color: TuColors

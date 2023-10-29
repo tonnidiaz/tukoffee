@@ -269,7 +269,7 @@ class TuFuncs {
         builder: (context) => widget);
   }
 
-  static showTDialog(BuildContext context, Widget widget) {
+  static dialog(BuildContext context, Widget widget) {
     return showDialog(
         useRootNavigator: false,
         context: context,

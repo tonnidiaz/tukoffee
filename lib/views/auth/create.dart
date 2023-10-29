@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants2.dart";
@@ -41,12 +42,18 @@ class _SignupPageState extends State<SignupPage> {
   }
 }
 
-class Step1 extends StatelessWidget {
+class Step1 extends HookWidget {
   const Step1({super.key});
 
   @override
   Widget build(BuildContext context) {
     final ctrl = Get.find<SignupCtrl>();
+
+    useEffect(() {
+      MainApp.formCtrl.clear();
+      ctrl.user.clear();
+      return null;
+    }, []);
     return CreateAccountPageWrapper(
       onSubmit: () async {
         try {

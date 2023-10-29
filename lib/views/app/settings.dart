@@ -34,7 +34,7 @@ class OldSettingsPage extends StatelessWidget {
                       () => Text("About ${MainApp.appCtrl.store["name"]}"))),
               InfoItem(
                   onTap: () {
-                    TuFuncs.showTDialog(context, const FeedbackForm());
+                    TuFuncs.dialog(context, const FeedbackForm());
                   },
                   child: const Text("Help/Feedback")),
               InfoItem(

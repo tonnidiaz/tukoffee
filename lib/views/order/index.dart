@@ -161,31 +161,33 @@ class _OrderPageState extends State<OrderPage> {
 
   _cancelOrder({bool del = false}) async {
     var act = del ? "delete" : "cancel";
-    Get.dialog(PromptDialog(
-      title: "Cancel order",
-      msg: "Are you sure you want to cancel this order? ",
-      okTxt: "Yes",
-      onOk: () async {
-        try {
-          showProgressSheet(msg: "Canceling order..");
+    TuFuncs.dialog(
+        context,
+        PromptDialog(
+          title: "Cancel order",
+          msg: "Are you sure you want to cancel this order? ",
+          okTxt: "Yes",
+          onOk: () async {
+            try {
+              showProgressSheet(msg: "Canceling order..");
 
-          if (_order!["mode"] == OrderMode.deliver.index) {
-            //cancel from shiplogic first
-            await Shiplogic.cancelOrder(_order!);
-          }
+              if (_order!["mode"] == OrderMode.deliver.index) {
+                //cancel from shiplogic first
+                await Shiplogic.cancelOrder(_order!);
+              }
 
-          await apiDio().post("/order/cancel?action=$act", data: {
-            "ids": [_order!["_id"]],
-          });
+              await apiDio().post("/order/cancel?action=$act", data: {
+                "ids": [_order!["_id"]],
+              });
 
-          gpop();
-          _init();
-        } catch (e) {
-          gpop();
-          errorHandler(e: e, msg: "Failed to cancel order!");
-        }
-      },
-    ));
+              gpop();
+              _init();
+            } catch (e) {
+              gpop();
+              errorHandler(e: e, msg: "Failed to cancel order!");
+            }
+          },
+        ));
   }
 
   _getTotal(Map order) {
@@ -213,7 +215,9 @@ class _OrderPageState extends State<OrderPage> {
                 SelectItem("Pending", OrderStatus.pending.name),
                 SelectItem("Awaiting pickup", OrderStatus.awaitingPickup.name),
                 SelectItem("Completed", OrderStatus.completed.name),
-               
+                DEV
+                    ? SelectItem("Cancelled", OrderStatus.cancelled.name)
+                    : null,
               ],
               onChanged: (val) {
                 _formCtrl.setFormField('status', val);
@@ -253,17 +257,21 @@ class _OrderPageState extends State<OrderPage> {
           TuPopupBtn(
             items: [
               (_appCtrl.user["permissions"] > 0 &&
-                      _order?["mode"] == OrderMode.collect.index &&
-                      widget.fromDash && _order?['status'] != "cancelled")
+                          _order?["mode"] == OrderMode.collect.index &&
+                          widget.fromDash &&
+                          _order?['status'] != "cancelled" ||
+                      DEV)
                   ? PopupMenuItem(
                       onTap: _showUpdateStatusSheet,
                       child: const Text("Update status"),
                     )
                   : null,
-            _order?['status'] == 'cancelled' ? null :  PopupMenuItem(
-                onTap: _cancelOrder,
-                child: const Text("Cancel order"),
-              ),
+              _order?['status'] == 'cancelled'
+                  ? null
+                  : PopupMenuItem(
+                      onTap: _cancelOrder,
+                      child: const Text("Cancel order"),
+                    ),
             ],
           )
         ],

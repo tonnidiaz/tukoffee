@@ -183,7 +183,7 @@ Widget storeCard(BuildContext context, Map<String, dynamic> store) {
                   // An action can be bigger than the others.
                   flex: 1,
                   onPressed: (c) async {
-                    TuFuncs.showTDialog(
+                    TuFuncs.dialog(
                         context,
                         PromptDialog(
                           title: "Delete store location",

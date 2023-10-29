@@ -2,6 +2,7 @@
 
 import "package:dio/dio.dart";
 import "package:flutter/material.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:lebzcafe/controllers/app_ctrl.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/colors.dart";
@@ -187,7 +188,7 @@ class AccountSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppCtrl appCtrl = Get.find();
-    final FormViewCtrl formCtrl = Get.find();
+    final FormCtrl formCtrl = Get.find();
 
     void onChangeEmailClick() {
       formCtrl.clear();
@@ -225,6 +226,7 @@ class AccountSettingsPage extends StatelessWidget {
                     bgColor: Colors.black,
                     onPressed: () {
                       // show edit pass dialog
+                      formCtrl.clear();
                       Get.bottomSheet(const EditPassForm(),
                           isDismissible: false);
                     },
@@ -235,16 +237,19 @@ class AccountSettingsPage extends StatelessWidget {
                   child: TuButton(
                       onPressed: () {
                         // confirm password -> delete paddword
-                        Get.dialog(ConfirmPassForm(
-                          url: "/user/delete",
-                          onOk: () async {
-                            // logout
-                            showProgressSheet();
-                            logout();
+                        formCtrl.clear();
+                        TuFuncs.dialog(
+                            context,
+                            ConfirmPassForm(
+                              url: "/user/delete",
+                              onOk: () async {
+                                // logout
+                                showProgressSheet();
+                                logout();
 
-                            Get.offAllNamed("/");
-                          },
-                        ));
+                                Get.offAllNamed("/");
+                              },
+                            ));
                       },
                       bgColor: Colors.red,
                       child: Row(
@@ -265,7 +270,7 @@ class AccountSettingsPage extends StatelessWidget {
   }
 }
 
-class ConfirmPassForm extends StatelessWidget {
+class ConfirmPassForm extends HookWidget {
   final Function()? onOk;
   final String url;
   const ConfirmPassForm(
@@ -273,6 +278,10 @@ class ConfirmPassForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    useEffect(() {
+      Logger.info("Show");
+      return null;
+    }, []);
     return TuDialogView(
       onOk: () async {
         try {

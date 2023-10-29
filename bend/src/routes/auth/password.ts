@@ -30,14 +30,14 @@ router.post("/reset", async (req, res) => {
         } else if (act == "gen-otp") {
             const _otp = randomInRange(1000, 9999);
             if (DEV){
-                console.log(otp)
+                console.log(_otp)
             }
             user.otp = _otp;
 
             const storeDetails = getStoreDetails()
             await sendMail(`${storeDetails.store.name} Verification Email`,
-            `<h2 style="font-weight: 500">Here is your Email verification One-Time-PIN:</h2>
-                <p class="otp m-auto" style="font-size: 20px; font-weight: 600">${_otp}</p>
+            `<h2 style="font-weight: 500; font-size: 1.2rem;">Here is your Email verification OTP:</h2>
+                <p class="m-auto" style="font-size: 20px; font-weight: 600">${_otp}</p>
             ` , email
            )
         }

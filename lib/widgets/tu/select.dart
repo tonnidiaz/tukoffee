@@ -16,7 +16,7 @@ class TuSelect extends StatelessWidget {
   final bool disabled;
   final Color? bgColor;
   final Color? borderColor;
-  final List<SelectItem> items;
+  final List<SelectItem?> items;
   const TuSelect(
       {Key? key,
       this.items = const [],
@@ -35,6 +35,10 @@ class TuSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List parseItems() {
+      return [...items].where((element) => element != null).toList();
+    }
+
     return Container(
       width: width,
       //height: height,
@@ -64,7 +68,7 @@ class TuSelect extends StatelessWidget {
                       child: Text(label!),
                     ),
             ),
-            items: items.map((e) {
+            items: parseItems().map((e) {
               return DropdownMenuItem(
                 value: e.value,
                 child: Text(

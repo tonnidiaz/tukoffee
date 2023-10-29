@@ -165,7 +165,7 @@ class _OrdersPageState extends State<OrdersPage> {
     _getOrders();
   }
 
-  _cancelOrders({bool del = false}) async {
+  _cancelOrders({bool del = false, required routeName}) async {
     showDialog(
         context: context,
         builder: (context) {
@@ -193,11 +193,16 @@ class _OrdersPageState extends State<OrdersPage> {
                     continue;
                   }
                 }
-                final res = await apiDio().post(
-                    "/order/cancel?action=${act.toLowerCase()}",
-                    data: {"ids": ids, "userId": MainApp.appCtrl.user["_id"]});
+                final res = await apiDio()
+                    .post("/order/cancel?action=${act.toLowerCase()}", data: {
+                  "ids": ids,
+                  "userId": routeName == "/orders"
+                      ? MainApp.appCtrl.user["_id"]
+                      : null
+                });
                 //gpop();
                 await _ctrl.setOrders(res.data["orders"]);
+                gpop();
               } catch (e) {
                 gpop();
                 Logger.info(e);
@@ -348,7 +353,7 @@ class _OrdersPageState extends State<OrdersPage> {
                   _appBarCtrl.selected.isNotEmpty
                       ? PopupMenuItem(
                           onTap: () {
-                            _cancelOrders();
+                            _cancelOrders(routeName: routeName);
                           },
                           child: const Text("Cancel orders"))
                       : null,

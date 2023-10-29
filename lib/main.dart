@@ -59,7 +59,7 @@ void main() async {
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
-  static FormViewCtrl formCtrl = Get.put(FormViewCtrl());
+  static FormCtrl formCtrl = Get.put(FormCtrl());
   static AppCtrl appCtrl = Get.put(AppCtrl());
   static StoreCtrl storeCtrl = Get.put(StoreCtrl());
   static AppBarCtrl appBarCtrl = Get.put(AppBarCtrl());
@@ -72,7 +72,7 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   void _init() async {
-    Get.put(FormViewCtrl());
+    Get.put(FormCtrl());
     Get.put(AppCtrl());
     Get.put(StoreCtrl());
     Get.put(AppBarCtrl());

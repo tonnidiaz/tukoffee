@@ -141,7 +141,7 @@ class CheckoutCtrl extends GetxController {
         if (paystackData != null) {
           Logger.info(jsonEncode(paystackData));
         }
-        TuFuncs.showTDialog(
+        TuFuncs.dialog(
             context,
             const TuDialogView(
               hasActions: false,

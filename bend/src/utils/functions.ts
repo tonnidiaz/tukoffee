@@ -24,6 +24,15 @@ export const paystackAxios = () => axios.create(
     
         }
 })
+export const yocoAxios = () => axios.create(
+    {baseURL: "https://payments.yoco.com/api",
+    
+        headers: {
+            
+    Authorization: `Bearer ${process.env.YOCO_SECRET_KEY_DEMO}`, //TODO: Use live key
+    
+        }
+})
 const genToken = (data: IObj, exp? : string | number | undefined) => {
     const { PRIVATE_KEY } = process.env;
     return exp
@@ -217,7 +226,7 @@ const sendMail = async (subject: string, body: string, clients: string | string[
               }
         
               .otp {
-                background-color: #c4c4c4;
+                /*background-color: #c4c4c4;
                 border: 2px dashed #d37305;
                 padding: 10px;
                 border-radius: 5px;
@@ -226,7 +235,7 @@ const sendMail = async (subject: string, body: string, clients: string | string[
                 font-weight: 700;
                 letter-spacing: 6;
                 font-family: monospace;
-                font-size: 20px;
+                font-size: 20px;*/
               }
               .text-c{
                 text-align: center !important;
@@ -239,7 +248,8 @@ const sendMail = async (subject: string, body: string, clients: string | string[
           </head>
           <body>
   
-              <div class="tb text-c">
+              <div class="tb">
+              <h2>${storeDetails.store.name} app</h2>
               ${body}
               <p>For support please contact the Developer at <a href="mailto:${storeDetails.developer.email}">${storeDetails.developer.email}</a></p>
               </div>

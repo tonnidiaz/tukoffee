@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers
 
-import "dart:convert";
 import "package:via_logger/logger.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter/material.dart";
@@ -10,10 +9,8 @@ import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/constants2.dart";
 import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/utils/functions2.dart";
-import "package:lebzcafe/views/order/index.dart";
 import "package:lebzcafe/widgets/common.dart";
 import "package:lebzcafe/widgets/common3.dart";
-import "package:lebzcafe/widgets/dialog.dart";
 import "package:sliver_tools/sliver_tools.dart";
 
 import "refunds.service.dart";
@@ -63,7 +60,7 @@ class RefundsPage extends HookWidget {
           IconButton(
               splashRadius: 20,
               onPressed: () {
-                TuFuncs.showTDialog(
+                TuFuncs.dialog(
                     context,
                     const AlertDialog(
                       content: Column(
@@ -88,50 +85,54 @@ class RefundsPage extends HookWidget {
               ? const SliverFillRemaining(
                   child: Center(child: CircularProgressIndicator()),
                 )
-              : MultiSliver(children: [
-                  mY(topMargin),
-                  SliverList.builder(
-                      itemCount: _refunds.value!.length,
-                      itemBuilder: (context, index) {
-                        final refund = _refunds.value![index];
-                        return Container(
-                          margin: const EdgeInsets.symmetric(vertical: 1),
-                          child: ListTile(
-                            tileColor: cardBGLight,
-                            title: SelectableText(
-                              "#${refund['id']}",
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                            isThreeLine: true,
-                            subtitle: tuColumn(children: [
-                              mY(4),
-                              Chip(
-                                label: Text(
-                                  "${refund['status']}",
+              : _refunds.value!.isEmpty
+                  ? SliverFillRemaining(
+                      child: Center(child: h4("Nothing to show")),
+                    )
+                  : MultiSliver(children: [
+                      mY(topMargin),
+                      SliverList.builder(
+                          itemCount: _refunds.value!.length,
+                          itemBuilder: (context, index) {
+                            final refund = _refunds.value![index];
+                            return Container(
+                              margin: const EdgeInsets.symmetric(vertical: 1),
+                              child: ListTile(
+                                tileColor: cardBGLight,
+                                title: SelectableText(
+                                  "#${refund['id']}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600),
                                 ),
+                                isThreeLine: true,
+                                subtitle: tuColumn(children: [
+                                  mY(4),
+                                  Chip(
+                                    label: Text(
+                                      "${refund['status']}",
+                                    ),
+                                  ),
+                                  mY(5),
+                                  Text(
+                                    formatDate(refund['createdAt']),
+                                    style: TextStyle(
+                                        color: TuColors.note,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 13),
+                                  ),
+                                  mY(4),
+                                  Text(
+                                    refund['customer']['email'],
+                                    style: TextStyle(
+                                        color: TuColors.note,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15),
+                                  ),
+                                ]),
                               ),
-                              mY(5),
-                              Text(
-                                formatDate(refund['createdAt']),
-                                style: TextStyle(
-                                    color: TuColors.note,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13),
-                              ),
-                              mY(4),
-                              Text(
-                                refund['customer']['email'],
-                                style: TextStyle(
-                                    color: TuColors.note,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15),
-                              ),
-                            ]),
-                          ),
-                        );
-                      })
-                ])
+                            );
+                          })
+                    ])
         ]),
       ),
     );

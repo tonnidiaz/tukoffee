@@ -1,6 +1,6 @@
 import express, { Request } from "express";
 import { Cart, Order, User, Product, Refund } from "../models";
-import { paystackAxios, tunedErr } from "../utils/functions";
+import { paystackAxios, tunedErr, yocoAxios } from "../utils/functions";
 import io from "../utils/io";
 import { IObj } from "../utils/interfaces";
 import { authMid } from "@/middleware/auth.mid";
@@ -17,6 +17,7 @@ const genOID = async () => {
 
 router.post("/cancel", authMid, async (req: Request, res) => {
     const { ids, userId } = req.body;
+    console.log(userId)
     const { action } = req.query;
     try {
         for (let id of ids) {
@@ -55,8 +56,21 @@ router.post("/cancel", authMid, async (req: Request, res) => {
                             }
      
                         }
+                        else if (order.yocoData?.payload?.id){
+                            console.log("REQUESTING YOCO REFUND...")
+                            const refundRes = await yocoAxios().post(`/checkouts/${order.yocoData?.payload?.id}/refund`);
+                            console.log(refundRes)
+                            const refund = new Refund()
+                            refund.userId = order.customer;
+                            refund.yocoId = refundRes.data.refundId
+                            await refund.save()
+                            await User.findByIdAndUpdate(order.customer, {$push: {
+                                refunds: refund._id
+                            }}).exec()
+                        }
                         
                     }catch(e: any){
+                        console.log(e)
                         const msg = e?.response?.data?.message
                         console.log(msg)
                         order.status = OrderStatus.cancelled

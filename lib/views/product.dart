@@ -28,7 +28,7 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   final AppCtrl _appCtrl = Get.find();
-  final FormViewCtrl _formViewCtrl = Get.find();
+  final FormCtrl _formViewCtrl = Get.find();
   final StoreCtrl _storeCtrl = Get.find();
   Map<String, dynamic>? _product;
   List? _related = [];

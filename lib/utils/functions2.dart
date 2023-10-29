@@ -157,7 +157,7 @@ Future<void> checkServer(BuildContext context) async {
   } catch (e) {
     gpop();
     if (!context.mounted) return;
-    TuFuncs.showTDialog(
+    TuFuncs.dialog(
         context,
         const TuDialogView(
           title: "Server down",

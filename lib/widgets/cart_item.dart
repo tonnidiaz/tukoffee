@@ -111,7 +111,7 @@ class CartItem extends StatelessWidget {
               ),
               IconButton(
                   onPressed: () async {
-                    TuFuncs.showTDialog(
+                    TuFuncs.dialog(
                         context,
                         TuDialogView(
                           title: "Delete item",

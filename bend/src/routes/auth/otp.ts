@@ -21,8 +21,8 @@ router.post("/resend", async (req, res) => {
         
             const storeDetails = getStoreDetails()
             await sendMail(`${storeDetails.store.name} Verification Email`,
-                `<h2 style="font-weight: 500">Here is your Email verification One-Time-PIN:</h2>
-                    <p class='otp m-auto' style="font-size: 20px; font-weight: 600">${otp}</p>
+                `<h2 style="font-weight: 500; font-size: 1.2rem;">Here is your Email verification OTP:</h2>
+                    <p class='m-auto' style="font-size: 20px; font-weight: 600">${otp}</p>
                 ` , email
                )
             await user.save();

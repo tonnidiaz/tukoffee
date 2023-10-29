@@ -29,7 +29,7 @@ class AdminSettingsPage extends StatefulWidget {
 
 class _AdminSettingsPageState extends State<AdminSettingsPage> {
   final appCtrl = Get.find<AppCtrl>();
-  final formCtrl = Get.find<FormViewCtrl>();
+  final formCtrl = Get.find<FormCtrl>();
   final storeCtrl = MainApp.storeCtrl;
 
   _init() async {
@@ -573,7 +573,7 @@ class AddStoreView extends StatelessWidget {
                     // formCtrl.form represents the store
                     value: formCtrl.form["open_time"],
                     onTap: () async {
-                      final val = await TuFuncs.showTDialog(context,
+                      final val = await TuFuncs.dialog(context,
                           TimePickerDialog(initialTime: TimeOfDay.now()));
                       if (val != null) {
                         formCtrl.setFormField(
@@ -590,7 +590,7 @@ class AddStoreView extends StatelessWidget {
                     // formCtrl.form represents the store
                     value: formCtrl.form["close_time"],
                     onTap: () async {
-                      final val = await TuFuncs.showTDialog(context,
+                      final val = await TuFuncs.dialog(context,
                           TimePickerDialog(initialTime: TimeOfDay.now()));
                       if (val != null) {
                         formCtrl.setFormField(
@@ -616,7 +616,7 @@ class AddStoreView extends StatelessWidget {
                     // formCtrl.form represents the store
                     value: formCtrl.form["open_time_weekends"],
                     onTap: () async {
-                      final val = await TuFuncs.showTDialog(context,
+                      final val = await TuFuncs.dialog(context,
                           TimePickerDialog(initialTime: TimeOfDay.now()));
                       if (val != null) {
                         formCtrl.setFormField("open_time_weekends",
@@ -633,7 +633,7 @@ class AddStoreView extends StatelessWidget {
                     // formCtrl.form represents the store
                     value: formCtrl.form["close_time_weekends"],
                     onTap: () async {
-                      final val = await TuFuncs.showTDialog(context,
+                      final val = await TuFuncs.dialog(context,
                           TimePickerDialog(initialTime: TimeOfDay.now()));
                       if (val != null) {
                         formCtrl.setFormField("close_time_weekends",

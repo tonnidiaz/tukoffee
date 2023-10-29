@@ -97,7 +97,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                             IconButton(
                                                 padding: EdgeInsets.zero,
                                                 onPressed: () {
-                                                  final FormViewCtrl ctrl =
+                                                  final FormCtrl ctrl =
                                                       Get.find();
                                                   ctrl.setForm({
                                                     "first_name":
@@ -360,7 +360,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
         ));
   }
 
-  final FormViewCtrl formViewCtrl = Get.find();
+  final FormCtrl formViewCtrl = Get.find();
   addEditAddress({String? title}) async {
     TuFuncs.showBottomSheet(
         context: context,

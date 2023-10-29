@@ -1,16 +1,14 @@
 import "package:flutter/material.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/functions.dart";
 import "package:get/get.dart";
 
 import "../utils/constants.dart";
-import "../utils/styles.dart";
 import "common.dart";
 import "common2.dart";
 import "package:via_logger/logger.dart";
 
-class FormViewCtrl extends GetxController {
+class FormCtrl extends GetxController {
   RxMap<String, dynamic> form = <String, dynamic>{}.obs;
   setFormField(String key, dynamic val) {
     form.value = {...form, key: val};

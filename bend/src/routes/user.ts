@@ -154,7 +154,7 @@ router.post("/edit", authMid, async (req, res) => {
                 if (DEV) console.log(otp);
                 const meta = getStoreDetails()
                await sendMail(meta.store.name + " Verification Email",
-                `<h2 style="font-weight: 500">Here is your Email verification One-Time-PIN:</h2>
+                `<h2 style="font-weight: 500; font-size: 1.2rem;">Here is your Email verification OTP:</h2>
                     <p style="font-size: 20px; font-weight: 600">${_user!.otp}</p>
                 ` , _user!.new_email!
                )
@@ -174,6 +174,7 @@ router.post("/edit", authMid, async (req, res) => {
 router.post("/delete", authMid, async (req, res) => {
     try {
         const { password } = req.body;
+        console.log(req.user?.first_name, password)
         const passValid = bcrypt.compareSync(password, req.user!.password);
         if (!passValid) {
             return res.status(401).send("tuned:Incorrect password!");

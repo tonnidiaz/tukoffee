@@ -35,7 +35,7 @@ class NotifsService {
       Logger.info("Allowed: $isAllowed");
       if (Platform.isLinux) return;
       if (!isAllowed) {
-        TuFuncs.showTDialog(
+        TuFuncs.dialog(
             context,
             PromptDialog(
               title: "Notifications permission",
