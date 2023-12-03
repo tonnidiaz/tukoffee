@@ -32,7 +32,7 @@ class ProductCard extends StatelessWidget {
               .where((el) => el["product"]["_id"] == product["_id"])
               .isNotEmpty;
 
-      Logger.info(!inCart ? "Adding to cart..." : "Removing from cart...");
+      clog(!inCart ? "Adding to cart..." : "Removing from cart...");
 
       var act = inCart ? "remove" : "add";
       try {
@@ -40,7 +40,7 @@ class ProductCard extends StatelessWidget {
             data: {"user": appCtrl.user["email"], "product": product["_id"]});
         storeCtrl.setcart(res.data["cart"]);
       } catch (e) {
-        Logger.info(e);
+        clog(e);
         if (e.runtimeType == DioException) {
           handleDioException(
               context: context,
@@ -60,7 +60,7 @@ class ProductCard extends StatelessWidget {
       width: width,
       padding: 0,
       onTap: () async {
-        Logger.info("Tap");
+        clog("Tap");
         storeCtrl.setCurrProduct(product);
         Navigator.of(context)
             .pushNamed("/product", arguments: {"pid": product["pid"]});
@@ -148,8 +148,8 @@ class ProductCard extends StatelessWidget {
                             child: inCart
                                 ? svgIcon(
                                     name: "rr-cart-minus",
-                                    color:
-                                        const Color.fromRGBO(20, 20, 20, 0.7),
+                                    color: colors
+                                        .onPrimary, //const Color.fromRGBO(20, 20, 20, 0.7),
                                     size: 20,
                                   )
                                 : svgIcon(

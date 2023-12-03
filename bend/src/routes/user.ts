@@ -164,7 +164,7 @@ router.post("/edit", authMid, async (req, res) => {
            
         }
         await _user!.save();
-        res.json({ user: _user!.toJSON() });
+        res.json({ user: _user!.toObject()});
     } catch (error) {
         console.log(error);
         res.status(500).send("tuned:Something went wrong");

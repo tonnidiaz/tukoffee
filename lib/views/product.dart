@@ -74,7 +74,7 @@ class _ProductPageState extends State<ProductPage> {
 
   Future<Map<String, dynamic>?> _getProduct(String? pid) async {
     if (pid == null) return null;
-    Logger.info(pid);
+    clog(pid);
     //if (_product != null) return _product;
     try {
       final url = "/products?pid=$pid";
@@ -95,7 +95,7 @@ class _ProductPageState extends State<ProductPage> {
           await apiDio().get("/products?q=related&pid=${_product!["pid"]}");
       _setRelated(res.data["data"]);
     } catch (error) {
-      Logger.info(error);
+      clog(error);
       _setRelated([]);
     }
   }
@@ -414,7 +414,7 @@ class _ProductPageState extends State<ProductPage> {
         showToast(succ, isErr: false).show(context);
       }
     } catch (e) {
-      Logger.info(e);
+      clog(e);
     }
   }
 
@@ -427,7 +427,7 @@ class _ProductPageState extends State<ProductPage> {
             .where((el) => el["product"]["_id"] == _product!["_id"])
             .isNotEmpty;
 
-    Logger.info(!inCart ? "Adding to cart..." : "Removing from cart...");
+    clog(!inCart ? "Adding to cart..." : "Removing from cart...");
 
     var act = inCart ? "remove" : "add";
     try {
@@ -436,7 +436,7 @@ class _ProductPageState extends State<ProductPage> {
       _storeCtrl.setcart(res.data["cart"]);
       // t.dismiss();
     } catch (e) {
-      Logger.info(e);
+      clog(e);
       if (e.runtimeType == DioException) {
         handleDioException(
             context: context,
@@ -456,12 +456,12 @@ class _ProductPageState extends State<ProductPage> {
     }
     _formViewCtrl.setForm(prod);
 
-    Get.bottomSheet(AddProductForm(
+    pushTo(AddProductForm(
       title: "Edit product",
       mode: "edit",
       btnTxt: "Save changes",
       onDone: (res) {
-        Logger.info(res);
+        clog(res);
         setState(() {
           _product = res;
         });

@@ -45,7 +45,7 @@ class ProductItem extends StatelessWidget {
           onLongPress: () {
             _selectItem(product);
           },
-          tileColor: colors.surface,
+          //tileColor: colors.surface,
           leading: Material(
             elevation: 2,
             borderRadius: BorderRadius.circular(4),

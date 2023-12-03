@@ -60,9 +60,9 @@ class _ProductsState extends State<Products> {
                                     await signedCloudinary.destroy(
                                   img["publicId"],
                                 );
-                                Logger.info(cloudinaryRes.result);
+                                clog(cloudinaryRes.result);
                               } catch (err) {
-                                Logger.info(err);
+                                clog(err);
                               }
                             }
                           }
@@ -78,7 +78,7 @@ class _ProductsState extends State<Products> {
                                 exception: e as DioException,
                                 msg: "Error deleting products!");
                           } else {
-                            Logger.info(e);
+                            clog(e);
                             showToast("Error deleting products!", isErr: true)
                                 .show(context);
                           }
@@ -100,12 +100,12 @@ class _ProductsState extends State<Products> {
   _getProducts() async {
     try {
       _ctrl.setProducts(null);
-      Logger.info("Getting...");
+      clog("Getting...");
 
       final res = await apiDio().get("/products");
       _ctrl.setProducts(res.data["data"]);
     } catch (e) {
-      Logger.info(e);
+      clog(e);
       _ctrl.setProducts([]);
     }
   }
@@ -213,60 +213,63 @@ class _ProductsState extends State<Products> {
         onRefresh: () async {
           await _getProducts();
         },
-        child: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: defaultPadding2,
-              sliver: TuSliver(
-                child: TuFormField(
-                  hasBorder: false,
-                  fill: colors.surface,
-                  hint: "Search",
-                  height: borderlessInpHeight,
-                  prefixIcon: TuIcon(Icons.search),
-                  radius: 100,
-                  readOnly: true,
-                  suffixIcon: IconButton(
-                      splashRadius: 20,
-                      padding: EdgeInsets.zero,
-                      onPressed: () {
-                        // show filters
-                        Get.bottomSheet(filterModal());
-                      },
-                      icon: TuIcon(Icons.tune)),
-                  onTap: () {
-                    pushTo(const SearchPage());
-                  },
-                ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 14, vertical: topMargin),
+              child: TuFormField(
+                hasBorder: false,
+                fill: colors.surface,
+                hint: "Search",
+                prefixIcon: TuIcon(Icons.search),
+                radius: 100,
+                readOnly: true,
+                suffixIcon: IconButton(
+                    splashRadius: 20,
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      // show filters
+                      Get.bottomSheet(filterModal());
+                    },
+                    icon: TuIcon(Icons.tune)),
+                onTap: () {
+                  pushTo(const SearchPage());
+                },
               ),
             ),
-            TuSliver(child: mY(topMargin)),
-            SliverFillRemaining(
-                hasScrollBody: true,
-                child: Obx(() => _ctrl.products.value == null
-                    ? Center(
+            Obx(() => _ctrl.products.value == null
+                ? Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [mY(30), const CircularProgressIndicator()],
+                      ),
+                    ),
+                  )
+                : _ctrl.sortedProducts.value!.isEmpty
+                    ? Expanded(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [mY(30), const CircularProgressIndicator()],
+                          children: [
+                            h3("Nothing to show"),
+                            IconButton(
+                                icon: const Icon(Icons.refresh),
+                                onPressed: () async {
+                                  await _getProducts();
+                                })
+                          ],
                         ),
                       )
-                    : _ctrl.sortedProducts.value!.isEmpty
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              h3("Nothing to show"),
-                              IconButton(
-                                  icon: const Icon(Icons.refresh),
-                                  onPressed: () async {
-                                    await _getProducts();
-                                  })
-                            ],
-                          )
-                        : ListView.builder(
-                            itemCount: _ctrl.sortedProducts.value!.length,
-                            itemBuilder: (context, index) => ProductItem(
-                                product: _ctrl.sortedProducts.value![index]),
-                          ))),
+                    : Expanded(
+                        child: ListView.builder(
+                          padding: const EdgeInsets.only(
+                              left: 14, right: 14, bottom: 70),
+                          itemCount: _ctrl.sortedProducts.value!.length,
+                          itemBuilder: (context, index) => ProductItem(
+                              product: _ctrl.sortedProducts.value![index]),
+                        ),
+                      ))
           ],
         ),
       ),

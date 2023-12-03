@@ -25,7 +25,7 @@ class _MobileAppState extends State<MobileApp> {
   _checkUpdates() async {
     final mAutoCheck = autoCheck();
     MainApp.appCtrl.setAutoCheckUpdates(mAutoCheck);
-    Logger.info("AUTO CHECK: $mAutoCheck");
+    clog("AUTO CHECK: $mAutoCheck");
     if (mAutoCheck && !dev) {
       final res = await checkUpdates();
       if (res != null) {
@@ -57,7 +57,7 @@ class _MobileAppState extends State<MobileApp> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       NotifsService.requestNotifsPermission(context);
       socket?.on("order", (data) {
-        Logger.info("ON ORDER");
+        clog("ON ORDER");
         //CREATE NOTIF IF USER IS ADMIN
         if (_appCtrl.user.isNotEmpty &&
             _appCtrl.user["permissions"] != UserPermissions.read) {
@@ -67,7 +67,7 @@ class _MobileAppState extends State<MobileApp> {
         }
       });
       _checkUpdates();
-      Logger.info("SETTING STATUSBAR COLOR");
+      clog("SETTING STATUSBAR COLOR");
       /* SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: colors.bg,
       )); */
@@ -87,19 +87,19 @@ class _MobileAppState extends State<MobileApp> {
           .theme(), //(Brightness.light),
       routes: routes,
       debugShowCheckedModeBanner: false,
-      initialRoute: "/",
+      initialRoute: "/rf",
       //home: MyReviewsPage(),
       builder: (context, child) {
         return CallbackShortcuts(
           bindings: <ShortcutActivator, VoidCallback>{
             const SingleActivator(LogicalKeyboardKey.escape): () {
-              Logger.info("Popping");
+              clog("Popping");
               gpop();
             },
           },
           child: WillPopScope(
             onWillPop: () async {
-              Logger.info("BACK ENABLED: $backEnabled");
+              clog("BACK ENABLED: $backEnabled");
               return backEnabled;
             },
             child: child!,

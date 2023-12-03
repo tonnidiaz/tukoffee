@@ -7,4 +7,5 @@ extension Ex on TuColors {
   Color get coffee1Shadow => const Color.fromRGBO(108, 52, 40, .5);
   Color get coffee2 => const Color.fromRGBO(186, 112, 79, 1);
   Color get coffee3 => const Color.fromRGBO(223, 168, 120, 1);
+  Color get coffee4 => const Color.fromRGBO(141, 96, 78, 1);
 }

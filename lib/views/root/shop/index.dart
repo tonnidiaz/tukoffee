@@ -28,12 +28,12 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
     //if (_storeCtrl.products.isNotEmpty) return;
     _storeCtrl.setProductsFetched(false);
     try {
-      Logger.info("Fetching products...");
+      clog("Fetching products...");
       final res = await apiDio().get("/products");
       _storeCtrl.setProducts(res.data["data"]);
       _storeCtrl.setProductsFetched(true);
     } catch (e) {
-      Logger.info(e);
+      clog(e);
       _storeCtrl.setProductsFetched(true);
     }
   }

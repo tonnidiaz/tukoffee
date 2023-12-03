@@ -39,34 +39,37 @@ class OrderItem extends StatelessWidget {
 
   _cancelOrder({bool del = false}) async {
     var act = del ? "delete" : "cancel";
-    Get.dialog(PromptDialog(
-      title: "Cancel order",
-      msg: "Are you sure you want to cancel this order? ",
-      okTxt: "Yes",
-      onOk: () async {
-        try {
-          showProgressSheet(msg: "Canceling order..");
+    TuFuncs.dialog(
+        getCtx(),
+        PromptDialog(
+          title: "Cancel order",
+          msg: "Are you sure you want to cancel this order? ",
+          okTxt: "Yes",
+          onOk: () async {
+            try {
+              showProgressSheet(msg: "Canceling order..");
 
-          //Apply for refund first
-          if (order["mode"] == OrderMode.deliver.index) {
-            //cancel from shiplogic first
-            await Shiplogic.cancelOrder(order);
-          }
+              //Apply for refund first
+              if (order["mode"] == OrderMode.deliver.index) {
+                //cancel from shiplogic first
+                await Shiplogic.cancelOrder(order);
+              }
 
-          final res = await apiDio().post("/order/cancel?action=$act", data: {
-            "ids": [order["_id"]],
-            "userId": isAdmin ? null : MainApp.appCtrl.user["_id"]
-          });
+              final res =
+                  await apiDio().post("/order/cancel?action=$act", data: {
+                "ids": [order["_id"]],
+                "userId": isAdmin ? null : MainApp.appCtrl.user["_id"]
+              });
 
-          _appBarCtrl.setSelected([]);
-          await ctrl.setOrders(res.data["orders"]);
-          gpop();
-        } catch (e) {
-          gpop();
-          errorHandler(e: e, msg: "Failed to cancel order!");
-        }
-      },
-    ));
+              _appBarCtrl.setSelected([]);
+              await ctrl.setOrders(res.data["orders"]);
+              gpop();
+            } catch (e) {
+              gpop();
+              errorHandler(e: e, msg: "Failed to cancel order!");
+            }
+          },
+        ));
   }
 
   final _key = GlobalKey();
@@ -78,12 +81,14 @@ class OrderItem extends StatelessWidget {
         key: _key,
         width: double.infinity,
         decoration: BoxDecoration(
-            color: _appBarCtrl.selected.isNotEmpty &&
-                    _appBarCtrl.selected.contains(order)
-                ? const Color.fromARGB(37, 0, 89, 255)
-                : colors.surface,
-            border: const Border(
-                bottom: BorderSide(color: Color.fromRGBO(10, 10, 10, .05)))),
+          color: _appBarCtrl.selected.isNotEmpty &&
+                  _appBarCtrl.selected.contains(order)
+              ? colors.primaryFade
+              : colors.surface,
+          borderRadius: defaultBorderRadius,
+          /*      border: const Border(
+                bottom: BorderSide(color: Color.fromRGBO(10, 10, 10, .05)))*/
+        ),
         child: ListTile(
           title: Text(
             "#${order["oid"]}",

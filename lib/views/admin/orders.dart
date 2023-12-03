@@ -90,7 +90,7 @@ class OrdersCtrl extends GetxController {
 
   void _sortOrders(List<dynamic> orders) {
     // clear selected
-    Logger.info("Sorting...");
+    clog("Sorting...");
     int dateInMs(String strDate) {
       var date = DateTime.parse(strDate);
       return date.millisecondsSinceEpoch;
@@ -143,7 +143,7 @@ class _OrdersPageState extends State<OrdersPage> {
 
   _init() async {
     if (_appCtrl.user.isEmpty) {
-      Logger.info("To Login");
+      clog("To Login");
       gpop();
       pushTo(const LoginPage(
         to: "/orders",
@@ -159,52 +159,48 @@ class _OrdersPageState extends State<OrdersPage> {
   }
 
   _cancelOrders({bool del = false, required routeName}) async {
-    showDialog(
-        context: context,
-        builder: (context) {
-          var act = del ? "delete" : "cancel";
-          return PromptDialog(
-            title: "Cancel orders",
-            msg: "Do you want to cancel the selected orders? ",
-            okTxt: "Yes",
-            onOk: () async {
-              try {
-                showProgressSheet(msg: "Canceling orders..");
-                // Deselect all
-                final List<dynamic> ids =
-                    _appBarCtrl.selected.map((it) => it["_id"]).toList();
-                _appBarCtrl.setSelected([]);
+    TuFuncs.dialog(
+        getCtx(),
+        PromptDialog(
+          title: "Cancel orders",
+          msg: "Do you want to cancel the selected orders? ",
+          okTxt: "Yes",
+          onOk: () async {
+            try {
+              showProgressSheet(msg: "Canceling orders..");
+              // Deselect all
+              final List<dynamic> ids =
+                  _appBarCtrl.selected.map((it) => it["_id"]).toList();
+              _appBarCtrl.setSelected([]);
 
-                for (var o in _appBarCtrl.selected
-                    .where((e) => e["mode"] == OrderMode.deliver.index)) {
-                  try {
-                    //cancel from shiplogic first
-                    await Shiplogic.cancelOrder(o);
-                  } catch (e) {
-                    Logger.info("SHIPLOGIC ERROR");
-                    Logger.info(e);
-                    continue;
-                  }
+              for (var o in _appBarCtrl.selected
+                  .where((e) => e["mode"] == OrderMode.deliver.index)) {
+                try {
+                  //cancel from shiplogic first
+                  await Shiplogic.cancelOrder(o);
+                } catch (e) {
+                  clog("SHIPLOGIC ERROR");
+                  clog(e);
+                  continue;
                 }
-                final res = await apiDio()
-                    .post("/order/cancel?action=${act.toLowerCase()}", data: {
-                  "ids": ids,
-                  "userId": routeName == "/orders"
-                      ? MainApp.appCtrl.user["_id"]
-                      : null
-                });
-                //gpop();
-                await _ctrl.setOrders(res.data["orders"]);
-                gpop();
-              } catch (e) {
-                gpop();
-                Logger.info(e);
-                errorHandler(
-                    context: context, e: e, msg: "Failed to cancel orders!");
               }
-            },
-          );
-        });
+              final res =
+                  await apiDio().post("/order/cancel?action=cancel", data: {
+                "ids": ids,
+                "userId":
+                    routeName == "/orders" ? MainApp.appCtrl.user["_id"] : null
+              });
+              //gpop();
+              await _ctrl.setOrders(res.data["orders"]);
+              gpop();
+            } catch (e) {
+              gpop();
+              clog(e);
+              errorHandler(
+                  context: context, e: e, msg: "Failed to cancel orders!");
+            }
+          },
+        ));
   }
 
   _getOrders() async {
@@ -212,7 +208,7 @@ class _OrdersPageState extends State<OrdersPage> {
       if (_appCtrl.user.isEmpty) {
         return;
       }
-      Logger.info("Getting orders");
+      clog("Getting orders");
       _ctrl.setOrdersFetched(false);
       final res = ModalRoute.of(context)?.settings.name == "/orders"
           ? await apiDio().get("/orders?user=${_appCtrl.user["_id"]}")
@@ -220,11 +216,11 @@ class _OrdersPageState extends State<OrdersPage> {
       await _ctrl.setOrders(res.data["orders"]);
       _ctrl.setOrdersFetched(true);
     } catch (e) {
-      Logger.info("FETCH ORDER ERR");
-      Logger.info(e);
+      clog("FETCH ORDER ERR");
+      clog(e);
       if (e.runtimeType == DioException) {
         e as DioException;
-        Logger.info(e.response);
+        clog(e.response);
       }
       _ctrl.setOrdersFetched(true);
     }
@@ -360,51 +356,44 @@ class _OrdersPageState extends State<OrdersPage> {
               await _getOrders();
             },
             child: Obx(
-              () => CustomScrollView(
-                slivers: [
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(vertical: topMargin),
-                    sliver: SliverToBoxAdapter(
-                      child: Obx(
-                        () => Container(
-                          width: double.infinity,
-                          padding: defaultPadding,
-                          child: TuFormField(
-                            fill: colors.surface,
-                            hasBorder: false,
-                            hint: "Order ID",
-                            height: borderlessInpHeight,
-                            prefixIcon: TuIcon(Icons.search),
-                            radius: 100,
-                            value: _ctrl.orderId.value,
-                            suffixIcon: IconButton(
-                                splashRadius: 20,
-                                padding: EdgeInsets.zero,
-                                onPressed: () {
-                                  // show filters
-                                  Get.bottomSheet(filterModal());
-                                },
-                                icon: TuIcon(Icons.tune)),
-                            onChanged: (val) {
-                              _ctrl.setOrderId(val);
-                              _ctrl.setsortedOrders(_ctrl.orders
-                                  .where((p0) => "${p0["oid"]}".contains(val))
-                                  .toList());
+              () => Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: topMargin, horizontal: 14),
+                    child: Obx(
+                      () => TuFormField(
+                        fill: colors.surface,
+                        hasBorder: false,
+                        hint: "Order ID",
+                        prefixIcon: TuIcon(Icons.search),
+                        radius: 100,
+                        value: _ctrl.orderId.value,
+                        suffixIcon: IconButton(
+                            splashRadius: 20,
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              // show filters
+                              Get.bottomSheet(filterModal());
                             },
-                          ),
-                        ),
+                            icon: TuIcon(Icons.tune)),
+                        onChanged: (val) {
+                          _ctrl.setOrderId(val);
+                          _ctrl.setsortedOrders(_ctrl.orders
+                              .where((p0) => "${p0["oid"]}".contains(val))
+                              .toList());
+                        },
                       ),
                     ),
                   ),
                   !_ctrl.ordersFetched.value
-                      ? const SliverFillRemaining(
+                      ? const Expanded(
                           child: Center(
                             child: CircularProgressIndicator(),
                           ),
                         )
                       : _ctrl.sortedOrders.isEmpty
-                          ? SliverFillRemaining(
-                              hasScrollBody: false,
+                          ? Expanded(
                               child: Center(
                                   child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -415,9 +404,10 @@ class _OrdersPageState extends State<OrdersPage> {
                                 ),
                               )),
                             )
-                          : SliverPadding(
-                              padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),
-                              sliver: SliverList.builder(
+                          : Expanded(
+                              child: ListView.builder(
+                                padding:
+                                    const EdgeInsets.fromLTRB(14.0, 0, 14, 8),
                                 itemBuilder: (c, i) => OrderItem(
                                   tcontext: _scaffoldKey.currentState!.context,
                                   ctrl: _ctrl,

@@ -1189,7 +1189,7 @@ packages:
     source: hosted
     version: "2.1.4"
   via_logger:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: via_logger
       sha256: "34d18cc843f70bdd10a285039bcace029f216e27346a142a460ab154b5040d1c"

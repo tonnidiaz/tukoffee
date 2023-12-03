@@ -35,7 +35,7 @@ class _IndexPageState extends State<IndexPage> {
   @override
   void initState() {
     super.initState();
-    Logger.info("ROOT MOUNTED");
+    clog("ROOT MOUNTED");
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (context.mounted) {
         _onTabTap(0);
@@ -78,13 +78,13 @@ class _IndexPageState extends State<IndexPage> {
                             horizontal: 15, vertical: 5),
                         decoration: BoxDecoration(
                             color: IndexPage.ctrl.tab.value == e.key
-                                ? colors.primaryFade
+                                ? colors.primary
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(100)),
                         child: svgIcon(
                             color: IndexPage.ctrl.tab.value != e.key
                                 ? colors.note
-                                : null,
+                                : colors.onPrimary,
                             name: e.value.svg!),
                       ),
                       label: e.value.label))

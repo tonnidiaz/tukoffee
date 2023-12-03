@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/constants.dart";
+import "package:lebzcafe/utils/extensions.dart";
 import "package:tu/tu.dart";
 
 class RFPage extends StatefulWidget {
@@ -23,7 +24,24 @@ class _RFPageState extends State<RFPage> {
           ),
         ),
         mY(10),
-        Expanded(
+        TuCard(
+          child: Column(
+            children: [
+              Text("My name is SquashE Tonics"),
+              Text("And I'm here to rule Earth"),
+              mY(10),
+              TuCard(
+                height: 50,
+                color: colors.coffee,
+              ),
+              TuCard(
+                height: 50,
+                color: const Color.fromRGBO(141, 96, 78, 1),
+              ),
+            ],
+          ),
+        ),
+        const Expanded(
           child: TuFormField(
             label: "Message:",
             minLines: null,

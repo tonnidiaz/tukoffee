@@ -19,52 +19,12 @@ class PromptDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-      backgroundColor: Colors.white,
-      insetPadding: defaultPadding2,
-      //actionsPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      titlePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
-      shape: const RoundedRectangleBorder(),
-      title: Text(
-        title,
-        style: styles.h3(isLight: true),
-      ),
-      content: Container(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              msg,
-              style: TextStyle(color: colors.text2),
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(
-            onPressed: () async {
-              if (onCancel != null) {
-                // ignore: use_build_context_synchronously
-                if (await onCancel!()) Navigator.pop(context);
-              } else {
-                Navigator.pop(context);
-              }
-            },
-            child: Text(
-              cancelTxt.toUpperCase(),
-              style: const TextStyle(color: Colors.black87, fontSize: 14),
-            )),
-        TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              await Future.delayed(const Duration(milliseconds: 10));
-              if (onOk != null) onOk!();
-            },
-            child: Text(okTxt.toUpperCase(),
-                style: const TextStyle(color: Colors.black, fontSize: 14))),
-      ],
+    return TuDialogView(
+      title: title,
+      content: Text(msg),
+      onOk: onOk,
+      onCancel: onCancel,
+      okTxt: okTxt,
     );
   }
 }

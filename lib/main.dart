@@ -6,7 +6,6 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_inappwebview/flutter_inappwebview.dart";
 import "package:lebzcafe/controllers/appbar.dart";
-import "package:lebzcafe/controllers/common_ctrls.dart";
 import "package:lebzcafe/controllers/products_ctrl.dart";
 import "package:lebzcafe/controllers/store_ctrl.dart";
 import "package:lebzcafe/services/notifications.dart";
@@ -18,7 +17,6 @@ import "package:tu/tu.dart";
 import "controllers/app_ctrl.dart";
 import "mobile.dart";
 import "utils/functions.dart";
-import "package:via_logger/logger.dart";
 
 enableWebviewDebugging() async {
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
@@ -28,7 +26,6 @@ enableWebviewDebugging() async {
 
 void main() async {
   dev = false;
-  setupLogger();
   await initHive();
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -109,10 +106,10 @@ class _MainAppState extends State<MainApp> {
         deviceId = r.machineId ?? "";
       }
 
-      Logger.info("DeviceID: $deviceId");
+      clog("DeviceID: $deviceId");
       appCtrl.setDeviceID(deviceId);
     } catch (e) {
-      Logger.info(e);
+      clog(e);
     }
   }
 
@@ -168,7 +165,7 @@ class _PageWrapperState extends State<PageWrapper> {
       appBar: widget.appBar,
       body: RefreshIndicator(
         onRefresh: () async {
-          Logger.info("Refreshing...");
+          clog("Refreshing...");
           if (widget.onRefresh != null) {
             await widget.onRefresh!();
           }
