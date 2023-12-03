@@ -1,8 +1,5 @@
 import "package:flutter/material.dart";
-import "package:lebzcafe/utils/styles.dart";
-
-import "../utils/colors.dart";
-import "../utils/constants.dart";
+import "package:tu/tu.dart";
 
 class PromptDialog extends StatelessWidget {
   final void Function()? onOk;
@@ -31,7 +28,7 @@ class PromptDialog extends StatelessWidget {
       shape: const RoundedRectangleBorder(),
       title: Text(
         title,
-        style: Styles.h3(isLight: true),
+        style: styles.h3(isLight: true),
       ),
       content: Container(
         child: Column(
@@ -40,7 +37,7 @@ class PromptDialog extends StatelessWidget {
           children: [
             Text(
               msg,
-              style: TextStyle(color: TuColors.text2),
+              style: TextStyle(color: colors.text2),
             ),
           ],
         ),

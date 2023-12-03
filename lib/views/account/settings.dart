@@ -6,18 +6,11 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:lebzcafe/controllers/app_ctrl.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/constants2.dart";
 import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/widgets/common2.dart";
-import "package:lebzcafe/widgets/dialog.dart";
-import "package:get/get.dart";
-import "package:lebzcafe/widgets/dialogs/loading_dialog.dart";
-import "package:lebzcafe/widgets/tu/common.dart";
-import "package:lebzcafe/widgets/tu/form.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
+import "package:tu/tu.dart";
+
 import "package:via_logger/logger.dart";
 import "../../utils/constants.dart";
-import "../../utils/styles.dart";
 import "../../widgets/common.dart";
 import "../../widgets/form_view.dart";
 import "../order/index.dart";
@@ -60,122 +53,126 @@ class _ChangeEmailSheetState extends State<ChangeEmailSheet> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Container(
-        padding: defaultPadding2,
-        color: cardBGLight,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            h3("Change email address", isLight: true),
-            mY(5),
-            _step == 0
-                ? TuForm(
-                    builder: (key) => Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Obx(
-                              () => TuFormField(
-                                keyboard: TextInputType.emailAddress,
-                                required: true,
-                                label: "New email:",
-                                hint: "Enter your new email address...",
-                                value: _formCtrl.form["email"],
-                                validator: (val) {
-                                  if (val == null || val.isEmpty) {
-                                    return "Email is required";
-                                  } else if (!val.isEmail) {
-                                    return "Enter a valid email address";
+      child: TuBottomSheet(
+        child: Container(
+          padding: defaultPadding2,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              h3("Change email address", isLight: true),
+              mY(5),
+              _step == 0
+                  ? TuForm(
+                      builder: (key) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Obx(
+                                () => TuFormField(
+                                  keyboard: TextInputType.emailAddress,
+                                  required: true,
+                                  label: "New email:",
+                                  hint: "Enter your new email address...",
+                                  value: _formCtrl.form["email"],
+                                  validator: (val) {
+                                    if (val == null || val.isEmpty) {
+                                      return "Email is required";
+                                    } else if (!val.isEmail) {
+                                      return "Enter a valid email address";
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (val) {
+                                    _formCtrl.setFormField("email", val);
+                                  },
+                                ),
+                              ),
+                              mY(5),
+                              Obx(
+                                () => TuFormField(
+                                  keyboard: TextInputType.emailAddress,
+                                  required: true,
+                                  label: "Password:",
+                                  isPass: true,
+                                  hint: "Enter your current password...",
+                                  value: _formCtrl.form["password"],
+                                  onChanged: (val) {
+                                    _formCtrl.setFormField("password", val);
+                                  },
+                                ),
+                              ),
+                              mY(10),
+                              TuButton(
+                                text: "Next",
+                                width: double.infinity,
+                                onPressed: () async {
+                                  if (!key.currentState!.validate()) return;
+                                  Logger.info("SHow loading");
+                                  //showLoading(context);
+                                  showProgressSheet();
+                                  try {
+                                    await apiDio().post(
+                                        "/user/edit?field=email",
+                                        data: {"data": _formCtrl.form});
+                                    gpop();
+                                    _setStep(1);
+                                  } catch (e) {
+                                    //Get.back();
+                                    errorHandler(e: e, context: context);
                                   }
-                                  return null;
                                 },
-                                onChanged: (val) {
-                                  _formCtrl.setFormField("email", val);
-                                },
+                              )
+                            ],
+                          ))
+                  : TuForm(
+                      builder: (key) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              mY(5),
+                              SizedBox(
+                                width: screenSize(context).width,
+                                child: Column(
+                                  children: [
+                                    const Text(
+                                        "Enter the 4 digit pin sent to:"),
+                                    Obx(() => Text(
+                                          "${_formCtrl.form["email"]}",
+                                          textAlign: TextAlign.center,
+                                          style:
+                                              TextStyle(color: colors.primary),
+                                        )),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Obx(
-                              () => TuFormField(
-                                keyboard: TextInputType.emailAddress,
-                                required: true,
-                                label: "Password:",
-                                isPass: true,
-                                hint: "Enter your current password...",
-                                value: _formCtrl.form["password"],
-                                onChanged: (val) {
-                                  _formCtrl.setFormField("password", val);
-                                },
-                              ),
-                            ),
-                            mY(4),
-                            TuButton(
-                              text: "Next",
-                              width: double.infinity,
-                              onPressed: () async {
-                                if (!key.currentState!.validate()) return;
-                                Logger.info("SHow loading");
-                                //showLoading(context);
-                                showProgressSheet();
-                                try {
-                                  await apiDio().post("/user/edit?field=email",
-                                      data: {"data": _formCtrl.form});
-                                  gpop();
-                                  _setStep(1);
-                                } catch (e) {
-                                  Get.back();
-                                  errorHandler(e: e, context: context);
-                                }
-                              },
-                            )
-                          ],
-                        ))
-                : TuForm(
-                    builder: (key) => Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            mY(5),
-                            SizedBox(
-                              width: screenSize(context).width,
-                              child: Column(
-                                children: [
-                                  const Text("Enter the 4 digit pin sent to:"),
-                                  Obx(() => Text(
-                                        "${_formCtrl.form["email"]}",
-                                        textAlign: TextAlign.center,
-                                        style:
-                                            TextStyle(color: TuColors.primary),
-                                      )),
-                                ],
-                              ),
-                            ),
-                            mY(10),
-                            Obx(
-                              () => TuFormField(
-                                my: 0,
-                                textAlign: TextAlign.center,
-                                labelAlignment: FloatingLabelAlignment.center,
-                                hint: "* * * * ",
-                                height: borderlessInpHeight,
+                              mY(10),
+                              Obx(
+                                () => TuFormField(
+                                  my: 0,
+                                  textAlign: TextAlign.center,
+                                  labelAlignment: FloatingLabelAlignment.center,
+                                  hint: "* * * * ",
+                                  height: borderlessInpHeight,
 
-                                ///label: "OTP:",
-                                value: _formCtrl.form["otp"],
-                                keyboard: TextInputType.number,
+                                  ///label: "OTP:",
+                                  value: _formCtrl.form["otp"],
+                                  keyboard: TextInputType.number,
 
-                                maxLength: 4,
-                                required: true,
-                                onChanged: (val) {
-                                  _formCtrl.setFormField("otp", val);
-                                },
+                                  maxLength: 4,
+                                  required: true,
+                                  onChanged: (val) {
+                                    _formCtrl.setFormField("otp", val);
+                                  },
+                                ),
                               ),
-                            ),
-                            mY(4),
-                            TuButton(
-                              text: "VERIFY",
-                              width: double.infinity,
-                              onPressed: _verifyOTP,
-                            )
-                          ],
-                        ))
-          ],
+                              mY(4),
+                              TuButton(
+                                text: "VERIFY",
+                                width: double.infinity,
+                                onPressed: _verifyOTP,
+                              )
+                            ],
+                          ))
+            ],
+          ),
         ),
       ),
     );
@@ -199,7 +196,7 @@ class AccountSettingsPage extends StatelessWidget {
         appBar: childAppbar(title: "Account settings", showCart: false),
         body: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.only(
+            margin: const EdgeInsets.only(
                 top: topMargin / 2, left: topMargin, right: topMargin),
             height: screenSize(context).height,
             child: Column(children: [
@@ -212,7 +209,7 @@ class AccountSettingsPage extends StatelessWidget {
                         tuTableRow(
                             Text(
                               "Email",
-                              style: Styles.h4(),
+                              style: styles.h4(),
                             ),
                             TextButton(
                                 onPressed: onChangeEmailClick,
@@ -223,7 +220,8 @@ class AccountSettingsPage extends StatelessWidget {
               TuCard(
                 my: topMargin / 2,
                 child: TuButton(
-                    bgColor: Colors.black,
+                    // bgColor: Colors.black,
+                    //color: Colors.white,
                     onPressed: () {
                       // show edit pass dialog
                       formCtrl.clear();
@@ -312,9 +310,11 @@ class ConfirmPassForm extends HookWidget {
       isForm: true,
       fields: [
         Obx(() => TuFormField(
-              label: "Password",
+              radius: 10,
+              hint: "Password:",
+              hasBorder: false,
               isPass: true,
-              hint: "Enter your password...",
+              //   hint: "Enter your password...",
               required: true,
               value: MainApp.formCtrl.form["password"],
               onChanged: (val) {
@@ -333,62 +333,64 @@ class EditPassForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final ctrl = MainApp.formCtrl;
     return SingleChildScrollView(
-      child: Container(
-        padding: defaultPadding2,
-        color: cardBGLight,
-        child: TuForm(
-          builder: (key) => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Obx(() => TuFormField(
-                    label: "Old password:",
-                    hint: "Enter old password...",
-                    isPass: true,
-                    showEye: false,
-                    required: true,
-                    value: ctrl.form["old"],
-                    onChanged: (val) {
-                      ctrl.setFormField("old", val);
-                    },
-                  )),
-              Obx(() => TuFormField(
-                    label: "New password:",
-                    hint: "Enter your new password...",
-                    isPass: true,
-                    required: true,
-                    value: ctrl.form["new"],
-                    onChanged: (val) {
-                      ctrl.setFormField("new", val);
-                    },
-                  )),
-              mY(6),
-              TuButton(
-                width: double.infinity,
-                text: "SUBMIT",
-                onPressed: () async {
-                  //Validate old password
-                  //If old password is valid -> change the password for the user
-                  if (!key.currentState!.validate()) return;
-                  try {
-                    showProgressSheet();
-                    await apiDio().post("/auth/password/change", data: {
-                      "old": ctrl.form["old"],
-                      "new": ctrl.form["new"],
-                    });
+      child: TuBottomSheet(
+        child: Container(
+          padding: defaultPadding2,
+          child: TuForm(
+            builder: (key) => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                mY(5),
+                Obx(() => TuFormField(
+                      label: "Old password:",
+                      hint: "Enter old password...",
+                      isPass: true,
+                      showEye: false,
+                      required: true,
+                      value: ctrl.form["old"],
+                      onChanged: (val) {
+                        ctrl.setFormField("old", val);
+                      },
+                    )),
+                mY(5),
+                Obx(() => TuFormField(
+                      label: "New password:",
+                      hint: "Enter your new password...",
+                      isPass: true,
+                      required: true,
+                      value: ctrl.form["new"],
+                      onChanged: (val) {
+                        ctrl.setFormField("new", val);
+                      },
+                    )),
+                mY(10),
+                TuButton(
+                  width: double.infinity,
+                  text: "SUBMIT",
+                  onPressed: () async {
+                    //Validate old password
+                    //If old password is valid -> change the password for the user
+                    if (!key.currentState!.validate()) return;
+                    try {
+                      showProgressSheet();
+                      await apiDio().post("/auth/password/change", data: {
+                        "old": ctrl.form["old"],
+                        "new": ctrl.form["new"],
+                      });
 
-                    gpop();
-                    gpop();
-                    showToast("Password changed successfully!").show(context);
-                  } catch (e) {
-                    gpop();
-                    errorHandler(
-                        context: context,
-                        e: e,
-                        msg: "Failed to change password!");
-                  }
-                },
-              )
-            ],
+                      gpop();
+                      gpop();
+                      showToast("Password changed successfully!").show(context);
+                    } catch (e) {
+                      errorHandler(
+                          context: context,
+                          e: e,
+                          msg: "Failed to change password!");
+                    }
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -1,11 +1,7 @@
 import "package:flutter/material.dart";
 import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/views/order/index.dart";
-import "package:lebzcafe/views/rf.dart";
-import "package:lebzcafe/views/rf2.dart";
-import "package:lebzcafe/widgets/common.dart";
+
+import "package:tu/tu.dart";
 
 class PageWithSearchAndList extends StatefulWidget {
   const PageWithSearchAndList({super.key});
@@ -27,7 +23,7 @@ class _PageWithSearchAndListState extends State<PageWithSearchAndList> {
           child: CustomScrollView(
             slivers: [
               SliverPadding(
-                padding: EdgeInsets.symmetric(vertical: topMargin),
+                padding: const EdgeInsets.symmetric(vertical: topMargin),
                 sliver: SliverToBoxAdapter(
                   child: Container(
                     /* SEARCHBAR */
@@ -53,7 +49,7 @@ class _PageWithSearchAndListState extends State<PageWithSearchAndList> {
                           ]), // Center(child: h3("Ohhhwee!")),
                         )
                       : DecoratedSliver(
-                          decoration: BoxDecoration(color: cardBGLight),
+                          decoration: BoxDecoration(color: colors.surface),
                           sliver: SliverPadding(
                             padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),
                             sliver: SliverList.builder(

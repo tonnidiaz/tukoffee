@@ -1,8 +1,7 @@
 import "package:flutter/material.dart";
-import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/widgets/common.dart";
+
 import "package:lebzcafe/widgets/common3.dart";
-import "package:google_fonts/google_fonts.dart";
+import "package:tu/tu.dart";
 
 class TuProductCircle extends StatelessWidget {
   final bool dummy;
@@ -67,7 +66,7 @@ class TuProductCircle extends StatelessWidget {
                                 color: Colors.black54,
                               )).image,
                   child: dummy || img == null
-                      ? Center(
+                      ? const Center(
                           child: SizedBox(
                               height: 20,
                               width: 20,

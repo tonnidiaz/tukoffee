@@ -1,11 +1,8 @@
 import "package:flutter/material.dart";
 import "package:lebzcafe/controllers/app_ctrl.dart";
-import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/constants2.dart";
 import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/widgets/common.dart";
-import "package:get/get.dart";
-import "package:google_fonts/google_fonts.dart";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 import "../utils/colors.dart";
 
@@ -36,10 +33,10 @@ class _TDrawerState extends State<TDrawer> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                 margin: const EdgeInsets.only(bottom: 10),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                     /*  image: DecorationImage(
                         image: Image.asset("assets/images/coffee2.jpg").image), */
-                    color: cardBGLight),
+                    color: colors.surface),
                 child: Center(
                   child: Text(
                     _appCtrl.store["name"],
@@ -102,7 +99,7 @@ class _TDrawerState extends State<TDrawer> {
               ),
             ), */
             Visibility(
-              visible: DEV,
+              visible: dev,
               child: TDrawerItem(
                   title: "Research",
                   index: 6,
@@ -115,7 +112,7 @@ class _TDrawerState extends State<TDrawer> {
           ],
         )),
         Container(
-          color: cardBGLight,
+          color: colors.surface,
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

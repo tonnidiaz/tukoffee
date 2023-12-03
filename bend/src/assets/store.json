@@ -1,12 +1,12 @@
 {
     "store": {
-        "slogan": "LIFE IS BITTER, YOUR  COFFEE SHOULDN'T BE!",
-        "name": "LebzCafé",
-        "phone": "078 000 3617",
+        "slogan": "A TUNED COFFEE FOR YOUR TASTEBUDS!",
+        "name": "TuKoffee",
+        "phone": "0769196476",
         "email": "tonnidiazed@gmail.com",
-        "real_email": "info@lebzcafe.co.za",
+        "real_email": "tonnidiazed@gmail.com",
         
-        "site": "www.lebzcafe.co.za",
+        "site": "",
         "image": {
             "url": "https://res.cloudinary.com/sketchi/image/upload/v1694715912/TunedBass/TuKoffee/DEV/images/products/TuKoffee_-_product_-_epoch-1694715908591.jpg",
             "publicId": "TunedBass/TuKoffee/DEV/images/products/TuKoffee_-_product_-_epoch-1694715908591"
@@ -14,15 +14,15 @@
     },
     "address": "23 Albtrech Street, City and Suburban, Johannesburg, Maboneng Precinct, 2091",
     "owner": {
-        "name": "Lebohang Nyandeni",
+        "name": "Thabiso Koza",
         "phone": "0769196476",
-        "email": "nyandenilebohang@gmail.com"
+        "email": "tonnidiazed@gmail.com"
     },
     "socials": {
-        "Facebook": "LebzCafé",
-        "Twitter": "LebzCafé", 
-        "Instagram": "LebzCafé",
-        "LinkedIn": "LebzCafé"
+        "Facebook": "TuKoffee",
+        "Twitter": "TuKoffee", 
+        "Instagram": "TuKoffee",
+        "LinkedIn": "TuKoffee"
     },
     "developer": {
         "name": "Thabiso Koza",

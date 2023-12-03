@@ -1,18 +1,12 @@
 import "package:lebzcafe/utils/constants2.dart";
 import "package:lebzcafe/utils/types.dart";
-import "package:lebzcafe/widgets/tu/common.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
 
 import "package:flutter/material.dart";
 import "package:flutter_rating_bar/flutter_rating_bar.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/utils/styles.dart";
-import "package:lebzcafe/widgets/common.dart";
-import "package:get/get.dart";
-import "package:lebzcafe/widgets/tu/select.dart";
+import "package:tu/tu.dart";
 
 class AddReviewView extends StatefulWidget {
   final Map<String, dynamic> product;
@@ -96,14 +90,14 @@ class _AddReviewViewState extends State<AddReviewView> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: keyboardPadding(context)),
-      color: cardBGLight,
+      color: colors.surface,
       padding: defaultPadding,
       width: double.infinity,
       child: SingleChildScrollView(
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text(
             widget.rev == null ? "New review" : "Edit review",
-            style: Styles.h3(),
+            style: styles.h3(),
           ),
           mY(8),
           SizedBox(

@@ -10,7 +10,8 @@ import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/views/map.dart";
 import "package:lebzcafe/widgets/common.dart";
 import "package:get/get.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
+import "package:tu/functions.dart";
+import "package:tu/tu.dart";
 
 import "../../widgets/common2.dart";
 import "../../widgets/form_view.dart";
@@ -40,14 +41,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
           data: {...data, "userId": _user!["_id"]});
       _setUser(res.data["user"]);
     } catch (e) {
-      if (e.runtimeType == DioException) {
-        handleDioException(
-            context: context,
-            exception: e as DioException,
-            msg: "Request failed!");
-      } else {
-        showToast("Request failed!", isErr: true).show(context);
-      }
+      errorHandler(e: e, msg: "Request failed!");
     }
   }
 
@@ -65,7 +59,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                     padding: defaultPadding,
                     constraints:
                         BoxConstraints(minHeight: constraints.maxHeight),
-                    color: cardBGLight,
+                    color: colors.surface,
                     alignment: Alignment.center,
                     child: const CircularProgressIndicator())
                 : SingleChildScrollView(
@@ -78,7 +72,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Text("Account", style: Styles.h1),
+                          Text("Account", style: styles.h1()),
                           Visibility(
                             visible: true,
                             child: Column(children: [
@@ -92,7 +86,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                         tuTableRow(
                                             Text(
                                               "Personal details",
-                                              style: Styles.h2(),
+                                              style: styles.h2(),
                                             ),
                                             IconButton(
                                                 padding: EdgeInsets.zero,
@@ -106,54 +100,47 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                                         _user!["last_name"],
                                                   });
                                                   final form = ctrl.form;
-                                                  TuFuncs.showBottomSheet(
-                                                      context: context,
-                                                      widget: FormView(
-                                                          title:
-                                                              "Edit personal details",
-                                                          fields: [
-                                                            TuFormField(
-                                                              label:
-                                                                  "First name:",
-                                                              hint: "e.g. John",
-                                                              radius: 5,
-                                                              hasBorder: false,
-                                                              required: true,
-                                                              value: form[
-                                                                  "first_name"],
-                                                              onChanged: (val) {
-                                                                formViewCtrl
-                                                                    .setFormField(
-                                                                        "first_name",
-                                                                        val);
-                                                              },
-                                                            ),
-                                                            TuFormField(
-                                                              label:
-                                                                  "Last name:",
-                                                              hint: "e.g. Doe",
-                                                              radius: 5,
-                                                              hasBorder: false,
-                                                              required: true,
-                                                              value: form[
-                                                                  "last_name"],
-                                                              onChanged: (val) {
-                                                                formViewCtrl
-                                                                    .setFormField(
-                                                                        "last_name",
-                                                                        val);
-                                                              },
-                                                            ),
-                                                          ],
-                                                          onSubmit: () async {
-                                                            await _editFields(
-                                                              data: {
-                                                                "value": form
-                                                              },
-                                                            );
-                                                            Navigator.pop(
-                                                                context);
-                                                          }));
+                                                  Get.bottomSheet(FormView(
+                                                      title:
+                                                          "Edit personal details",
+                                                      fields: [
+                                                        TuFormField(
+                                                          label: "First name:",
+                                                          hint: "e.g. John",
+                                                          radius: 5,
+                                                          hasBorder: false,
+                                                          required: true,
+                                                          value: form[
+                                                              "first_name"],
+                                                          onChanged: (val) {
+                                                            formViewCtrl
+                                                                .setFormField(
+                                                                    "first_name",
+                                                                    val);
+                                                          },
+                                                        ),
+                                                        TuFormField(
+                                                          label: "Last name:",
+                                                          hint: "e.g. Doe",
+                                                          radius: 5,
+                                                          hasBorder: false,
+                                                          required: true,
+                                                          value:
+                                                              form["last_name"],
+                                                          onChanged: (val) {
+                                                            formViewCtrl
+                                                                .setFormField(
+                                                                    "last_name",
+                                                                    val);
+                                                          },
+                                                        ),
+                                                      ],
+                                                      onSubmit: () async {
+                                                        await _editFields(
+                                                          data: {"value": form},
+                                                        );
+                                                        Navigator.pop(context);
+                                                      }));
                                                 },
                                                 icon: const Icon(
                                                   Icons.edit,
@@ -168,21 +155,21 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                             tuTableRow(
                                               Text(
                                                 "First name:",
-                                                style: Styles.h3(),
+                                                style: styles.h3(),
                                               ),
                                               Text(
                                                 "${_user!["first_name"]}",
-                                                style: Styles.h3(isLight: true),
+                                                style: styles.h3(isLight: true),
                                               ),
                                             ),
                                             tuTableRow(
                                               Text(
                                                 "Last name:",
-                                                style: Styles.h3(),
+                                                style: styles.h3(),
                                               ),
                                               Text(
                                                 "${_user!["last_name"]}",
-                                                style: Styles.h3(isLight: true),
+                                                style: styles.h3(isLight: true),
                                               ),
                                             ),
                                           ],
@@ -198,7 +185,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                         tuTableRow(
                                             Text(
                                               "Contact details",
-                                              style: Styles.h2(),
+                                              style: styles.h2(),
                                             ),
                                             IconButton(
                                                 padding: EdgeInsets.zero,
@@ -216,21 +203,21 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                             tuTableRow(
                                               Text(
                                                 "Email:",
-                                                style: Styles.h3(),
+                                                style: styles.h3(),
                                               ),
                                               Text(
                                                 "${_user!["email"]}",
-                                                style: Styles.h3(isLight: true),
+                                                style: styles.h3(isLight: true),
                                               ),
                                             ),
                                             tuTableRow(
                                               Text(
                                                 "Phone:",
-                                                style: Styles.h3(),
+                                                style: styles.h3(),
                                               ),
                                               Text(
                                                 "${_user!["phone"]}",
-                                                style: Styles.h3(isLight: true),
+                                                style: styles.h3(isLight: true),
                                               ),
                                             ),
                                           ],
@@ -246,7 +233,7 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                         tuTableRow(
                                             Text(
                                               "Residential Address",
-                                              style: Styles.h2(),
+                                              style: styles.h2(),
                                             ),
                                             IconButton(
                                                 padding: EdgeInsets.zero,
@@ -299,12 +286,12 @@ class _DashAccountPageState extends State<DashAccountPage> {
                                       children: [
                                         Text(
                                           "Permissions",
-                                          style: Styles.h2(),
+                                          style: styles.h2(),
                                         ),
                                         mY(5),
                                         Builder(builder: (context) {
                                           final perms = _user!["permissions"];
-                                          return TuDropdownButton(
+                                          return TuSelect(
                                             label: "Permissions",
                                             value: perms,
                                             borderColor: const Color.fromRGBO(
@@ -362,14 +349,12 @@ class _DashAccountPageState extends State<DashAccountPage> {
 
   final FormCtrl formViewCtrl = Get.find();
   addEditAddress({String? title}) async {
-    TuFuncs.showBottomSheet(
-        context: context,
-        widget: MapPage(onSubmit: (val) async {
-          if (val.isEmpty) return;
-          _editFields(data: {
-            "value": {"location": val}
-          }, field: "address");
-        }));
+    Get.bottomSheet(MapPage(onSubmit: (val) async {
+      if (val.isEmpty) return;
+      _editFields(data: {
+        "value": {"location": val}
+      }, field: "address");
+    }));
   }
 
   _setUser(Map<String, dynamic>? val) {

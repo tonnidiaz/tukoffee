@@ -1,24 +1,18 @@
-// ignore_for_file: use_build_context_synchronously
-import "package:lebzcafe/utils/constants2.dart";
 import "package:lebzcafe/utils/functions2.dart";
 import "package:lebzcafe/views/order/checkout.dart";
 import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/prompt_modal.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
 
 import "package:flutter/material.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/styles.dart";
-import "package:lebzcafe/views/account/settings.dart";
+
 import "package:lebzcafe/views/map.dart";
-import "package:lebzcafe/widgets/common.dart";
 import "package:lebzcafe/widgets/common2.dart";
 import "package:lebzcafe/widgets/form_view.dart";
-import "package:lebzcafe/widgets/tu/select.dart";
-import "package:get/get.dart";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 
 import "../../utils/functions.dart";
@@ -79,73 +73,67 @@ class _OrderPageState extends State<OrderPage> {
     Map<String, dynamic> form =
         mode == 1 ? _order!["collector"] : _order!["delivery_address"];
 
-    TuFuncs.showBottomSheet(
-        context: context,
-        widget: FormView(
-            title: "Edit order recipient",
-            useBottomSheet: true,
-            fields: [
-              TuFormField(
-                required: true,
-                label: "Name:",
-                hint: "e.g. John Doe",
-                value: form["name"],
-                onChanged: (val) {
-                  form["name"] = val;
-                },
-              ),
-              TuFormField(
-                required: true,
-                label: "Phone:",
-                hint: "e.g. 0712345678",
-                value: form["phone"],
-                onChanged: (val) {
-                  form["phone"] = val;
-                },
-              ),
-              mY(5)
-            ],
-            onSubmit: () async {
-              try {
-                var field = mode == 1 ? "collector" : "delivery_address";
-                Map<String, dynamic> val = mode == 1
-                    ? _order!["collector"]
-                    : _order!["delivery_address"];
-                showProgressSheet();
-                final res = await apiDio()
-                    .post("/order/edit?id=${_order!["_id"]}", data: {
-                  field: {...val, ...form}
-                });
-                gpop(); //POP SHEET
-                gpop(); //POP MAP
-                _reload(data: res.data);
-              } catch (e) {
-                errorHandler(
-                    e: e, context: context, msg: "Error editing fields!");
-              }
-            }));
+    Get.bottomSheet(FormView(
+        title: "Edit order recipient",
+        useBottomSheet: true,
+        fields: [
+          TuFormField(
+            required: true,
+            label: "Name:",
+            hint: "e.g. John Doe",
+            value: form["name"],
+            onChanged: (val) {
+              form["name"] = val;
+            },
+          ),
+          TuFormField(
+            required: true,
+            label: "Phone:",
+            hint: "e.g. 0712345678",
+            value: form["phone"],
+            onChanged: (val) {
+              form["phone"] = val;
+            },
+          ),
+          mY(5)
+        ],
+        onSubmit: () async {
+          try {
+            var field = mode == 1 ? "collector" : "delivery_address";
+            Map<String, dynamic> val =
+                mode == 1 ? _order!["collector"] : _order!["delivery_address"];
+            showProgressSheet();
+            final res =
+                await apiDio().post("/order/edit?id=${_order!["_id"]}", data: {
+              field: {...val, ...form}
+            });
+            gpop(); //POP SHEET
+            gpop(); //POP MAP
+            _reload(data: res.data);
+          } catch (e) {
+            errorHandler(e: e, msg: "Error editing fields!");
+          }
+        }));
   }
 
   _onEditAddressPress() async {
     _formCtrl.setForm({"delivery_address": _order!["delivery_address"]});
     _formCtrl.setForm({"address": _order!["delivery_address"]});
 
-    TuFuncs.showBottomSheet(
-        context: context,
-        widget: MapPage(onSubmit: (val) async {
-          if (val.isEmpty) return;
-          try {
-            showProgressSheet();
-            final res =
-                await apiDio().post("/order/edit?id=${_order!["_id"]}", data: {
-              "delivery_address": {..._order!["delivery_address"], ...val}
-            });
-            gpop();
-            _reload(data: res.data);
-          } catch (e) {
-            errorHandler(e: e, context: context, msg: "Error editing fields!");
-          }
-        }));
+    Get.bottomSheet(MapPage(onSubmit: (val) async {
+      if (val.isEmpty) return;
+      try {
+        showProgressSheet();
+        final res =
+            await apiDio().post("/order/edit?id=${_order!["_id"]}", data: {
+          "delivery_address": {..._order!["delivery_address"], ...val}
+        });
+        gpop();
+        _reload(data: res.data);
+      } catch (e) {
+        errorHandler(e: e, msg: "Error editing fields!");
+      }
+    }));
   }
 
   _reload({Map? data}) async {
@@ -215,7 +203,7 @@ class _OrderPageState extends State<OrderPage> {
                 SelectItem("Pending", OrderStatus.pending.name),
                 SelectItem("Awaiting pickup", OrderStatus.awaitingPickup.name),
                 SelectItem("Completed", OrderStatus.completed.name),
-                DEV
+                dev
                     ? SelectItem("Cancelled", OrderStatus.cancelled.name)
                     : null,
               ],
@@ -260,7 +248,7 @@ class _OrderPageState extends State<OrderPage> {
                           _order?["mode"] == OrderMode.collect.index &&
                           widget.fromDash &&
                           _order?['status'] != "cancelled" ||
-                      DEV)
+                      dev)
                   ? PopupMenuItem(
                       onTap: _showUpdateStatusSheet,
                       child: const Text("Update status"),
@@ -282,8 +270,18 @@ class _OrderPageState extends State<OrderPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  tuTableRow(h4("SUBTOTAL:"), Text("R${_getTotal(_order!)}")),
-                  tuTableRow(h4("DELIVERY FEE:"), Text("R${_order!["fee"]}")),
+                  tuTableRow(
+                      Text(
+                        "SUBTOTAL:",
+                        style: styles.h4(),
+                      ),
+                      Text("R${_getTotal(_order!)}")),
+                  tuTableRow(
+                      Text(
+                        "DELIVERY FEE:",
+                        style: styles.h4(),
+                      ),
+                      Text("R${_order!["fee"]}")),
                 ],
               ),
             ),
@@ -304,13 +302,13 @@ class _OrderPageState extends State<OrderPage> {
                         TuCard(
                             width: double.infinity,
                             child: TuCard(
-                              color: appBGLight,
+                              color: colors.bg,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     "Details",
-                                    style: Styles.h3(),
+                                    style: styles.h3(),
                                   ),
                                   Container(
                                     height: 1,
@@ -341,8 +339,8 @@ class _OrderPageState extends State<OrderPage> {
                                             backgroundColor: _order!["status"]
                                                         .toLowerCase() ==
                                                     "cancelled"
-                                                ? TuColors.danger
-                                                : TuColors.medium,
+                                                ? colors.danger
+                                                : colors.medium,
                                             label: Text(
                                               "${_order!["status"]}",
                                               style: const TextStyle(
@@ -388,13 +386,13 @@ class _OrderPageState extends State<OrderPage> {
                         TuCard(
                             width: double.infinity,
                             child: TuCard(
-                              color: appBGLight,
+                              color: colors.bg,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     "Customer",
-                                    style: Styles.h3(),
+                                    style: styles.h3(),
                                   ),
                                   devider(),
                                   Column(
@@ -425,19 +423,19 @@ class _OrderPageState extends State<OrderPage> {
                         TuCard(
                             width: double.infinity,
                             child: TuCard(
-                              color: appBGLight,
+                              color: colors.bg,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   tuTableRow(
-                                      Text("Recipient", style: Styles.h3()),
+                                      Text("Recipient", style: styles.h3()),
                                       IconButton(
                                           padding: EdgeInsets.zero,
                                           onPressed: _onEditRecipientBtnPress,
                                           icon: Icon(
                                             Icons.edit,
                                             size: 20,
-                                            color: TuColors.text2,
+                                            color: colors.text2,
                                           )),
                                       my: 0),
                                   devider(),
@@ -473,18 +471,18 @@ class _OrderPageState extends State<OrderPage> {
                         _order!["mode"] == OrderMode.collect.index
                             ? TuCard(
                                 child: TuCard(
-                                color: appBGLight,
+                                color: colors.bg,
                                 child: Column(children: [
                                   tuTableRow(
                                       Text("Collection store",
-                                          style: Styles.h3()),
+                                          style: styles.h3()),
                                       IconButton(
                                           padding: EdgeInsets.zero,
                                           onPressed: _onEditStoreAddrClick,
                                           icon: Icon(
                                             Icons.edit,
                                             size: 20,
-                                            color: TuColors.text2,
+                                            color: colors.text2,
                                           )),
                                       my: 0),
                                   devider(),
@@ -494,10 +492,8 @@ class _OrderPageState extends State<OrderPage> {
                                       _formCtrl.setForm({
                                         "address": _order!['store']['address']
                                       });
-                                      TuFuncs.showBottomSheet(
-                                          context: context,
-                                          widget:
-                                              const MapPage(canEdit: false));
+                                      Get.bottomSheet(
+                                          const MapPage(canEdit: false));
                                     },
                                     child: Row(
                                       mainAxisAlignment:
@@ -520,7 +516,7 @@ class _OrderPageState extends State<OrderPage> {
                                   TuCard(
                                       width: double.infinity,
                                       child: TuCard(
-                                        color: appBGLight,
+                                        color: colors.bg,
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -528,7 +524,7 @@ class _OrderPageState extends State<OrderPage> {
                                             tuTableRow(
                                                 Text(
                                                   "Delivery address",
-                                                  style: Styles.h3(),
+                                                  style: styles.h3(),
                                                 ),
                                                 Visibility(
                                                   visible: false,
@@ -555,9 +551,8 @@ class _OrderPageState extends State<OrderPage> {
                                                           "address": _order![
                                                               "delivery_address"]
                                                         });
-                                                        TuFuncs.showBottomSheet(
-                                                          context: context,
-                                                          widget: const MapPage(
+                                                        Get.bottomSheet(
+                                                          const MapPage(
                                                             canEdit: false,
                                                           ),
                                                         );
@@ -574,14 +569,14 @@ class _OrderPageState extends State<OrderPage> {
                                   TuCard(
                                       width: double.infinity,
                                       child: TuCard(
-                                        color: appBGLight,
+                                        color: colors.bg,
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               "Pickup date & time",
-                                              style: Styles.h3(),
+                                              style: styles.h3(),
                                             ),
                                             devider(),
                                             mY(10),
@@ -596,14 +591,14 @@ class _OrderPageState extends State<OrderPage> {
                                   TuCard(
                                       width: double.infinity,
                                       child: TuCard(
-                                        color: appBGLight,
+                                        color: colors.bg,
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               "Delivery dates & times",
-                                              style: Styles.h3(),
+                                              style: styles.h3(),
                                             ),
                                             devider(),
                                             mY(10),
@@ -659,7 +654,7 @@ class _OrderPageState extends State<OrderPage> {
                                                                       .w600)),
                                                       subtitle: Text(
                                                         "R${it['product']['on_sale'] ? it['product']['sale_price'] : it["product"]["price"]}",
-                                                        style: Styles.subtitle,
+                                                        style: styles.subtitle,
                                                       ),
                                                       trailing: Text(
                                                           "x${it["quantity"]}")),
@@ -717,67 +712,5 @@ class _OrderPageState extends State<OrderPage> {
         )
       ]),
     ));
-  }
-}
-
-Widget tuTableRow(Widget? first, Widget? last,
-    {double my = 2, WrapCrossAlignment? crossAxisAlignment}) {
-  return Container(
-    margin: EdgeInsets.symmetric(vertical: my),
-    width: double.infinity,
-    child: Wrap(
-      alignment: WrapAlignment.spaceBetween,
-      runAlignment: WrapAlignment.spaceBetween,
-      crossAxisAlignment: crossAxisAlignment ?? WrapCrossAlignment.center,
-      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [first ?? none(), last ?? none()],
-    ),
-  );
-}
-
-class TuCard extends StatelessWidget {
-  final double radius;
-  final double padding;
-  final double my;
-  final double borderSize;
-  final double mx;
-  final Widget? child;
-  final Function()? onTap;
-  final Function()? onLongPress;
-  final double? width;
-  final double? height;
-  final Color? color;
-  const TuCard(
-      {super.key,
-      this.radius = 0,
-      this.padding = 8,
-      this.my = 0,
-      this.mx = 0,
-      this.borderSize = 1.6,
-      this.child,
-      this.onTap,
-      this.onLongPress,
-      this.height,
-      this.color,
-      this.width = double.infinity});
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      onLongPress: onLongPress,
-      borderRadius: BorderRadius.circular(radius),
-      //hoverColor: Colors.black,
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: my, horizontal: mx),
-        height: height,
-        width: width,
-        padding: EdgeInsets.all(padding),
-        decoration: BoxDecoration(
-          color: color ?? cardBGLight,
-          borderRadius: BorderRadius.circular(radius),
-        ),
-        child: child,
-      ),
-    );
   }
 }

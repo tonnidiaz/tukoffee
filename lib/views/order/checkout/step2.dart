@@ -1,13 +1,7 @@
 import "package:flutter/cupertino.dart";
-import "package:lebzcafe/widgets/common.dart";
 import "package:flutter/material.dart";
-import "package:get/get.dart";
 import "package:lebzcafe/main.dart";
-
-import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/views/order/index.dart";
-import "package:lebzcafe/widgets/common3.dart";
+import "package:tu/tu.dart";
 
 class CheckoutStep2 extends StatelessWidget {
   const CheckoutStep2({super.key});

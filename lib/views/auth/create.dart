@@ -2,11 +2,7 @@
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/utils/vars.dart";
-import "package:lebzcafe/views/account/profile.dart";
-import "package:lebzcafe/widgets/tu/common.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
+import "package:tu/tu.dart";
 
 import "dart:async";
 import "package:via_logger/logger.dart";
@@ -14,9 +10,7 @@ import "package:flutter/material.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/widgets/common.dart";
-import "package:lebzcafe/widgets/common2.dart";
 import "package:get/get.dart";
 
 class SignupCtrl extends GetxController {
@@ -88,6 +82,7 @@ class Step1 extends HookWidget {
                 ctrl.setuser = {...ctrl.user, "email": val};
               },
             )),
+        mY(5),
         Obx(() => TuFormField(
               label: "Password:",
               hint: "More than 6 characters...",
@@ -181,7 +176,7 @@ class _Step2State extends State<Step2> {
               Obx(() => Text(
                     "${ctrl.user["email"]}",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: TuColors.primary),
+                    style: TextStyle(color: colors.primary),
                   )),
             ],
           ),
@@ -225,7 +220,7 @@ class _Step2State extends State<Step2> {
           child: Text(
             _secs > 0 ? "Resend PIN in: $_secs" : "Resend PIN",
             style:
-                TextStyle(color: _secs > 0 ? Colors.black45 : TuColors.primary),
+                TextStyle(color: _secs > 0 ? Colors.black45 : colors.primary),
           ),
         )
       ],
@@ -259,12 +254,12 @@ class Step3 extends StatelessWidget {
       },
       title: "Finish up",
       fields: [
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "FINISH UP",
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+              style: styles.h3(isLight: true),
             ),
           ],
         ),
@@ -279,6 +274,7 @@ class Step3 extends StatelessWidget {
                 ctrl.setuser = {...ctrl.user, "first_name": val};
               },
             )),
+        mY(5),
         Obx(() => TuFormField(
               label: "Last name:",
               keyboard: TextInputType.name,
@@ -289,16 +285,20 @@ class Step3 extends StatelessWidget {
                 ctrl.setuser = {...ctrl.user, "last_name": val};
               },
             )),
-        TuFormField(
-          label: "Phone:",
-          hint: "e.g. 0712345678",
-          required: true,
-          value: ctrl.user["phone"],
-          keyboard: TextInputType.phone,
-          onChanged: (val) {
-            ctrl.setuser = {...ctrl.user, "phone": val};
-          },
+        mY(5),
+        Obx(
+          () => TuFormField(
+            label: "Phone:",
+            hint: "e.g. 0712345678",
+            required: true,
+            value: ctrl.user["phone"],
+            keyboard: TextInputType.phone,
+            onChanged: (val) {
+              ctrl.setuser = {...ctrl.user, "phone": val};
+            },
+          ),
         ),
+        mY(5)
       ],
     );
   }
@@ -336,10 +336,12 @@ class _CreateAccountPageWrapperState extends State<CreateAccountPageWrapper> {
     return PageWrapper(
       appBar: childAppbar(title: "New account", showCart: false),
       child: Container(
-          color: cardBGLight,
-          height:
-              screenSize(context).height - appBarH - statusBarH() - topMargin,
-          margin: EdgeInsets.only(top: topMargin),
+          color: colors.surface,
+          height: screenSize(context).height -
+              appBarH -
+              statusBarH(context) -
+              topMargin,
+          margin: const EdgeInsets.only(top: topMargin),
           padding: defaultPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -349,7 +351,7 @@ class _CreateAccountPageWrapperState extends State<CreateAccountPageWrapper> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${MainApp.appCtrl.store["name"]}",
+                    "${MainApp.appCtrl.store["name"]} auth",
                     style: GoogleFonts.montserrat(
                         fontWeight: FontWeight.bold, fontSize: 30),
                   ),
@@ -369,6 +371,8 @@ class _CreateAccountPageWrapperState extends State<CreateAccountPageWrapper> {
                 children: [
                   TuButton(
                       width: double.infinity,
+                      bgColor: Colors.black,
+                      color: Colors.white,
                       text: widget.btnTxt,
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {

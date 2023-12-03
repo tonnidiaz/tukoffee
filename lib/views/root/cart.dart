@@ -1,17 +1,11 @@
 import "package:flutter/material.dart";
 import "package:lebzcafe/controllers/app_ctrl.dart";
 import "package:lebzcafe/controllers/store_ctrl.dart";
-import "package:lebzcafe/main.dart";
-import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/views/auth/login.dart";
 import "package:lebzcafe/widgets/cart_item.dart";
-import "package:lebzcafe/widgets/common.dart";
-import "package:get/get.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 
 class CartPage extends StatefulWidget {
@@ -94,12 +88,12 @@ class _CartPageState extends State<CartPage> {
                 children: [
                   Text(
                     "TOTAL:",
-                    style: Styles.h4(),
+                    style: styles.h4(),
                   ),
                   Obx(
                     () => Text(
                       "R${roundDouble(_storeCtrl.total.value, 2)}",
-                      style: Styles.h4(),
+                      style: styles.h4(),
                     ),
                   )
                 ],
@@ -132,25 +126,23 @@ class _CartPageState extends State<CartPage> {
                 ? Center(
                     child: Text(
                       "Cart empty",
-                      style: Styles.h3(isLight: true, color: TuColors.text2),
+                      style: styles.h3(isLight: true, color: colors.text2),
                     ),
                   )
-                : Container(
-                    child: Column(
-                      children: [
-                        mY(topMargin),
-                        Expanded(
-                          child: ListView.builder(
-                            itemBuilder: (context, index) {
-                              return CartItem(
-                                  item: _storeCtrl.cart["products"]
-                                      .elementAt(index));
-                            },
-                            itemCount: _storeCtrl.cart["products"].length,
-                          ),
+                : Column(
+                    children: [
+                      mY(topMargin),
+                      Expanded(
+                        child: ListView.builder(
+                          itemBuilder: (context, index) {
+                            return CartItem(
+                                item: _storeCtrl.cart["products"]
+                                    .elementAt(index));
+                          },
+                          itemCount: _storeCtrl.cart["products"].length,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   )),
       ),
     );

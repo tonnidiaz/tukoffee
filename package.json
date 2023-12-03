@@ -1,7 +1,16 @@
 {
-    "scripts": {
-        "droid": "flutter run --debug",
-        "linux": "flutter run --debug -d linux",
-        "build": "flutter build apk --target-platform android-arm --split-per-abi"
+ 
+    "license": "MIT",
+       "scripts": {
+            "droid": "flutter run --debug",
+            "linux": "flutter run --debug -d linux",
+            "runner": "dart run build_runner build",
+            "build": "flutter build apk --target-platform android-arm --split-per-abi",
+            "build:all": "flutter build apk --split-per-abi",
+            "change-pkg-name": "dart run change_app_package_name:main",
+            "rename": "dart run rename_app:main all='My App Name'",
+            "splash" : "dart run flutter_native_splash:create"
+    
+        }
     }
-}
+    

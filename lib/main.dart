@@ -10,17 +10,14 @@ import "package:lebzcafe/controllers/common_ctrls.dart";
 import "package:lebzcafe/controllers/products_ctrl.dart";
 import "package:lebzcafe/controllers/store_ctrl.dart";
 import "package:lebzcafe/services/notifications.dart";
-import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/functions2.dart";
 import "package:lebzcafe/views/auth/create.dart";
 import "package:lebzcafe/widgets/form_view.dart";
 import "package:lebzcafe/widgets/splash.dart";
-import "package:get/get.dart";
+import "package:tu/controllers/commom.ctrl.dart";
+import "package:tu/tu.dart";
 import "controllers/app_ctrl.dart";
 import "mobile.dart";
-import "utils/constants.dart";
 import "utils/functions.dart";
-import "package:flutter_downloader/flutter_downloader.dart";
 import "package:via_logger/logger.dart";
 
 enableWebviewDebugging() async {
@@ -30,9 +27,10 @@ enableWebviewDebugging() async {
 }
 
 void main() async {
+  dev = false;
   setupLogger();
   await initHive();
-  NotifsService.initNotifs();
+
   WidgetsFlutterBinding.ensureInitialized();
 
   if (Platform.isAndroid) {
@@ -65,7 +63,6 @@ class MainApp extends StatefulWidget {
   static AppBarCtrl appBarCtrl = Get.put(AppBarCtrl());
   static ProductsCtrl productsCtrl = Get.put(ProductsCtrl());
   static SignupCtrl signupCtrl = Get.put(SignupCtrl());
-  static ProgressCtrl progressCtrl = Get.put(ProgressCtrl());
   @override
   State<MainApp> createState() => _MainAppState();
 }
@@ -76,8 +73,10 @@ class _MainAppState extends State<MainApp> {
     Get.put(AppCtrl());
     Get.put(StoreCtrl());
     Get.put(AppBarCtrl());
+    Get.put(BarCtrl());
     Get.put(ProductsCtrl());
     Get.put(SignupCtrl());
+    Get.put(TuProgressCtrl());
 
     /* SETUP APP VERSION */
     MainApp.appCtrl.appVersion.value = await getAppVersion();
@@ -89,6 +88,9 @@ class _MainAppState extends State<MainApp> {
 
     _init();
     _getDeviceID(MainApp.appCtrl);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      NotifsService.initNotifs();
+    });
   }
 
   void _getDeviceID(AppCtrl appCtrl) async {
@@ -118,6 +120,7 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: TuTheme(colors: TuColors(), dark: false, context: context).theme(),
       home: Obx(() => MainApp.appCtrl.ready.value &&
               MainApp.appCtrl.store["name"] != null &&
               MainApp.appCtrl.store["name"].isNotEmpty
@@ -172,8 +175,7 @@ class _PageWrapperState extends State<PageWrapper> {
         },
         child: SizedBox(
           width: double.infinity,
-          height: screenSize(context).height -
-              (appBarH + statusBarH(context: context)),
+          height: screenSize(context).height - (appBarH + statusBarH(context)),
           child: SingleChildScrollView(
             physics: widget.onRefresh != null
                 ? const AlwaysScrollableScrollPhysics()

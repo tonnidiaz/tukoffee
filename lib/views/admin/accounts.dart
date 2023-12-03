@@ -2,22 +2,14 @@
 
 import "package:dio/dio.dart";
 import "package:flutter/material.dart";
-import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/views/account/profile.dart";
-import "package:lebzcafe/views/admin/account.dart";
-import "package:lebzcafe/views/order/index.dart";
-import "package:lebzcafe/widgets/common.dart";
 import "package:lebzcafe/widgets/common2.dart";
 import "package:lebzcafe/widgets/common3.dart";
-import "package:lebzcafe/widgets/order_item.dart";
 import "package:lebzcafe/widgets/prompt_modal.dart";
 import "package:get/get.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 import "../../controllers/app_ctrl.dart";
 import "../../controllers/appbar.dart";
@@ -139,19 +131,19 @@ class _AccountsState extends State<Accounts> {
           onRefresh: () async {
             await _init();
           },
-          child: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(child: mY(topMargin)),
-              SliverToBoxAdapter(
-                child: Obx(
-                  () => Container(
-                    color: cardBGLight,
-                    padding: defaultPadding,
-                    child: TuFormField(
+          child: Padding(
+            padding: defaultPadding,
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(child: mY(topMargin)),
+                SliverToBoxAdapter(
+                  child: Obx(
+                    () => TuFormField(
                       hint: "Name or email",
-                      fill: appBGLight,
+                      fill: colors.surface,
                       height: borderlessInpHeight,
                       hasBorder: false,
+                      radius: 100,
                       prefixIcon: TuIcon(Icons.search),
                       value: _ctrl.query.value,
                       onChanged: (val) {
@@ -174,42 +166,45 @@ class _AccountsState extends State<Accounts> {
                     ),
                   ),
                 ),
-              ),
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Obx(() {
-                  return _ctrl.accounts.value == null
-                      ? const Center(child: CircularProgressIndicator())
-                      : Column(
-                          children: [
-                            mY(topMargin),
-                            AccountsSection(
+                TuSliver(
+                  child: mY(6),
+                ),
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Obx(() {
+                    return _ctrl.accounts.value == null
+                        ? const Center(child: CircularProgressIndicator())
+                        : Column(
+                            children: [
+                              mY(topMargin),
+                              AccountsSection(
+                                  ctrl: _ctrl,
+                                  title: "Staff",
+                                  accounts: [
+                                    ..._ctrl.filteredAccounts
+                                        .where((it) =>
+                                            it["permissions"] ==
+                                                UserPermissions.write.index ||
+                                            it["permissions"] ==
+                                                UserPermissions.delete.index)
+                                        .toList(),
+                                  ]),
+                              mY(5),
+                              AccountsSection(
                                 ctrl: _ctrl,
-                                title: "Staff",
-                                accounts: [
-                                  ..._ctrl.filteredAccounts
-                                      .where((it) =>
-                                          it["permissions"] ==
-                                              UserPermissions.write.index ||
-                                          it["permissions"] ==
-                                              UserPermissions.delete.index)
-                                      .toList(),
-                                ]),
-                            mY(5),
-                            AccountsSection(
-                              ctrl: _ctrl,
-                              title: "Customers",
-                              accounts: _ctrl.filteredAccounts
-                                  .where((it) =>
-                                      it["permissions"] ==
-                                      UserPermissions.read.index)
-                                  .toList(),
-                            ),
-                          ],
-                        );
-                }),
-              )
-            ],
+                                title: "Customers",
+                                accounts: _ctrl.filteredAccounts
+                                    .where((it) =>
+                                        it["permissions"] ==
+                                        UserPermissions.read.index)
+                                    .toList(),
+                              ),
+                            ],
+                          );
+                  }),
+                )
+              ],
+            ),
           )),
     );
   }
@@ -289,7 +284,7 @@ class AccountCard extends StatelessWidget {
                 ),
                 CircleAvatar(
                   backgroundColor: Colors.black12,
-                  child: svgIcon(name: "br-user", color: TuColors.text2),
+                  child: svgIcon(name: "br-user", color: colors.text2),
                 ),
               ],
             ),
@@ -297,7 +292,7 @@ class AccountCard extends StatelessWidget {
               "${account["first_name"]} ${account["last_name"]}",
               softWrap: false,
               overflow: TextOverflow.ellipsis,
-              style: Styles.title(),
+              style: styles.title(),
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,7 +309,7 @@ class AccountCard extends StatelessWidget {
                 int perms = _appCtrl.user["permissions"];
                 bool isAdmin = perms == 2;
                 return PopupMenuButton(
-                    icon: Icon(Icons.more_vert, color: TuColors.text2),
+                    icon: Icon(Icons.more_vert, color: colors.text2),
                     splashRadius: 23,
                     padding: EdgeInsets.zero,
                     itemBuilder: (context) {
@@ -397,10 +392,11 @@ class _AccountsSectionState extends State<AccountsSection> {
   @override
   Widget build(BuildContext context) {
     return TuCard(
+      radius: 5,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
           widget.title,
-          style: Styles.h3(isLight: true),
+          style: styles.h3(isLight: true),
         ),
         mY(topMargin),
 
@@ -413,7 +409,7 @@ class _AccountsSectionState extends State<AccountsSection> {
                   children: [
                     Text(
                       "Nothing to show",
-                      style: Styles.h3(),
+                      style: styles.h3(isLight: true),
                     ),
                   ],
                 ),

@@ -2,14 +2,10 @@
 
 import "package:flutter/material.dart";
 import "package:lebzcafe/main.dart";
-import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/views/order/index.dart";
-import "package:lebzcafe/widgets/common2.dart";
-import "package:lebzcafe/widgets/common3.dart";
-import "package:lebzcafe/widgets/dialog.dart";
-import "package:lebzcafe/widgets/feedback_form.dart";
-import "package:get/get.dart";
+
+import "package:tu/tu.dart";
+
+import "../../widgets/common.dart";
 
 class OldSettingsPage extends StatelessWidget {
   const OldSettingsPage({super.key});
@@ -34,7 +30,8 @@ class OldSettingsPage extends StatelessWidget {
                       () => Text("About ${MainApp.appCtrl.store["name"]}"))),
               InfoItem(
                   onTap: () {
-                    TuFuncs.dialog(context, const FeedbackForm());
+                    // TuFuncs.dialog(context, const FeedbackForm());
+                    //TODO: feedback view
                   },
                   child: const Text("Help/Feedback")),
               InfoItem(

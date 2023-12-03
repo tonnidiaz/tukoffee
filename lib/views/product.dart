@@ -1,15 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 import "package:dio/dio.dart";
 import "package:flutter/material.dart";
 import "package:lebzcafe/controllers/store_ctrl.dart";
 import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/views/order/index.dart";
 import "package:lebzcafe/views/product/reviews.dart";
 import "package:lebzcafe/widgets/add_product_form.dart";
 import "package:lebzcafe/widgets/common2.dart";
-import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/form_view.dart";
 import "package:lebzcafe/widgets/product_card.dart";
 import "package:get/get.dart";
@@ -17,7 +16,6 @@ import "package:lebzcafe/widgets/tu/common.dart";
 import "../controllers/app_ctrl.dart";
 import "../utils/colors.dart";
 import "/utils/constants.dart";
-import "/widgets/common.dart";
 
 class ProductPage extends StatefulWidget {
   const ProductPage({Key? key}) : super(key: key);
@@ -84,7 +82,7 @@ class _ProductPageState extends State<ProductPage> {
       final List<dynamic> data = res.data["data"];
       return data.isNotEmpty ? data[0] : null;
     } catch (e) {
-      errorHandler(e: e, context: context, msg: "Failed to fetch product");
+      errorHandler(e: e, msg: "Failed to fetch product");
       return null;
     }
   }
@@ -139,7 +137,7 @@ class _ProductPageState extends State<ProductPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Chip(
-                          backgroundColor: TuColors.medium,
+                          backgroundColor: colors.medium,
                           labelPadding: const EdgeInsets.symmetric(
                               horizontal: 5, vertical: -2),
                           label: Text(
@@ -168,7 +166,7 @@ class _ProductPageState extends State<ProductPage> {
                           width: double.infinity,
                           onPressed:
                               _product!["quantity"] < 1 ? null : addRemoveCart,
-                          bgColor: inCart ? TuColors.danger : TuColors.success,
+                          bgColor: inCart ? colors.danger : colors.success,
                           // radius: 100,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -211,7 +209,7 @@ class _ProductPageState extends State<ProductPage> {
                             LayoutBuilder(builder: (context, constraints) {
                               return Container(
                                 //id=img-wrap
-                                color: appBGLight,
+                                color: colors.bg,
                                 width: constraints.maxWidth,
                                 margin: const EdgeInsets.only(top: 6),
                                 height: constraints.maxWidth - 20 - 40,
@@ -261,7 +259,7 @@ class _ProductPageState extends State<ProductPage> {
                           ],
                         ),
                         Container(
-                          color: cardBGLight,
+                          color: colors.surface,
                           padding: const EdgeInsets.all(10.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -272,7 +270,7 @@ class _ProductPageState extends State<ProductPage> {
                                   children: [
                                     Text(
                                       "${_product!["name"]}",
-                                      style: Styles.h3(),
+                                      style: styles.h3(),
                                     ),
                                     mY(5),
                                     Container(
@@ -293,7 +291,7 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                         mY(6),
                         Container(
-                          color: cardBGLight,
+                          color: colors.surface,
                           padding: const EdgeInsets.all(10.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -331,13 +329,13 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                         mY(6),
                         Container(
-                          color: cardBGLight,
+                          color: colors.surface,
                           width: double.infinity,
                           padding: const EdgeInsets.all(10.0),
                           child: tuColumn(children: [
                             Text(
                               "EXTRA INFORMATION",
-                              style: Styles.h4(),
+                              style: styles.h4(),
                             ),
                             mY(10),
                             tuTableRow(
@@ -362,19 +360,19 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                         mY(6),
                         Container(
-                            color: cardBGLight,
+                            color: colors.surface,
                             width: double.infinity,
                             padding: const EdgeInsets.symmetric(vertical: 5.0),
                             child: tuColumn(children: [
                               TuCard(
                                 child: Text(
                                   "You may also like",
-                                  style: Styles.h4(),
+                                  style: styles.h4(),
                                 ),
                               ),
                               mY(10),
                               TuCard(
-                                color: appBGLight,
+                                color: colors.bg,
                                 child: Visibility(
                                   visible: true,
                                   child: SingleChildScrollView(
@@ -458,19 +456,17 @@ class _ProductPageState extends State<ProductPage> {
     }
     _formViewCtrl.setForm(prod);
 
-    TuFuncs.showBottomSheet(
-        context: context,
-        widget: AddProductForm(
-          title: "Edit product",
-          mode: "edit",
-          btnTxt: "Save changes",
-          onDone: (res) {
-            Logger.info(res);
-            setState(() {
-              _product = res;
-            });
-          },
-        ));
+    Get.bottomSheet(AddProductForm(
+      title: "Edit product",
+      mode: "edit",
+      btnTxt: "Save changes",
+      onDone: (res) {
+        Logger.info(res);
+        setState(() {
+          _product = res;
+        });
+      },
+    ));
     /*  editProductForm(
             context: context, formViewCtrl: _formViewCtrl, product: _product!)); */
   }

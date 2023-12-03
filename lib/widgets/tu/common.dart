@@ -1,74 +1,7 @@
 import "package:flutter/material.dart";
-import "package:get/get.dart";
-import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/widgets/common.dart";
 
-class ProgressSheet extends StatefulWidget {
-  final Color? color;
-  final String? msg;
-  final bool dismissable;
-  const ProgressSheet(
-      {super.key, this.color, this.msg, required this.dismissable});
-
-  @override
-  State<ProgressSheet> createState() => _ProgressSheetState();
-}
-
-class _ProgressSheetState extends State<ProgressSheet> {
-  final _ctrl = MainApp.progressCtrl;
-
-  @override
-  void dispose() {
-    backEnabled = true;
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _ctrl.setProgress(null);
-    });
-
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    if (!widget.dismissable) {
-      backEnabled = false;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Visibility(
-        child: Container(
-            height: 45,
-            color: widget.color ?? cardBGLight,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Obx(() => LinearProgressIndicator(
-                      value: _ctrl.progress.value,
-                    )),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [Text(widget.msg ?? "Hang on...")],
-                    ),
-                  ),
-                )
-              ],
-            )));
-  }
-}
-
-void showProgressSheet({String? msg, bool dismissable = false}) {
-  Get.bottomSheet(ProgressSheet(msg: msg, dismissable: dismissable),
-      isDismissible: false);
-}
+import "package:tu/tu.dart";
 
 class TuCollapse extends StatelessWidget {
   final String title;
@@ -86,22 +19,22 @@ class TuCollapse extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExpansionTile(
       initiallyExpanded: expanded,
-      backgroundColor: appBGLight,
-      collapsedBackgroundColor: appBGLight,
-      textColor: TuColors.text2,
-      title: h3(title, isLight: true),
+      backgroundColor: colors.background,
+      collapsedBackgroundColor: colors.background,
+      textColor: colors.text2,
+      title: Text(title, style: styles.h3(isLight: true)),
       shape:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
       collapsedShape:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
       children: [
         Container(
-          color: cardBGLight,
+          color: colors.surface,
           width: double.infinity,
           margin: const EdgeInsets.all(4),
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Container(
-              padding: defaultPadding, color: cardBGLight, child: child),
+              padding: defaultPadding, color: colors.surface, child: child),
         )
       ],
     );
@@ -122,7 +55,7 @@ class TuBottomBar extends StatelessWidget {
       padding: padding ?? defaultPadding2,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.vertical(top: Radius.circular(topRadius)),
-          color: cardBGLight,
+          color: colors.surface,
           boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(158, 158, 158, .5),
@@ -131,24 +64,5 @@ class TuBottomBar extends StatelessWidget {
           ]),
       child: child,
     );
-  }
-}
-
-class TuPopupBtn extends StatelessWidget {
-  final List<PopupMenuEntry<Object?>?> items;
-  const TuPopupBtn({super.key, this.items = const []});
-
-  List<PopupMenuEntry<Object?>> parseItems() {
-    List<PopupMenuEntry<Object?>> its = [];
-    for (var it in items.where((element) => element != null).toList()) {
-      its.add(it!);
-    }
-    return its;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton(
-        splashRadius: 20, itemBuilder: (context) => parseItems());
   }
 }

@@ -2,43 +2,14 @@ import "dart:async";
 import "dart:math";
 import "package:cloudinary/cloudinary.dart";
 import "package:flutter/material.dart";
-import "package:google_fonts/google_fonts.dart";
 import "package:socket_io_client/socket_io_client.dart" as io;
+import "package:tu/tu.dart";
 import "package:via_logger/log_record.dart";
 import "package:via_logger/output.dart";
-import "colors.dart";
-import "constants.dart";
 
 const hivePath = "Tunedbass/db/hive_db/tukoffee";
 String randomImg() {
   return "https://picsum.photos/80/80?random==${Random().nextInt(100)}";
-}
-
-ThemeData buildTheme(brightness) {
-  var baseTheme = ThemeData(brightness: brightness);
-
-  return baseTheme.copyWith(
-    appBarTheme: AppBarTheme(
-        centerTitle: true,
-        toolbarHeight: appBarH,
-        //  iconTheme: IconThemeData(color: ),
-        titleTextStyle: GoogleFonts.poppins(
-            fontWeight: FontWeight.w800, color: Colors.black87),
-        backgroundColor: appBGLight,
-        elevation: 0,
-        foregroundColor: Colors.black87), // end appbar
-    //canvasColor: Colors.purple,
-    colorScheme: const ColorScheme.light(
-      background: Colors.pink,
-    ),
-    cardColor: cardBGLight,
-    primaryColor: Colors.brown,
-    tabBarTheme: const TabBarTheme(
-        labelColor: Colors.black87,
-        indicatorColor: Colors.brown,
-        dividerColor: Colors.brown),
-    textTheme: GoogleFonts.poppinsTextTheme(baseTheme.textTheme),
-  );
 }
 
 const uploadPreset = "t6pie4cq";
@@ -54,7 +25,7 @@ const cloudinaryURL =
 
 String getCloudinaryFolder(
     {required String storeName, String folder = "products"}) {
-  return "TunedBass/$storeName/${DEV ? "DEV" : "PROD"}/images/$folder";
+  return "TunedBass/$storeName/${dev ? "DEV" : "PROD"}/images/$folder";
 }
 
 const paystackTestURL = "https://paystack.com/pay/spy9pzsw5u";
@@ -136,11 +107,7 @@ List<String> reviewStatuses = ["pending", "approved", "rejected"];
 const sheetRadius = BorderRadius.only(
     topLeft: Radius.circular(10), topRight: Radius.circular(10));
 
-double topMargin = 4;
-
 io.Socket? socket;
-
-bool backEnabled = true;
 
 class Console extends Output {
   @override

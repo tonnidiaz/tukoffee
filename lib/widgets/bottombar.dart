@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:lebzcafe/utils/functions.dart";
+import "package:tu/tu.dart";
 import "../utils/colors.dart";
 import "../utils/constants.dart";
 
@@ -26,13 +26,13 @@ class _TBottomBarState extends State<TBottomBar> {
               return IconButton(
                   splashRadius: splashRadius,
                   iconSize: iconSize,
-                  color: ModalRoute.of(context)?.settings.name == e.value.name
+                  color: ModalRoute.of(context)?.settings.name == e.value.to
                       ? Colors.orange
                       : Colors.white,
                   onPressed: () {
-                    _onItemTapped(e.value.name);
+                    _onItemTapped(e.value.to);
                   },
-                  icon: Icon(e.value.icon));
+                  icon: (e.value.icon));
             }).toList()));
   }
 }

@@ -2,11 +2,11 @@ import "package:flutter/material.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:get/get.dart";
+import "package:tu/tu.dart";
 
-import "../utils/constants.dart";
-import "common.dart";
-import "common2.dart";
 import "package:via_logger/logger.dart";
+
+import "common.dart";
 
 class FormCtrl extends GetxController {
   RxMap<String, dynamic> form = <String, dynamic>{}.obs;
@@ -70,37 +70,34 @@ class _FormViewState extends State<FormView> {
             widget.onSubmit();
           }
         });
-    return PageWrapper(
+    return Scaffold(
         appBar:
             childAppbar(showCart: false, title: widget.title ?? "Add address"),
-        bottomSheet: widget.useBottomSheet
+        bottomNavigationBar: widget.useBottomSheet
             ? Container(
                 padding: defaultPadding,
-                color: cardBGLight,
-                height: 55,
+                color: colors.surface,
                 child: submitBtn,
               )
             : null,
-        child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          padding: defaultPadding,
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             mY(4),
-            Container(
-              color: cardBGLight,
-              padding: defaultPadding,
-              child: Column(
-                children: [
-                  Form(
-                      key: _formKey,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ...widget.fields,
-                            mY(5),
-                            widget.useBottomSheet ? none() : submitBtn
-                          ]))
-                ],
-              ),
+            TuCard(
+              radius: 5,
+              color: colors.surface,
+              child: Form(
+                  key: _formKey,
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ...widget.fields,
+                        mY(5),
+                        widget.useBottomSheet ? none() : submitBtn
+                      ])),
             ),
             mY(55)
           ]),

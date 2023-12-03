@@ -1,15 +1,10 @@
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
-import "package:awesome_notifications/awesome_notifications.dart";
 import "package:dio/dio.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/widgets/dialog.dart";
-import "package:lebzcafe/widgets/tu/common.dart";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
-import "package:via_logger/output.dart";
 
 class Shiplogic {
   static Future<String> getOrderStatus(Map order) async {
@@ -135,19 +130,9 @@ class Shiplogic {
   }
 }
 
-String formatDate(String dateString) {
-  final DateFormat formatter = DateFormat("yyyy-MM-dd").add_jm();
-  return formatter.format(DateTime.parse(dateString).toLocal());
-}
-
 String camelToSentence(String text) {
   return text.replaceAllMapped(RegExp(r"^([a-z])|[A-Z]"),
       (Match m) => m[1] == null ? " ${m[0]}" : m[1]!.toUpperCase());
-}
-
-setupLogger() {
-  final List<Output> engines = [Console()];
-  Logger.setEngines(engines);
 }
 
 Future<void> checkServer(BuildContext context) async {

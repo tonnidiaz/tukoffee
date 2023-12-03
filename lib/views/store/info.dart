@@ -1,26 +1,19 @@
 // ignore_for_file: use_build_context_synchronously
 
-import "dart:convert";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:lebzcafe/controllers/app_ctrl.dart";
 import "package:lebzcafe/main.dart";
-import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/constants2.dart";
 import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/views/map.dart";
-import "package:lebzcafe/views/order/index.dart";
-import "package:lebzcafe/widgets/common.dart";
-import "package:lebzcafe/widgets/common2.dart";
 import "package:lebzcafe/widgets/common3.dart";
-import "package:lebzcafe/widgets/common4.dart";
 import "package:lebzcafe/widgets/form_view.dart";
 import "package:get/get.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
 
 class StoreInfoPage extends StatefulWidget {
   const StoreInfoPage({super.key});
@@ -97,8 +90,8 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-          childAppbar(showCart: false, title: "About ${appCtrl.store["name"]}"),
+      appBar: tuAppbar(
+          showCart: false, title: Text("About ${appCtrl.store["name"]}")),
       body: RefreshIndicator(
         onRefresh: () async {
           await _init();
@@ -122,11 +115,11 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
                           child: tuColumn(children: [
                             tuColumn(
                               children: [
-                                h4("Name:", isLight: true),
+                                Text("Name:", style: styles.h4(isLight: true)),
                                 mY(8),
                                 Obx(() => Text(
                                       e.value["name"],
-                                      style: TextStyle(color: TuColors.text2),
+                                      style: TextStyle(color: colors.text2),
                                     )),
                                 mY(4),
                                 devider(),
@@ -135,11 +128,11 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
                             ),
                             tuColumn(
                               children: [
-                                h4("Phone:", isLight: true),
+                                Text("Phone:", style: styles.h4(isLight: true)),
                                 mY(8),
                                 Obx(() => SelectableText(
                                       e.value["phone"],
-                                      style: TextStyle(color: TuColors.text2),
+                                      style: TextStyle(color: colors.text2),
                                     )),
                                 mY(4),
                                 devider(),
@@ -148,11 +141,11 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
                             ),
                             tuColumn(
                               children: [
-                                h4("Email:", isLight: true),
+                                Text("Email:", style: styles.h4(isLight: true)),
                                 mY(8),
                                 Obx(() => SelectableText(
                                       e.value["email"],
-                                      style: TextStyle(color: TuColors.text2),
+                                      style: TextStyle(color: colors.text2),
                                     )),
                                 mY(4),
                                 devider(),
@@ -163,11 +156,12 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
                               visible: e.value["site"] != null,
                               child: tuColumn(
                                 children: [
-                                  h4("Website:", isLight: true),
+                                  Text("Website:",
+                                      style: styles.h4(isLight: true)),
                                   mY(8),
                                   Obx(() => SelectableText(
                                         e.value["site"],
-                                        style: TextStyle(color: TuColors.text2),
+                                        style: TextStyle(color: colors.text2),
                                       )),
                                   mY(4),
                                   devider(),
@@ -190,7 +184,7 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
                             tuTableRow(
                                 Text(
                                   "Locations & times",
-                                  style: Styles.h3(),
+                                  style: styles.h3(),
                                 ),
                                 Obx(
                                   () => appCtrl.user.isEmpty
@@ -201,9 +195,8 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
                                           child: InkWell(
                                             onTap: () {
                                               formCtrl.setForm({});
-                                              TuFuncs.showBottomSheet(
-                                                  context: context,
-                                                  widget: const AddStoreView());
+                                              Get.bottomSheet(
+                                                  const AddStoreView());
                                             },
                                             child: const Icon(
                                               CupertinoIcons.add,
@@ -218,7 +211,7 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
                                 : Column(
                                     children: storeCtrl.stores.value!.reversed
                                         .map((it) {
-                                      return storeCard(context, it);
+                                      return StoreCard(context, store: it);
                                     }).toList(),
                                   )
                           ],
@@ -299,7 +292,7 @@ class AddStoreView extends StatelessWidget {
         mY(10),
         Text(
           "Weekdays",
-          style: Styles.h3(isLight: true),
+          style: styles.h3(isLight: true),
         ),
         mY(10),
         LayoutBuilder(builder: (context, c) {
@@ -343,44 +336,50 @@ class AddStoreView extends StatelessWidget {
         mY(10),
         Text(
           "Weekend",
-          style: Styles.h3(isLight: true),
+          style: styles.h3(isLight: true),
         ),
         mY(10),
         LayoutBuilder(builder: (context, c) {
           return tuTableRow(
-              Obx(() => TuFormField(
-                    label: "Open time:",
-                    hasBorder: true,
-                    readOnly: true,
-                    required: true,
+              Obx(() => SizedBox(
                     width: (c.maxWidth / 2) - 2.5,
-                    // formCtrl.form represents the store
-                    value: formCtrl.form["open_time_weekend"],
-                    onTap: () async {
-                      final val = await TuFuncs.dialog(context,
-                          TimePickerDialog(initialTime: TimeOfDay.now()));
-                      if (val != null) {
-                        formCtrl.setFormField("open_time_weekend",
-                            (val as TimeOfDay).format(context));
-                      }
-                    },
+                    child: TuFormField(
+                      label: "Open time:",
+                      hasBorder: true,
+                      readOnly: true,
+                      required: true,
+
+                      // formCtrl.form represents the store
+                      value: formCtrl.form["open_time_weekend"],
+                      onTap: () async {
+                        final val = await TuFuncs.dialog(context,
+                            TimePickerDialog(initialTime: TimeOfDay.now()));
+                        if (val != null) {
+                          formCtrl.setFormField("open_time_weekend",
+                              (val as TimeOfDay).format(context));
+                        }
+                      },
+                    ),
                   )),
-              Obx(() => TuFormField(
-                    label: "Close time:",
-                    hasBorder: true,
-                    readOnly: true,
-                    required: true,
+              Obx(() => SizedBox(
                     width: (c.maxWidth / 2) - 2.5,
-                    // formCtrl.form represents the store
-                    value: formCtrl.form["close_time_weekend"],
-                    onTap: () async {
-                      final val = await TuFuncs.dialog(context,
-                          TimePickerDialog(initialTime: TimeOfDay.now()));
-                      if (val != null) {
-                        formCtrl.setFormField("close_time_weekend",
-                            (val as TimeOfDay).format(context));
-                      }
-                    },
+                    child: TuFormField(
+                      label: "Close time:",
+                      hasBorder: true,
+                      readOnly: true,
+                      required: true,
+
+                      // formCtrl.form represents the store
+                      value: formCtrl.form["close_time_weekend"],
+                      onTap: () async {
+                        final val = await TuFuncs.dialog(context,
+                            TimePickerDialog(initialTime: TimeOfDay.now()));
+                        if (val != null) {
+                          formCtrl.setFormField("close_time_weekend",
+                              (val as TimeOfDay).format(context));
+                        }
+                      },
+                    ),
                   )),
               crossAxisAlignment: WrapCrossAlignment.start);
         }),

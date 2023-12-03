@@ -4,18 +4,13 @@ import "package:google_fonts/google_fonts.dart";
 import "package:lebzcafe/controllers/store_ctrl.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/utils/functions.dart";
+
 import "package:lebzcafe/utils/functions2.dart";
 import "package:lebzcafe/views/order/checkout.dart";
-import "package:lebzcafe/views/order/index.dart";
-import "package:lebzcafe/views/rf.dart";
-import "package:lebzcafe/widgets/common.dart";
+
 import "package:lebzcafe/widgets/common2.dart";
-import "package:lebzcafe/widgets/common3.dart";
-import "package:lebzcafe/widgets/tu/common.dart";
-import "package:lebzcafe/widgets/tu/select.dart";
+import "package:tu/tu.dart";
+
 import "package:via_logger/logger.dart";
 
 class CheckoutStep1 extends StatelessWidget {
@@ -52,7 +47,7 @@ class CheckoutStep1 extends StatelessWidget {
               Obx(
                 () => ctrl.mode.value == OrderMode.collect
                     ? Container(
-                        color: appBGLight,
+                        color: colors.bg,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -85,7 +80,7 @@ class CheckoutStep1 extends StatelessWidget {
                                   leading: CircleAvatar(
                                     backgroundColor: Colors.black12,
                                     child: svgIcon(
-                                        name: "br-user", color: TuColors.text2),
+                                        name: "br-user", color: colors.text2),
                                   ),
                                   title: Text(
                                     ctrl.collector["name"] ?? "",
@@ -101,15 +96,13 @@ class CheckoutStep1 extends StatelessWidget {
                                     child: IconButton(
                                       splashRadius: 20,
                                       onPressed: () {
-                                        TuFuncs.showBottomSheet(
-                                            context: context,
-                                            widget:
-                                                editCollectorModal(context));
+                                        Get.bottomSheet(
+                                            editCollectorModal(context));
                                       },
                                       icon: Icon(
                                         Icons.edit,
                                         size: 20,
-                                        color: TuColors.text2,
+                                        color: colors.text2,
                                       ),
                                       padding: EdgeInsets.zero,
                                     ),
@@ -127,9 +120,7 @@ class CheckoutStep1 extends StatelessWidget {
                                 width: 25,
                                 child: IconButton(
                                   onPressed: () {
-                                    TuFuncs.showBottomSheet(
-                                        context: context,
-                                        widget: const EditAddressForm());
+                                    Get.bottomSheet(const EditAddressForm());
                                   },
                                   splashRadius: 24,
                                   padding: EdgeInsets.zero,
@@ -150,9 +141,8 @@ class CheckoutStep1 extends StatelessWidget {
                                     child: TuCard(
                                         height: 70,
                                         onTap: () {
-                                          TuFuncs.showBottomSheet(
-                                              context: context,
-                                              widget: const EditAddressForm());
+                                          Get.bottomSheet(
+                                              const EditAddressForm());
                                         },
                                         child: const Icon(
                                           Icons.add,
@@ -171,7 +161,7 @@ class CheckoutStep1 extends StatelessWidget {
                     return TuButton(
                       text: "next",
                       width: screenSize(context).width - 20,
-                      bgColor: TuColors.primary,
+                      bgColor: colors.primary,
                       onPressed: (ctrl.mode.value == OrderMode.collect &&
                                   ctrl.store.isEmpty) ||
                               (ctrl.mode.value == OrderMode.deliver &&
@@ -251,7 +241,7 @@ class DatesRatesSheet extends StatelessWidget {
                 //final String date1
                 return Container(
                   margin: const EdgeInsets.symmetric(vertical: 1.5),
-                  color: appBGLight,
+                  color: colors.bg,
                   child: ListTile(
                     isThreeLine: true,
                     onTap: () {
@@ -285,7 +275,7 @@ class DatesRatesSheet extends StatelessWidget {
                       Text(
                         "R${rate["rate"]}",
                         style: TextStyle(
-                            fontWeight: FontWeight.w600, color: TuColors.text2),
+                            fontWeight: FontWeight.w600, color: colors.text2),
                       ),
                       const Icon(Icons.chevron_right)
                     ]),

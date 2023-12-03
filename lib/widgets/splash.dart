@@ -1,15 +1,8 @@
-import "dart:io";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 import "package:flutter/material.dart";
-import "package:flutter/services.dart";
 import "package:lebzcafe/main.dart";
-import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/utils/functions2.dart";
-import "package:lebzcafe/utils/styles.dart";
-import "package:lebzcafe/widgets/common.dart";
-import "package:get/get.dart";
 import "package:internet_connection_checker/internet_connection_checker.dart";
 
 import "../utils/functions.dart";
@@ -49,9 +42,7 @@ class _TuSplashState extends State<TuSplash> {
   @override
   void initState() {
     super.initState();
-    /*  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.black12,
-    )); */
+
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       _init();
     });
@@ -85,7 +76,7 @@ class _TuSplashState extends State<TuSplash> {
       await setupStoreDetails();
       // If server is still down
       Logger.info("Server down: ${_appCtrl.serverDown.value}");
-      if (!_appCtrl.serverDown.value || DEV) {
+      if (!_appCtrl.serverDown.value || dev) {
         setupUser();
         setupStoreDetails();
       }
@@ -93,32 +84,22 @@ class _TuSplashState extends State<TuSplash> {
   }
 
   Widget refreshBtn() {
-    return OutlinedButton(
-        style: OutlinedButton.styleFrom(
-            elevation: .5,
-            foregroundColor: Colors.white,
-            //backgroundColor: TuColors.medium,
-            fixedSize: const Size(150, 35),
-            shape: RoundedRectangleBorder(
-                side: const BorderSide(width: 1.5, color: Colors.white38),
-                borderRadius: BorderRadius.circular(5))),
-        onPressed: () async {
-          Logger.info("REFRESHING");
-          _init();
-        },
-        child: const Text("REFRESH"));
+    return TuButton(
+      text: "Refresh",
+      onPressed: _init,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.dark(useMaterial3: false),
+      theme: ThemeData.dark(useMaterial3: true),
       home: Scaffold(
         body: Container(
           width: screenSize(context).width,
           height: screenSize(context).height,
           alignment: Alignment.center,
-          color: Colors.black,
+          color: const Color.fromRGBO(141, 96, 78, 1),
           child: _connected
               ? Obx(() => !_appCtrl.serverDown.value
                   ? Container(
@@ -128,14 +109,15 @@ class _TuSplashState extends State<TuSplash> {
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Image.asset(
-                            "assets/images/logo.jpg",
+                            "assets/images/logo.png",
                           )),
                     )
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        h4("Server down!",
-                            isLight: true, color: Colors.white70),
+                        Text("Server down!",
+                            style: styles.h4(
+                                isLight: true, color: Colors.white70)),
                         mY(5),
                         refreshBtn(),
                       ],
@@ -143,8 +125,8 @@ class _TuSplashState extends State<TuSplash> {
               : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    h4("No internet access",
-                        isLight: true, color: Colors.white70),
+                    Text("No internet access",
+                        style: styles.h3(isLight: true, color: Colors.white70)),
                     mY(5),
                     refreshBtn()
                   ],

@@ -3,12 +3,10 @@ import "package:flutter/material.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/utils/functions2.dart";
-import "package:lebzcafe/views/order/index.dart";
-import "package:lebzcafe/widgets/common.dart";
-import "package:lebzcafe/widgets/common3.dart";
+
 import "package:lebzcafe/widgets/review_item.dart";
 import "package:lebzcafe/widgets/views/add_review.dart";
+import "package:tu/tu.dart";
 
 class ProductReviewPage extends StatefulWidget {
   final String id;
@@ -68,19 +66,17 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
           IconButton(
               splashRadius: 20,
               onPressed: () {
-                TuFuncs.showBottomSheet(
-                    context: context,
-                    widget: AddReviewView(
-                        product: _review!["product"],
-                        rev: _review!,
-                        isAdmin: widget.isAdmin,
-                        onOk: () {
-                          _getReview();
-                        }));
+                Get.bottomSheet(AddReviewView(
+                    product: _review!["product"],
+                    rev: _review!,
+                    isAdmin: widget.isAdmin,
+                    onOk: () {
+                      _getReview();
+                    }));
               },
               icon: svgIcon(
                 name: "br-pencil",
-                color: TuColors.text2,
+                color: colors.text2,
               ) // widget
 
               ),
@@ -95,7 +91,7 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
                 children: [
                   SizedBox(
                       child: CircularProgressIndicator(
-                    color: TuColors.medium,
+                    color: colors.medium,
                   )),
                 ],
               ),
@@ -117,7 +113,7 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
                     ),
                     mY(6),
                     Container(
-                      color: cardBGLight,
+                      color: colors.surface,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 14),
                       child: Row(
@@ -152,7 +148,7 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
                     mY(6),
                     Container(
                       width: double.infinity,
-                      color: cardBGLight,
+                      color: colors.surface,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 14),
                       child: tuColumn(children: [
@@ -163,7 +159,7 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
                         mY(6),
                         Text(
                           "${_review!["name"]}",
-                          style: TextStyle(color: TuColors.text2, fontSize: 14),
+                          style: TextStyle(color: colors.text2, fontSize: 14),
                         ),
                         mY(10),
                         Text(_review!["body"])

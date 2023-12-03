@@ -1,20 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
 import "dart:async";
-import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/widgets/tu/common.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
 
 import "package:flutter/material.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/widgets/common.dart";
-import "package:lebzcafe/widgets/common2.dart";
-import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/form_view.dart";
 import "package:get/get.dart";
+import "package:tu/tu.dart";
 
 class ResetPassPage extends StatelessWidget {
   const ResetPassPage({super.key});
@@ -147,7 +141,7 @@ class _Step2State extends State<Step2> {
               Obx(() => Text(
                     " ${formCtrl.form["email"]}",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: TuColors.primary),
+                    style: TextStyle(color: colors.primary),
                   )),
             ],
           ),
@@ -187,7 +181,7 @@ class _Step2State extends State<Step2> {
           child: Text(
             _secs > 0 ? "Resend PIN in: $_secs" : "Resend PIN",
             style:
-                TextStyle(color: _secs > 0 ? Colors.black45 : TuColors.primary),
+                TextStyle(color: _secs > 0 ? Colors.black45 : colors.primary),
           ),
         )
       ],
@@ -224,7 +218,7 @@ class Step3 extends StatelessWidget {
           child: Text(
             "Create new password",
             textAlign: TextAlign.center,
-            style: Styles.h4(isLight: true),
+            style: styles.h4(isLight: true),
           ),
         ),
         mY(5),
@@ -288,7 +282,7 @@ class ResetPassPageWrapper extends StatelessWidget {
             mY(screenSize(context).height / 20),
             Text(
               "Reset password",
-              style: Styles.h1,
+              style: styles.h1(),
             ),
             mY(5),
             ...children

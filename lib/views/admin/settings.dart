@@ -17,7 +17,7 @@ import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/form_view.dart";
 import "package:get/get.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 
 class AdminSettingsPage extends StatefulWidget {
@@ -119,7 +119,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                               mY(8),
                               Obx(() => Text(
                                     e.value["name"],
-                                    style: TextStyle(color: TuColors.text2),
+                                    style: TextStyle(color: colors.text2),
                                   )),
                               mY(4),
                               devider(),
@@ -132,7 +132,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                               mY(8),
                               Obx(() => SelectableText(
                                     e.value["phone"],
-                                    style: TextStyle(color: TuColors.text2),
+                                    style: TextStyle(color: colors.text2),
                                   )),
                               mY(4),
                               devider(),
@@ -145,7 +145,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                               mY(8),
                               Obx(() => SelectableText(
                                     e.value["email"],
-                                    style: TextStyle(color: TuColors.text2),
+                                    style: TextStyle(color: colors.text2),
                                   )),
                               mY(4),
                               devider(),
@@ -164,35 +164,35 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                       /*     tuTableRow(
                           Text(
                             "Store details",
-                            style: Styles.h3(),
+                            style: styles.h3(),
                           ),
                       ) */
                       tuTableRow(
                           Text(
                             "Name:",
-                            style: Styles.label(isBold: true),
+                            style: styles.label(isBold: true),
                           ),
                           Obx(
                             () => Text(
                               appCtrl.store["name"],
-                              style: Styles.label(isLight: true),
+                              style: styles.label(isLight: true),
                             ),
                           )),
                       tuTableRow(
                           Text(
                             "Phone:",
-                            style: Styles.label(isBold: true),
+                            style: styles.label(isBold: true),
                           ),
                           Obx(
                             () => SelectableText(
                               appCtrl.store["phone"],
-                              style: Styles.label(isLight: true),
+                              style: styles.label(isLight: true),
                             ),
                           )),
                       tuTableRow(
                           Text(
                             "Email:",
-                            style: Styles.label(isBold: true),
+                            style: styles.label(isBold: true),
                           ),
                           Obx(
                             () => SizedBox(
@@ -200,14 +200,14 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                               child: SelectableText(
                                 appCtrl.store["email"],
                                 maxLines: 1,
-                                style: Styles.label(isLight: true),
+                                style: styles.label(isLight: true),
                               ),
                             ),
                           )),
                       tuTableRow(
                           Text(
                             "Website:",
-                            style: Styles.label(isBold: true),
+                            style: styles.label(isBold: true),
                           ),
                           Obx(
                             () => SizedBox(
@@ -215,7 +215,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                               child: SelectableText(
                                 appCtrl.store["site"],
                                 maxLines: 1,
-                                style: Styles.label(isLight: true),
+                                style: styles.label(isLight: true),
                               ),
                             ),
                           )),
@@ -228,7 +228,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                         tuTableRow(
                             Text(
                               "Store owner",
-                              style: Styles.h3(),
+                              style: styles.h3(),
                             ),
                             Obx(
                               () => appCtrl.user.isEmpty
@@ -347,29 +347,29 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                         tuTableRow(
                             Text(
                               "Name:",
-                              style: Styles.label(isBold: true),
+                              style: styles.label(isBold: true),
                             ),
                             Obx(
                               () => Text(
                                 appCtrl.owner["name"],
-                                style: Styles.label(isLight: true),
+                                style: styles.label(isLight: true),
                               ),
                             )),
                         tuTableRow(
                             Text(
                               "Phone:",
-                              style: Styles.label(isBold: true),
+                              style: styles.label(isBold: true),
                             ),
                             Obx(
                               () => SelectableText(
                                 appCtrl.owner["phone"],
-                                style: Styles.label(isLight: true),
+                                style: styles.label(isLight: true),
                               ),
                             )),
                         tuTableRow(
                             Text(
                               "Email:",
-                              style: Styles.label(isBold: true),
+                              style: styles.label(isBold: true),
                             ),
                             Obx(
                               () => SizedBox(
@@ -377,14 +377,14 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                 child: SelectableText(
                                   appCtrl.owner["email"],
                                   maxLines: 1,
-                                  style: Styles.label(isLight: true),
+                                  style: styles.label(isLight: true),
                                 ),
                               ),
                             )),
                         tuTableRow(
                             Text(
                               "Website:",
-                              style: Styles.label(isBold: true),
+                              style: styles.label(isBold: true),
                             ),
                             Obx(
                               () => SizedBox(
@@ -392,7 +392,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                 child: SelectableText(
                                   appCtrl.owner["site"],
                                   maxLines: 1,
-                                  style: Styles.label(isLight: true),
+                                  style: styles.label(isLight: true),
                                 ),
                               ),
                             )),
@@ -405,35 +405,35 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                       children: [
                         Text(
                           "Developer",
-                          style: Styles.h3(),
+                          style: styles.h3(),
                         ),
                         mY(7),
                         tuTableRow(
                             Text(
                               "Name:",
-                              style: Styles.label(isBold: true),
+                              style: styles.label(isBold: true),
                             ),
                             Obx(
                               () => Text(
                                 appCtrl.developer["name"],
-                                style: Styles.label(isLight: true),
+                                style: styles.label(isLight: true),
                               ),
                             )),
                         tuTableRow(
                             Text(
                               "Phone:",
-                              style: Styles.label(isBold: true),
+                              style: styles.label(isBold: true),
                             ),
                             Obx(
                               () => SelectableText(
                                 appCtrl.developer["phone"],
-                                style: Styles.label(isLight: true),
+                                style: styles.label(isLight: true),
                               ),
                             )),
                         tuTableRow(
                             Text(
                               "Email:",
-                              style: Styles.label(isBold: true),
+                              style: styles.label(isBold: true),
                             ),
                             Obx(
                               () => SizedBox(
@@ -441,14 +441,14 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                 child: SelectableText(
                                   appCtrl.developer["email"],
                                   maxLines: 1,
-                                  style: Styles.label(isLight: true),
+                                  style: styles.label(isLight: true),
                                 ),
                               ),
                             )),
                         tuTableRow(
                             Text(
                               "Website:",
-                              style: Styles.label(isBold: true),
+                              style: styles.label(isBold: true),
                             ),
                             Obx(
                               () => SizedBox(
@@ -456,7 +456,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                 child: SelectableText(
                                   appCtrl.developer["site"],
                                   maxLines: 1,
-                                  style: Styles.label(isLight: true),
+                                  style: styles.label(isLight: true),
                                 ),
                               ),
                             )),
@@ -471,7 +471,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                           tuTableRow(
                               Text(
                                 "Locations",
-                                style: Styles.h3(),
+                                style: styles.h3(),
                               ),
                               Obx(
                                 () => appCtrl.user.isEmpty
@@ -482,9 +482,8 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                                         child: InkWell(
                                           onTap: () {
                                             formCtrl.setForm({});
-                                            TuFuncs.showBottomSheet(
-                                                context: context,
-                                                widget: const AddStoreView());
+                                            Get.bottomSheet(
+                                                const AddStoreView());
                                           },
                                           child: const Icon(
                                             CupertinoIcons.add_circled,
@@ -498,7 +497,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
                               ? const CircularProgressIndicator()
                               : Column(
                                   children: storeCtrl.stores.value!.map((it) {
-                                    return storeCard(context, it);
+                                    return StoreCard(context, store: it);
                                   }).toList(),
                                 )
                         ],
@@ -559,7 +558,7 @@ class AddStoreView extends StatelessWidget {
         mY(10),
         Text(
           "Weekdays",
-          style: Styles.h3(),
+          style: styles.h3(),
         ),
         mY(10),
         LayoutBuilder(builder: (context, c) {
@@ -602,7 +601,7 @@ class AddStoreView extends StatelessWidget {
         mY(10),
         Text(
           "Weekends",
-          style: Styles.h3(),
+          style: styles.h3(),
         ),
         mY(10),
         LayoutBuilder(builder: (context, c) {

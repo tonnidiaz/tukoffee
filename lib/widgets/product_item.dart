@@ -6,6 +6,7 @@ import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/styles.dart";
 import "package:get/get.dart";
 import "package:lebzcafe/widgets/common3.dart";
+import "package:tu/tu.dart";
 
 import "../controllers/appbar.dart";
 import "../utils/colors.dart";
@@ -44,7 +45,7 @@ class ProductItem extends StatelessWidget {
           onLongPress: () {
             _selectItem(product);
           },
-          tileColor: cardBGLight,
+          tileColor: colors.surface,
           leading: Material(
             elevation: 2,
             borderRadius: BorderRadius.circular(4),
@@ -91,7 +92,7 @@ class ProductItem extends StatelessWidget {
           ),
           title: Text(
             product["name"],
-            style: Styles.h4(),
+            style: styles.h4(),
           ),
           subtitle: Text(
             "R${product["price"]}",
@@ -101,7 +102,7 @@ class ProductItem extends StatelessWidget {
               splashRadius: 20,
               icon: Icon(
                 Icons.more_vert,
-                color: TuColors.text2,
+                color: colors.text2,
               ),
               itemBuilder: (context) {
                 return [

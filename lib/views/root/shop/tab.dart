@@ -1,5 +1,3 @@
-import "package:lebzcafe/widgets/tu/form_field.dart";
-
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:lebzcafe/controllers/store_ctrl.dart";
@@ -7,11 +5,9 @@ import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/views/search.dart";
-import "package:lebzcafe/widgets/common2.dart";
 import "package:lebzcafe/widgets/common3.dart";
-import "package:get/get.dart";
+import "package:tu/tu.dart";
 import "../../../utils/constants2.dart";
-import "../../../widgets/common.dart";
 import "../../../widgets/product_card.dart";
 import "/utils/constants.dart";
 import "package:via_logger/logger.dart";
@@ -103,7 +99,7 @@ class _HomeTabState extends State<HomeTab> {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Obx(() => TuDropdownButton(
+                  Obx(() => TuSelect(
                         label: "Sort by",
                         labelFontSize: 14,
                         width: (c.maxWidth / 2) - 2.5,
@@ -119,7 +115,7 @@ class _HomeTabState extends State<HomeTab> {
                           _storeCtrl.setSortBy(p0);
                         },
                       )),
-                  Obx(() => TuDropdownButton(
+                  Obx(() => TuSelect(
                         label: "Status",
                         labelFontSize: 14,
                         width: (c.maxWidth / 2) - 2.5,
@@ -157,7 +153,7 @@ class _HomeTabState extends State<HomeTab> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                color: cardBGLight,
+                color: colors.surface,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: TuFormField(
                   hint: "Search",
@@ -168,15 +164,11 @@ class _HomeTabState extends State<HomeTab> {
                       padding: EdgeInsets.zero,
                       onPressed: () {
                         // show filters
-                        TuFuncs.showBottomSheet(
-                            full: false,
-                            context: context,
-                            widget: filterModal());
+                        Get.bottomSheet(filterModal());
                       },
                       icon: TuIcon(Icons.tune)),
                   onTap: () {
-                    TuFuncs.showBottomSheet(
-                        context: context, widget: const SearchPage());
+                    Get.bottomSheet(const SearchPage());
                   },
                 ),
               ),
@@ -186,7 +178,10 @@ class _HomeTabState extends State<HomeTab> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          h3("Please wait..."),
+                          Text(
+                            "Please wait...",
+                            style: styles.h3(),
+                          ),
                         ],
                       ),
                     )
@@ -196,7 +191,10 @@ class _HomeTabState extends State<HomeTab> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               mY(30),
-                              h3("Nothing to show"),
+                              Text(
+                                "Nothing to show",
+                                style: styles.h3(),
+                              ),
                               IconButton(
                                   icon: const Icon(Icons.refresh),
                                   onPressed: () async {

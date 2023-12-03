@@ -2,16 +2,13 @@
 import 'dart:convert';
 
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lebzcafe/utils/functions2.dart';
 import 'package:lebzcafe/utils/types.dart';
-import 'package:lebzcafe/utils/vars.dart';
 import 'package:lebzcafe/views/order/checkout/step1.dart';
 import 'package:lebzcafe/views/order/checkout/step2.dart';
-import 'package:lebzcafe/widgets/dialog.dart';
 import 'package:lebzcafe/widgets/tu/browser.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
+import 'package:tu/tu.dart';
 import 'package:url_launcher/url_launcher.dart';
 import "package:via_logger/logger.dart";
 import 'dart:io';
@@ -22,16 +19,13 @@ import 'package:lebzcafe/controllers/store_ctrl.dart';
 import 'package:lebzcafe/main.dart';
 import 'package:lebzcafe/utils/constants2.dart';
 import 'package:lebzcafe/utils/functions.dart';
-import 'package:lebzcafe/utils/styles.dart';
 import 'package:lebzcafe/views/auth/login.dart';
 import 'package:lebzcafe/views/map.dart';
 import 'package:lebzcafe/views/order/index.dart';
-import 'package:lebzcafe/views/order/payment.dart';
 import 'package:lebzcafe/widgets/common2.dart';
 import 'package:lebzcafe/widgets/common3.dart';
 import 'package:lebzcafe/widgets/form_view.dart';
 import 'package:get/get.dart';
-import 'package:lebzcafe/widgets/tu/select.dart';
 import 'package:lebzcafe/widgets/tu/stepper.dart';
 import '../../controllers/app_ctrl.dart';
 import '../../utils/colors.dart';
@@ -221,7 +215,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       _initSocketio();
       _browser = MyInAppBrowser(onLoad: _onWebviewLoad);
       if (_appCtrl.user.isEmpty) {
-        TuFuncs.showBottomSheet(context: context, widget: const LoginPage());
+        Get.bottomSheet(const LoginPage());
         return;
       }
 
@@ -255,15 +249,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
             appBar: appBar,
             child: Container(
               padding: defaultPadding2,
-              height: screenSize(context).height -
-                  statusBarH(context: context) -
-                  appBarH,
+              height:
+                  screenSize(context).height - statusBarH(context) - appBarH,
               child: Center(
                 child: TuButton(
                   text: "Login",
                   onPressed: () {
-                    TuFuncs.showBottomSheet(
-                        context: context, widget: const LoginPage());
+                    Get.bottomSheet(const LoginPage());
                   },
                 ),
               ),
@@ -285,13 +277,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               children: [
                                 Text(
                                   "Total:",
-                                  style: Styles.h4(),
+                                  style: styles.h4(),
                                 ),
                                 Obx(
                                   () {
                                     return Text(
                                       "R${roundDouble(_storeCtrl.total.value + _storeCtrl.deliveryFee.value, 2)}",
-                                      style: Styles.h4(),
+                                      style: styles.h4(),
                                     );
                                   },
                                 )
@@ -312,7 +304,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 SliverToBoxAdapter(
                     child: Container(
                   width: screenSize(context).width,
-                  height: screenSize(context).height - appBarH - statusBarH(),
+                  height: screenSize(context).height -
+                      appBarH -
+                      statusBarH(context),
                   child: Obx(
                     () => TuStepper(
                       elevation: .5,
@@ -409,7 +403,7 @@ Widget addressCard(
             }),
         title: Text(
           address['name'] ?? "",
-          style: Styles.h4(),
+          style: Tu.styles.h4(),
         ),
         subtitle:
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -420,7 +414,7 @@ Widget addressCard(
           mY(4),
           Text(
             address['phone'] ?? "",
-            style: TextStyle(fontSize: 13, color: TuColors.primary),
+            style: TextStyle(fontSize: 13, color: Tu.colors.primary),
           ),
         ]),
         trailing: Row(
@@ -451,7 +445,7 @@ Widget addressCard(
                   },
                   icon: Icon(
                     Icons.delete,
-                    color: TuColors.text2,
+                    color: Tu.colors.text2,
                   )),
             )
           ],
@@ -498,16 +492,14 @@ class _EditAddressFormState extends State<EditAddressForm> {
             value: _deliveryAddress['place_name'],
             onTap: () {
               MainApp.formCtrl.clear();
-              TuFuncs.showBottomSheet(
-                  context: context,
-                  widget: MapPage(
-                    onSubmit: (val) {
-                      Logger.info(val);
-                      setState(() {
-                        _deliveryAddress = {..._deliveryAddress, ...val};
-                      });
-                    },
-                  ));
+              Get.bottomSheet(MapPage(
+                onSubmit: (val) {
+                  Logger.info(val);
+                  setState(() {
+                    _deliveryAddress = {..._deliveryAddress, ...val};
+                  });
+                },
+              ));
             },
           ),
           TuFormField(
@@ -648,7 +640,7 @@ class GatewaysSheet extends StatelessWidget {
 
     return Container(
       padding: defaultPadding2,
-      color: cardBGLight,
+      color: colors.surface,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -666,7 +658,7 @@ class GatewaysSheet extends StatelessWidget {
               onPayBtnClick(uri: uri);
             },
             radius: 100,
-            bgColor: cardBGLight,
+            bgColor: colors.surface,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -685,7 +677,7 @@ class GatewaysSheet extends StatelessWidget {
           mY(5),
           TuButton(
             width: double.infinity,
-            bgColor: cardBGLight,
+            bgColor: colors.surface,
             radius: 100,
             onPressed: () async {
               final uri = await createYocoURL();

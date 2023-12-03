@@ -1,19 +1,14 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, use_build_context_synchronously
 
 import "package:dio/dio.dart";
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/views/order/index.dart";
-import "package:lebzcafe/widgets/common3.dart";
-import "package:get/get.dart";
-import "package:google_fonts/google_fonts.dart";
+
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 import "../controllers/app_ctrl.dart";
 import "../controllers/store_ctrl.dart";
 import "../utils/constants.dart";
-import "../utils/functions.dart";
-import "common.dart";
 
 class ProductCard extends StatelessWidget {
   final Map<String, dynamic> product;
@@ -81,7 +76,7 @@ class ProductCard extends StatelessWidget {
                 Container(
                   //id=cover
 
-                  //  color: appBGLight,
+                  //  color: colors.bg,
                   alignment: Alignment.center,
                   height: cardW,
                   width: cardW,
@@ -144,7 +139,7 @@ class ProductCard extends StatelessWidget {
                             radius: 100,
                             height: 40,
                             width: 40,
-                            bgColor: inCart ? TuColors.primary : appBGLight,
+                            bgColor: inCart ? colors.primary : colors.bg,
                             onPressed: product["quantity"] <= 0
                                 ? null
                                 : () async {
@@ -187,7 +182,7 @@ class ProductCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Chip(
-                      backgroundColor: TuColors.primary,
+                      backgroundColor: colors.primary,
                       label: Text(
                         product["quantity"] > 0 ? "In stock" : "out of stock",
                         style:
@@ -217,7 +212,7 @@ class ProductCard extends StatelessWidget {
                     Text("R${product["price"]}",
                         style: GoogleFonts.poppins(
                             color: product["on_sale"]
-                                ? TuColors.text2
+                                ? colors.text2
                                 : Colors.black87,
                             fontSize: product["on_sale"] ? 12 : 14,
                             decoration: product["on_sale"]

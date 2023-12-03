@@ -2,19 +2,15 @@
 import 'package:lebzcafe/utils/colors.dart';
 import 'package:lebzcafe/utils/functions.dart';
 import 'package:lebzcafe/widgets/common3.dart';
-import 'package:lebzcafe/widgets/tu/form_field.dart';
 
 import 'package:flutter/material.dart';
 import 'package:lebzcafe/main.dart';
-import 'package:lebzcafe/utils/constants.dart';
-import 'package:lebzcafe/utils/styles.dart';
+
 import 'package:lebzcafe/views/search.dart';
-import 'package:lebzcafe/widgets/common.dart';
 import 'package:lebzcafe/widgets/common2.dart';
 import 'package:lebzcafe/widgets/tu/product_circle.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import 'package:get/get.dart';
+import 'package:tu/tu.dart';
 
 class HomeCtrl extends GetxController {
   Rx<List?> topSelling = (null as List?).obs;
@@ -103,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                       style: GoogleFonts.firaCode(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          color: TuColors.surface600),
+                          color: colors.surface600),
                     ),
                     Text(
                       "Grab one now!",
@@ -111,18 +107,19 @@ class _HomePageState extends State<HomePage> {
                       style: GoogleFonts.pacifico(
                           fontSize: 30, fontWeight: FontWeight.w900),
                     ),
-                    mY(5),
+                    mY(10),
                     TuFormField(
                       hint: "Search",
                       prefixIcon: TuIcon(Icons.search),
                       radius: 500,
                       elevation: 1,
-                      fill: cardBGLight,
+                      fill: colors.surface,
                       hasBorder: false,
                       readOnly: true,
                       onTap: () {
-                        TuFuncs.showBottomSheet(
-                            context: context, widget: const SearchPage());
+                        pushTo(
+                          const SearchPage(),
+                        );
                       },
                     ),
                     mY(15),
@@ -136,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Text(
                                   "Top selling",
-                                  style: Styles.h3(isLight: true),
+                                  style: styles.h3(isLight: true),
                                 ),
                                 mY(15),
                                 SingleChildScrollView(
@@ -181,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Text(
                                   "Today's special",
-                                  style: Styles.h3(isLight: true),
+                                  style: styles.h3(isLight: true),
                                 ),
                                 mY(15),
                                 SingleChildScrollView(

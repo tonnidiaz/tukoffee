@@ -1,10 +1,7 @@
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
-import "package:get/get.dart";
 import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/widgets/common.dart";
+
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 
 class GetxHomePage extends StatelessWidget {
@@ -25,7 +22,7 @@ class GetxHomePage extends StatelessWidget {
 
                 Get.bottomSheet(const MySheet(),
                     useRootNavigator: false,
-                    backgroundColor: cardBGLight,
+                    backgroundColor: colors.surface,
                     enableDrag: true);
               },
               child: const Column(
@@ -61,7 +58,7 @@ class MySheet extends StatelessWidget {
                   ],
                 ),
               ),
-              backgroundColor: appBGLight);
+              backgroundColor: colors.bg);
           // await sleep(1500);
           Get.back();
         },

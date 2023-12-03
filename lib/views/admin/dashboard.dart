@@ -1,17 +1,14 @@
 import "package:flutter/material.dart";
 import "package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart";
 import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/utils/functions.dart";
+import "package:lebzcafe/utils/extensions.dart";
 import "package:lebzcafe/views/admin/index.dart";
 import "package:lebzcafe/views/admin/reviews.dart";
-import "package:lebzcafe/widgets/common3.dart";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 import "package:get/get.dart";
 
 import "../../utils/colors.dart";
-
-import "/widgets/common.dart";
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -60,7 +57,8 @@ class _DashboardState extends State<Dashboard> {
             ),
             SliverFillRemaining(
               child: Container(
-                padding: EdgeInsets.all(topMargin),
+                padding: const EdgeInsets.symmetric(
+                    vertical: topMargin, horizontal: 16),
                 width: double.infinity,
                 child: Obx(
                   () => StaggeredGrid.count(
@@ -75,7 +73,7 @@ class _DashboardState extends State<Dashboard> {
                         },
                         icon: svgIcon(
                             name: "br-box-open-full",
-                            color: TuColors.coffee2,
+                            color: colors.coffee2,
                             size: 24),
                         subtitle: "${_ctrl.data["products"].length}",
                       ),
@@ -99,7 +97,7 @@ class _DashboardState extends State<Dashboard> {
                         icon: svgIcon(
                           name: "br-users",
                           size: 24,
-                          color: TuColors.text2,
+                          color: colors.text2,
                         ),
                         subtitle: "${_ctrl.data["customers"].length}",
                       ),
@@ -111,7 +109,7 @@ class _DashboardState extends State<Dashboard> {
                         icon: svgIcon(
                           name: "br-comment-user",
                           size: 24,
-                          color: TuColors.success,
+                          color: colors.success,
                         ),
                         subtitle: "${_ctrl.data["reviews"].length}",
                       ),
@@ -122,7 +120,7 @@ class _DashboardState extends State<Dashboard> {
                         },
                         icon: Icon(
                           Icons.info_outline,
-                          color: TuColors.text2,
+                          color: colors.text2,
                         ),
                       ),
                     ],
@@ -157,7 +155,7 @@ class ItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final bRad = BorderRadius.circular(5);
     return Material(
-      color: cardBGLight,
+      color: colors.surface,
       borderRadius: bRad,
       child: InkWell(
           onTap: onTap,
@@ -173,7 +171,7 @@ class ItemCard extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      backgroundColor: appBGLight,
+                      backgroundColor: colors.bg,
                       child: icon,
                     ),
                     mY(6),
@@ -184,13 +182,13 @@ class ItemCard extends StatelessWidget {
                             style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
-                                color: TuColors.text2),
+                                color: colors.text2),
                           ),
                     Text(
                       title,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontWeight: FontWeight.w500, color: TuColors.text),
+                          fontWeight: FontWeight.w500, color: colors.text),
                     ),
                   ]))),
     );

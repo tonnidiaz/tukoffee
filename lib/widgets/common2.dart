@@ -1,21 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
-import "package:lebzcafe/controllers/app_ctrl.dart";
-import "package:lebzcafe/controllers/appbar.dart";
 import "package:lebzcafe/controllers/store_ctrl.dart";
 import "package:lebzcafe/main.dart";
-import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/widgets/common.dart";
-import "package:lebzcafe/widgets/common3.dart";
-import "package:get/get.dart";
-import "package:google_fonts/google_fonts.dart";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 import "../utils/constants2.dart";
-import "../utils/styles.dart";
 
 class CartBtn extends StatelessWidget {
   final double top;
@@ -25,29 +16,26 @@ class CartBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     final storeCtrl = Get.find<StoreCtrl>();
     return Obx(() {
-      int c = false
-          ? 100
-          : (storeCtrl.cart.isEmpty ? 0 : storeCtrl.cart["products"].length);
+      int c = (storeCtrl.cart.isEmpty ? 0 : storeCtrl.cart["products"].length);
       return SizedBox(
-        width: c < 100 ? 50 : 65,
-        child: IconButton(
-            splashRadius: 23,
-            onPressed: () {
-              pushNamed("/cart");
-            },
-            icon: Badge(
-              label: Text(c < 100 ? "$c" : "99+"),
-              textColor: Colors.white,
-              textStyle:
-                  const TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
-              backgroundColor: TuColors.primary,
-              child: svgIcon(
-                name: "rr-shopping-basket",
-                color: TuColors.text2,
-                size: 24,
-              ),
-            )),
-      );
+          width: c < 100 ? 50 : 65,
+          child: IconButton(
+              splashRadius: 23,
+              onPressed: () {
+                pushNamed("/cart");
+              },
+              icon: Badge(
+                label: Text(c < 100 ? "$c" : "99+"),
+                textColor: Colors.white,
+                textStyle:
+                    const TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+                backgroundColor: colors.primary,
+                child: svgIcon(
+                  name: "rr-shopping-basket",
+                  color: colors.text2,
+                  size: 24,
+                ),
+              )));
     });
   }
 }
@@ -90,102 +78,6 @@ class TuListTile extends StatelessWidget {
 }
 
 enum Position { top, bottom, right }
-
-class TuLabeledCheckbox extends StatelessWidget {
-  final bool value;
-  final double radius;
-  final Function(bool?) onChanged;
-  final String? label;
-  final Position labelPos;
-  final Color? activeColor;
-  final FontWeight? fontWeight;
-  const TuLabeledCheckbox(
-      {super.key,
-      this.fontWeight = FontWeight.w600,
-      this.label,
-      this.activeColor,
-      this.value = false,
-      this.radius = 5,
-      this.labelPos = Position.right,
-      required this.onChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    final check = Container(
-      margin: const EdgeInsets.symmetric(horizontal: 2),
-      width: 25,
-      child: Checkbox(
-          value: value,
-          activeColor: activeColor ?? TuColors.primary,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(radius)),
-          onChanged: onChanged),
-    );
-    final lbl = label != null
-        ? Text(
-            label!,
-            style: TextStyle(
-                fontSize: 14, fontWeight: fontWeight, color: TuColors.text2),
-          )
-        : none();
-    return labelPos == Position.right
-        ? Row(
-            children: [check, lbl],
-            mainAxisSize: MainAxisSize.min,
-          )
-        : labelPos == Position.bottom
-            ? Column(
-                children: [check, lbl],
-              )
-            : Column(
-                children: [lbl, check],
-              );
-  }
-}
-
-PreferredSizeWidget childAppbar(
-    {String? title,
-    bool showCart = true,
-    double height = appBarH,
-    List<Widget> actions = const []}) {
-  final AppCtrl appCtrl = Get.find();
-  final AppBarCtrl appBarCtrl = Get.find();
-  return PreferredSize(
-    preferredSize: Size.fromHeight(height),
-    child: Obx(
-      () => AppBar(
-        elevation: .4,
-        backgroundColor: cardBGLight,
-        leadingWidth: appBarH - 5,
-        //titleSpacing: 5,
-        leading: appBarCtrl.selected.isNotEmpty
-            ? IconButton(
-                padding: EdgeInsets.zero,
-                splashRadius: 20,
-                onPressed: () {
-                  appBarCtrl.setSelected([]);
-                },
-                icon: const Icon(Icons.close))
-            : null,
-        title: appBarCtrl.selected.isNotEmpty
-            ? Text(
-                "${appBarCtrl.selected.length} selected",
-                style: GoogleFonts.karla(fontWeight: FontWeight.w500),
-              )
-            : Text(title ?? appCtrl.store["name"]),
-        actions: [
-          showCart
-              ? const CartBtn(
-                  top: 15,
-                )
-              : none(),
-          ...actions,
-          // mX(8)
-        ],
-      ),
-    ),
-  );
-}
 
 Container imgCard(
     {Widget? child,
@@ -296,7 +188,7 @@ class TuBackButton extends StatelessWidget {
         },
         icon: Icon(
           Icons.arrow_back_outlined,
-          color: TuColors.text2,
+          color: colors.text2,
           size: 30,
         ));
   }

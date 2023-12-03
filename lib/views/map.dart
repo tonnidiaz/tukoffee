@@ -1,18 +1,14 @@
-import "dart:convert";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter_map/flutter_map.dart";
 import "package:geocoding/geocoding.dart";
 import "package:geolocator/geolocator.dart";
 import "package:get/get.dart";
 import "package:lebzcafe/main.dart";
-import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/constants.dart";
+
 import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/utils/dummies.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/widgets/common.dart";
+
 import "package:lebzcafe/widgets/tu/common.dart";
 import "package:lebzcafe/widgets/tu/searchfield.dart";
 import "package:latlong2/latlong.dart";
@@ -212,9 +208,16 @@ class _MapPageState extends State<MapPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    context.dependOnInheritedWidgetOfExactType();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: TuBottomBar(
+          topRadius: 10,
           child: Container(
             child: iconText(
                 _address["place_name"] ?? "No address", Icons.location_on,
@@ -279,7 +282,7 @@ class _MapPageState extends State<MapPage> {
         ),
         body: SafeArea(
           child: Container(
-              height: screenSize(context).height - statusBarH(context: context),
+              height: screenSize(context).height - statusBarH(context),
               color: Colors.green,
               child: Stack(
                 children: [
@@ -331,7 +334,7 @@ class _MapPageState extends State<MapPage> {
                             point: _center ?? const LatLng(0, 0),
                             builder: (context) => Icon(
                               Icons.location_pin,
-                              color: TuColors.primary,
+                              color: colors.primary,
                               size: 30,
                             ),
                           ),
@@ -369,8 +372,7 @@ class _MapPageState extends State<MapPage> {
                                             Icons.location_on,
                                             size: 25,
                                           ),
-                                          fill: const Color.fromARGB(
-                                              255, 255, 254, 253),
+                                          fill: Colors.white,
                                           suggestions: _features
                                               .map((it) => TuSuggestion(
                                                   text: "${it["place_name"]}",

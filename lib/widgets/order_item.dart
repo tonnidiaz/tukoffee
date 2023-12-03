@@ -6,14 +6,12 @@ import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/functions2.dart";
 import "package:lebzcafe/views/order/checkout.dart";
 import "package:lebzcafe/views/order/index.dart";
-import "package:lebzcafe/widgets/common3.dart";
-import "package:get/get.dart";
-import "package:lebzcafe/widgets/tu/common.dart";
+
+import "package:tu/tu.dart";
 
 import "../utils/colors.dart";
 import "../utils/constants.dart";
-import "../utils/functions.dart";
-import "common.dart";
+
 import "prompt_modal.dart";
 
 class OrderItem extends StatelessWidget {
@@ -41,37 +39,34 @@ class OrderItem extends StatelessWidget {
 
   _cancelOrder({bool del = false}) async {
     var act = del ? "delete" : "cancel";
-    TuFuncs.dialog(
-        appCtx!,
-        PromptDialog(
-          title: "Cancel order",
-          msg: "Are you sure you want to cancel this order? ",
-          okTxt: "Yes",
-          onOk: () async {
-            try {
-              showProgressSheet(msg: "Canceling order..");
+    Get.dialog(PromptDialog(
+      title: "Cancel order",
+      msg: "Are you sure you want to cancel this order? ",
+      okTxt: "Yes",
+      onOk: () async {
+        try {
+          showProgressSheet(msg: "Canceling order..");
 
-              //Apply for refund first
-              if (order["mode"] == OrderMode.deliver.index) {
-                //cancel from shiplogic first
-                await Shiplogic.cancelOrder(order);
-              }
+          //Apply for refund first
+          if (order["mode"] == OrderMode.deliver.index) {
+            //cancel from shiplogic first
+            await Shiplogic.cancelOrder(order);
+          }
 
-              final res =
-                  await apiDio().post("/order/cancel?action=$act", data: {
-                "ids": [order["_id"]],
-                "userId": isAdmin ? null : MainApp.appCtrl.user["_id"]
-              });
+          final res = await apiDio().post("/order/cancel?action=$act", data: {
+            "ids": [order["_id"]],
+            "userId": isAdmin ? null : MainApp.appCtrl.user["_id"]
+          });
 
-              _appBarCtrl.setSelected([]);
-              await ctrl.setOrders(res.data["orders"]);
-              gpop();
-            } catch (e) {
-              gpop();
-              errorHandler(e: e, msg: "Failed to cancel order!");
-            }
-          },
-        ));
+          _appBarCtrl.setSelected([]);
+          await ctrl.setOrders(res.data["orders"]);
+          gpop();
+        } catch (e) {
+          gpop();
+          errorHandler(e: e, msg: "Failed to cancel order!");
+        }
+      },
+    ));
   }
 
   final _key = GlobalKey();
@@ -86,7 +81,7 @@ class OrderItem extends StatelessWidget {
             color: _appBarCtrl.selected.isNotEmpty &&
                     _appBarCtrl.selected.contains(order)
                 ? const Color.fromARGB(37, 0, 89, 255)
-                : cardBGLight,
+                : colors.surface,
             border: const Border(
                 bottom: BorderSide(color: Color.fromRGBO(10, 10, 10, .05)))),
         child: ListTile(
@@ -102,14 +97,14 @@ class OrderItem extends StatelessWidget {
               Text(
                 formatDate(order["createdAt"] ?? order['date_created']),
                 style: TextStyle(
-                    color: TuColors.note,
+                    color: colors.note,
                     fontWeight: FontWeight.w500,
                     fontSize: 13),
               ),
               Chip(
                   backgroundColor: order["status"] == "cancelled"
-                      ? TuColors.danger
-                      : TuColors.medium,
+                      ? colors.danger
+                      : colors.medium,
                   label: Text(
                     "${order["status"]}",
                     style: const TextStyle(fontSize: 12, color: Colors.white),
@@ -179,7 +174,7 @@ class OrderItem extends StatelessWidget {
           trailing: PopupMenuButton(
               icon: Icon(
                 Icons.more_vert,
-                color: TuColors.text2,
+                color: colors.text2,
               ),
               splashRadius: 24,
               itemBuilder: (context) {

@@ -3,12 +3,8 @@
 import "package:flutter/material.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/widgets/common.dart";
-import "package:get/get.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
 
-import "../../widgets/common2.dart";
+import "package:tu/tu.dart";
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});

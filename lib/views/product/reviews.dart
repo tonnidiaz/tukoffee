@@ -5,16 +5,11 @@ import "package:flutter_rating_bar/flutter_rating_bar.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/utils/functions2.dart";
-import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/utils/types.dart";
 import "package:lebzcafe/views/account/profile.dart";
 import "package:lebzcafe/views/account/reviews/index.dart";
 import "package:lebzcafe/views/auth/login.dart";
-import "package:lebzcafe/widgets/common.dart";
-import "package:lebzcafe/widgets/common3.dart";
-import "package:lebzcafe/widgets/common4.dart";
+import "package:tu/tu.dart";
 
 class ProductReviewsPage extends StatefulWidget {
   final String id;
@@ -113,9 +108,9 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
                                 width: double.infinity,
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 8),
-                                decoration: const BoxDecoration(
-                                    color: cardBGLight,
-                                    border: Border(
+                                decoration: BoxDecoration(
+                                    color: colors.surface,
+                                    border: const Border(
                                         bottom: BorderSide(
                                             color: Color.fromRGBO(
                                                 10, 10, 10, .05)))),
@@ -166,7 +161,7 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
                                   itemBuilder: (context, i) {
                                     final review = _reviews![i];
                                     return Container(
-                                      color: cardBGLight,
+                                      color: colors.surface,
                                       margin: const EdgeInsets.symmetric(
                                           vertical: 2.5, horizontal: 8),
                                       padding: defaultPadding,
@@ -183,14 +178,14 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
                                         mY(2.5),
                                         Text(
                                           review["title"],
-                                          style: Styles.h4(),
+                                          style: styles.h4(),
                                         ),
                                         Text(
                                           formatDate(review['createdAt'] ??
                                               review['date_created']),
                                           style: TextStyle(
                                               fontSize: 14,
-                                              color: TuColors.text2),
+                                              color: colors.text2),
                                         ),
                                         mY(3),
                                         InkWell(

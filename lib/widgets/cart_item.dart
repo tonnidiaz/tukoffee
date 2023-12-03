@@ -3,20 +3,11 @@
 import "package:flutter/material.dart";
 import "package:lebzcafe/controllers/store_ctrl.dart";
 import "package:lebzcafe/main.dart";
-import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/views/order/index.dart";
-import "package:lebzcafe/widgets/common3.dart";
-import "package:lebzcafe/widgets/dialog.dart";
-import "package:get/get.dart";
-import "package:lebzcafe/widgets/tu/common.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
-import "package:lebzcafe/widgets/tu/select.dart";
+import "package:tu/tu.dart";
+
 import "package:via_logger/logger.dart";
-import "../controllers/products_ctrl.dart";
 import "../utils/colors.dart";
 import "../utils/constants.dart";
-import "common.dart";
 
 class CartItem extends StatelessWidget {
   final Map<String, dynamic> item;
@@ -24,7 +15,6 @@ class CartItem extends StatelessWidget {
     super.key,
     required this.item,
   });
-  final ProductsCtrl _productsCtrl = Get.find();
   final _appBarCtrl = MainApp.appBarCtrl;
 
   void _selectItem(Map<String, dynamic> product) {
@@ -56,58 +46,22 @@ class CartItem extends StatelessWidget {
 
     Widget editSheet() {
       return Container(
-        color: cardBGLight,
+        color: colors.surface,
         padding: defaultPadding,
         child: tuColumn(min: true, children: [
           Row(
             children: [
               Expanded(
-                child: false
-                    ? Obx(
-                        () => TuFormField(
-                          radius: 100,
-                          hasBorder: false,
-                          textAlign: TextAlign.center,
-                          readOnly: true,
-                          value: formCtrl.form["quantity"],
-                          prefixIcon: IconButton(
-                            padding: EdgeInsets.zero,
-                            splashRadius: 16,
-                            icon: const Icon(
-                              Icons.remove,
-                              color: Colors.black54,
-                            ),
-                            onPressed: () {
-                              if (formCtrl.form["quantity"] > 0) {
-                                formCtrl.form["quantity"]--;
-                              } else {
-                                formCtrl.form["quantity"] = 0;
-                              }
-                            },
-                          ),
-                          suffixIcon: IconButton(
-                            padding: EdgeInsets.zero,
-                            splashRadius: 16,
-                            icon: const Icon(
-                              Icons.add,
-                              color: Colors.black54,
-                            ),
-                            onPressed: () {
-                              formCtrl.form["quantity"]++;
-                            },
-                          ),
-                        ),
-                      )
-                    : Obx(
-                        () => TuSelect(
-                          label: "Quantity:",
-                          value: formCtrl.form["quantity"],
-                          onChanged: (val) =>
-                              {formCtrl.setFormField("quantity", val)},
-                          items: List.generate(prod["quantity"],
-                              (index) => SelectItem("${index + 1}", index + 1)),
-                        ),
-                      ),
+                child: Obx(
+                  () => TuSelect(
+                    label: "Quantity:",
+                    value: formCtrl.form["quantity"],
+                    onChanged: (val) =>
+                        {formCtrl.setFormField("quantity", val)},
+                    items: List.generate(prod["quantity"],
+                        (index) => SelectItem("${index + 1}", index + 1)),
+                  ),
+                ),
               ),
               IconButton(
                   onPressed: () async {
@@ -127,7 +81,7 @@ class CartItem extends StatelessWidget {
                   },
                   icon: Icon(
                     Icons.delete,
-                    color: TuColors.text2,
+                    color: colors.text2,
                   ))
             ],
           ),
@@ -148,7 +102,7 @@ class CartItem extends StatelessWidget {
 
     void showEditSheet() {
       formCtrl.setForm({"quantity": item["quantity"]});
-      TuFuncs.showBottomSheet(context: context, widget: editSheet());
+      Get.bottomSheet(editSheet());
     }
 
     return Container(
@@ -162,7 +116,7 @@ class CartItem extends StatelessWidget {
             pushNamed("/product", arguments: {"pid": prod["pid"]});
           },
           //Checkbox, cover, content, deleteBtn
-          tileColor: cardBGLight,
+          tileColor: colors.surface,
           contentPadding: const EdgeInsets.symmetric(horizontal: 10),
           leading: Material(
             elevation: 2,
@@ -221,7 +175,7 @@ class CartItem extends StatelessWidget {
             children: [
               Text("R${prod["price"]}  ",
                   style: TextStyle(
-                      color: prod["on_sale"] ? TuColors.text2 : Colors.black87,
+                      color: prod["on_sale"] ? colors.text2 : Colors.black87,
                       fontSize: prod["on_sale"] ? 12 : 14,
                       decoration:
                           prod["on_sale"] ? TextDecoration.lineThrough : null,
@@ -231,7 +185,7 @@ class CartItem extends StatelessWidget {
                 child: Text(
                   "R${prod["sale_price"]}",
                   style: TextStyle(
-                      color: TuColors.text2,
+                      color: colors.text2,
                       fontWeight: FontWeight.w600,
                       fontSize: 14),
                 ),
@@ -240,7 +194,7 @@ class CartItem extends StatelessWidget {
               Text(
                 "x${item["quantity"]}",
                 style: TextStyle(
-                    color: TuColors.text2,
+                    color: colors.text2,
                     fontWeight: FontWeight.w500,
                     fontSize: 14),
               ),

@@ -1,0 +1,27 @@
+   Obx(() => _ctrl.products.value == null
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [mY(30), const CircularProgressIndicator()],
+                      ),
+                    )
+                  : _ctrl.sortedProducts.value!.isEmpty
+                      ? SliverFillRemaining(child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              h3("Nothing to show"),
+                              IconButton(
+                                  icon: const Icon(Icons.refresh),
+                                  onPressed: () async {
+                                    await _getProducts();
+                                  })
+                            ],
+                          ),)
+                      : TuSliver(
+                          child: Column(
+                            children: _ctrl.sortedProducts.value!.map((e) {
+                              return ProductItem(product: e);
+                            }).toList(),
+                          ),
+                        )),
+            

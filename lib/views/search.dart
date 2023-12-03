@@ -1,16 +1,10 @@
 import "package:flutter/material.dart";
-import "package:flutter/services.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/utils/styles.dart";
-import "package:lebzcafe/views/order/index.dart";
-import "package:lebzcafe/widgets/common.dart";
 import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/product_card.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
-import "package:lebzcafe/widgets/tu/select.dart";
+import "package:tu/tu.dart";
+
 import "package:via_logger/logger.dart";
 
 class SearchPage extends StatefulWidget {
@@ -67,12 +61,8 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(),
-          leadingWidth: appBarH - 8,
-          backgroundColor: cardBGLight,
+        appBar: tuAppbar(
           elevation: .5,
-          titleSpacing: 0,
           title: TuFormField(
             hint: "Search",
             hasBorder: false,
@@ -88,33 +78,30 @@ class _SearchPageState extends State<SearchPage> {
             onChanged: (val) {},
           ),
           actions: [
-            PopupMenuButton(
-                splashRadius: 20,
-                itemBuilder: (context) {
-                  return [
-                    PopupMenuItem(
-                      child: const Text("Reset"),
-                      onTap: () {
-                        _setProducts(null);
-                        _setQuery("");
-                        _setSearchBy(null);
-                      },
-                    ),
-                    /*       PopupMenuItem(
+            TuPopupBtn(items: [
+              PopupMenuItem(
+                child: const Text("Reset"),
+                onTap: () {
+                  _setProducts(null);
+                  _setQuery("");
+                  _setSearchBy(null);
+                },
+              ),
+              /*       PopupMenuItem(
                       child: const Text("Show sheet"),
                       onTap: () {
                         TuFuncs.showBottomSheet(
                             context: context, widget: const SearchPage());
                       },
                     ), */
-                  ];
-                })
+            ])
           ],
         ),
         body: CustomScrollView(slivers: [
           SliverToBoxAdapter(child: mY(topMargin)),
-          SliverToBoxAdapter(
-            child: TuCard(
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
               child: TuSelect(
                 label: "Search by:",
                 value: _searchBy,
@@ -137,11 +124,11 @@ class _SearchPageState extends State<SearchPage> {
                   children: [
                     const Text(
                       "Search results for:  ",
-                      // style: Styles.title(isLight: true),
+                      // style: styles.title(isLight: true),
                     ),
                     Text(
                       _query,
-                      style: Styles.title(color: TuColors.primary),
+                      style: styles.title(color: colors.primary),
                     )
                   ],
                 ),
@@ -156,7 +143,7 @@ class _SearchPageState extends State<SearchPage> {
                       child: Center(
                           child: Text(
                       "Searching...",
-                      style: Styles.h3(isLight: true),
+                      style: styles.h3(isLight: true),
                     )))
               : _products!.isNotEmpty
                   ? SliverPadding(
@@ -177,7 +164,7 @@ class _SearchPageState extends State<SearchPage> {
                       child: Center(
                           child: Text(
                         "No results",
-                        style: Styles.h3(isLight: true),
+                        style: styles.h3(isLight: true),
                       )))
         ]));
   }

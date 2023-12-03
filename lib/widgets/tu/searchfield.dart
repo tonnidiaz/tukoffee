@@ -1,12 +1,8 @@
 import "dart:io";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 import "package:flutter/material.dart";
-import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/widgets/common.dart";
-import "package:lebzcafe/widgets/common2.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
 
 class TuSearchField extends StatefulWidget {
   final List<TuSuggestion> suggestions;
@@ -82,6 +78,7 @@ class _TuSearchFieldState extends State<TuSearchField> {
   }
 
   _onFocusChanged() async {
+    clog("ON FOCUS CHANGE");
     if (_focusNode.hasFocus && widget.suggestions.isNotEmpty) {
       _showOverlay();
     } else {
@@ -100,11 +97,14 @@ class _TuSearchFieldState extends State<TuSearchField> {
 
   @override
   void dispose() {
-    _controller.dispose();
-    _focusNode.dispose();
+    clog("DISPOSE");
     _hideOverlay();
 
     _entry?.dispose();
+    _focusNode.removeListener(_onFocusChanged);
+
+    _controller.dispose();
+
     super.dispose();
   }
 

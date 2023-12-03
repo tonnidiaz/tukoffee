@@ -1,10 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
-import "package:lebzcafe/utils/constants2.dart";
 import "package:lebzcafe/utils/functions2.dart";
 import "package:lebzcafe/views/auth/login.dart";
 import "package:lebzcafe/views/order/checkout.dart";
-import "package:lebzcafe/widgets/tu/common.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
 
 import "package:dio/dio.dart";
 import "package:flutter/cupertino.dart";
@@ -13,14 +10,10 @@ import "package:lebzcafe/controllers/app_ctrl.dart";
 import "package:lebzcafe/controllers/appbar.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/widgets/common.dart";
-import "package:lebzcafe/widgets/common2.dart";
 import "package:lebzcafe/widgets/common3.dart";
-import "package:lebzcafe/widgets/dialogs/loading_dialog.dart";
 import "package:get/get.dart";
-import "package:lebzcafe/widgets/tu/select.dart";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 import "../../main.dart";
 import "../../widgets/order_item.dart";
@@ -251,79 +244,81 @@ class _OrdersPageState extends State<OrdersPage> {
   Widget build(BuildContext context) {
     var routeName = ModalRoute.of(context)?.settings.name;
     filterModal() {
-      return Padding(
-        padding: defaultPadding,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text("FILTER",
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black)),
-                Obx(() => IconButton(
-                      splashRadius: 15,
-                      padding: EdgeInsets.zero,
-                      onPressed: () {
-                        _ctrl.sortOrder.value == SortOrder.descending
-                            ? _ctrl.setSortOrder(SortOrder.ascending)
-                            : _ctrl.setSortOrder(SortOrder.descending);
-                      },
-                      icon: Icon(_ctrl.sortOrder.value == SortOrder.descending
-                          ? CupertinoIcons.sort_down
-                          : CupertinoIcons.sort_up),
-                      color: Colors.black87,
-                    )),
-              ],
-            ),
-            LayoutBuilder(builder: (context, c) {
-              return Row(
+      return TuBottomSheet(
+        child: Padding(
+          padding: defaultPadding2,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Obx(() => TuDropdownButton(
-                        label: "Sort by",
-                        labelFontSize: 14,
-                        width: (c.maxWidth),
-                        //height: 35,
-                        value: _ctrl.sortBy.value,
-                        radius: 1,
-                        items: [
-                          SelectItem("Date created", SortBy.createdAt),
-                          SelectItem("Last modified", SortBy.lastModified),
-                        ],
-                        onChanged: (p0) {
-                          _ctrl.setSortBy(p0);
+                  const Text("FILTER",
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black)),
+                  Obx(() => IconButton(
+                        splashRadius: 15,
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          _ctrl.sortOrder.value == SortOrder.descending
+                              ? _ctrl.setSortOrder(SortOrder.ascending)
+                              : _ctrl.setSortOrder(SortOrder.descending);
                         },
+                        icon: Icon(_ctrl.sortOrder.value == SortOrder.descending
+                            ? CupertinoIcons.sort_down
+                            : CupertinoIcons.sort_up),
+                        color: Colors.black87,
                       )),
-                  Visibility(
-                    visible: false,
-                    child: Obx(() {
-                      return TuDropdownButton(
-                        radius: 1,
-                        label: "Status",
-                        labelFontSize: 14,
-                        width: (c.maxWidth / 2) - 2.5,
-                        //height: 35,
-                        value: _ctrl.status.value,
-                        items: [
-                          SelectItem("All", OrderStatus.all),
-                          SelectItem("Pending", OrderStatus.pending),
-                          SelectItem("Completed", OrderStatus.completed),
-                          SelectItem("Cancelled", OrderStatus.cancelled),
-                        ],
-                        onChanged: (p0) {
-                          _ctrl.setStatus(p0);
-                        },
-                      );
-                    }),
-                  ),
                 ],
-              );
-            }),
-          ],
+              ),
+              LayoutBuilder(builder: (context, c) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Obx(() => TuSelect(
+                          label: "Sort by",
+                          labelFontSize: 14,
+                          width: (c.maxWidth),
+                          //height: 35,
+                          value: _ctrl.sortBy.value,
+                          radius: 1,
+                          items: [
+                            SelectItem("Date created", SortBy.createdAt),
+                            SelectItem("Last modified", SortBy.lastModified),
+                          ],
+                          onChanged: (p0) {
+                            _ctrl.setSortBy(p0);
+                          },
+                        )),
+                    Visibility(
+                      visible: false,
+                      child: Obx(() {
+                        return TuSelect(
+                          radius: 1,
+                          label: "Status",
+                          labelFontSize: 14,
+                          width: (c.maxWidth / 2) - 2.5,
+                          //height: 35,
+                          value: _ctrl.status.value,
+                          items: [
+                            SelectItem("All", OrderStatus.all),
+                            SelectItem("Pending", OrderStatus.pending),
+                            SelectItem("Completed", OrderStatus.completed),
+                            SelectItem("Cancelled", OrderStatus.cancelled),
+                          ],
+                          onChanged: (p0) {
+                            _ctrl.setStatus(p0);
+                          },
+                        );
+                      }),
+                    ),
+                  ],
+                );
+              }),
+            ],
+          ),
         ),
       );
     }
@@ -368,30 +363,26 @@ class _OrdersPageState extends State<OrdersPage> {
               () => CustomScrollView(
                 slivers: [
                   SliverPadding(
-                    padding: EdgeInsets.symmetric(vertical: topMargin),
+                    padding: const EdgeInsets.symmetric(vertical: topMargin),
                     sliver: SliverToBoxAdapter(
                       child: Obx(
                         () => Container(
                           width: double.infinity,
-                          color: cardBGLight,
                           padding: defaultPadding,
                           child: TuFormField(
-                            fill: appBGLight,
+                            fill: colors.surface,
                             hasBorder: false,
                             hint: "Order ID",
                             height: borderlessInpHeight,
                             prefixIcon: TuIcon(Icons.search),
-                            radius: 5,
+                            radius: 100,
                             value: _ctrl.orderId.value,
                             suffixIcon: IconButton(
                                 splashRadius: 20,
                                 padding: EdgeInsets.zero,
                                 onPressed: () {
                                   // show filters
-                                  TuFuncs.showBottomSheet(
-                                      full: false,
-                                      context: context,
-                                      widget: filterModal());
+                                  Get.bottomSheet(filterModal());
                                 },
                                 icon: TuIcon(Icons.tune)),
                             onChanged: (val) {

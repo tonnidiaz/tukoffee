@@ -1,11 +1,8 @@
 import "package:flutter/material.dart";
-import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/views/account/profile.dart";
-import "package:lebzcafe/views/order/index.dart";
 import "package:lebzcafe/widgets/common.dart";
 import "package:lebzcafe/widgets/common2.dart";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 
 class AccountPage extends StatelessWidget {

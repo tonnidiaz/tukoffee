@@ -3,9 +3,8 @@
 import "package:flutter/material.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/widgets/review_item2.dart";
-import "package:get/get.dart";
+import "package:tu/tu.dart";
 
 class ItemsTabCtrl extends GetxController {
   Rxn<List> products = Rxn();
@@ -64,7 +63,7 @@ class _ItemsTabState extends State<ItemsTab> {
       onRefresh: () async {
         await _getProducts();
       },
-      child: Container(
+      child: SizedBox(
         height: screenSize(context).height,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -72,8 +71,10 @@ class _ItemsTabState extends State<ItemsTab> {
             () => Container(
               padding: defaultPadding,
               width: double.infinity,
-              height:
-                  screenSize(context).height - appBarH - tabH - statusBarH(),
+              height: screenSize(context).height -
+                  appBarH -
+                  tabH -
+                  statusBarH(context),
               child: _ctrl.products.value == null
                   ? const Column(
                       mainAxisAlignment: MainAxisAlignment.center,

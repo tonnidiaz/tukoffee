@@ -1,20 +1,15 @@
-import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
-import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/constants2.dart";
-import "package:google_fonts/google_fonts.dart";
 
 var amber = const Color.fromRGBO(255, 193, 7, 1);
 var black12 = Colors.black12;
-
+/*
 ThemeData tuTheme(bool dark) {
   return ThemeData(
       useMaterial3: false,
       platform: TargetPlatform.linux,
       scaffoldBackgroundColor: appBGLight,
       progressIndicatorTheme: ProgressIndicatorThemeData(
-        color: TuColors.medium,
+        color: colors.medium,
       ),
       tabBarTheme:
           TabBarTheme(labelColor: TuColors.text2, indicatorColor: Colors.red),
@@ -76,3 +71,4 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
         // etc.
       };
 }
+ */

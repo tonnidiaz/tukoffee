@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/widgets/common.dart";
+import "package:tu/tu.dart";
 
 class LoadingDialog extends StatefulWidget {
   final String? msg;
@@ -30,7 +29,7 @@ class _LoadingDialogState extends State<LoadingDialog> {
   ) {
     return AlertDialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 20),
-      backgroundColor: appBGLight,
+      backgroundColor: colors.bg,
       content: Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
         const SizedBox(
           width: 24,
@@ -41,7 +40,7 @@ class _LoadingDialogState extends State<LoadingDialog> {
         Text(
           widget.msg ?? "Hang on...",
           style: TextStyle(
-              fontWeight: FontWeight.w600, color: TuColors.note, fontSize: 14),
+              fontWeight: FontWeight.w600, color: colors.note, fontSize: 14),
         )
       ]),
     );

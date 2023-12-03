@@ -1,12 +1,10 @@
 import "package:flutter/material.dart";
 import "package:flutter_rating_bar/flutter_rating_bar.dart";
 import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/utils/types.dart";
 import "package:lebzcafe/views/product/reviews/review.dart";
-import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/views/add_review.dart";
+import "package:tu/tu.dart";
 
 class ReviewItem2 extends StatelessWidget {
   final Map<String, dynamic> prod;
@@ -27,10 +25,10 @@ class ReviewItem2 extends StatelessWidget {
         //largeSize: 18
 
         backgroundColor: rev!["status"] == EReviewStatus.pending.name
-            ? TuColors.medium
+            ? colors.medium
             : rev!["status"] == EReviewStatus.approved.name
-                ? TuColors.success
-                : TuColors.danger,
+                ? colors.success
+                : colors.danger,
         label: Text(
           rev!["status"],
           style: const TextStyle(fontSize: 10, color: Colors.white),
@@ -51,7 +49,7 @@ class ReviewItem2 extends StatelessWidget {
                   pushTo(ProductReviewPage(id: rev!["_id"]));
                 },
           //Checkbox, cover, content, deleteBtn
-          tileColor: cardBGLight,
+          tileColor: colors.surface,
           isThreeLine: !hasStars,
           contentPadding: const EdgeInsets.symmetric(horizontal: 10),
           leading: Material(
@@ -106,11 +104,9 @@ class ReviewItem2 extends StatelessWidget {
                   children: [
                     TextButton(
                         onPressed: () {
-                          TuFuncs.showBottomSheet(
-                              context: context,
-                              widget: AddReviewView(
-                                product: prod,
-                              ));
+                          Get.bottomSheet(AddReviewView(
+                            product: prod,
+                          ));
                         },
                         child: const Text("WRITE REVIEW"))
                   ],

@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:lebzcafe/utils/colors.dart";
 import "package:google_fonts/google_fonts.dart";
-
-class Styles {
+/* 
+class ThisStyles {
   static TextStyle h1 =
       GoogleFonts.inclusiveSans(fontSize: 22, fontWeight: FontWeight.w900);
   static TextStyle h2({Color? color, bool isLight = false}) {
@@ -54,3 +54,4 @@ class Styles {
 
   static TextStyle cardTitle = GoogleFonts.poppins(fontSize: 20);
 }
+ */

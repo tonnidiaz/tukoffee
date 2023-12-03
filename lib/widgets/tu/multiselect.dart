@@ -1,10 +1,7 @@
 import "package:flutter/material.dart";
-import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/styles.dart";
 import "package:lebzcafe/widgets/common2.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
-import "../../../utils/functions.dart";
 
 class TuMultiselect extends StatefulWidget {
   final List<int> selected;
@@ -136,7 +133,7 @@ class _TuMultiselectDialogState extends State<TuMultiselectDialog> {
                     ),
                     title: Text(
                       item.label,
-                      style: Styles.subtitle,
+                      style: styles.subtitle,
                       overflow: TextOverflow.ellipsis,
                     ),
                     subtitle: item.subtitle),

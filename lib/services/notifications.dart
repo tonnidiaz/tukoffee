@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:lebzcafe/utils/colors.dart';
-import 'package:lebzcafe/utils/functions.dart';
+
 import 'package:lebzcafe/widgets/prompt_modal.dart';
+import 'package:tu/tu.dart';
 import "package:via_logger/logger.dart";
 
 class NotifsService {
@@ -18,7 +18,7 @@ class NotifsService {
               channelKey: "order_channel",
               channelName: "Order notifications",
               channelDescription: "Notification channel for order creation",
-              defaultColor: TuColors.primary,
+              defaultColor: Tu.colors.primary,
               ledColor: Colors.white)
         ],
         // Channel groups are only visual and are not required

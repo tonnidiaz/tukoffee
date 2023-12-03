@@ -8,6 +8,7 @@ import "package:lebzcafe/views/root/home.dart";
 import "package:lebzcafe/views/root/shop/index.dart";
 import "package:lebzcafe/widgets/common3.dart";
 import "package:get/get.dart";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 
 class IndexCtrl extends GetxController {
@@ -45,12 +46,14 @@ class _IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     List<TuPage> indexTabs = [
-      TuPage("/~/home", const HomePage(), label: "Home", svg: "br-home"),
-      TuPage("/~/shop", const ShopPage(), label: "Shop", svg: "br-shop"),
+      TuPage("/~/home", const HomePage(),
+          label: "Home", svg: "br-home", icon: none()),
+      TuPage("/~/shop", const ShopPage(),
+          label: "Shop", svg: "br-shop", icon: none()),
       TuPage("/~/cart", const CartPage(),
-          label: "Cart", svg: "br-shopping-cart"),
+          label: "Cart", svg: "br-shopping-cart", icon: none()),
       TuPage("/~/account", const AccountTab(),
-          label: "Account", svg: "br-user"),
+          label: "Account", svg: "br-user", icon: none()),
     ];
     return WillPopScope(
       onWillPop: () async {
@@ -70,11 +73,20 @@ class _IndexPageState extends State<IndexPage> {
                   .asMap()
                   .entries
                   .map((e) => BottomNavigationBarItem(
-                      icon: svgIcon(
-                          color: IndexPage.ctrl.tab.value != e.key
-                              ? TuColors.surface600
-                              : TuColors.primary,
-                          name: e.value.svg!),
+                      icon: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
+                        decoration: BoxDecoration(
+                            color: IndexPage.ctrl.tab.value == e.key
+                                ? colors.primaryFade
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(100)),
+                        child: svgIcon(
+                            color: IndexPage.ctrl.tab.value != e.key
+                                ? colors.note
+                                : null,
+                            name: e.value.svg!),
+                      ),
                       label: e.value.label))
                   .toList()),
         ),

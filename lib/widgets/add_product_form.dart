@@ -1,21 +1,18 @@
 // ignore_for_file: use_build_context_synchronously
 
 import "dart:io";
-import "package:lebzcafe/widgets/tu/common.dart";
-import "package:lebzcafe/widgets/tu/form_field.dart";
 
 import "package:cloudinary/cloudinary.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
-import "package:get/get.dart";
-import "package:via_logger/logger.dart";
+import "package:tu/functions.dart";
+import "package:tu/tu.dart";
 import "../main.dart";
 import "../utils/constants.dart";
 import "../utils/constants2.dart";
 import "../utils/functions.dart";
 import "../views/order/index.dart";
-import "common.dart";
 
 import "common2.dart";
 import "form_view.dart";
@@ -154,92 +151,60 @@ class _AddProductFormState extends State<AddProductForm> {
 
   @override
   Widget build(BuildContext context) {
-    return FormView(
-        title: widget.title,
-        btnTxt: widget.btnTxt,
-        fields: [
-          TuFormField(
-            label: "Product name:",
-            hint: "Enter product name...",
-            value: _formCtrl.form["name"],
-            required: true,
-            onChanged: (val) {
-              _formCtrl.setFormField("name", val);
-            },
-          ),
-          TuFormField(
-            label: "Product description:",
-            hint: "Enter product description...",
-            value: _formCtrl.form["description"],
-            required: true,
-            onChanged: (val) {
-              _formCtrl.setFormField("description", val);
-            },
-          ),
-          TuFormField(
-            label: "Price:",
-            prefix: const Text("R "),
-            hint: "Enter product price...",
-            value: _formCtrl.form["price"],
-            required: true,
-            validator: (val) {
-              bool isNum = isNumeric(val);
-              if (!isNum || (isNum && double.parse(val!) < 0)) {
-                return "Enter a valid positive number";
-              }
-              return null;
-            },
-            keyboard: TextInputType.number,
-            onChanged: (val) {
-              _formCtrl.setFormField("price", val);
-            },
-          ),
-          LayoutBuilder(builder: (context, c) {
-            return Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TuFormField(
-                      label: "Quantity:",
-                      hint: "Enter product quantity...",
-                      width: (c.maxWidth / 2) - 2.5,
-                      value: _formCtrl.form["quantity"],
-                      required: true,
-                      validator: (val) {
-                        bool isNum = isNumeric(val);
-                        if (!isNum || (isNum && double.parse(val!) < 0)) {
-                          return "Enter a valid positive number";
-                        }
-                        return null;
-                      },
-                      keyboard: TextInputType.number,
-                      onChanged: (val) {
-                        _formCtrl.setFormField("quantity", val);
-                      },
-                    ),
-                    TuFormField(
-                      label: "Weight:",
-                      width: (c.maxWidth / 2) - 2.5,
-                      keyboard: TextInputType.number,
-                      hint: "Weight in KG...",
-                      value: _formCtrl.form["weight"],
-                      required: true,
-                      suffix: const Text("KG"),
-                      onChanged: (val) {
-                        _formCtrl.setFormField("weight", val);
-                      },
-                    ),
-                  ],
-                ),
-                Obx(
-                  () => _formCtrl.form["on_sale"] == true
-                      ? TuFormField(
-                          label: "Sale price:",
-                          prefix: const Text("R "),
-                          hint: "Enter sale price...",
-                          value: _formCtrl.form["sale_price"],
+    return Obx(
+      () => FormView(
+          title: widget.title,
+          btnTxt: widget.btnTxt,
+          fields: [
+            TuFormField(
+              label: "Product name:",
+              hint: "Enter product name...",
+              value: _formCtrl.form["name"],
+              required: true,
+              onChanged: (val) {
+                _formCtrl.setFormField("name", val);
+              },
+            ),
+            TuFormField(
+              label: "Product description:",
+              hint: "Enter product description...",
+              value: _formCtrl.form["description"],
+              required: true,
+              onChanged: (val) {
+                _formCtrl.setFormField("description", val);
+              },
+            ),
+            TuFormField(
+              label: "Price:",
+              prefix: const Text("R "),
+              hint: "Enter product price...",
+              value: _formCtrl.form["price"],
+              required: true,
+              validator: (val) {
+                bool isNum = isNumeric(val);
+                if (!isNum || (isNum && double.parse(val!) < 0)) {
+                  return "Enter a valid positive number";
+                }
+                return null;
+              },
+              keyboard: TextInputType.number,
+              onChanged: (val) {
+                _formCtrl.setFormField("price", val);
+              },
+            ),
+            LayoutBuilder(builder: (context, c) {
+              return Column(
+                children: [
+                  Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TuFormField(
+                          width: (c.maxWidth / 2) - 2.5,
+                          label: "Quantity:",
+                          hint: "Enter product quantity...",
+                          value: _formCtrl.form["quantity"],
                           required: true,
                           validator: (val) {
                             bool isNum = isNumeric(val);
@@ -250,145 +215,183 @@ class _AddProductFormState extends State<AddProductForm> {
                           },
                           keyboard: TextInputType.number,
                           onChanged: (val) {
-                            _formCtrl.setFormField("sale_price", val);
+                            _formCtrl.setFormField("quantity", val);
                           },
-                        )
-                      : none(),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TuFormField(
-                      label: "Width:",
-                      width: (c.maxWidth / 2) - 2.5,
-                      keyboard: TextInputType.number,
-                      hint: "Width in cm...",
-                      value: _formCtrl.form["width"],
-                      required: true,
-                      suffix: const Text("cm"),
-                      onChanged: (val) {
-                        _formCtrl.setFormField("width", val);
-                      },
+                        ),
+                        TuFormField(
+                          width: (c.maxWidth / 2) - 2.5,
+                          label: "Weight:",
+                          keyboard: TextInputType.number,
+                          hint: "Weight in KG...",
+                          value: _formCtrl.form["weight"],
+                          required: true,
+                          suffix: const Text("KG"),
+                          onChanged: (val) {
+                            _formCtrl.setFormField("weight", val);
+                          },
+                        ),
+                      ],
                     ),
-                    TuFormField(
-                      label: "Height:",
-                      width: (c.maxWidth / 2) - 2.5,
-                      keyboard: TextInputType.number,
-                      hint: "Height in cm...",
-                      value: _formCtrl.form["height"],
-                      required: true,
-                      suffix: const Text("cm"),
-                      onChanged: (val) {
-                        _formCtrl.setFormField("height", val);
-                      },
+                  ),
+                  Obx(
+                    () => _formCtrl.form["on_sale"] == true
+                        ? TuFormField(
+                            label: "Sale price:",
+                            prefix: const Text("R "),
+                            hint: "Enter sale price...",
+                            value: _formCtrl.form["sale_price"],
+                            required: true,
+                            validator: (val) {
+                              bool isNum = isNumeric(val);
+                              if (!isNum || (isNum && double.parse(val!) < 0)) {
+                                return "Enter a valid positive number";
+                              }
+                              return null;
+                            },
+                            keyboard: TextInputType.number,
+                            onChanged: (val) {
+                              _formCtrl.setFormField("sale_price", val);
+                            },
+                          )
+                        : none(),
+                  ),
+                  Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TuFormField(
+                          label: "Width:",
+                          width: (c.maxWidth / 2) - 2.5,
+                          keyboard: TextInputType.number,
+                          hint: "Width in cm...",
+                          value: _formCtrl.form["width"],
+                          required: true,
+                          suffix: const Text("cm"),
+                          onChanged: (val) {
+                            _formCtrl.setFormField("width", val);
+                          },
+                        ),
+                        TuFormField(
+                          label: "Height:",
+                          width: (c.maxWidth / 2) - 2.5,
+                          keyboard: TextInputType.number,
+                          hint: "Height in cm...",
+                          value: _formCtrl.form["height"],
+                          required: true,
+                          suffix: const Text("cm"),
+                          onChanged: (val) {
+                            _formCtrl.setFormField("height", val);
+                          },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ],
-            );
-          }),
-          Center(
-            child: Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              alignment: WrapAlignment.center,
+                  ),
+                ],
+              );
+            }),
+            /* Center(
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                alignment: WrapAlignment.center,
+                children: [
+                  Obx(
+                    () => TuLabeledCheckbox(
+                        radius: 50,
+                        label: "Top selling",
+                        value: _formCtrl.form["top_selling"] == true,
+                        onChanged: (val) {
+                          _formCtrl.setFormField("top_selling", val);
+                        }),
+                  ),
+                  Obx(
+                    () => TuLabeledCheckbox(
+                        radius: 50,
+                        label: "On special",
+                        value: _formCtrl.form["on_special"] == true,
+                        onChanged: (val) {
+                          _formCtrl.setFormField("on_special", val);
+                        }),
+                  ),
+                  Obx(
+                    () => TuLabeledCheckbox(
+                        radius: 50,
+                        label: "On sale",
+                        value: _formCtrl.form["on_sale"] == true,
+                        onChanged: (val) {
+                          _formCtrl.setFormField("on_sale", val);
+                        }),
+                  ),
+                ],
+              ),
+            ),
+            mY(5),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Obx(
-                  () => TuLabeledCheckbox(
-                      radius: 50,
-                      label: "Top selling",
-                      value: _formCtrl.form["top_selling"] == true,
-                      onChanged: (val) {
-                        _formCtrl.setFormField("top_selling", val);
-                      }),
-                ),
-                Obx(
-                  () => TuLabeledCheckbox(
-                      radius: 50,
-                      label: "On special",
-                      value: _formCtrl.form["on_special"] == true,
-                      onChanged: (val) {
-                        _formCtrl.setFormField("on_special", val);
-                      }),
-                ),
-                Obx(
-                  () => TuLabeledCheckbox(
-                      radius: 50,
-                      label: "On sale",
-                      value: _formCtrl.form["on_sale"] == true,
-                      onChanged: (val) {
-                        _formCtrl.setFormField("on_sale", val);
-                      }),
+                tuTableRow(
+                    const Text("Product Images"),
+                    IconButton(
+                        padding: EdgeInsets.zero,
+                        splashRadius: 24,
+                        onPressed: () {
+                          _importImg();
+                        },
+                        icon: const Icon(Icons.add_outlined))),
+                Listener(
+                  onPointerSignal: (event) {
+                    if (event is PointerScrollEvent) {
+                      final offset = event.scrollDelta.dy;
+                      _innerController.jumpTo(_innerController.offset + offset);
+                      // outerController.jumpTo(outerController.offset - offset);
+                    }
+                  },
+                  child: SingleChildScrollView(
+                    controller: _innerController,
+                    scrollDirection: Axis.horizontal,
+                    child: Obx(() => Row(
+                          children: _formCtrl.tempImgs.asMap().entries.map((e) {
+                            return imgCard(
+                                context: context,
+                                index: e.key,
+                                mode: widget.mode,
+                                child: e.value["url"] != null
+                                    ? Image.network(e.value["url"])
+                                    : Image.file(e.value["file"]),
+                                uploading: e.value["url"] != null
+                                    ? false
+                                    : e.value["loading"]);
+                          }).toList(),
+                        )),
+                  ),
                 ),
               ],
             ),
-          ),
-          mY(5),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              tuTableRow(
-                  const Text("Product Images"),
-                  IconButton(
-                      padding: EdgeInsets.zero,
-                      splashRadius: 24,
-                      onPressed: () {
-                        _importImg();
-                      },
-                      icon: const Icon(Icons.add_outlined))),
-              Listener(
-                onPointerSignal: (event) {
-                  if (event is PointerScrollEvent) {
-                    final offset = event.scrollDelta.dy;
-                    _innerController.jumpTo(_innerController.offset + offset);
-                    // outerController.jumpTo(outerController.offset - offset);
-                  }
-                },
-                child: SingleChildScrollView(
-                  controller: _innerController,
-                  scrollDirection: Axis.horizontal,
-                  child: Obx(() => Row(
-                        children: _formCtrl.tempImgs.asMap().entries.map((e) {
-                          return imgCard(
-                              context: context,
-                              index: e.key,
-                              mode: widget.mode,
-                              child: e.value["url"] != null
-                                  ? Image.network(e.value["url"])
-                                  : Image.file(e.value["file"]),
-                              uploading: e.value["url"] != null
-                                  ? false
-                                  : e.value["loading"]);
-                        }).toList(),
-                      )),
-                ),
-              ),
-            ],
-          ),
-          mY(10)
-        ],
-        useBottomSheet: true,
-        onSubmit: () async {
-          if (true) {
-            showProgressSheet();
-            final res = await addEditProduct(context, {..._formCtrl.form},
-                mode: widget.mode);
-            if (res != null) {
-              /*   showToast("Successs!").show(context);
-              return; */
-              gpop();
-              if (widget.mode == 'edit') {
-                if (widget.onDone != null) {
-                  await widget.onDone!(res);
-                }
+            mY(10) */
+          ],
+          useBottomSheet: true,
+          onSubmit: () async {
+            if (true) {
+              showProgressSheet();
+              final res = await addEditProduct(context, {..._formCtrl.form},
+                  mode: widget.mode);
+              if (res != null) {
+                /*   showToast("Successs!").show(context);
+                return; */
                 gpop();
+                if (widget.mode == 'edit') {
+                  if (widget.onDone != null) {
+                    await widget.onDone!(res);
+                  }
+                  gpop();
 
-                return;
+                  return;
+                }
+                Get.offAllNamed("/");
+                pushNamed("/product", arguments: {"pid": res['pid']});
               }
-              Get.offAllNamed("/");
-              pushNamed("/product", arguments: {"pid": res['pid']});
             }
-          }
-        });
+          }),
+    );
   }
 }

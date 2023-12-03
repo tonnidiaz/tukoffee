@@ -1,11 +1,9 @@
 import "package:flutter/material.dart";
 import "package:flutter_rating_bar/flutter_rating_bar.dart";
 import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/constants2.dart";
-import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/views/product/reviews/review.dart";
-import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/views/add_review.dart";
+import "package:tu/tu.dart";
 import "package:via_logger/logger.dart";
 
 class ReviewItem extends StatelessWidget {
@@ -27,10 +25,10 @@ class ReviewItem extends StatelessWidget {
         //largeSize: 18
 
         backgroundColor: item["status"] == "pending"
-            ? TuColors.medium
+            ? colors.medium
             : item["status"] == "approved"
-                ? TuColors.success
-                : TuColors.danger,
+                ? colors.success
+                : colors.danger,
         label: Text(
           item["status"],
           style: const TextStyle(fontSize: 10, color: Colors.white),
@@ -50,7 +48,7 @@ class ReviewItem extends StatelessWidget {
               : () {
                   pushTo(ProductReviewPage(id: item["_id"], isAdmin: isAdmin));
                 },
-          tileColor: cardBGLight,
+          tileColor: colors.surface,
           isThreeLine: !hasStars,
           contentPadding: const EdgeInsets.symmetric(horizontal: 10),
           leading: Material(
@@ -115,7 +113,7 @@ class ReviewItem extends StatelessWidget {
                     Text(
                       "R${item["name"]}",
                       style: TextStyle(
-                          color: TuColors.text2,
+                          color: colors.text2,
                           fontWeight: FontWeight.w600,
                           fontSize: 14),
                     ),
@@ -133,16 +131,14 @@ class ReviewItem extends StatelessWidget {
                       PopupMenuItem(
                         child: Text("Edit"),
                         onTap: () {
-                          TuFuncs.showBottomSheet(
-                              context: context,
-                              widget: AddReviewView(
-                                  product: item["product"],
-                                  rev: item,
-                                  isAdmin: isAdmin,
-                                  onOk: () {
-                                    // _getReviews();
-                                    //TODO: RELOAD
-                                  }));
+                          Get.bottomSheet(AddReviewView(
+                              product: item["product"],
+                              rev: item,
+                              isAdmin: isAdmin,
+                              onOk: () {
+                                // _getReviews();
+                                //TODO: RELOAD
+                              }));
                         },
                       ),
                     ],

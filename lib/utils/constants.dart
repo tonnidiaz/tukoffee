@@ -2,7 +2,6 @@
 
 import "package:dio/dio.dart";
 import "package:flutter/cupertino.dart";
-import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/views/about.dart";
@@ -15,7 +14,6 @@ import "package:lebzcafe/views/auth/reset_pass.dart";
 import "package:lebzcafe/views/root/cart.dart";
 import "package:lebzcafe/views/root/index.dart";
 import "package:lebzcafe/views/map.dart";
-import "package:lebzcafe/views/order/index.dart";
 import "package:lebzcafe/views/order/checkout.dart";
 import "package:lebzcafe/views/product.dart";
 import "package:lebzcafe/views/rf.dart";
@@ -24,10 +22,10 @@ import "package:geocode/geocode.dart";
 import "package:hive_flutter/hive_flutter.dart";
 import "package:lebzcafe/views/setting.dart";
 import "package:lebzcafe/views/store/info.dart";
+import "package:tu/tu.dart";
 import "../views/admin/index.dart";
 import "../views/admin/settings.dart";
 import "../views/app/settings.dart";
-import "../views/rf2.dart";
 import "../views/root/shop/index.dart";
 
 enum UserPermissions { read, write, delete }
@@ -38,129 +36,84 @@ enum SortOrder { ascending, descending }
 
 enum OrderStatus { pending, awaitingPickup, completed, cancelled, all }
 
-class TuPage {
-  Widget widget;
-  bool inList;
-  bool isAction;
-  String name;
-  String? svg;
-  IconData? icon;
-  Widget? ic;
-  String label;
-  TuPage(this.name, this.widget,
-      {this.icon,
-      this.inList = true,
-      this.isAction = false,
-      this.label = "",
-      this.svg,
-      this.ic});
-}
-
 final List<TuPage> pages = [
   TuPage(
     "/shop",
     const ShopPage(),
-    icon: CupertinoIcons.home,
+    icon: const Icon(CupertinoIcons.home),
   ),
   TuPage(
     "/",
     const IndexPage(),
-    icon: CupertinoIcons.home,
+    icon: const Icon(CupertinoIcons.home),
   ),
-  TuPage(
-    "/map",
-    const MapPage(),
-    icon: CupertinoIcons.map,
-  ),
+  TuPage("/map", const MapPage(),
+      icon: const Icon(
+        CupertinoIcons.map,
+      )),
   TuPage(
     "/product",
     const ProductPage(),
-    icon: CupertinoIcons.home,
+    icon: const Icon(CupertinoIcons.home),
   ),
   TuPage(
     "/rf",
     const RFPage(),
-    icon: CupertinoIcons.home,
-  ),
-  TuPage(
-    "/rf2",
-    const RFPage2(),
-    icon: CupertinoIcons.home,
+    icon: const Icon(CupertinoIcons.home),
   ),
   TuPage(
     "/search",
     const SearchPage(),
-    icon: CupertinoIcons.search,
+    icon: const Icon(CupertinoIcons.search),
   ),
   TuPage(
     "/admin/dashboard",
     const DashboardPage(),
-    icon: CupertinoIcons.home,
+    icon: const Icon(CupertinoIcons.home),
   ),
   TuPage(
     "/dashboard",
     const DashboardPage(),
-    icon: CupertinoIcons.home,
+    icon: const Icon(CupertinoIcons.home),
   ),
   TuPage("/app/settings", const OldSettingsPage(),
-      icon: CupertinoIcons.info_circle, inList: false),
+      icon: const Icon(CupertinoIcons.info_circle), inList: false),
   TuPage("/settings", const SettingsPage(),
-      icon: CupertinoIcons.info_circle, inList: false),
+      icon: const Icon(CupertinoIcons.info_circle), inList: false),
   TuPage("/auth/login", const LoginPage(),
-      icon: CupertinoIcons.home, inList: false),
+      icon: const Icon(CupertinoIcons.home), inList: false),
   TuPage("/auth/forgot", const ResetPassPage(),
-      icon: CupertinoIcons.home, inList: false),
+      icon: const Icon(CupertinoIcons.home), inList: false),
   TuPage("/admin/settings", const AdminSettingsPage(),
-      icon: CupertinoIcons.home, inList: false),
+      icon: const Icon(CupertinoIcons.home), inList: false),
   TuPage("/auth/signup", const SignupPage(),
-      icon: CupertinoIcons.home, inList: false),
+      icon: const Icon(CupertinoIcons.home), inList: false),
   TuPage("/orders", const OrdersPage(),
-      icon: CupertinoIcons.home, inList: false),
+      icon: const Icon(CupertinoIcons.home), inList: false),
   TuPage("/admin/orders", const OrdersPage(),
-      icon: CupertinoIcons.home, inList: false),
-  TuPage("/cart", const CartPage(), icon: CupertinoIcons.home, inList: false),
+      icon: const Icon(CupertinoIcons.home), inList: false),
+  TuPage("/cart", const CartPage(),
+      icon: const Icon(CupertinoIcons.home), inList: false),
   TuPage("/order/checkout", const CheckoutPage(),
-      icon: CupertinoIcons.home, inList: false),
+      icon: const Icon(CupertinoIcons.home), inList: false),
   TuPage("/about", const AboutPage(),
-      icon: CupertinoIcons.info_circle, isAction: true),
+      icon: const Icon(CupertinoIcons.info_circle), isAction: true),
   TuPage("/account/profile", const ProfilePage(),
-      icon: CupertinoIcons.info_circle, isAction: true),
+      icon: const Icon(CupertinoIcons.info_circle), isAction: true),
   TuPage("/account/settings", const AccountSettingsPage(),
-      icon: CupertinoIcons.info_circle, isAction: true),
-  TuPage("/store/info", const StoreInfoPage())
+      icon: const Icon(CupertinoIcons.info_circle), isAction: true),
+  TuPage("/store/info", const StoreInfoPage(), icon: none())
 ];
 
 const String tag = "Tunedbass";
 const String package = "com.tb.tmeta";
-const double bottomSheetH = 150;
-const double bottomBarH = kBottomNavigationBarHeight; //46;
 const double footerH = 46;
-const double appBarH = kToolbarHeight; //56;
 const double tabH = 48;
 BuildContext? appCtx;
-double statusBarH({BuildContext? context}) {
-  return MediaQuery.of(context ?? appCtx!).padding.top;
-}
 
 const double sidebarW = 46;
-const double iconSize = 25;
-const double splashRadius = iconSize;
 const testUser = {"email": "tonni@gmail.com", "password": "Baseline@072"};
 Box<dynamic>? appBox;
-const bool isMobile = true;
-final dio = Dio();
-
-const String githubURL =
-    "https://raw.githubusercontent.com/tonnidiaz/tunedapps/main/meta.json";
-const localhost = false ? "http://192.168.43.231" : "http://172.16.10.204";
-
-const defaultPadding = EdgeInsets.all(8);
-const defaultPadding2 = EdgeInsets.all(12);
-Size screenSize(BuildContext context) {
-  return MediaQuery.of(context).size;
-}
-
-const DEV = kDebugMode;
 
 Size screenPercent(BuildContext context, double p) {
   final h = MediaQuery.of(context).size.height;
@@ -169,21 +122,6 @@ Size screenPercent(BuildContext context, double p) {
   final ph = (p / 100) * h;
   return Size(pw, ph);
 }
-
-double keyboardPadding(BuildContext context) {
-  return MediaQuery.of(context).viewInsets.bottom;
-}
-
-class SelectItem {
-  final String label;
-  final dynamic value;
-  SelectItem(this.label, this.value);
-}
-
-Map<String, dynamic> styles = {
-  "h1": const TextStyle(
-      fontSize: 23, fontWeight: FontWeight.bold, color: Colors.white),
-};
 
 const paystackSecretKeyDemo =
     "sk_test_7c31366f091fd9bddfc2126935832309c7525f18";

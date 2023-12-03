@@ -6,7 +6,6 @@ import "dart:math";
 
 import "package:another_flushbar/flushbar.dart";
 import "package:cloudinary/cloudinary.dart";
-import "package:dio/dio.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
 import "package:lebzcafe/controllers/app_ctrl.dart";
@@ -14,8 +13,8 @@ import "package:lebzcafe/controllers/store_ctrl.dart";
 import "package:lebzcafe/main.dart";
 import "package:get/get.dart" as getx;
 import "package:hive_flutter/hive_flutter.dart";
-import "package:package_info_plus/package_info_plus.dart";
-import "package:permission_handler/permission_handler.dart";
+
+import "package:tu/tu.dart";
 import "package:via_logger/via_logger.dart";
 import "/utils/constants.dart";
 import "package:window_manager/window_manager.dart";
@@ -44,26 +43,6 @@ void setupWindowManager() async {
   });
 }
 
-Flushbar showToast(String msg,
-    {bool isErr = false, int duration = 2, bool autoDismiss = true}) {
-  // final appCtrl = MainApp.appCtrl;
-  return Flushbar(
-    backgroundColor: const Color.fromARGB(255, 236, 236, 236),
-    messageColor: isErr ? Colors.red : Colors.black87,
-    message: msg,
-    duration: autoDismiss ? Duration(seconds: duration) : null,
-    animationDuration: const Duration(milliseconds: 500),
-    onStatusChanged: (status) {
-      /*  if (status == FlushbarStatus.IS_APPEARING) {
-        appCtrl.setBackEnabled(false);
-      }
-      if (status == FlushbarStatus.DISMISSED) {
-        appCtrl.setBackEnabled(true);
-      } */
-    },
-  ); //.show(context);
-}
-
 Future<List> rateProduct(dynamic pid, Map<String, dynamic> rating) async {
   try {
     final res = await apiDio()
@@ -72,26 +51,6 @@ Future<List> rateProduct(dynamic pid, Map<String, dynamic> rating) async {
   } catch (e) {
     return ["Something went wrong!", null];
   }
-}
-
-bool isNumeric(dynamic s) {
-  if (s == null) {
-    return false;
-  }
-  return double.tryParse("$s") != null;
-}
-
-void pushTo(Widget widget) {
-  getx.Get.to(widget);
-}
-
-void pushNamed(String name, {Object? arguments}) {
-  getx.Get.toNamed(name, arguments: arguments);
-}
-
-double roundDouble(double value, int places) {
-  double mod = pow(10.0, places).toDouble();
-  return ((value * mod).round().toDouble() / mod);
 }
 
 setupStoreDetails({Map<String, dynamic>? data}) async {
@@ -188,31 +147,6 @@ logout() async {
   setupUser();
 }
 
-void handleDioException(
-    {BuildContext? context, required DioException exception, String? msg}) {
-  Logger.info("ERROR RESP: ${exception.response}");
-  if (exception.response != null &&
-      "${exception.response!.data}".startsWith("tuned")) {
-    showToast("${exception.response!.data.split("tuned:").last}", isErr: true)
-        .show(context ?? appCtx!);
-  } else {
-    showToast(msg ?? "Something went wrong!", isErr: true)
-        .show(context ?? appCtx!);
-  }
-}
-
-void errorHandler({required e, BuildContext? context, String? msg}) {
-  if (!(context?.mounted == true)) return;
-  if (e.runtimeType == DioException) {
-    handleDioException(
-        context: context, exception: e as DioException, msg: msg);
-  } else {
-    Logger.info(e);
-    showToast(msg ?? "Something went wrong!", isErr: true)
-        .show(context ?? appCtx!);
-  }
-}
-
 Future<Map?> addEditProduct(BuildContext context, Map<String, dynamic> product,
     {String mode = "add"}) async {
   Logger.info("$mode product...");
@@ -255,27 +189,6 @@ Future<File?> importFile(
     Logger.info(e);
   }
   return null;
-}
-
-class TuFuncs {
-  static void showBottomSheet(
-      {required BuildContext context,
-      bool full = true,
-      required Widget widget}) {
-    showModalBottomSheet(
-        useSafeArea: true,
-        isScrollControlled: full,
-        context: context,
-        builder: (context) => widget);
-  }
-
-  static dialog(BuildContext context, Widget widget) {
-    return showDialog(
-        useRootNavigator: false,
-        context: context,
-        //barrierColor: const Color.fromRGBO(0, 0, 0, 0.03),
-        builder: (context) => widget);
-  }
 }
 
 Future<Response> searchLocation(String query,
@@ -323,35 +236,16 @@ Future<Response<dynamic>> getProducts({String? q}) async {
   return await apiDio().get("/products?q=$q");
 }
 
-Future<String> getAppVersion() async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  return packageInfo.version;
-}
-
-Future requestStoragePermission() async {
-  Logger.info("Requesting...");
-
-  return await Permission.storage.request().isGranted;
-}
-
 double fullHeight(BuildContext context) {
-  return screenSize(context).height - (statusBarH() + appBarH);
+  return screenSize(context).height - (statusBarH(context) + appBarH);
 }
 
 void pop(BuildContext context) {
   return Navigator.pop(context);
 }
 
-void gpop() {
-  getx.Get.back();
-}
-
-sleep(int ms) async {
-  return await Future.delayed(Duration(milliseconds: ms));
-}
-
 Future<String> tbURL() async {
-  if (DEV) return "$localhost:3000";
+  if (dev) return "$localhost:3000";
   final res = await dio.get(
     githubURL,
   );
@@ -359,7 +253,7 @@ Future<String> tbURL() async {
 }
 
 Future<String> getApiURL() async {
-  if (DEV) return "$localhost:8000";
+  if (dev) return "$localhost:8000";
   final res = await dio.get(
     githubURL,
   );

@@ -1,12 +1,9 @@
 import "package:flutter/material.dart";
-import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/views/admin/accounts.dart";
 import "package:lebzcafe/views/admin/dashboard.dart";
 import "package:lebzcafe/views/admin/orders.dart";
 import "package:lebzcafe/views/admin/products.dart";
-import "package:lebzcafe/widgets/common3.dart";
-import "package:get/get.dart";
+import "package:tu/tu.dart";
 
 final Map<String, dynamic> initDashData = {
   "products": [],
@@ -88,19 +85,26 @@ class _DashboardPageState extends State<DashboardPage> {
                 .entries
                 .map(
                   (e) => BottomNavigationBarItem(
-                    icon: e.value.icon.runtimeType == String
-                        ? svgIcon(
-                            name: e.value.icon,
-                            color: index != e.key
-                                ? TuColors.note
-                                : TuColors.primary,
-                          )
-                        : Icon(
-                            e.value.icon,
-                            color: index != e.key
-                                ? TuColors.text2
-                                : TuColors.primary,
-                          ),
+                    icon: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 5),
+                      decoration: BoxDecoration(
+                          color: index == e.key
+                              ? colors.primaryFade
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(100)),
+                      child: e.value.icon.runtimeType == String
+                          ? svgIcon(
+                              name: e.value.icon,
+                              color: index != e.key ? colors.note : null,
+                            )
+                          : Icon(
+                              e.value.icon,
+                              color: index != e.key
+                                  ? colors.text2
+                                  : colors.primary,
+                            ),
+                    ),
                     label: e.value.label,
                   ),
                 )

@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:lebzcafe/controllers/app_ctrl.dart";
 import "package:lebzcafe/utils/constants.dart";
-import "package:get/get.dart";
+import "package:tu/tu.dart";
 
 class Footer extends StatelessWidget {
   const Footer({super.key});

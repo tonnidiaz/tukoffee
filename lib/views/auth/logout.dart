@@ -1,8 +1,6 @@
 import "package:flutter/material.dart";
-import "package:get/get.dart";
-import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/functions.dart";
-import "package:lebzcafe/utils/styles.dart";
+import "package:tu/tu.dart";
 
 class LogoutPage extends StatefulWidget {
   const LogoutPage({super.key});
@@ -36,7 +34,7 @@ class _LogoutPageState extends State<LogoutPage> {
             children: [
               Text(
                 "Loging out...",
-                style: Styles.h3(),
+                style: styles.h3(),
               )
             ]),
       ),
