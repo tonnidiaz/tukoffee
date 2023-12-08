@@ -120,7 +120,7 @@ class _ProductsState extends State<Products> {
 
   @override
   Widget build(BuildContext context) {
-    filterModal() {
+    Widget filterModal() {
       return TuBottomSheet(
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Row(
@@ -263,7 +263,7 @@ class _ProductsState extends State<Products> {
                     : Expanded(
                         child: ListView.builder(
                           padding: const EdgeInsets.only(
-                              left: 14, right: 14, bottom: 70),
+                              left: 0, right: 0, bottom: 70),
                           itemCount: _ctrl.sortedProducts.value!.length,
                           itemBuilder: (context, index) => ProductItem(
                               product: _ctrl.sortedProducts.value![index]),

@@ -1,9 +1,7 @@
 import "package:flutter/material.dart";
-import "package:get/get.dart";
-import "package:google_fonts/google_fonts.dart";
+
 import "package:lebzcafe/controllers/store_ctrl.dart";
 import "package:lebzcafe/main.dart";
-import "package:lebzcafe/utils/colors.dart";
 
 import "package:lebzcafe/utils/functions2.dart";
 import "package:lebzcafe/views/order/checkout.dart";
@@ -94,8 +92,10 @@ class CheckoutStep1 extends StatelessWidget {
                                     child: IconButton(
                                       splashRadius: 20,
                                       onPressed: () {
-                                        Tu.bottomSheet(
-                                            editCollectorModal(context));
+                                        Get.bottomSheet(
+                                            editCollectorModal(context),
+                                            ignoreSafeArea: false,
+                                            isScrollControlled: true);
                                       },
                                       icon: Icon(
                                         Icons.edit,
@@ -188,7 +188,7 @@ class CheckoutStep1 extends StatelessWidget {
                                     to: ctrl.selectedAddr);
                                 gpop();
                                 if (res == null) return;
-                                Tu.bottomSheet(DatesRatesSheet(
+                                Get.bottomSheet(DatesRatesSheet(
                                   rates: res["rates"],
                                 ));
                               } catch (e) {
@@ -220,10 +220,11 @@ class DatesRatesSheet extends StatelessWidget {
     final CheckoutCtrl ctrl = Get.find();
     return TuBottomSheet(
       padding: defaultPadding2,
-      child: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: tuColumn(min: true, children: [
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            tuColumn(min: true, children: [
               h3("Dates & Delivery Fees"),
               mY(10),
               Text(
@@ -234,60 +235,62 @@ class DatesRatesSheet extends StatelessWidget {
               devider(),
               mY(10)
             ]),
-          ),
-          SliverList.builder(
-              itemCount: rates.length,
-              itemBuilder: (context, i) {
-                var rate = rates.elementAt(i);
-                final String deliveryDateFrom =
-                    rate["service_level"]["delivery_date_from"];
-                final String deliveryDateTo =
-                    rate["service_level"]["delivery_date_to"];
-                //final String date1
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 1.5),
-                  color: colors.bg,
-                  child: ListTile(
-                    isThreeLine: true,
-                    onTap: () {
-                      ctrl.form["shiplogic"] = {
-                        "service_level": rate["service_level"]
-                      };
+            ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: rates.length,
+                itemBuilder: (context, i) {
+                  var rate = rates.elementAt(i);
+                  final String deliveryDateFrom =
+                      rate["service_level"]["delivery_date_from"];
+                  final String deliveryDateTo =
+                      rate["service_level"]["delivery_date_to"];
+                  //final String date1
+                  return Container(
+                    margin: const EdgeInsets.symmetric(vertical: 1.5),
+                    color: colors.bg,
+                    child: ListTile(
+                      isThreeLine: true,
+                      onTap: () {
+                        ctrl.form["shiplogic"] = {
+                          "service_level": rate["service_level"]
+                        };
 
-                      storeCtrl.setDeliveryFee(rate["rate"].toDouble());
-                      gpop();
-                      ctrl.step++;
-                    },
-                    title: Text("${rate["service_level"]["name"]} delivery"),
-                    subtitle: tuColumn(
-                      min: true,
-                      children: [
-                        mY(5),
-                        const Text(
-                          "FROM:",
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        Text(formatDate(deliveryDateFrom)),
-                        mY(5),
-                        const Text(
-                          "TO:",
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        Text(formatDate(deliveryDateTo)),
-                      ],
-                    ),
-                    trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                      Text(
-                        "R${rate["rate"]}",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, color: colors.text2),
+                        storeCtrl.setDeliveryFee(rate["rate"].toDouble());
+                        gpop();
+                        ctrl.step++;
+                      },
+                      title: Text("${rate["service_level"]["name"]} delivery"),
+                      subtitle: tuColumn(
+                        min: true,
+                        children: [
+                          mY(5),
+                          const Text(
+                            "FROM:",
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          Text(formatDate(deliveryDateFrom)),
+                          mY(5),
+                          const Text(
+                            "TO:",
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          Text(formatDate(deliveryDateTo)),
+                        ],
                       ),
-                      const Icon(Icons.chevron_right)
-                    ]),
-                  ),
-                );
-              })
-        ],
+                      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                        Text(
+                          "R${rate["rate"]}",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, color: colors.text2),
+                        ),
+                        const Icon(Icons.chevron_right)
+                      ]),
+                    ),
+                  );
+                })
+          ],
+        ),
       ),
     );
   }

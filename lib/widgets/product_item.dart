@@ -92,7 +92,7 @@ class ProductItem extends StatelessWidget {
           ),
           title: Text(
             product["name"],
-            style: styles.h4(),
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
           subtitle: Text(
             "R${product["price"]}",
