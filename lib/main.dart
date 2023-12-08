@@ -25,7 +25,7 @@ enableWebviewDebugging() async {
 }
 
 void main() async {
-  dev = false;
+  // dev = false;
   await initHive();
 
   WidgetsFlutterBinding.ensureInitialized();

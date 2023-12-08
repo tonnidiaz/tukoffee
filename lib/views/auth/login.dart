@@ -29,7 +29,6 @@ class _LoginPageState extends State<LoginPage> {
         // User already exists and password is correct
         appBox!.put("authToken", res.data["token"]);
         await setupUser(full: false);
-        //gpop();
         if (widget.pop) {
           gpop(); //Hide sheet
           gpop(); //Back to prev page

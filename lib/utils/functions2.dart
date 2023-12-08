@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:intl/intl.dart";
 import "package:dio/dio.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/constants.dart";
@@ -153,5 +152,21 @@ Future<void> checkServer(BuildContext context) async {
         ));
 
     throw Error();
+  }
+}
+
+String toRealTime(String time) {
+  String mTime = time.trim().toLowerCase();
+  final timeAsList = mTime.split(" ").first.split(":");
+  if (mTime.endsWith("am")) {
+    if (int.parse(timeAsList.first) == 12) {
+      return "00:${timeAsList.last}";
+    }
+    return mTime.split(" ").first;
+  } else if (mTime.endsWith("pm")) {
+    if (int.parse(timeAsList.first) == 12) return "12:${timeAsList.last}";
+    return "${int.parse(timeAsList.first) + 12}:${timeAsList.last}";
+  } else {
+    return time;
   }
 }

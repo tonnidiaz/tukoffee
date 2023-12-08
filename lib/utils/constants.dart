@@ -148,12 +148,15 @@ var yocoDio = Dio(
   ),
 );
 
-Dio apiDio() => Dio(BaseOptions(
-    baseUrl: MainApp.appCtrl.apiURL.value,
-    contentType: "application/json",
-    headers: appBox!.get("authToken") != null
-        ? {"Authorization": "Bearer ${appBox!.get("authToken")}"}
-        : {}));
+Dio apiDio() {
+  clog(MainApp.appCtrl.apiURL);
+  return Dio(BaseOptions(
+      baseUrl: MainApp.appCtrl.apiURL.value,
+      contentType: "application/json",
+      headers: appBox!.get("authToken") != null
+          ? {"Authorization": "Bearer ${appBox!.get("authToken")}"}
+          : {}));
+}
 
 const courierGuyKey = "a601d99c75fc4c64b5a64288f97d52b4";
 Dio shiplogicDio() => Dio(BaseOptions(

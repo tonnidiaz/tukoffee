@@ -123,7 +123,7 @@ class _ProductPageState extends State<ProductPage> {
                   }))
         ],
       ),
-      bottomNavigationBar: TuBottomBar(
+      bottomNavigationBar: TuBottomSheet(
         child: _product == null
             ? none()
             : Builder(builder: (context) {

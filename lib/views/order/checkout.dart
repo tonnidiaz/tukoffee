@@ -244,9 +244,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Widget build(BuildContext context) {
     final appBar = childAppbar(showCart: false, title: "Checkout");
     return _appCtrl.user.isEmpty
-        ? PageWrapper(
+        ? Scaffold(
             appBar: appBar,
-            child: Container(
+            body: Container(
               padding: defaultPadding2,
               height:
                   screenSize(context).height - statusBarH(context) - appBarH,
@@ -491,14 +491,16 @@ class _EditAddressFormState extends State<EditAddressForm> {
             value: _deliveryAddress['place_name'],
             onTap: () {
               MainApp.formCtrl.clear();
-              Get.bottomSheet(MapPage(
-                onSubmit: (val) {
-                  clog(val);
-                  setState(() {
-                    _deliveryAddress = {..._deliveryAddress, ...val};
-                  });
-                },
-              ));
+              pushTo(
+                MapPage(
+                  onSubmit: (val) {
+                    clog(val);
+                    setState(() {
+                      _deliveryAddress = {..._deliveryAddress, ...val};
+                    });
+                  },
+                ),
+              );
             },
           ),
           TuFormField(

@@ -1,7 +1,10 @@
+import "dart:isolate";
+
 import "package:flutter/material.dart";
 import "package:flutter_slidable/flutter_slidable.dart";
 
 import "package:lebzcafe/main.dart";
+import "package:lebzcafe/utils/functions2.dart";
 import "package:lebzcafe/views/map.dart";
 import "package:lebzcafe/widgets/prompt_modal.dart";
 import "package:tu/tu.dart";
@@ -157,18 +160,20 @@ class StoreCard extends StatelessWidget {
 
     bool isOpen() {
       final now = DateTime.now().toLocal(),
-          timeSuffix = now.weekday == 6 || now.weekday == 7 ? "_weekend" : "",
-          openTime = store["open_time$timeSuffix"]
+          timeSuffix = now.weekday == 6 || now.weekday == 7 ? "_weekend" : "";
+
+      final openTime = toRealTime(store["open_time$timeSuffix"])
               .split(":")
               .map((it) => int.parse(it))
               .toList(),
-          closeTime = store["close_time$timeSuffix"]
+          closeTime = toRealTime(store["close_time$timeSuffix"])
               .split(":")
               .map((it) => int.parse(it))
               .toList();
       final int h = now.hour, m = now.minute;
 
       var mIsOpen = false;
+
       if (h > openTime[0] && h <= closeTime[0]) {
         mIsOpen = true;
       } else if (h == openTime[0] && m >= openTime[1] && h <= closeTime[0]) {

@@ -78,6 +78,8 @@ class _FormViewState extends State<FormView> {
                 child: submitBtn,
               )
             : null,
+
+            resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
           padding: defaultPadding,
           child:

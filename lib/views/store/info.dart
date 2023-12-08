@@ -12,7 +12,6 @@ import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/views/map.dart";
 import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/form_view.dart";
-import "package:get/get.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
 
 class StoreInfoPage extends StatefulWidget {
@@ -98,7 +97,7 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
         },
         child: TuScrollview(
           child: Container(
-            padding: EdgeInsets.all(topMargin),
+            padding: const EdgeInsets.all(topMargin),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               ...[appCtrl.store, appCtrl.owner, appCtrl.developer]
@@ -274,7 +273,8 @@ class AddStoreView extends StatelessWidget {
             value: address != null ? address["place_name"] : null,
             required: true,
             onTap: () {
-              pushTo(const MapPage());
+              Get.bottomSheet(const MapPage(),
+                  isScrollControlled: true, ignoreSafeArea: false);
             },
           );
         }),

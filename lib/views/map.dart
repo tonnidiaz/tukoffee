@@ -215,6 +215,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         bottomNavigationBar: TuBottomSheet(
           child: Container(
             child: iconText(

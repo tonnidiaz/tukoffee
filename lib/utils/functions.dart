@@ -52,6 +52,7 @@ Future<List> rateProduct(dynamic pid, Map<String, dynamic> rating) async {
 setupStoreDetails({Map<String, dynamic>? data}) async {
   final AppCtrl appCtrl = getx.Get.find();
   try {
+    clog("SETTING UP STORE DETAILS");
     appCtrl.setserverDown(false);
     Map<String, dynamic> details;
 
@@ -69,6 +70,7 @@ setupStoreDetails({Map<String, dynamic>? data}) async {
     appCtrl.setSlogan(details["store"]["slogan"]);
     appCtrl.setSocials(details["socials"]);
   } catch (e) {
+    clog(e);
     if (e.runtimeType == DioException) {
       e as DioException;
       appCtrl.setserverDown(true);

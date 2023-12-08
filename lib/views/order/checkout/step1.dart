@@ -118,9 +118,9 @@ class CheckoutStep1 extends StatelessWidget {
                                 width: 25,
                                 child: IconButton(
                                   onPressed: () {
-                                    Get.bottomSheet(const EditAddressForm(),
-                                        ignoreSafeArea: false,
-                                        isScrollControlled: true);
+                                    pushTo(
+                                      const EditAddressForm(),
+                                    );
                                   },
                                   splashRadius: 24,
                                   padding: EdgeInsets.zero,
@@ -141,10 +141,9 @@ class CheckoutStep1 extends StatelessWidget {
                                     child: TuCard(
                                         height: 70,
                                         onTap: () {
-                                          Tu.bottomSheet(
-                                              const EditAddressForm(),
-                                              useSafeArea: true,
-                                              isScrollControlled: false);
+                                          pushTo(
+                                            const EditAddressForm(),
+                                          );
                                         },
                                         child: const Icon(
                                           Icons.add,
@@ -170,30 +169,33 @@ class CheckoutStep1 extends StatelessWidget {
                                   ctrl.selectedAddr.isEmpty)
                           ? null
                           : () async {
-                              clog("Next up");
-
                               if (ctrl.mode.value == OrderMode.collect) {
                                 ctrl.step++;
                                 return;
                               }
-                              showProgressSheet(msg: "Calculating total...");
-                              List items = [];
-                              for (var item in storeCtrl.cart["products"]) {
-                                for (var pr
-                                    in List.filled(item["quantity"], 0)) {
-                                  items.add(item["product"]);
+                              try {
+                                showProgressSheet(msg: "Calculating total...");
+                                List items = [];
+                                for (var item in storeCtrl.cart["products"]) {
+                                  for (var i = 0; i < item["quantity"]; i++) {
+                                    items.add(item["product"]);
+                                  }
                                 }
+                                final res = await Shiplogic.getRates(
+                                    items: items,
+                                    total: storeCtrl.total.value,
+                                    from: storeCtrl.stores.value?[0]["address"],
+                                    to: ctrl.selectedAddr);
+                                gpop();
+                                if (res == null) return;
+                                Tu.bottomSheet(DatesRatesSheet(
+                                  rates: res["rates"],
+                                ));
+                              } catch (e) {
+                                // Hide progress sheet
+                                gpop();
+                                errorHandler(e: e, msg: "Something went wrong");
                               }
-                              final res = await Shiplogic.getRates(
-                                  items: items,
-                                  total: storeCtrl.total.value,
-                                  from: storeCtrl.stores.value?[0]["address"],
-                                  to: ctrl.selectedAddr);
-                              gpop();
-                              if (res == null) return;
-                              Tu.bottomSheet(DatesRatesSheet(
-                                rates: res["rates"],
-                              ));
                               // ctrl.step++;
                             },
                     );

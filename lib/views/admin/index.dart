@@ -80,6 +80,9 @@ class _DashboardPageState extends State<DashboardPage> {
         return BottomNavigationBar(
             currentIndex: index,
             onTap: _onBottonNavitemTap,
+            unselectedLabelStyle: const TextStyle(fontSize: fontSizeBody - 2),
+            selectedLabelStyle: const TextStyle(
+                fontSize: fontSizeBody, fontWeight: FontWeight.bold),
             items: tabs
                 .asMap()
                 .entries

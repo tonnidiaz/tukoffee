@@ -84,9 +84,16 @@ class _TuSplashState extends State<TuSplash> {
   }
 
   Widget refreshBtn() {
-    return TuButton(
-      text: "Refresh",
+    return OutlinedButton(
       onPressed: _init,
+      style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(7),
+            side: const BorderSide(
+                color: Colors.white, width: 10, style: BorderStyle.solid),
+          )),
+      child: const Text("REFRESH"),
     );
   }
 

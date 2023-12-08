@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import "package:flutter_hooks/flutter_hooks.dart";
-import "package:google_fonts/google_fonts.dart";
-import "package:lebzcafe/utils/colors.dart";
+
 import "package:tu/tu.dart";
 
 import "dart:async";
@@ -10,7 +9,6 @@ import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/widgets/common.dart";
-import "package:get/get.dart";
 
 class SignupCtrl extends GetxController {
   RxMap<String, dynamic> user = <String, dynamic>{}.obs;
@@ -332,66 +330,69 @@ class _CreateAccountPageWrapperState extends State<CreateAccountPageWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return PageWrapper(
+    return Scaffold(
       appBar: childAppbar(title: "New account", showCart: false),
-      child: Container(
-          color: colors.surface,
-          height: screenSize(context).height -
-              appBarH -
-              statusBarH(context) -
-              topMargin,
-          margin: const EdgeInsets.only(top: topMargin),
-          padding: defaultPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "${MainApp.appCtrl.store["name"]} auth",
-                    style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.bold, fontSize: 30),
-                  ),
-                ],
-              ),
-              mY(10),
-              Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: widget.fields,
-                  )),
-              mY(10),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TuButton(
-                      width: double.infinity,
-                      bgColor: Colors.black,
-                      color: Colors.white,
-                      text: widget.btnTxt,
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          await widget.onSubmit();
-                        }
-                      }),
-                  mY(5),
-                  TextButton(
-                      onPressed: () {
-                        //pushNamed( "/auth/signup");
-                        Get.back();
-                      },
-                      child: const Text(
-                        "Login instead",
-                        style: TextStyle(color: Colors.blue),
-                      )),
-                ],
-              ),
-            ],
-          )),
+      body: SingleChildScrollView(
+        padding: defaultPadding,
+        child: Container(
+            color: colors.surface,
+            height: screenSize(context).height -
+                appBarH -
+                statusBarH(context) -
+                topMargin,
+            margin: const EdgeInsets.only(top: topMargin),
+            padding: defaultPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${MainApp.appCtrl.store["name"]} auth",
+                      style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.bold, fontSize: 30),
+                    ),
+                  ],
+                ),
+                mY(10),
+                Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: widget.fields,
+                    )),
+                mY(10),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TuButton(
+                        width: double.infinity,
+                        bgColor: Colors.black,
+                        color: Colors.white,
+                        text: widget.btnTxt,
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await widget.onSubmit();
+                          }
+                        }),
+                    mY(5),
+                    TextButton(
+                        onPressed: () {
+                          //pushNamed( "/auth/signup");
+                          Get.back();
+                        },
+                        child: const Text(
+                          "Login instead",
+                          style: TextStyle(color: Colors.blue),
+                        )),
+                  ],
+                ),
+              ],
+            )),
+      ),
     );
   }
 }

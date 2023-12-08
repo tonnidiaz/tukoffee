@@ -68,78 +68,79 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     filterModal() {
       return TuBottomSheet(
-        child: Padding(
-          padding: defaultPadding2,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("FILTER",
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black)),
+                Obx(() => IconButton(
+                      splashRadius: 15,
+                      onPressed: () {
+                        _storeCtrl.sortOrder.value == SortOrder.descending
+                            ? _storeCtrl.setSortOrder(SortOrder.ascending)
+                            : _storeCtrl.setSortOrder(SortOrder.descending);
+                      },
+                      icon: Icon(
+                        _storeCtrl.sortOrder.value == SortOrder.descending
+                            ? CupertinoIcons.chevron_down
+                            : CupertinoIcons.chevron_up,
+                        size: 20,
+                      ),
+                      color: Colors.black87,
+                    )),
+              ],
+            ),
+            LayoutBuilder(builder: (context, c) {
+              return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text("FILTER",
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black)),
-                  Obx(() => IconButton(
-                        splashRadius: 15,
-                        onPressed: () {
-                          _storeCtrl.sortOrder.value == SortOrder.descending
-                              ? _storeCtrl.setSortOrder(SortOrder.ascending)
-                              : _storeCtrl.setSortOrder(SortOrder.descending);
+                  Obx(() => TuSelect(
+                        label: "Sort by",
+                        labelFontSize: 14,
+                        width: (c.maxWidth / 2) - 2.5,
+                        height: 40,
+                        value: _storeCtrl.sortBy.value,
+                        radius: 2,
+                        bgColor: colors.surface,
+                        items: [
+                          SelectItem("name", SortBy.name),
+                          SelectItem("price", SortBy.price),
+                          SelectItem("date", SortBy.createdAt),
+                        ],
+                        onChanged: (p0) {
+                          _storeCtrl.setSortBy(p0);
                         },
-                        icon: Icon(
-                            _storeCtrl.sortOrder.value == SortOrder.descending
-                                ? CupertinoIcons.sort_down
-                                : CupertinoIcons.sort_up),
-                        color: Colors.black87,
+                      )),
+                  Obx(() => TuSelect(
+                        label: "Status",
+                        labelFontSize: 14,
+                        width: (c.maxWidth / 2) - 2.5,
+                        radius: 2,
+                        height: 40,
+                        bgColor: colors.surface,
+                        value: _storeCtrl.status.value,
+                        items: [
+                          SelectItem("All", ProductStatus.all),
+                          SelectItem("Top selling", ProductStatus.topSelling),
+                          SelectItem("On special", ProductStatus.special),
+                          SelectItem("On sale", ProductStatus.sale),
+                          SelectItem("in stock", ProductStatus.instock),
+                          SelectItem("out of stock", ProductStatus.out),
+                        ],
+                        onChanged: (p0) {
+                          _storeCtrl.setStatus(p0);
+                        },
                       )),
                 ],
-              ),
-              LayoutBuilder(builder: (context, c) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Obx(() => TuSelect(
-                          label: "Sort by",
-                          labelFontSize: 14,
-                          width: (c.maxWidth / 2) - 2.5,
-                          height: 40,
-                          value: _storeCtrl.sortBy.value,
-                          radius: 2,
-                          items: [
-                            SelectItem("name", SortBy.name),
-                            SelectItem("price", SortBy.price),
-                            SelectItem("date", SortBy.createdAt),
-                          ],
-                          onChanged: (p0) {
-                            _storeCtrl.setSortBy(p0);
-                          },
-                        )),
-                    Obx(() => TuSelect(
-                          label: "Status",
-                          labelFontSize: 14,
-                          width: (c.maxWidth / 2) - 2.5,
-                          radius: 2,
-                          height: 40,
-                          value: _storeCtrl.status.value,
-                          items: [
-                            SelectItem("All", ProductStatus.all),
-                            SelectItem("Top selling", ProductStatus.topSelling),
-                            SelectItem("On special", ProductStatus.special),
-                            SelectItem("On sale", ProductStatus.sale),
-                            SelectItem("in stock", ProductStatus.instock),
-                            SelectItem("out of stock", ProductStatus.out),
-                          ],
-                          onChanged: (p0) {
-                            _storeCtrl.setStatus(p0);
-                          },
-                        )),
-                  ],
-                );
-              }),
-            ],
-          ),
+              );
+            }),
+          ],
         ),
       );
     }
