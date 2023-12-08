@@ -1,19 +1,16 @@
 import "package:lebzcafe/utils/functions2.dart";
 import "package:lebzcafe/views/order/checkout.dart";
-import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/prompt_modal.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
 
 import "package:flutter/material.dart";
 import "package:lebzcafe/main.dart";
-import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/utils/constants.dart";
 
 import "package:lebzcafe/views/map.dart";
 import "package:lebzcafe/widgets/common2.dart";
 import "package:lebzcafe/widgets/form_view.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 
 import "../../utils/functions.dart";
 
@@ -61,7 +58,7 @@ class _OrderPageState extends State<OrderPage> {
       }
       getStores(storeCtrl: _storeCtrl);
     } catch (e) {
-      Logger.info(e);
+      clog(e);
       setState(() {
         _setOrder({});
       });
@@ -73,47 +70,51 @@ class _OrderPageState extends State<OrderPage> {
     Map<String, dynamic> form =
         mode == 1 ? _order!["collector"] : _order!["delivery_address"];
 
-    Get.bottomSheet(FormView(
-        title: "Edit order recipient",
-        useBottomSheet: true,
-        fields: [
-          TuFormField(
-            required: true,
-            label: "Name:",
-            hint: "e.g. John Doe",
-            value: form["name"],
-            onChanged: (val) {
-              form["name"] = val;
-            },
-          ),
-          TuFormField(
-            required: true,
-            label: "Phone:",
-            hint: "e.g. 0712345678",
-            value: form["phone"],
-            onChanged: (val) {
-              form["phone"] = val;
-            },
-          ),
-          mY(5)
-        ],
-        onSubmit: () async {
-          try {
-            var field = mode == 1 ? "collector" : "delivery_address";
-            Map<String, dynamic> val =
-                mode == 1 ? _order!["collector"] : _order!["delivery_address"];
-            showProgressSheet();
-            final res =
-                await apiDio().post("/order/edit?id=${_order!["_id"]}", data: {
-              field: {...val, ...form}
-            });
-            gpop(); //POP SHEET
-            gpop(); //POP MAP
-            _reload(data: res.data);
-          } catch (e) {
-            errorHandler(e: e, msg: "Error editing fields!");
-          }
-        }));
+    Get.bottomSheet(
+        FormView(
+            title: "Edit order recipient",
+            useBottomSheet: true,
+            fields: [
+              TuFormField(
+                required: true,
+                label: "Name:",
+                hint: "e.g. John Doe",
+                value: form["name"],
+                onChanged: (val) {
+                  form["name"] = val;
+                },
+              ),
+              TuFormField(
+                required: true,
+                label: "Phone:",
+                hint: "e.g. 0712345678",
+                value: form["phone"],
+                onChanged: (val) {
+                  form["phone"] = val;
+                },
+              ),
+              mY(5)
+            ],
+            onSubmit: () async {
+              try {
+                var field = mode == 1 ? "collector" : "delivery_address";
+                Map<String, dynamic> val = mode == 1
+                    ? _order!["collector"]
+                    : _order!["delivery_address"];
+                showProgressSheet();
+                final res = await apiDio()
+                    .post("/order/edit?id=${_order!["_id"]}", data: {
+                  field: {...val, ...form}
+                });
+                gpop(); //POP SHEET
+                gpop(); //POP MAP
+                _reload(data: res.data);
+              } catch (e) {
+                errorHandler(e: e, msg: "Error editing fields!");
+              }
+            }),
+        isScrollControlled: true,
+        ignoreSafeArea: false);
   }
 
   _onEditAddressPress() async {
@@ -133,7 +134,7 @@ class _OrderPageState extends State<OrderPage> {
       } catch (e) {
         errorHandler(e: e, msg: "Error editing fields!");
       }
-    }));
+    }), isScrollControlled: true, ignoreSafeArea: false);
   }
 
   _reload({Map? data}) async {
@@ -157,6 +158,7 @@ class _OrderPageState extends State<OrderPage> {
           okTxt: "Yes",
           onOk: () async {
             try {
+              gpop();
               showProgressSheet(msg: "Canceling order..");
 
               if (_order!["mode"] == OrderMode.deliver.index) {
@@ -191,7 +193,8 @@ class _OrderPageState extends State<OrderPage> {
 
   _showUpdateStatusSheet() {
     _formCtrl.setForm({'status': _order!['status']});
-    Get.bottomSheet(TuCard(
+    Tu.bottomSheet(TuBottomSheet(
+      padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -266,19 +269,21 @@ class _OrderPageState extends State<OrderPage> {
       ),
       bottomNavigationBar: _order == null
           ? null
-          : TuBottomBar(
+          : TuBottomSheet(
+              elevation: 1,
+              padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   tuTableRow(
                       Text(
-                        "SUBTOTAL:",
+                        "Subtotal:",
                         style: styles.h4(),
                       ),
                       Text("R${_getTotal(_order!)}")),
                   tuTableRow(
                       Text(
-                        "DELIVERY FEE:",
+                        "Delivery fee:",
                         style: styles.h4(),
                       ),
                       Text("R${_order!["fee"]}")),
@@ -402,18 +407,23 @@ class _OrderPageState extends State<OrderPage> {
                                           const Text("Name:",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600)),
-                                          Text(
-                                            "${_order!["customer"]["first_name"]} ${_order!["customer"]["last_name"]}",
-                                          ),
+                                          _order!['customer'] == null
+                                              ? none()
+                                              : Text(
+                                                  "${_order!["customer"]["first_name"]} ${_order!["customer"]["last_name"]}",
+                                                ),
                                           my: 10),
-                                      tuTableRow(
-                                          const Text("Phone:",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600)),
-                                          Text(
-                                            "${_order!["customer"]["phone"]}",
-                                          ),
-                                          my: 10),
+                                      _order!['customer'] == null
+                                          ? none()
+                                          : tuTableRow(
+                                              const Text("Phone:",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                              Text(
+                                                "${_order!["customer"]["phone"]}",
+                                              ),
+                                              my: 10),
                                     ],
                                   ),
                                 ],
@@ -493,7 +503,9 @@ class _OrderPageState extends State<OrderPage> {
                                         "address": _order!['store']['address']
                                       });
                                       Get.bottomSheet(
-                                          const MapPage(canEdit: false));
+                                          const MapPage(canEdit: false),
+                                          isScrollControlled: true,
+                                          ignoreSafeArea: false);
                                     },
                                     child: Row(
                                       mainAxisAlignment:
@@ -552,10 +564,13 @@ class _OrderPageState extends State<OrderPage> {
                                                               "delivery_address"]
                                                         });
                                                         Get.bottomSheet(
-                                                          const MapPage(
-                                                            canEdit: false,
-                                                          ),
-                                                        );
+                                                            const MapPage(
+                                                              canEdit: false,
+                                                            ),
+                                                            isScrollControlled:
+                                                                true,
+                                                            ignoreSafeArea:
+                                                                false);
                                                       },
                                                       child: Text(
                                                         addr["place_name"],
@@ -676,7 +691,8 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   void _onEditStoreAddrClick() async {
-    Get.bottomSheet(TuCard(
+    Get.bottomSheet(TuBottomSheet(
+      padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
       child: tuColumn(min: true, children: [
         Obx(() => TuSelect(
               label: "Store:",

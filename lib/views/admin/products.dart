@@ -13,7 +13,6 @@ import "package:lebzcafe/views/admin/index.dart";
 import "package:lebzcafe/views/search.dart";
 import "package:lebzcafe/widgets/common3.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 import "../../widgets/add_product_form.dart";
 import "../../widgets/product_item.dart";
 import "../../widgets/prompt_modal.dart";
@@ -123,74 +122,74 @@ class _ProductsState extends State<Products> {
   Widget build(BuildContext context) {
     filterModal() {
       return TuBottomSheet(
-        child: Container(
-          padding: defaultPadding2,
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Row(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("FILTER",
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black)),
+              Obx(() => IconButton(
+                    splashRadius: 15,
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      _ctrl.sortOrder.value == SortOrder.descending
+                          ? _ctrl.setSortOrder(SortOrder.ascending)
+                          : _ctrl.setSortOrder(SortOrder.descending);
+                    },
+                    icon: Icon(
+                      _ctrl.sortOrder.value == SortOrder.descending
+                          ? CupertinoIcons.chevron_down
+                          : CupertinoIcons.chevron_up,
+                      size: 20,
+                    ),
+                    color: Colors.black87,
+                  )),
+            ],
+          ),
+          LayoutBuilder(builder: (context, c) {
+            return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text("FILTER",
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black)),
-                Obx(() => IconButton(
-                      splashRadius: 15,
-                      padding: EdgeInsets.zero,
-                      onPressed: () {
-                        _ctrl.sortOrder.value == SortOrder.descending
-                            ? _ctrl.setSortOrder(SortOrder.ascending)
-                            : _ctrl.setSortOrder(SortOrder.descending);
+                Obx(() => TuSelect(
+                      label: "Sort by",
+                      labelFontSize: 14,
+                      width: (c.maxWidth / 2) - 2.5,
+                      value: _ctrl.sortBy.value,
+                      radius: 2,
+                      items: [
+                        SelectItem("name", SortBy.name),
+                        SelectItem("price", SortBy.price),
+                        SelectItem("date", SortBy.createdAt),
+                      ],
+                      onChanged: (p0) {
+                        _ctrl.setSortBy(p0);
                       },
-                      icon: Icon(_ctrl.sortOrder.value == SortOrder.descending
-                          ? CupertinoIcons.sort_down
-                          : CupertinoIcons.sort_up),
-                      color: Colors.black87,
+                    )),
+                Obx(() => TuSelect(
+                      label: "Status",
+                      labelFontSize: 14,
+                      width: (c.maxWidth / 2) - 2.5,
+                      radius: 2,
+                      value: _ctrl.status.value,
+                      items: [
+                        SelectItem("All", ProductStatus.all),
+                        SelectItem("Top selling", ProductStatus.topSelling),
+                        SelectItem("On special", ProductStatus.special),
+                        SelectItem("On sale", ProductStatus.sale),
+                        SelectItem("in stock", ProductStatus.instock),
+                        SelectItem("out of stock", ProductStatus.out),
+                      ],
+                      onChanged: (p0) {
+                        _ctrl.setStatus(p0);
+                      },
                     )),
               ],
-            ),
-            LayoutBuilder(builder: (context, c) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Obx(() => TuSelect(
-                        label: "Sort by",
-                        labelFontSize: 14,
-                        width: (c.maxWidth / 2) - 2.5,
-                        value: _ctrl.sortBy.value,
-                        radius: 2,
-                        items: [
-                          SelectItem("name", SortBy.name),
-                          SelectItem("price", SortBy.price),
-                          SelectItem("date", SortBy.createdAt),
-                        ],
-                        onChanged: (p0) {
-                          _ctrl.setSortBy(p0);
-                        },
-                      )),
-                  Obx(() => TuSelect(
-                        label: "Status",
-                        labelFontSize: 14,
-                        width: (c.maxWidth / 2) - 2.5,
-                        radius: 2,
-                        value: _ctrl.status.value,
-                        items: [
-                          SelectItem("All", ProductStatus.all),
-                          SelectItem("Top selling", ProductStatus.topSelling),
-                          SelectItem("On special", ProductStatus.special),
-                          SelectItem("On sale", ProductStatus.sale),
-                          SelectItem("in stock", ProductStatus.instock),
-                          SelectItem("out of stock", ProductStatus.out),
-                        ],
-                        onChanged: (p0) {
-                          _ctrl.setStatus(p0);
-                        },
-                      )),
-                ],
-              );
-            }),
-          ]),
-        ),
+            );
+          }),
+        ]),
       );
     }
 

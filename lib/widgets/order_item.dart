@@ -47,6 +47,7 @@ class OrderItem extends StatelessWidget {
           okTxt: "Yes",
           onOk: () async {
             try {
+              gpop(); // Close this dialog
               showProgressSheet(msg: "Canceling order..");
 
               //Apply for refund first
@@ -63,9 +64,9 @@ class OrderItem extends StatelessWidget {
 
               _appBarCtrl.setSelected([]);
               await ctrl.setOrders(res.data["orders"]);
-              gpop();
+              gpop(); // Hide progress sheet
             } catch (e) {
-              gpop();
+              //gpop();
               errorHandler(e: e, msg: "Failed to cancel order!");
             }
           },

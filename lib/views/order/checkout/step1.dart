@@ -11,8 +11,6 @@ import "package:lebzcafe/views/order/checkout.dart";
 import "package:lebzcafe/widgets/common2.dart";
 import "package:tu/tu.dart";
 
-import "package:via_logger/logger.dart";
-
 class CheckoutStep1 extends StatelessWidget {
   final CheckoutCtrl ctrl;
   const CheckoutStep1({super.key, required this.ctrl});
@@ -96,7 +94,7 @@ class CheckoutStep1 extends StatelessWidget {
                                     child: IconButton(
                                       splashRadius: 20,
                                       onPressed: () {
-                                        Get.bottomSheet(
+                                        Tu.bottomSheet(
                                             editCollectorModal(context));
                                       },
                                       icon: Icon(
@@ -120,7 +118,9 @@ class CheckoutStep1 extends StatelessWidget {
                                 width: 25,
                                 child: IconButton(
                                   onPressed: () {
-                                    Get.bottomSheet(const EditAddressForm());
+                                    Get.bottomSheet(const EditAddressForm(),
+                                        ignoreSafeArea: false,
+                                        isScrollControlled: true);
                                   },
                                   splashRadius: 24,
                                   padding: EdgeInsets.zero,
@@ -141,8 +141,10 @@ class CheckoutStep1 extends StatelessWidget {
                                     child: TuCard(
                                         height: 70,
                                         onTap: () {
-                                          Get.bottomSheet(
-                                              const EditAddressForm());
+                                          Tu.bottomSheet(
+                                              const EditAddressForm(),
+                                              useSafeArea: true,
+                                              isScrollControlled: false);
                                         },
                                         child: const Icon(
                                           Icons.add,
@@ -168,7 +170,7 @@ class CheckoutStep1 extends StatelessWidget {
                                   ctrl.selectedAddr.isEmpty)
                           ? null
                           : () async {
-                              Logger.info("Next up");
+                              clog("Next up");
 
                               if (ctrl.mode.value == OrderMode.collect) {
                                 ctrl.step++;
@@ -189,7 +191,7 @@ class CheckoutStep1 extends StatelessWidget {
                                   to: ctrl.selectedAddr);
                               gpop();
                               if (res == null) return;
-                              Get.bottomSheet(DatesRatesSheet(
+                              Tu.bottomSheet(DatesRatesSheet(
                                 rates: res["rates"],
                               ));
                               // ctrl.step++;
@@ -214,7 +216,8 @@ class DatesRatesSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final StoreCtrl storeCtrl = Get.find();
     final CheckoutCtrl ctrl = Get.find();
-    return TuCard(
+    return TuBottomSheet(
+      padding: defaultPadding2,
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(

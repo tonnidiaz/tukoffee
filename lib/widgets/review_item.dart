@@ -1,10 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_rating_bar/flutter_rating_bar.dart";
-import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/views/product/reviews/review.dart";
 import "package:lebzcafe/widgets/views/add_review.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 
 class ReviewItem extends StatelessWidget {
   final Map<String, dynamic> item;
@@ -31,7 +29,7 @@ class ReviewItem extends StatelessWidget {
                 : colors.danger,
         label: Text(
           item["status"],
-          style: const TextStyle(fontSize: 10, color: Colors.white),
+          // style: const TextStyle(fontSize: 10, color: Colors.white),
         ),
       );
     }
@@ -73,7 +71,7 @@ class ReviewItem extends StatelessWidget {
                       child: Image.network(
                         item["product"]["images"][0]["url"],
                         errorBuilder: ((context, error, stackTrace) {
-                          Logger.info(error);
+                          clog(error);
                           return svgIcon(
                             name: "br-image-slash",
                             size: 26,
@@ -129,9 +127,9 @@ class ReviewItem extends StatelessWidget {
                     splashRadius: 24,
                     itemBuilder: (context) => [
                       PopupMenuItem(
-                        child: Text("Edit"),
+                        child: const Text("Edit"),
                         onTap: () {
-                          Get.bottomSheet(AddReviewView(
+                          Tu.bottomSheet(AddReviewView(
                               product: item["product"],
                               rev: item,
                               isAdmin: isAdmin,

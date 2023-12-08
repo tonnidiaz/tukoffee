@@ -8,7 +8,6 @@ import "package:lebzcafe/utils/functions.dart";
 import 'package:lebzcafe/controllers/notifs_ctrl.dart';
 
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 import "/utils/constants.dart";
 
 class MobileApp extends StatefulWidget {
@@ -87,7 +86,7 @@ class _MobileAppState extends State<MobileApp> {
           .theme(), //(Brightness.light),
       routes: routes,
       debugShowCheckedModeBanner: false,
-      initialRoute: "/rf",
+      initialRoute: "/",
       //home: MyReviewsPage(),
       builder: (context, child) {
         return CallbackShortcuts(

@@ -5,7 +5,6 @@ import "package:lebzcafe/utils/extensions.dart";
 import "package:lebzcafe/views/admin/index.dart";
 import "package:lebzcafe/views/admin/reviews.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 import "package:get/get.dart";
 
 import "../../utils/colors.dart";
@@ -26,7 +25,7 @@ class _DashboardState extends State<Dashboard> {
       final data = res.data;
       _ctrl.setData(data);
     } catch (e) {
-      Logger.info(e);
+      clog(e);
     }
   }
 

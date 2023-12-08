@@ -43,7 +43,6 @@ router.get("/cart", async (req, res) => {
         try {
             const { action } = req.query;
             const { product, quantity } = req.body;
-            console.log(product, action, quantity);
             const _user = req.user!;
             let cart : ICart | null = null;
             if (_user.cart) {

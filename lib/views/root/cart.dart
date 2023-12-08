@@ -4,9 +4,9 @@ import "package:lebzcafe/controllers/store_ctrl.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:lebzcafe/views/auth/login.dart";
 import "package:lebzcafe/widgets/cart_item.dart";
+import "package:lebzcafe/widgets/prompt_modal.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -60,8 +60,8 @@ class _CartPageState extends State<CartPage> {
         _storeCtrl.setcart(res.data["cart"]);
       }
     } catch (e) {
-      Logger.info("FETCH CART ERR");
-      Logger.info(e);
+      clog("FETCH CART ERR");
+      clog(e);
     }
     _storeCtrl.setcartFetched(true);
   }
@@ -72,12 +72,31 @@ class _CartPageState extends State<CartPage> {
       appBar: AppBar(titleSpacing: 14, title: const Text("Cart"), actions: [
         PopupMenuButton(
             itemBuilder: (context) => [
-                  const PopupMenuItem(
-                      padding: EdgeInsets.symmetric(horizontal: 5),
+                  PopupMenuItem(
+                      enabled: _storeCtrl.cart["products"].isNotEmpty,
+                      onTap: () async {
+                        Tu.dialog(PromptDialog(
+                          title: "Clear cart",
+                          msg: "Are you sure you want  to clear cart?",
+                          okTxt: "Yes",
+                          onOk: () async {
+                            try {
+                              gpop();
+                              showProgressSheet();
+                              final res = await apiDio().post('/user/cart',
+                                  queryParameters: {"action": "clear"});
+                              _storeCtrl.setcart(res.data["cart"]);
+                              gpop();
+                            } catch (e) {
+                              errorHandler(e: e, msg: "Failed to clear cart");
+                            }
+                          },
+                        ));
+                      },
                       child: Text("Clear cart"))
                 ])
       ]),
-      bottomNavigationBar: TuBottomBar(
+      bottomNavigationBar: TuBottomSheet(
         child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,

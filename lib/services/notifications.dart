@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'package:lebzcafe/widgets/prompt_modal.dart';
 import 'package:tu/tu.dart';
-import "package:via_logger/logger.dart";
 
 class NotifsService {
   static initNotifs() {
@@ -32,7 +31,7 @@ class NotifsService {
 
   static requestNotifsPermission(BuildContext context) {
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-      Logger.info("Allowed: $isAllowed");
+      clog("Allowed: $isAllowed");
       if (Platform.isLinux) return;
       if (!isAllowed) {
         TuFuncs.dialog(

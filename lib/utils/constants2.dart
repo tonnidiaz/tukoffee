@@ -4,8 +4,6 @@ import "package:cloudinary/cloudinary.dart";
 import "package:flutter/material.dart";
 import "package:socket_io_client/socket_io_client.dart" as io;
 import "package:tu/tu.dart";
-import "package:via_logger/log_record.dart";
-import "package:via_logger/output.dart";
 
 const hivePath = "Tunedbass/db/hive_db/tukoffee";
 String randomImg() {
@@ -108,11 +106,3 @@ const sheetRadius = BorderRadius.only(
     topLeft: Radius.circular(10), topRight: Radius.circular(10));
 
 io.Socket? socket;
-
-class Console extends Output {
-  @override
-  void output(LogRecord record) {
-    ///Custom print style
-    debugPrint('[${record.path}:${record.lineNumber}] ${record.message}');
-  }
-}

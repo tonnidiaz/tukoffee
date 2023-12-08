@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:lebzcafe/widgets/common2.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 
 class TuMultiselect extends StatefulWidget {
   final List<int> selected;
@@ -115,7 +114,7 @@ class _TuMultiselectDialogState extends State<TuMultiselectDialog> {
             itemCount: widget.items.length,
             itemBuilder: (context, index) {
               var item = widget.items[index];
-              Logger.info(item.subtitle);
+              clog(item.subtitle);
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 4),
                 child: TuListTile(

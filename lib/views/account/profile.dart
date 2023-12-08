@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import "package:lebzcafe/views/auth/login.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 import "package:dio/dio.dart";
 import "package:flutter/material.dart";
 import "package:lebzcafe/controllers/app_ctrl.dart";
@@ -37,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
         _account = res.data["users"][0];
       });
     } catch (e) {
-      Logger.info(e);
+      clog(e);
     }
   }
 
@@ -86,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
             // Navigator.pop(context);
           } catch (e) {
             Get.back();
-            Logger.info(e);
+            clog(e);
             if (e.runtimeType == DioException) {
               handleDioException(
                   context: context,
@@ -186,69 +185,61 @@ class _ProfilePageState extends State<ProfilePage> {
         "last_name": _account!["last_name"],
       });
       final form = ctrl.form;
-      Get.bottomSheet(SingleChildScrollView(
-        child: TuBottomSheet(
-          child: TuForm(
-            builder: (key) => Container(
-              padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
-              //color: colors.surface,
-              child: tuColumn(
-                min: true,
-                children: [
-                  mY(10),
-                  TuFormField(
-                    label: "First name:",
-                    hint: "e.g. John",
-                    radius: 5,
-                    required: true,
-                    value: form["first_name"],
-                    onChanged: (val) {
-                      formCtrl.setFormField("first_name", val);
-                    },
-                  ),
-                  mY(5),
-                  TuFormField(
-                    label: "Last name:",
-                    hint: "e.g. Doe",
-                    radius: 5,
-                    required: true,
-                    value: form["last_name"],
-                    onChanged: (val) {
-                      formCtrl.setFormField("last_name", val);
-                    },
-                  ),
-                  mY(10),
-                  TuButton(
-                      width: double.infinity,
-                      text: "SAVE CHANGES",
-                      color: Colors.white,
-                      bgColor: Colors.black,
-                      onPressed: () async {
-                        if (key.currentState == null ||
-                            !key.currentState!.validate()) return;
-                        try {
-                          showProgressSheet();
-                          final res = await apiDio().post("/user/edit", data: {
-                            "value": form,
-                            "userId": _account!["_id"]
-                          });
-                          setState(() {
-                            _account = res.data["user"];
-                          });
-                          if (_account!["_id"] == appCtrl.user["_id"]) {
-                            appCtrl.setUser(_account!);
-                          }
-                          Get.back();
-                          Get.back();
-                        } catch (e) {
-                          //
-                          Get.back();
-                          errorHandler(e: e, context: context);
+      Get.bottomSheet(TuBottomSheet(
+        child: TuForm(
+          builder: (key) => Container(
+            //color: colors.surface,
+            child: tuColumn(
+              min: true,
+              children: [
+                TuFormField(
+                  label: "First name:",
+                  hint: "e.g. John",
+                  radius: 5,
+                  required: true,
+                  value: form["first_name"],
+                  onChanged: (val) {
+                    formCtrl.setFormField("first_name", val);
+                  },
+                ),
+                TuFormField(
+                  label: "Last name:",
+                  hint: "e.g. Doe",
+                  radius: 5,
+                  required: true,
+                  value: form["last_name"],
+                  onChanged: (val) {
+                    formCtrl.setFormField("last_name", val);
+                  },
+                ),
+                mY(10),
+                TuButton(
+                    width: double.infinity,
+                    text: "SAVE CHANGES",
+                    color: Colors.white,
+                    bgColor: Colors.black,
+                    onPressed: () async {
+                      if (key.currentState == null ||
+                          !key.currentState!.validate()) return;
+                      try {
+                        showProgressSheet();
+                        final res = await apiDio().post("/user/edit",
+                            data: {"value": form, "userId": _account!["_id"]});
+                        setState(() {
+                          _account = res.data["user"];
+                        });
+                        if (_account!["_id"] == appCtrl.user["_id"]) {
+                          appCtrl.setUser(_account!);
                         }
-                      }),
-                  mY(15)
-                ],
-              ),
+                        Get.back();
+                        Get.back();
+                      } catch (e) {
+                        //
+                        Get.back();
+                        errorHandler(e: e, context: context);
+                      }
+                    }),
+              ],
             ),
           ),
         ),

@@ -10,7 +10,6 @@ import "package:tu/tu.dart";
 import "../../../utils/constants2.dart";
 import "../../../widgets/product_card.dart";
 import "/utils/constants.dart";
-import "package:via_logger/logger.dart";
 
 class HomeTab extends StatefulWidget {
   final String q;
@@ -27,12 +26,12 @@ class _HomeTabState extends State<HomeTab> {
     //if (_storeCtrl.products.isNotEmpty) return;
     _storeCtrl.setProductsFetched(false);
     try {
-      Logger.info("Fetching products...");
+      clog("Fetching products...");
       final res = await apiDio().get("/products?q=${widget.q}");
       _storeCtrl.setProducts(res.data["data"]);
       _storeCtrl.setProductsFetched(true);
     } catch (e) {
-      Logger.info(e);
+      clog(e);
       _storeCtrl.setProductsFetched(true);
     }
   }

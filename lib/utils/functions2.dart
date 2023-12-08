@@ -4,7 +4,6 @@ import "package:dio/dio.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/constants.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 
 class Shiplogic {
   static Future<String> getOrderStatus(Map order) async {
@@ -17,14 +16,14 @@ class Shiplogic {
     } catch (e) {
       if (e.runtimeType == DioException) {
         e as DioException;
-        Logger.info(e.response);
+        clog(e.response);
       }
       return "cancelled";
     }
   }
 
   static cancelOrder(Map order) async {
-    Logger.info("CANCELLING ON SHIPLOGIC...");
+    clog("CANCELLING ON SHIPLOGIC...");
     final res = await shiplogicDio().post("/shipments/cancel", data: {
       "tracking_reference": order["shiplogic"]["shipment"]["tracking_code"]
     });

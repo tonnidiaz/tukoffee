@@ -10,7 +10,6 @@ import 'package:lebzcafe/widgets/tu/browser.dart';
 import 'package:lebzcafe/widgets/tu/common.dart';
 import 'package:tu/tu.dart';
 import 'package:url_launcher/url_launcher.dart';
-import "package:via_logger/logger.dart";
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -133,7 +132,7 @@ class CheckoutCtrl extends GetxController {
         gpop();
         //PROBLEM WITH BACKEND
         if (paystackData != null) {
-          Logger.info(jsonEncode(paystackData));
+          clog(jsonEncode(paystackData));
         }
         TuFuncs.dialog(
             context,
@@ -170,7 +169,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   final CheckoutCtrl _ctrl = Get.put(CheckoutCtrl());
 
   _onPayment(data) {
-    Logger.info('On payment: $data');
+    clog('On payment: $data');
     final gateway = data['gateway'];
     final user = data['user'];
     final mData = data['data'];
@@ -179,7 +178,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       if (mData['type'] == 'payment.succeeded') {
         _ctrl.createOrder(context: context, yocoData: mData, browser: _browser);
       } else {
-        Logger.info(mData);
+        clog(mData);
       }
     } else if (gateway == EGateway.paystack.index) {
       _ctrl.createOrder(
@@ -188,7 +187,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   _initSocketio() {
-    Logger.info('Socketio init...');
+    clog('Socketio init...');
     socket?.off("payment");
     socket?.on('payment', _onPayment);
   }
@@ -236,7 +235,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   void dispose() {
-    Logger.info('Disposing');
+    clog('Disposing');
     Get.delete<CheckoutCtrl>();
     super.dispose();
   }
@@ -370,10 +369,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
         options: _webviewOptions,
       ));
     } catch (e) {
-      Logger.info(e);
+      clog(e);
       if (e.runtimeType == DioException) {
         e as DioException;
-        Logger.info(e.response);
+        clog(e.response);
         if (e.response != null) {
           var msg = e.response!.data.runtimeType == String
               ? "Something went wrong"
@@ -494,7 +493,7 @@ class _EditAddressFormState extends State<EditAddressForm> {
               MainApp.formCtrl.clear();
               Get.bottomSheet(MapPage(
                 onSubmit: (val) {
-                  Logger.info(val);
+                  clog(val);
                   setState(() {
                     _deliveryAddress = {..._deliveryAddress, ...val};
                   });

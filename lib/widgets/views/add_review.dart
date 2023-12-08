@@ -88,11 +88,7 @@ class _AddReviewViewState extends State<AddReviewView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: keyboardPadding(context)),
-      color: colors.surface,
-      padding: defaultPadding,
-      width: double.infinity,
+    return TuBottomSheet(
       child: SingleChildScrollView(
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text(

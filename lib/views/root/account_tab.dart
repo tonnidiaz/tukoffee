@@ -5,6 +5,7 @@ import "package:lebzcafe/utils/colors.dart";
 import "package:lebzcafe/views/admin/refunds.dart";
 
 import "package:get/get.dart";
+import "package:lebzcafe/views/feedback/view.dart";
 import "package:lebzcafe/widgets/titlebars.dart";
 import "package:tu/tu.dart";
 
@@ -104,7 +105,7 @@ class AccountTab extends StatelessWidget {
                           child: const Text("Settings")),
                       InfoItem(
                           onTap: () {
-                            //     Get.bottomSheet(const Feedba());
+                            pushTo(const FeedbackView());
                           },
                           child: const Text("Help/Feedback")),
                     ]),

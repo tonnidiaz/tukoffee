@@ -12,7 +12,6 @@ import "package:tu/tu.dart";
 
 import "../../../utils/constants2.dart";
 import "../../../widgets/product_card.dart";
-import "package:via_logger/logger.dart";
 
 class ShopPage extends StatefulWidget {
   const ShopPage({Key? key}) : super(key: key);

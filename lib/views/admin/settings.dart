@@ -18,7 +18,6 @@ import "package:lebzcafe/widgets/form_view.dart";
 import "package:get/get.dart";
 import "package:lebzcafe/widgets/tu/common.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 
 class AdminSettingsPage extends StatefulWidget {
   const AdminSettingsPage({super.key});
@@ -38,10 +37,10 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
 
   editFields() async {
     try {
-      //Logger.info(formCtrl.form);
+      //clog(formCtrl.form);
       final res =
           await apiDio().post("/store/update", data: {"data": formCtrl.form});
-      // Logger.info(res);
+      // clog(res);
       setupStoreDetails(data: res.data["store"]);
       Navigator.pop(context);
     } catch (e) {
@@ -64,7 +63,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
       final file = await importFile();
       if (file != null) {
         if (appCtrl.store["image"]["publicId"] != null) {
-          Logger.info("Deleting old...");
+          clog("Deleting old...");
           try {
             await signedCloudinary.destroy(appCtrl.store["image"]["publicId"]);
           } catch (e) {
@@ -73,11 +72,11 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
           }
         }
 
-        Logger.info("Uploading...");
+        clog("Uploading...");
         showToast("Uploading image...").show(context);
         final res = await uploadImg(file, appCtrl: appCtrl);
         if (res.isResultOk) {
-          Logger.info("Updating...");
+          clog("Updating...");
           final res2 = await apiDio().post("/store/update", data: {
             "data": {
               "image": {"url": res.secureUrl, "publicId": res.publicId}
@@ -87,7 +86,7 @@ class _AdminSettingsPageState extends State<AdminSettingsPage> {
         }
       }
     } catch (e) {
-      Logger.info(e);
+      clog(e);
       errorHandler(e: e, context: context, msg: "Failed to upload image");
     }
   }

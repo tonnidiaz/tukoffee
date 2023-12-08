@@ -3,7 +3,6 @@ import "package:lebzcafe/controllers/app_ctrl.dart";
 import "package:lebzcafe/utils/functions.dart";
 import "package:lebzcafe/widgets/common.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 import "../utils/colors.dart";
 
 class TDrawer extends StatefulWidget {
@@ -141,7 +140,7 @@ class _TDrawerState extends State<TDrawer> {
                                   try {
                                     logout();
                                   } catch (e) {
-                                    Logger.info(e);
+                                    clog(e);
                                   }
                                 },
                                 child: iconText("Logout", Icons.logout)),

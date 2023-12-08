@@ -5,7 +5,6 @@ import "package:lebzcafe/controllers/store_ctrl.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/functions.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 import "../utils/constants2.dart";
 
 class CartBtn extends StatelessWidget {
@@ -123,14 +122,14 @@ Container imgCard(
                           formViewCtrl.form["images"][index]; // {url, publicId}
                       toast.show(context);
                       try {
-                        Logger.info("Deleting from cloudinary...");
+                        clog("Deleting from cloudinary...");
                         var res = await signedCloudinary.destroy(
                           img["publicId"],
                         );
-                        Logger.info(formViewCtrl.form["images"].length);
+                        clog(formViewCtrl.form["images"].length);
                         var tempImgs = [...formViewCtrl.form["images"]];
                         tempImgs.removeAt(index);
-                        Logger.info(res.result);
+                        clog(res.result);
                         if (mode == "edit" || res.result == "not found") {
                           final res2 = await addEditProduct(
                               context,
@@ -144,11 +143,11 @@ Container imgCard(
                           }
                         }
                         if (res.isSuccessful) {
-                          Logger.info("Image deleted successfully!");
+                          clog("Image deleted successfully!");
                         }
                         toast.dismiss();
                       } catch (e) {
-                        Logger.info(e);
+                        clog(e);
                         toast.dismiss();
                         showToast("Failed to delete image").show(context);
                       }

@@ -39,6 +39,10 @@ class AppCtrl extends GetxController {
     title.value = val;
   }
 
+  final _email = Rx<String>("tunedstreamz@gmail.com");
+  String get email => _email.value;
+  set email(String val) => _email.value = val;
+
   RxMap store = {}.obs;
   setStore(Map val) {
     store.value = val;

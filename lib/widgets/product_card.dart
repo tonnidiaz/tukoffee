@@ -5,7 +5,6 @@ import "package:flutter/material.dart";
 import "package:lebzcafe/utils/colors.dart";
 
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 import "../controllers/app_ctrl.dart";
 import "../controllers/store_ctrl.dart";
 import "../utils/constants.dart";
@@ -177,12 +176,13 @@ class ProductCard extends StatelessWidget {
                   style: GoogleFonts.poppins(
                       fontSize: 14, fontWeight: FontWeight.w600),
                 ),
-                mY(2),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Chip(
                       backgroundColor: colors.primary,
+                      labelPadding:
+                          EdgeInsets.symmetric(vertical: -6, horizontal: 4),
                       label: Text(
                         product["quantity"] > 0 ? "In stock" : "out of stock",
                         style:
@@ -205,7 +205,6 @@ class ProductCard extends StatelessWidget {
                     )
                   ],
                 ),
-                mY(2.5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

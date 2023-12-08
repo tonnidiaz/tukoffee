@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:lebzcafe/utils/colors.dart";
 
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 
 class GetxHomePage extends StatelessWidget {
   const GetxHomePage({super.key});
@@ -18,7 +17,7 @@ class GetxHomePage extends StatelessWidget {
             mY(6),
             ElevatedButton(
               onPressed: () {
-                Logger.info("p");
+                clog("p");
 
                 Get.bottomSheet(const MySheet(),
                     useRootNavigator: false,

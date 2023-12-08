@@ -9,7 +9,6 @@ import "package:lebzcafe/views/root/shop/index.dart";
 import "package:lebzcafe/widgets/common3.dart";
 import "package:get/get.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 
 class IndexCtrl extends GetxController {
   RxInt tab = 0.obs;

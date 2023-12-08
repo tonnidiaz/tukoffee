@@ -90,13 +90,15 @@ class _DashboardPageState extends State<DashboardPage> {
                           horizontal: 15, vertical: 5),
                       decoration: BoxDecoration(
                           color: index == e.key
-                              ? colors.primaryFade
+                              ? colors.primary
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(100)),
                       child: e.value.icon.runtimeType == String
                           ? svgIcon(
                               name: e.value.icon,
-                              color: index != e.key ? colors.note : null,
+                              color: index != e.key
+                                  ? colors.note
+                                  : colors.onPrimary,
                             )
                           : Icon(
                               e.value.icon,

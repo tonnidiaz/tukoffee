@@ -1,6 +1,5 @@
 import "package:lebzcafe/utils/extensions.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 import "package:flutter/material.dart";
 import "package:lebzcafe/main.dart";
 import "package:lebzcafe/utils/constants2.dart";

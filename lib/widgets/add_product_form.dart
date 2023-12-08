@@ -49,7 +49,7 @@ class _AddProductFormState extends State<AddProductForm> {
 
   void _onUpload(int p0, int p1) {
     var percentage = (p0 / p1) * 100;
-    Logger.info("Percentage: $percentage%");
+    clog("Percentage: $percentage%");
   }
 
   void _uploadImg(File file, int index) async {
@@ -68,7 +68,7 @@ class _AddProductFormState extends State<AddProductForm> {
           // immediately update product images
 
           try {
-            Logger.info("Adding image to backend...");
+            clog("Adding image to backend...");
             var newImgs = [
               ...existingImgs,
               {"url": res.secureUrl, "publicId": res.publicId}
@@ -90,7 +90,7 @@ class _AddProductFormState extends State<AddProductForm> {
                   exception: e as DioException,
                   msg: "Failed to add image to database");
             } else {
-              Logger.info(e);
+              clog(e);
               showToast("Failed to add image to database", isErr: true)
                   .show(context);
             }
@@ -116,7 +116,7 @@ class _AddProductFormState extends State<AddProductForm> {
             exception: e as DioException,
             msg: "Failed to upload image");
       } else {
-        Logger.info(e);
+        clog(e);
         showToast("Failed to upload image", isErr: true).show(context);
       }
     }
@@ -290,7 +290,7 @@ class _AddProductFormState extends State<AddProductForm> {
                 ],
               );
             }),
-            /* Center(
+            Center(
               child: Wrap(
                 crossAxisAlignment: WrapCrossAlignment.center,
                 alignment: WrapAlignment.center,
@@ -367,7 +367,7 @@ class _AddProductFormState extends State<AddProductForm> {
                 ),
               ],
             ),
-            mY(10) */
+            mY(10)
           ],
           useBottomSheet: true,
           onSubmit: () async {

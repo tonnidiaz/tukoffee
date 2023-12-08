@@ -4,8 +4,6 @@ import "package:lebzcafe/utils/colors.dart";
 import "package:get/get.dart";
 import "package:tu/tu.dart";
 
-import "package:via_logger/logger.dart";
-
 import "common.dart";
 
 class FormCtrl extends GetxController {
@@ -16,7 +14,7 @@ class FormCtrl extends GetxController {
 
   clear() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Logger.info("Clear form");
+      clog("Clear form");
       form.value = {};
       setTempImgs([]);
     });

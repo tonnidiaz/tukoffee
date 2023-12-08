@@ -1,5 +1,4 @@
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 import "package:flutter/material.dart";
 import "package:flutter_map/flutter_map.dart";
 import "package:geocoding/geocoding.dart";
@@ -72,7 +71,7 @@ class _MapPageState extends State<MapPage> {
     if (_isGeocoding || query.length < 3) return;
     _setIsGeocoding(true);
     try {
-      /* Logger.info("setft");
+      /* clog("setft");
       _setFeatures(dummyFeatures);
       return; */
       const baseURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
@@ -83,7 +82,7 @@ class _MapPageState extends State<MapPage> {
       });
       _setFeatures(res.data["features"]);
     } catch (e) {
-      Logger.info(e);
+      clog(e);
     }
     _setIsGeocoding(false);
   }
@@ -144,17 +143,17 @@ class _MapPageState extends State<MapPage> {
       if (context.mounted) {
         await showToast("Something went wrong", isErr: true).show(context);
       }
-      Logger.info(e);
+      clog(e);
       Get.back();
     }
   }
 
   Future<void> _getAddressFromLatLng(Position position) async {
-    Logger.info("GETTING...");
+    clog("GETTING...");
     await placemarkFromCoordinates(position.latitude, position.longitude)
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
-      Logger.info("${place.administrativeArea}");
+      clog("${place.administrativeArea}");
       List<String?> placeAsList = [
         place.street,
         place.subLocality,
@@ -176,7 +175,7 @@ class _MapPageState extends State<MapPage> {
       _setCenter(cent);
       _mapController.move(cent, 17.5);
     }).catchError((e) {
-      Logger.info(e);
+      clog(e);
     });
   }
 
@@ -216,8 +215,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: TuBottomBar(
-          topRadius: 10,
+        bottomNavigationBar: TuBottomSheet(
           child: Container(
             child: iconText(
                 _address["place_name"] ?? "No address", Icons.location_on,
@@ -423,7 +421,7 @@ class _MapPageState extends State<MapPage> {
                                                 ...addr
                                               });
                                             } catch (e) {
-                                              Logger.info(e);
+                                              clog(e);
                                             }
                                           }),
                                     )

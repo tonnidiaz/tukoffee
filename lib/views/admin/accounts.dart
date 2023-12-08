@@ -10,7 +10,6 @@ import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/prompt_modal.dart";
 import "package:get/get.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 import "../../controllers/app_ctrl.dart";
 import "../../controllers/appbar.dart";
 
@@ -73,14 +72,14 @@ class _AccountsState extends State<Accounts> {
                 _ctrl.setAccounts(_ctrl.accounts.value!
                     .where((it) => !ids.contains(it["_id"]))
                     .toList());
-                Logger.info(res.data);
+                clog(res.data);
                 showToast("Accounts deleted successfully!").show(context);
               } catch (e) {
                 if (e.runtimeType == DioException) {
                   e as DioException;
                   handleDioException(context: context, exception: e);
                 } else {
-                  Logger.info(e);
+                  clog(e);
                   showToast("Error deleting accounts!", isErr: true)
                       .show(context);
                 }
@@ -132,16 +131,15 @@ class _AccountsState extends State<Accounts> {
             await _init();
           },
           child: Padding(
-            padding: defaultPadding,
+            padding: const EdgeInsets.all(14.0),
             child: CustomScrollView(
               slivers: [
-                SliverToBoxAdapter(child: mY(topMargin)),
-                SliverToBoxAdapter(
+                TuSliver(child: mY(topMargin)),
+                TuSliver(
                   child: Obx(
                     () => TuFormField(
                       hint: "Name or email",
                       fill: colors.surface,
-                      height: borderlessInpHeight,
                       hasBorder: false,
                       radius: 100,
                       prefixIcon: TuIcon(Icons.search),
@@ -165,9 +163,6 @@ class _AccountsState extends State<Accounts> {
                       },
                     ),
                   ),
-                ),
-                TuSliver(
-                  child: mY(6),
                 ),
                 SliverFillRemaining(
                   hasScrollBody: false,
@@ -217,9 +212,9 @@ class _AccountsState extends State<Accounts> {
     } catch (e) {
       if (e.runtimeType == DioException) {
         e as DioException;
-        Logger.info(e.response);
+        clog(e.response);
       } else {
-        Logger.info(e);
+        clog(e);
       }
       _ctrl.setAccounts([]);
     }
@@ -317,46 +312,37 @@ class AccountCard extends StatelessWidget {
                         PopupMenuItem(
                             enabled: isAdmin,
                             onTap: () async {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return PromptDialog(
-                                      title: "Delete account",
-                                      okTxt: "Yes",
-                                      msg:
-                                          "Do you want to permenently delete this account?",
-                                      onOk: () async {
-                                        try {
-                                          final res = await apiDio()
-                                              .post("/users/delete", data: {
-                                            "ids": [account["_id"]]
-                                          });
-                                          var accs = ctrl.accounts.value!;
-                                          ctrl.setAccounts(accs
-                                              .where((it) =>
-                                                  it["_id"] != account["_id"])
-                                              .toList());
-                                          Logger.info(res.data);
-                                          showToast(
-                                                  "Account deleted successfully!")
-                                              .show(context);
-                                        } catch (e) {
-                                          Logger.info(e);
-                                          if (e.runtimeType == DioException) {
-                                            e as DioException;
-                                            handleDioException(
-                                                context: context,
-                                                exception: e,
-                                                msg: "Error deleting account!");
-                                          } else {
-                                            showToast("Error deleting account!",
-                                                    isErr: true)
-                                                .show(context);
-                                          }
-                                        }
-                                      },
-                                    );
-                                  });
+                              clog("TU FUNCS DLG");
+                              Tu.dialog(
+                                PromptDialog(
+                                  title: "Delete account",
+                                  okTxt: "Yes",
+                                  msg:
+                                      "Do you want to permenently delete this account?",
+                                  onOk: () async {
+                                    try {
+                                      final res = await apiDio()
+                                          .post("/users/delete", data: {
+                                        "ids": [account["_id"]]
+                                      });
+                                      var accs = ctrl.accounts.value!;
+                                      ctrl.setAccounts(accs
+                                          .where((it) =>
+                                              it["_id"] != account["_id"])
+                                          .toList());
+                                      clog(res.data);
+                                      gpop();
+                                      showToast("Account deleted successfully!")
+                                          .show(context);
+                                    } catch (e) {
+                                      clog(e);
+                                      gpop();
+                                      errorHandler(
+                                          e: e, msg: "Error deleting account");
+                                    }
+                                  },
+                                ),
+                              );
                             },
                             child: const Text("Delete"))
                       ];

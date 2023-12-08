@@ -2,9 +2,6 @@
 
 import "dart:convert";
 import "dart:io";
-import "dart:math";
-
-import "package:another_flushbar/flushbar.dart";
 import "package:cloudinary/cloudinary.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
@@ -15,14 +12,13 @@ import "package:get/get.dart" as getx;
 import "package:hive_flutter/hive_flutter.dart";
 
 import "package:tu/tu.dart";
-import "package:via_logger/via_logger.dart";
 import "/utils/constants.dart";
 import "package:window_manager/window_manager.dart";
 import "constants2.dart";
 
 /* void cclog(dynamic p) {
   //debugPrint("$tag: $p");
-  Logger.info(p);
+  clog(p);
 }
  */
 void setupWindowManager() async {
@@ -76,7 +72,7 @@ setupStoreDetails({Map<String, dynamic>? data}) async {
     if (e.runtimeType == DioException) {
       e as DioException;
       appCtrl.setserverDown(true);
-      Logger.info(e.response);
+      clog(e.response);
     }
   }
 }
@@ -89,9 +85,9 @@ Future<void> initHive() async {
     await Hive.initFlutter(hivePath);
     var box = await Hive.openBox("app");
     appBox = box;
-    Logger.info("Hive initialized");
+    clog("Hive initialized");
   } catch (e) {
-    Logger.info(e);
+    clog(e);
   }
 }
 
@@ -108,7 +104,7 @@ setupUser({bool full = true}) async {
     return;
   }
   var authToken = appBox!.get("authToken");
-  Logger.info(authToken);
+  clog(authToken);
   if (authToken != null) {
     try {
       final res = await apiDio().post("/auth/login");
@@ -116,7 +112,7 @@ setupUser({bool full = true}) async {
       appCtrl.setUser(res.data["user"]);
       setupCart(res.data["user"]["_id"]);
     } catch (e) {
-      Logger.info(e);
+      clog(e);
       appCtrl.setUser({});
       storeCtrl.setcart({});
       appCtrl.setReady(true);
@@ -126,7 +122,7 @@ setupUser({bool full = true}) async {
     storeCtrl.setcart({});
     appCtrl.setReady(true);
   }
-  Logger.info("User setup");
+  clog("User setup");
 }
 
 void setupCart(String id) async {
@@ -137,7 +133,7 @@ void setupCart(String id) async {
     storeCtrl.setcart(res.data["cart"]);
     appCtrl.setReady(true);
   } catch (e) {
-    Logger.info(e);
+    clog(e);
     appCtrl.setReady(true);
   }
 }
@@ -149,15 +145,15 @@ logout() async {
 
 Future<Map?> addEditProduct(BuildContext context, Map<String, dynamic> product,
     {String mode = "add"}) async {
-  Logger.info("$mode product...");
+  clog("$mode product...");
   try {
     final url = "/products/$mode";
     final res = await apiDio().post(url, data: product);
-    Logger.info(res.data);
+    clog(res.data);
     return res.data;
   } catch (e) {
     gpop();
-    Logger.info(e);
+    clog(e);
     if (e.runtimeType == DioException) {
       e as DioException;
       handleDioException(
@@ -186,7 +182,7 @@ Future<File?> importFile(
       return null;
     }
   } catch (e) {
-    Logger.info(e);
+    clog(e);
   }
   return null;
 }
@@ -215,7 +211,7 @@ getStores({required StoreCtrl storeCtrl}) async {
     final res = await apiDio().get("/stores");
     storeCtrl.setStores(res.data["stores"]);
   } catch (e) {
-    Logger.info(e);
+    clog(e);
     storeCtrl.setStores([]);
   }
 }

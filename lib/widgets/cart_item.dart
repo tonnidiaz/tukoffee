@@ -5,7 +5,6 @@ import "package:lebzcafe/controllers/store_ctrl.dart";
 import "package:lebzcafe/main.dart";
 import "package:tu/tu.dart";
 
-import "package:via_logger/logger.dart";
 import "../utils/colors.dart";
 import "../utils/constants.dart";
 
@@ -31,13 +30,13 @@ class CartItem extends StatelessWidget {
     final storeCtrl = Get.find<StoreCtrl>();
 
     updateCart(String act, dynamic val) async {
-      Logger.info(act);
+      clog(act);
       try {
         final res = await apiDio().post("/user/cart?action=$act",
             data: {"product": prod["_id"], "quantity": val});
         storeCtrl.setcart(res.data["cart"]);
         // t.dismiss();
-        Logger.info("Item quantity updated");
+        clog("Item quantity updated");
         Navigator.pop(context);
       } catch (e) {
         errorHandler(e: e, context: context);
@@ -45,9 +44,7 @@ class CartItem extends StatelessWidget {
     }
 
     Widget editSheet() {
-      return Container(
-        color: colors.surface,
-        padding: defaultPadding,
+      return TuBottomSheet(
         child: tuColumn(min: true, children: [
           Row(
             children: [
@@ -55,6 +52,7 @@ class CartItem extends StatelessWidget {
                 child: Obx(
                   () => TuSelect(
                     label: "Quantity:",
+                    bgColor: colors.surface,
                     value: formCtrl.form["quantity"],
                     onChanged: (val) =>
                         {formCtrl.setFormField("quantity", val)},
@@ -73,6 +71,7 @@ class CartItem extends StatelessWidget {
                           content: const Text(
                               "Are you sure you want to remove this item?"),
                           onOk: () async {
+                            gpop();
                             showProgressSheet();
                             await updateCart("remove", null);
                             gpop();
@@ -102,7 +101,7 @@ class CartItem extends StatelessWidget {
 
     void showEditSheet() {
       formCtrl.setForm({"quantity": item["quantity"]});
-      Get.bottomSheet(editSheet());
+      Tu.bottomSheet(editSheet());
     }
 
     return Container(

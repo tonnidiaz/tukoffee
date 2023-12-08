@@ -5,8 +5,6 @@ import "package:lebzcafe/widgets/common3.dart";
 import "package:lebzcafe/widgets/product_card.dart";
 import "package:tu/tu.dart";
 
-import "package:via_logger/logger.dart";
-
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
@@ -46,7 +44,7 @@ class _SearchPageState extends State<SearchPage> {
       _setProducts(res.data["products"]);
     } catch (e) {
       _setProducts([]);
-      Logger.info(e);
+      clog(e);
     }
   }
 

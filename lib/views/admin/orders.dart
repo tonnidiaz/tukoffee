@@ -14,7 +14,6 @@ import "package:lebzcafe/widgets/common.dart";
 import "package:lebzcafe/widgets/common3.dart";
 import "package:get/get.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 import "../../main.dart";
 import "../../widgets/order_item.dart";
 import "../../widgets/prompt_modal.dart";
@@ -241,80 +240,81 @@ class _OrdersPageState extends State<OrdersPage> {
     var routeName = ModalRoute.of(context)?.settings.name;
     filterModal() {
       return TuBottomSheet(
-        child: Padding(
-          padding: defaultPadding2,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
+        padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("FILTER",
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black)),
+                Obx(() => IconButton(
+                      splashRadius: 15,
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        _ctrl.sortOrder.value == SortOrder.descending
+                            ? _ctrl.setSortOrder(SortOrder.ascending)
+                            : _ctrl.setSortOrder(SortOrder.descending);
+                      },
+                      icon: Icon(
+                        _ctrl.sortOrder.value == SortOrder.descending
+                            ? CupertinoIcons.chevron_down
+                            : CupertinoIcons.chevron_up,
+                        size: 20,
+                      ),
+                      color: Colors.black87,
+                    )),
+              ],
+            ),
+            LayoutBuilder(builder: (context, c) {
+              return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text("FILTER",
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black)),
-                  Obx(() => IconButton(
-                        splashRadius: 15,
-                        padding: EdgeInsets.zero,
-                        onPressed: () {
-                          _ctrl.sortOrder.value == SortOrder.descending
-                              ? _ctrl.setSortOrder(SortOrder.ascending)
-                              : _ctrl.setSortOrder(SortOrder.descending);
+                  Obx(() => TuSelect(
+                        label: "Sort by",
+                        labelFontSize: 14,
+                        width: (c.maxWidth),
+                        //height: 35,
+                        value: _ctrl.sortBy.value,
+                        radius: 1,
+                        items: [
+                          SelectItem("Date created", SortBy.createdAt),
+                          SelectItem("Last modified", SortBy.lastModified),
+                        ],
+                        onChanged: (p0) {
+                          _ctrl.setSortBy(p0);
                         },
-                        icon: Icon(_ctrl.sortOrder.value == SortOrder.descending
-                            ? CupertinoIcons.sort_down
-                            : CupertinoIcons.sort_up),
-                        color: Colors.black87,
                       )),
+                  Visibility(
+                    visible: false,
+                    child: Obx(() {
+                      return TuSelect(
+                        radius: 1,
+                        label: "Status",
+                        labelFontSize: 14,
+                        width: (c.maxWidth / 2) - 2.5,
+                        //height: 35,
+                        value: _ctrl.status.value,
+                        items: [
+                          SelectItem("All", OrderStatus.all),
+                          SelectItem("Pending", OrderStatus.pending),
+                          SelectItem("Completed", OrderStatus.completed),
+                          SelectItem("Cancelled", OrderStatus.cancelled),
+                        ],
+                        onChanged: (p0) {
+                          _ctrl.setStatus(p0);
+                        },
+                      );
+                    }),
+                  ),
                 ],
-              ),
-              LayoutBuilder(builder: (context, c) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Obx(() => TuSelect(
-                          label: "Sort by",
-                          labelFontSize: 14,
-                          width: (c.maxWidth),
-                          //height: 35,
-                          value: _ctrl.sortBy.value,
-                          radius: 1,
-                          items: [
-                            SelectItem("Date created", SortBy.createdAt),
-                            SelectItem("Last modified", SortBy.lastModified),
-                          ],
-                          onChanged: (p0) {
-                            _ctrl.setSortBy(p0);
-                          },
-                        )),
-                    Visibility(
-                      visible: false,
-                      child: Obx(() {
-                        return TuSelect(
-                          radius: 1,
-                          label: "Status",
-                          labelFontSize: 14,
-                          width: (c.maxWidth / 2) - 2.5,
-                          //height: 35,
-                          value: _ctrl.status.value,
-                          items: [
-                            SelectItem("All", OrderStatus.all),
-                            SelectItem("Pending", OrderStatus.pending),
-                            SelectItem("Completed", OrderStatus.completed),
-                            SelectItem("Cancelled", OrderStatus.cancelled),
-                          ],
-                          onChanged: (p0) {
-                            _ctrl.setStatus(p0);
-                          },
-                        );
-                      }),
-                    ),
-                  ],
-                );
-              }),
-            ],
-          ),
+              );
+            }),
+          ],
         ),
       );
     }

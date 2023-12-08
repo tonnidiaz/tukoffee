@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:lebzcafe/controllers/app_ctrl.dart";
 import "package:lebzcafe/widgets/common2.dart";
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 
 PreferredSizeWidget mobileTitleBar(
     {required BuildContext context,
@@ -29,7 +28,7 @@ Widget ActionBtn(IconData icon, {Color? color, void Function()? onClick}) {
       enableFeedback: true,
       onTap: onClick,
       onTapDown: (e) {
-        Logger.info("ontap");
+        clog("ontap");
       },
       child: Icon(
         icon,

@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 import "package:tu/tu.dart";
-import "package:via_logger/logger.dart";
 import "package:dio/dio.dart";
 import "package:flutter/material.dart";
 import "package:lebzcafe/controllers/store_ctrl.dart";
