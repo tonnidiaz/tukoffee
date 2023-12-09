@@ -69,7 +69,7 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(titleSpacing: 14, title: const Text("Cart"), actions: [
+      appBar: tuAppbar(title: const Text("Cart"), actions: [
         PopupMenuButton(
             itemBuilder: (context) => [
                   PopupMenuItem(

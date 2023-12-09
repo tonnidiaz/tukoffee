@@ -65,45 +65,41 @@ class _ProfilePageState extends State<ProfilePage> {
     final FormCtrl formCtrl = Get.find();
 
     addEditAddress({String? title}) async {
-      pushTo(
-        MapPage(onSubmit: (val) async {
-          if (val.isEmpty) return;
-          try {
-            //showToast("Adding address...").show(context);
-            showProgressSheet();
-            final res = await apiDio().post("/user/edit?field=address", data: {
-              "value": val,
-              "userId": _account!["_id"],
-            });
-            setState(() {
-              _account = res.data["user"];
-            });
-            if (_account!["_id"] == appCtrl.user["_id"]) {
-              appCtrl.setUser(_account!);
-            }
-            Get.back();
-            // Navigator.pop(context);
-          } catch (e) {
-            Get.back();
-            clog(e);
-            if (e.runtimeType == DioException) {
-              handleDioException(
-                  context: context,
-                  exception: e as DioException,
-                  msg: "Error adding addess!");
-            } else {
-              showToast("Error adding address", isErr: true).show(context);
-            }
+      Tu.bottomSheet(MapPage(onSubmit: (val) async {
+        if (val.isEmpty) return;
+        try {
+          //showToast("Adding address...").show(context);
+          showProgressSheet();
+          final res = await apiDio().post("/user/edit?field=address", data: {
+            "value": val,
+            "userId": _account!["_id"],
+          });
+          setState(() {
+            _account = res.data["user"];
+          });
+          if (_account!["_id"] == appCtrl.user["_id"]) {
+            appCtrl.setUser(_account!);
           }
-        }),
-      );
+          Get.back();
+          // Navigator.pop(context);
+        } catch (e) {
+          Get.back();
+          clog(e);
+          if (e.runtimeType == DioException) {
+            handleDioException(
+                context: context,
+                exception: e as DioException,
+                msg: "Error adding addess!");
+          } else {
+            showToast("Error adding address", isErr: true).show(context);
+          }
+        }
+      }), fullScreen: true);
     }
 
     void onEditPermissionsClick() {
       formCtrl.setForm({"permissions": _account!["permissions"]});
-      Tu.bottomSheet(Container(
-        color: colors.surface,
-        padding: defaultPadding,
+      Tu.bottomSheet(TuBottomSheet(
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,

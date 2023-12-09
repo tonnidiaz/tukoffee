@@ -51,8 +51,7 @@ class Shiplogic {
       required List items}) async {
     final appCtrl = MainApp.appCtrl;
     final today = DateTime.now().toLocal();
-    final collectionDate =
-        "${today.year}-${today.month}-${today.day}T00:00:00.000Z";
+    final collectionDate = "${today.year}-${today.month}-${today.day}";
     final reqData = {
       "collection_min_date": collectionDate,
       "delivery_min_date": collectionDate,

@@ -241,9 +241,11 @@ class StoreCard extends StatelessWidget {
             onTap: () {
               //formCtrl.clear();
               formCtrl.setForm({"address": store['address']});
-              pushTo(const MapPage(
-                canEdit: false,
-              ));
+              Tu.bottomSheet(
+                  const MapPage(
+                    canEdit: false,
+                  ),
+                  fullScreen: true);
             },
             child: TuListTile(
                 leading: Icon(

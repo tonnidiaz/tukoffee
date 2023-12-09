@@ -364,67 +364,70 @@ class _MapPageState extends State<MapPage> {
                                   children: [
                                     const BackButton(),
                                     Expanded(
-                                      child: TuSearchField(
-                                          enabled: widget.canEdit,
-                                          hint: "Search location...",
-                                          prefix: const Icon(
-                                            Icons.location_on,
-                                            size: 25,
-                                          ),
-                                          fill: Colors.white,
-                                          suggestions: _features
-                                              .map((it) => TuSuggestion(
-                                                  text: "${it["place_name"]}",
-                                                  value: it))
-                                              .toList(),
-                                          onChanged: (val) {
-                                            _searchAddress(val);
-                                          },
-                                          onSuggestionTap: (val) {
-                                            try {
-                                              var center = val.value["center"];
-                                              var latlng =
-                                                  LatLng(center[1], center[0]);
-                                              _mapController.move(latlng, 18.5);
-                                              _setCenter(latlng);
+                                      child: Visibility(
+                                        visible: widget.canEdit,
+                                        child: TuSearchField(
+                                            enabled: widget.canEdit,
+                                            hint: "Search location...",
+                                            prefix: const Icon(
+                                              Icons.location_on,
+                                              size: 25,
+                                            ),
+                                            fill: Colors.white,
+                                            suggestions: _features
+                                                .map((it) => TuSuggestion(
+                                                    text: "${it["place_name"]}",
+                                                    value: it))
+                                                .toList(),
+                                            onChanged: (val) {
+                                              _searchAddress(val);
+                                            },
+                                            onSuggestionTap: (val) {
+                                              try {
+                                                var center =
+                                                    val.value["center"];
+                                                var latlng = LatLng(
+                                                    center[1], center[0]);
+                                                _mapController.move(
+                                                    latlng, 18.5);
+                                                _setCenter(latlng);
 
-                                              final List context =
-                                                  val.value["context"];
+                                                final List context =
+                                                    val.value["context"];
 
-                                              var addr = {
-                                                "street":
-                                                    "${val.value["address"]} ${val.value["text"]}",
-                                                "city": context
-                                                    .firstWhereOrNull((el) =>
-                                                        el["id"].startsWith(
-                                                            "place"))["text"],
-                                                "state": context
-                                                    .firstWhereOrNull((el) =>
-                                                        el["id"].startsWith(
-                                                            "region"))?["text"],
-                                                "postcode": context
-                                                        .firstWhereOrNull((el) =>
-                                                            el["id"].startsWith(
-                                                                "postcode"))?[
-                                                    "text"],
-                                                "locality": context
-                                                        .firstWhereOrNull((el) =>
-                                                            el["id"].startsWith(
-                                                                "locality"))?[
-                                                    "text"],
-                                              };
-                                              _setAddress({
-                                                "place_name":
-                                                    val.value["place_name"],
-                                                "center": center.reversed
-                                                    .toList(), // REVERSING IT TO MAP MODE
+                                                var addr = {
+                                                  "street":
+                                                      "${val.value["address"]} ${val.value["text"]}",
+                                                  "city": context
+                                                      .firstWhereOrNull((el) =>
+                                                          el["id"].startsWith(
+                                                              "place"))["text"],
+                                                  "state": context
+                                                      .firstWhereOrNull((el) =>
+                                                          el["id"].startsWith(
+                                                              "region"))?["text"],
+                                                  "postcode": context
+                                                      .firstWhereOrNull((el) =>
+                                                          el["id"].startsWith(
+                                                              "postcode"))?["text"],
+                                                  "locality": context
+                                                      .firstWhereOrNull((el) =>
+                                                          el["id"].startsWith(
+                                                              "locality"))?["text"],
+                                                };
+                                                _setAddress({
+                                                  "place_name":
+                                                      val.value["place_name"],
+                                                  "center": center.reversed
+                                                      .toList(), // REVERSING IT TO MAP MODE
 
-                                                ...addr
-                                              });
-                                            } catch (e) {
-                                              clog(e);
-                                            }
-                                          }),
+                                                  ...addr
+                                                });
+                                              } catch (e) {
+                                                clog(e);
+                                              }
+                                            }),
+                                      ),
                                     )
                                   ],
                                 ),

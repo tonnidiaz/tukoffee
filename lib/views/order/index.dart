@@ -70,7 +70,7 @@ class _OrderPageState extends State<OrderPage> {
     Map<String, dynamic> form =
         mode == 1 ? _order!["collector"] : _order!["delivery_address"];
 
-    Get.bottomSheet(
+    Tu.bottomSheet(
         FormView(
             title: "Edit order recipient",
             useBottomSheet: true,
@@ -89,6 +89,7 @@ class _OrderPageState extends State<OrderPage> {
                 label: "Phone:",
                 hint: "e.g. 0712345678",
                 value: form["phone"],
+                keyboard: TextInputType.phone,
                 onChanged: (val) {
                   form["phone"] = val;
                 },
@@ -113,8 +114,7 @@ class _OrderPageState extends State<OrderPage> {
                 errorHandler(e: e, msg: "Error editing fields!");
               }
             }),
-        isScrollControlled: true,
-        ignoreSafeArea: false);
+        fullScreen: true);
   }
 
   _onEditAddressPress() async {

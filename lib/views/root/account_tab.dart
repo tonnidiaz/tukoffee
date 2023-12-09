@@ -23,8 +23,6 @@ class AccountTab extends StatelessWidget {
         title: Text(
           "${appCtrl.store["name"]}",
         ),
-        centerTitle: true,
-        // titleSpacing: 14,
         actions: const [CartBtn()],
       ),
       body: SingleChildScrollView(

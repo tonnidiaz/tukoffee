@@ -98,18 +98,22 @@ class CheckoutCtrl extends GetxController {
             items.add(item['product']);
           }
         }
-        final shiplogicRes = await Shiplogic.createShipment(
-            items: items,
-            total: storeCtrl.total.value - storeCtrl.deliveryFee.value,
-            from: storeCtrl.stores.value?[0]['address'],
-            to: selectedAddr,
-            ref: "DELIVERY FOR ${selectedAddr['name']}",
-            serviceLevelId: form['shiplogic']['service_level']['id']);
+        try {
+          final shiplogicRes = await Shiplogic.createShipment(
+              items: items,
+              total: storeCtrl.total.value - storeCtrl.deliveryFee.value,
+              from: storeCtrl.stores.value?[0]['address'],
+              to: selectedAddr,
+              ref: "DELIVERY FOR ${selectedAddr['name']}",
+              serviceLevelId: form['shiplogic']['service_level']['id']);
 
-        // SAVE TRACKING CODE
-        form['shiplogic']['shipment'] = {
-          "tracking_code": shiplogicRes['short_tracking_reference']
-        };
+          // SAVE TRACKING CODE
+          form['shiplogic']['shipment'] = {
+            "tracking_code": shiplogicRes['short_tracking_reference']
+          };
+        } catch (e) {
+          clog("FAILED TO CREATE SHIPLOGIC SHIPMENT");
+        }
       }
 
       try {
@@ -214,7 +218,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       _initSocketio();
       _browser = MyInAppBrowser(onLoad: _onWebviewLoad);
       if (_appCtrl.user.isEmpty) {
-        Get.bottomSheet(const LoginPage());
+        Tu.bottomSheet(const LoginPage(), fullScreen: true);
         return;
       }
 
@@ -628,7 +632,6 @@ class GatewaysSheet extends StatelessWidget {
             return;
           }
 
-          //pushTo(PaymentPage(url: url));
           await browser.openUrlRequest(
               urlRequest: URLRequest(url: Uri.parse(uri)), options: options);
           gpop();
@@ -639,9 +642,7 @@ class GatewaysSheet extends StatelessWidget {
       }).catchError((e) {});
     }
 
-    return Container(
-      padding: defaultPadding2,
-      color: colors.surface,
+    return TuBottomSheet(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

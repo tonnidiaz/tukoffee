@@ -147,87 +147,76 @@ class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
 
     return Scaffold(
         appBar: tuAppbar(
-            actions: const [CartBtn()],
-            title: const Text("Shop"),
-            centerTitle: true),
+          actions: const [CartBtn()],
+          title: const Text("Shop"),
+        ),
         body: RefreshIndicator(
             onRefresh: () async {
               await getProducts();
             },
-            child: Obx(() => SizedBox(
-                  height: screenSize(context).height,
-                  width: double.infinity,
-                  child: TuScrollview(
-                    child: SizedBox(
-                      height: fullHeight(context) - kBottomNavigationBarHeight,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(vertical: topMargin),
-                            child: TuCard(
-                              color: colors.bg,
-                              child: TuFormField(
-                                hint: "Search",
-                                fill: colors.surface,
-                                hasBorder: false,
-                                prefixIcon: TuIcon(Icons.search),
-                                radius: 5,
-                                suffixIcon: IconButton(
-                                    splashRadius: 20,
-                                    padding: EdgeInsets.zero,
-                                    onPressed: () {
-                                      // show filters
-                                      Get.bottomSheet(filterModal());
-                                    },
-                                    icon: TuIcon(Icons.tune)),
-                                onTap: () {
-                                  pushTo(const SearchPage());
-                                },
-                              ),
-                            ),
-                          ),
-                          !_storeCtrl.productsFetched.value
-                              ? const Expanded(
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                )
-                              : _storeCtrl.products.isEmpty
-                                  ? Expanded(
-                                      child: Center(
-                                        child: Text(
-                                          "Nothing to show",
-                                          style: styles.h3(),
-                                        ),
-                                      ),
-                                    )
-                                  : Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            8, 0, 8, 8),
-                                        child: GridView.builder(
-                                            shrinkWrap: true,
-                                            gridDelegate:
-                                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                              crossAxisSpacing: 5.0,
-                                              mainAxisSpacing: 5.0,
-                                            ),
-                                            itemCount: _storeCtrl
-                                                .sortedProducts.length,
-                                            itemBuilder: (context, i) =>
-                                                ProductCard(
-                                                  product: _storeCtrl
-                                                      .sortedProducts[i],
-                                                )),
-                                      ),
-                                    ),
-                          mY(5)
-                        ],
+            child: Obx(() => Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: topMargin),
+                      child: TuCard(
+                        color: colors.bg,
+                        child: TuFormField(
+                          hint: "Search",
+                          fill: colors.surface,
+                          hasBorder: false,
+                          prefixIcon: TuIcon(Icons.search),
+                          radius: 5,
+                          suffixIcon: IconButton(
+                              splashRadius: 20,
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                // show filters
+                                Get.bottomSheet(filterModal());
+                              },
+                              icon: TuIcon(Icons.tune)),
+                          onTap: () {
+                            pushTo(const SearchPage());
+                          },
+                        ),
                       ),
                     ),
-                  ),
+                    !_storeCtrl.productsFetched.value
+                        ? const Expanded(
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                        : _storeCtrl.products.isEmpty
+                            ? Expanded(
+                                child: Center(
+                                  child: Text(
+                                    "Nothing to show",
+                                    style: styles.h3(),
+                                  ),
+                                ),
+                              )
+                            : Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  child: GridView.builder(
+                                      shrinkWrap: true,
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 5.0,
+                                        mainAxisSpacing: 5.0,
+                                      ),
+                                      itemCount:
+                                          _storeCtrl.sortedProducts.length,
+                                      itemBuilder: (context, i) => ProductCard(
+                                            product:
+                                                _storeCtrl.sortedProducts[i],
+                                          )),
+                                ),
+                              ),
+                    mY(5)
+                  ],
                 ))));
   }
 }
