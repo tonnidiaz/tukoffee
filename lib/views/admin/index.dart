@@ -80,9 +80,10 @@ class _DashboardPageState extends State<DashboardPage> {
         return BottomNavigationBar(
             currentIndex: index,
             onTap: _onBottonNavitemTap,
-            unselectedLabelStyle: const TextStyle(fontSize: fontSizeBody - 2),
-            selectedLabelStyle: const TextStyle(
-                fontSize: fontSizeBody, fontWeight: FontWeight.bold),
+            unselectedLabelStyle:
+                GoogleFonts.roboto(fontSize: fontSizeBody - 2),
+            selectedLabelStyle: GoogleFonts.roboto(
+                fontSize: fontSizeBody - .7, fontWeight: FontWeight.bold),
             items: tabs
                 .asMap()
                 .entries
@@ -93,21 +94,22 @@ class _DashboardPageState extends State<DashboardPage> {
                           horizontal: 15, vertical: 5),
                       decoration: BoxDecoration(
                           color: index == e.key
-                              ? colors.primary
+                              ? colors.primaryFade
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(100)),
                       child: e.value.icon.runtimeType == String
                           ? svgIcon(
                               name: e.value.icon,
+                              size: 18,
                               color: index != e.key
                                   ? colors.note
-                                  : colors.onPrimary,
+                                  : colors.onBackground,
                             )
                           : Icon(
                               e.value.icon,
                               color: index != e.key
-                                  ? colors.text2
-                                  : colors.primary,
+                                  ? colors.note
+                                  : colors.onBackground,
                             ),
                     ),
                     label: e.value.label,

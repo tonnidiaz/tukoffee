@@ -73,19 +73,20 @@ class _IndexPageState extends State<IndexPage> {
                   .entries
                   .map((e) => BottomNavigationBarItem(
                       icon: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 5),
-                        decoration: BoxDecoration(
-                            color: IndexPage.ctrl.tab.value == e.key
-                                ? colors.primary
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(100)),
-                        child: svgIcon(
-                            color: IndexPage.ctrl.tab.value != e.key
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 5),
+                          decoration: BoxDecoration(
+                              color: IndexPage.ctrl.tab.value == e.key
+                                  ? colors.primaryFade
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(100)),
+                          child: svgIcon(
+                            name: e.value.svg!,
+                            size: 18,
+                            color: ctrl.tab.value != e.key
                                 ? colors.note
-                                : colors.onPrimary,
-                            name: e.value.svg!),
-                      ),
+                                : colors.onBackground,
+                          )),
                       label: e.value.label))
                   .toList()),
         ),
