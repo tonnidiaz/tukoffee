@@ -1,13 +1,9 @@
 import "package:flutter/material.dart";
-import "package:lebzcafe/utils/colors.dart";
-import "package:lebzcafe/utils/constants.dart";
-import "package:lebzcafe/utils/functions.dart";
+
 import "package:lebzcafe/views/root/account_tab.dart";
 import "package:lebzcafe/views/root/cart.dart";
 import "package:lebzcafe/views/root/home.dart";
 import "package:lebzcafe/views/root/shop/index.dart";
-import "package:lebzcafe/widgets/common3.dart";
-import "package:get/get.dart";
 import "package:tu/tu.dart";
 
 class IndexCtrl extends GetxController {
